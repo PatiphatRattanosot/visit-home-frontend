@@ -1,0 +1,145 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+@theme {
+  --color-green_light: #a5dc86;
+  --color-neutral_content: #f9fafb;
+  --color-neutral_content_hover: #f3f4f6;
+  --color-back: #000000;
+  --color-white: #ffffff;
+  --color-emerald_hover: #6ee7b7;
+  --color-emerald: #34d399;
+  --color-red: #f87171;
+  --color-red_hover: #fca5a5;
+  --color-yellow: #fcbf49;
+  --color-yellow_hover: #fde047;
+  --color-darkbule: #4338ca;
+  --color-darkbule_hover: #4f46e5;
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 1rem;
+  /* ขนาดอักษรพื้นฐาน */
+  --font-size-base: 1.25rem;
+  /* หัวข้อ */
+  --font-size-lg: 2rem;
+  --font-size-xl: 3rem;
+  --font-size-2xl: 3.5rem;
+}
+
+.section-container {
+  @apply max-w-screen-2xl container mx-auto xl:px-24 px-4 mt-8;
+}
+
+@theme {
+  --color-green_light: #a5dc86;
+  --color-neutral_content: #f9fafb;
+  --color-neutral_content_hover: #f3f4f6;
+  --color-back: #000000;
+  --color-white: #ffffff;
+  --color-emerald_hover: #6ee7b7;
+  --color-emerald: #34d399;
+  --color-red: #f87171;
+  --color-red_hover: #fca5a5;
+  --color-yellow: #fcbf49;
+  --color-yellow_hover: #fde047;
+  --color-darkbule: #4338ca;
+  --color-darkbule_hover: #4f46e5;
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 1rem;
+  /* ขนาดอักษรพื้นฐาน */
+  --font-size-base: 1.25rem;
+  /* หัวข้อ */
+  --font-size-lg: 2rem;
+  --font-size-xl: 3rem;
+  --font-size-2xl: 3.5rem;
+}
+
+@theme {
+  --color-green_light: #a5dc86;
+  --color-neutral_content: #f9fafb;
+  --color-neutral_content_hover: #f3f4f6;
+  --color-back: #000000;
+  --color-white: #ffffff;
+  --color-emerald_hover: #6ee7b7;
+  --color-emerald: #34d399;
+  --color-red: #f87171;
+  --color-red_hover: #fca5a5;
+  --color-yellow: #fcbf49;
+  --color-yellow_hover: #fde047;
+  --color-darkbule: #4338ca;
+  --color-darkbule_hover: #4f46e5;
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 1rem;
+  /* ขนาดอักษรพื้นฐาน */
+  --font-size-base: 1.25rem;
+  /* หัวข้อ */
+  --font-size-lg: 2rem;
+  --font-size-xl: 3rem;
+  --font-size-2xl: 3.5rem;
+}
+
+.section-container {
+  @apply max-w-screen-2xl container mx-auto xl:px-24 px-4 mt-8 mb-8;
+}
+
+.btn-gray {
+  @apply py-3 px-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg bg-[#f9fafb] text-[#1f2937] hover:bg-[#f3f4f6] hover:cursor-pointer;
+}
+
+.btn-green {
+  @apply py-3 px-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg bg-[#34d399] text-[#fff] hover:bg-[#6ee7b7] hover:cursor-pointer;
+}
+
+.btn-red {
+  @apply py-3 px-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg bg-[#f87171] text-[#fff] hover:bg-[#fca5a5] hover:cursor-pointer;
+}
+
+.btn-blue {
+  @apply py-3 px-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg bg-[#433bca] text-[#fff] hover:bg-[#4f46e5] hover:cursor-pointer;
+}
+
+.btn-yellow {
+  @apply py-3 px-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg bg-[#fcbf49] text-[#fff] hover:bg-[#fde047] hover:cursor-pointer;
+}
+
+.btn-ghost {
+  @apply py-3 px-6 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg bg-none text-[#1f2937] hover:bg-[#f3f4f6] hover:cursor-pointer;
+}
+
+.btn-hamburger {
+  @apply py-3 px-3 inline-flex justify-center items-center gap-x-2 text-sm font-medium rounded-lg bg-none text-[#1f2937] hover:bg-[#f3f4f6] hover:cursor-pointer md:hidden;
+}
+
+.text-input {
+  @apply w-full p-2 border text-sm border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.text-input:disabled {
+  @apply bg-gray-100 text-gray-500 cursor-not-allowed opacity-70;
+}
+
+.select-input {
+  @apply w-full p-2 border text-xs border-gray-300 rounded-md bg-white focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.select-input:disabled {
+  @apply bg-gray-100 text-gray-500 cursor-not-allowed opacity-70;
+}
+
+.textarea-input {
+  @apply w-full p-2 border h-[15vh] text-sm border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.textarea-input:disabled {
+  @apply bg-gray-100 text-gray-500 cursor-not-allowed opacity-70;
+}
+
+.textarea-input {
+  @apply w-full p-2 border h-[15vh] text-sm border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.textarea-input:disabled {
+  @apply bg-gray-100 text-gray-500 cursor-not-allowed opacity-70;
+}

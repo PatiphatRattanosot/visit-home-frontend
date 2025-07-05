@@ -1,0 +1,451 @@
+import { create } from "zustand";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
+import Userservice from "../services/users/users.service";
+import YearServices from "../services/years/years.service";
+import ClassroomService from "../services/class/class.service";
+
+export const usePersonnelStore = create((set, get) => ({
+  data: [], // state ของข้อมูลเปลี่ยนชื่อได้
+  setData: (data) => set({ data }), // js ชื่อตัวแปรตรงกัน
+  fetchData: async () => {
+    try {
+      const response = await Userservice.getAllTeacher();
+      //ถ้า Log User จะต้องเป็น response.data.users
+      console.log("hello teacher", response.data);
+      if (response.status === 200) {
+        set({ data: response.data.teachers }); // ตั้งค่าเริ่มต้นให้ personnel ทั้งหมด
+        return response.data.teachers; // ส่งคืนข้อมูลบุคลากรที่ได้
+      }
+    } catch (error) {
+      console.error(error.response.data.message);
+      toast.error(error.response.data.message);
+     
+    }
+  },
+  getPersonnelById: async (id) => {
+    try {
+      const response = await Userservice.getTeacherById(id);
+      console.log("getPersonnelById = ", response);
+      if (response.status === 200) {
+        return response.data.teacher; // ส่งคืนข้อมูลบุคลากรที่ได้
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || "เกิดข้อผิดพลาดในการดึงข้อมูลบุคลากร"
+      );
+    }
+  },
+  addPersonnel: async (values) => {
+    try {
+      const res = await Userservice.addTeacher(values);
+      console.log(res);
+
+      if (res.status === 201) {
+        document.getElementById("add_personnel").close();
+        toast.success(res.data.message);
+        //concat ใช้สำหรับรวม array ใหม่กับ array ที่มีอยู่
+        const newPersonnel = get().data.concat(res.data.teacher); // เพิ่มบุคลากรใหม่เข้าไปในข้อมูลที่มีอยู่
+        set({ data: newPersonnel }); // อัปเดตข้อมูล personnel หลังจากเพิ่มสำเร็จ
+      }
+    } catch (error) {
+      toast.error(error.response.data.message);
+      console.log("เพิ่มผิดพลาดนะ", error.response.data.message);
+    }
+  },
+  // updatePersonnel: async (id, values) => {
+
+  //   try {
+  //     const res = await Userservice.updateTeacher({ ...values, _id: id });
+  //     console.log("res", res);
+  //     if (res.status === 200) {
+  //       document.getElementById(`edit_personnel_${id}`).close();
+  //       toast.success(res.data.message);
+  //       const updatedPersonnel = get().data.map((person) =>
+  //         person._id === id ? { ...person, ...values } : person
+  //       );
+  //       set({ data: updatedPersonnel }); // อัปเดตข้อมูล personnel หลังจากแก้ไขสำเร็จ
+  //     }
+  //   } catch (error) {
+  //     toast.error(
+  //       error.response?.data?.message ||
+  //         "เกิดข้อผิดพลาดในการอัปเดตข้อมูลบุคลากร"
+  //     );
+  //   }
+  // },
+  updatePersonnel: async (id, values) => {
+    try {
+      const res = await Userservice.updateTeacher({ ...values, _id: id });
+      console.log("res", res);
+
+      if (res.status === 200) {
+        document.getElementById(`edit_personnel_${id}`).close();
+
+        // ดึงข้อมูล role ของคนที่แก้ไขจาก state เดิม
+        //ยังไม่ค่อยเข้าใจ p มาจากไหน
+        const person = get().data.find((p) => p._id === id);
+        const isAdmin = person?.role?.includes("Admin");
+
+        // แสดงข้อความตาม role
+        if (isAdmin) {
+          toast.success("แก้ไขข้อมูลเจ้าหน้าที่สำเร็จ");
+        } else {
+          toast.success(res.data.message || "แก้ไขข้อมูลบุคลากรสำเร็จ");
+        }
+
+        // อัปเดตข้อมูลใน store
+        const updatedPersonnel = get().data.map((person) =>
+          person._id === id ? { ...person, ...values } : person
+        );
+        set({ data: updatedPersonnel });
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+          "เกิดข้อผิดพลาดในการอัปเดตข้อมูลบุคลากร"
+      );
+    }
+  },
+
+  deletePersonnel: async (email) => {
+    Swal.fire({
+      title: "คุณแน่ใจหรือไม่?",
+      text: "คุณต้องการลบข้อมูลบุคลากรนี้!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "ยืนยัน",
+      cancelButtonText: "ยกเลิก",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await Userservice.deleteUser(email); // ลบหลังจากผู้ใช้ยืนยันแล้ว
+          Swal.fire({
+            title: "ลบข้อมูลเรียบร้อย",
+            text: response.data.message,
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            const updatedPersonnel = get().data.filter(
+              (person) => person.email !== email
+            );
+            set({ data: updatedPersonnel });
+          });
+        } catch (error) {
+          Swal.fire({
+            title: "เกิดข้อผิดพลาด",
+            text: "ไม่สามารถลบข้อมูลบุคลากรได้",
+            icon: "error",
+            confirmButtonText: "ตกลง",
+          });
+        }
+      } else if (result.isDismissed) {
+        Swal.fire({
+          title: "ยกเลิกการลบข้อมูล",
+          icon: "info",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
+  },
+  addAdminRole: async (email, newRole) => {
+    try {
+      const response = await Userservice.addAdminRole(email, newRole);
+
+      if (response.status === 200) {
+        toast.success(response.data.message || "บทบาทถูกเปลี่ยนเรียบร้อยแล้ว");
+        get().fetchData(); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลบุคลากรใหม่
+      }
+    } catch (error) {
+    
+      console.error("Error changing role:", error?.response?.data?.message || "เกิดข้อผิดพลาดในการเปลี่ยนบทบาท");
+      toast.error(error?.response?.data?.message || "เกิดข้อผิดพลาดในการเปลี่ยนบทบาท");
+    }
+  },
+  removeAdminRole: async (email, roleToRemove) => {
+    try {
+      Swal.fire({
+        title: "ยืนยันการลบบทบาท",
+        text: `คุณต้องการลบบทบาทของ ${roleToRemove} หรือไม่?`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "ยืนยัน",
+        cancelButtonText: "ยกเลิก",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const response = await Userservice.removeAdminRole(
+            email,
+            roleToRemove
+          );
+          console.log("RESPONSE =", response);
+          const message = response.data.message || "บทบาทถูกลบเรียบร้อยแล้ว";
+
+          if (response.status === 200) {
+            toast.success(message);
+            get().fetchData(); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลบุคลากรใหม่
+          }
+        } else if (result.isDismissed) {
+          Swal.fire({
+            title: "ยกเลิกการลบบทบาท",
+            icon: "info",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message || "เกิดข้อผิดพลาดในการลบบทบาท";
+      console.error("Error removing role:", error);
+      toast.error(errorMessage);
+    }
+  },
+}));
+
+export const useYearStore = create((set, get) => ({
+  data: [],
+  setData: (data) => set({ data }), // ตั้งค่าเริ่มต้นให้ปีการศึกษา
+  fetchData: async () => {
+    try {
+      const response = await YearServices.getYears();
+      if (response.status === 200) {
+        //ฟังก์ชัน sort ใช้สำหรับเรียงลำดับ element ใน array b.year - a.year: หากผลลัพธ์เป็นค่าบวก แสดงว่า b.year มีค่ามากกว่า a.year ดังนั้น b จะถูกวางไว้หน้า a ในลำดับการเรียง หากผลลัพธ์เป็นค่าลบ แสดงว่า a.year มีค่ามากกว่า b.year ดังนั้น a จะถูกวางไว้หน้า b ในลำดับการเรียง
+        const sortedYears = response.data.sort((a, b) => b.year - a.year);
+        set({ data: sortedYears }); // ตั้งค่าเริ่มต้นให้ปีการศึกษา
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(
+        err.response?.data?.message || "เกิดข้อผิดพลาดในการโหลดปีการศึกษา"
+      );
+    }
+  },
+  addYear: async (values) => {
+    try {
+      const res = await YearServices.createYear({
+        year: Number(values.year),
+      });
+      if (res.status === 201) {
+        toast.success(res.data.message);
+        get().fetchData(); // เรียกใช้ fetchData เพื่ออัปเดตข้อมูล
+        document.getElementById("add_year").close(); // ปิด modal
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(
+        err.response?.data?.message || "เกิดข้อผิดพลาดในการเพิ่มปีการศึกษา"
+      );
+    }
+  },
+  getYearsById: async (id) => {
+    try {
+      const response = await YearServices.getYearById(id);
+      if (response.status === 200) {
+        const year = response.data.year;
+        set({ yearData: year }); // บันทึกลงใน Store
+        return year; // คืนค่าเพื่อให้ใช้ใน Component หรือ Formik ได้
+      }
+      console.log(year);
+    } catch (err) {
+      console.log(err);
+      toast.error(
+        err.response?.data?.message || "เกิดข้อผิดพลาดในการโหลดปีการศึกษา"
+      );
+      return null;
+    }
+  },
+  updateYear: async (id, values) => {
+    try {
+      //ก้อน object ที่จะส่งไป
+      const response = await YearServices.updateYear({
+        year_id: id,
+
+        // Number() เป็นฟังก์ชั่นที่เอาไว้เปลี่ยน type ของข้อมูลเป็น integer หรือ ตัวเลข
+        new_year: Number(values.year),
+      });
+
+      if (response.status === 200) {
+        toast.success("แก้ไขปีการศึกษาเรียบร้อยแล้ว");
+        get().fetchData(); // เรียกใช้ fetchData เพื่ออัปเดตข้อมูล
+        document.getElementById(`Edit_year_${id}`).close();
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(
+        err.response?.data?.message || "เกิดข้อผิดพลาดในการแก้ไขปีการศึกษา"
+      );
+    }
+  },
+
+  deleteYear: async (_id) => {
+    Swal.fire({
+      title: "คุณแน่ใจหรือไม่?",
+      text: "คุณต้องการลบข้อมูลปีการศึกษานี้!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "ยืนยัน",
+      cancelButtonText: "ยกเลิก",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await YearServices.deleteYear(_id);
+          if (response.status === 200) {
+            Swal.fire({
+              title: "ลบข้อมูลเรียบร้อย",
+              text: response.data.message,
+              icon: "success",
+              showConfirmButton: false,
+              timer: 1500,
+            }).then(() => {
+              get().fetchData(); // เรียกใช้ fetchData เพื่ออัปเดตข้อมูล
+            });
+          }
+        } catch (err) {
+          Swal.fire({
+            title: "เกิดข้อผิดพลาด",
+            text:
+              err.response?.data?.message || "ไม่สามารถลบข้อมูลปีการศึกษาได้",
+            icon: "error",
+            confirmButtonText: "ตกลง",
+          });
+          console.log(err);
+        }
+      } else if (result.isDismissed) {
+        Swal.fire({
+          title: "ยกเลิกการลบข้อมูล",
+          icon: "info",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
+  },
+}));
+
+export const useClassroomStore = create((set, get) => ({
+  data: [],
+  setData: (data) => set({ data }), // ตั้งค่าเริ่มต้นให้ชั้นเรียน
+  fetchData: async (yearId) => {
+    try {
+      const response = await ClassroomService.getClassroomsByYear(yearId);
+      console.log("yearId:", yearId); // ควรขึ้น ObjectId
+
+      if (response.status === 200) {
+        set({ data: response.data.classes });
+      }
+    } catch (error) {
+      console.log(error.response.data.message);
+    }
+  },
+  addClassroom: async (values, yearId) => {
+    try {
+      const response = await ClassroomService.createClass({
+        room: values.room,
+        number: values.number,
+        teacher_id: values.teacherId,
+        year_id: yearId, // ส่ง year_id เพื่อระบุปีการศึกษา
+      });
+
+      if (response.status === 201) {
+        toast.success(response.data.message || "เพิ่มชั้นเรียนสำเร็จ");
+        set({ data: response.data.classes });
+
+        document.getElementById("add_classroom").close(); // ปิด modal
+      }
+    } catch (error) {
+      console.error(
+        "Error in classService.createClass:",
+        error.response?.data.message
+      );
+
+      toast.error(
+        error.response?.data?.message || "เกิดข้อผิดพลาดในการเพิ่มชั้นเรียน"
+      );
+    }
+  },
+  getClassroomById: async (id) => {
+    try {
+      const response = await ClassroomService.getClassById(id);
+      if (response.status === 200) {
+        return response.data.class; // ส่งคืนข้อมูลชั้นเรียนที่ได้
+      }
+    } catch (error) {
+      console.error("Error in getClassroomById:", error);
+    }
+  },
+  updateClassroom: async (id, values) => {
+    try {
+      const response = await ClassroomService.updateClass({
+        class_id: id,
+        room: parseInt(values.room),
+        number: parseInt(values.number),
+        teacher_id: values.teacherId,
+      });
+      if (response.status === 200) {
+        toast.success(response.data.message || "แก้ไขชั้นเรียนสำเร็จ");
+        // updateClassroom ใน store
+        const updatedClassrooms = get().data.map((classroom) =>
+          classroom._id === id ? { ...classroom, ...values } : classroom
+        );
+        set({ data: updatedClassrooms }); // อัปเดตข้อมูลชั้นเรียนหลังจากแก้ไขสำเร็จ
+        document.getElementById(`edit_classroom_${id}`).close(); // ปิด modal
+      }
+    } catch (error) {
+      console.error("Error in updateClassroom:", error);
+      toast.error(
+        error.response?.data?.message || "เกิดข้อผิดพลาดในการแก้ไขชั้นเรียน"
+      );
+    }
+  },
+
+  deleteClassroom: async (id) =>
+    Swal.fire({
+      title: "คุณแน่ใจหรือไม่?",
+      text: "คุณต้องการลบข้อมูลชั้นเรียนนี้!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "ยืนยัน",
+      cancelButtonText: "ยกเลิก",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await ClassroomService.deleteClass(id);
+          Swal.fire({
+            title: "ลบข้อมูลเรียบร้อย",
+            text: response.data.message,
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(() => {
+            const updatedClassrooms = get().data.filter(
+              (classroom) => classroom._id !== id
+            );
+            set({ data: updatedClassrooms });
+          });
+        } catch (err) {
+          Swal.fire({
+            title: "เกิดข้อผิดพลาด",
+            text:
+              err.response?.data?.message || "ไม่สามารถลบข้อมูลชั้นเรียนได้",
+            icon: "error",
+            confirmButtonText: "ตกลง",
+          });
+          console.log(err);
+        }
+      } else if (result.isDismissed) {
+        Swal.fire({
+          title: "ยกเลิกการลบข้อมูล",
+          icon: "info",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    }),
+}));

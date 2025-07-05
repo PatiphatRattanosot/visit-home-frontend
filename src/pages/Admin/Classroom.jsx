@@ -1,0 +1,197 @@
+import { useState, useEffect } from "react";
+import DateInput from "../../components/DateInput";
+import FilterDropdown from "../../components/FilterDropdown";
+import SearchClass from "../../components/SearchClassroom";
+import { BiSolidEdit } from "react-icons/bi";
+import { AiOutlineDelete } from "react-icons/ai";
+import { useParams } from "react-router";
+import Swal from "sweetalert2";
+import classService from "../../services/class/class.service";
+import Pagiantion from "../../components/Pagination";
+import ModalAddClassroom from "../../components/modals/AddClassroom";
+import ModalEditClassroom from "../../components/modals/EditClassroom";
+import Breadcrumbs from "../../components/Breadcrumbs";
+import ArrowBack from "../../components/ArrowBack";
+import { useClassroomStore } from "../../stores/admin.store";
+const Classroom = () => {
+  const {data: classrooms, fetchData, deleteClassroom} = useClassroomStore();
+  const { yearId, year } = useParams();
+  const [selectedOption, setSelectedOption] = useState("SortToMost");
+
+  // สร้าง state สำหรับเก็บข้อมูลชั้นเรียนที่กรองแล้ว
+  // เพื่อใช้ในการแสดงผลในตาราง
+  const optionsForClassroom = [
+    { value: "SortToMost", label: "เรียงจากน้อยไปมาก" },
+    { value: "MostToSort", label: "เรียงจากมากไปน้อย" },
+  ];
+
+  const [filteredClassroom, setFilteredClassroom] = useState([]);
+  // สร้าง satate สำหรับ Paginations
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = Array.isArray(filteredClassroom)
+    ? filteredClassroom.slice(indexOfFirstItem, indexOfLastItem)
+    : [];
+
+  useEffect(() => {
+   fetchData(yearId); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลชั้นเรียนตามปีการศึกษา
+    setFilteredClassroom(classrooms); // ตั้งค่าเริ่มต้นให้ classrooms ทั้งหมด
+  }, [yearId]);
+
+
+
+  useEffect(() => {
+    // กรองข้อมูลชั้นเรียนตามตัวเลือกที่เลือก
+    //ตรวจสอบว่า classrooms เป็น อาร์เรย์ (Array) หรือไม่
+    let sorted = Array.isArray(classrooms) ? [...classrooms] : [];
+
+    if (selectedOption === "SortToMost") {
+      sorted.sort((a, b) => a.room - b.room || a.number - b.number);
+    } else if (selectedOption === "MostToSort") {
+      sorted.sort((a, b) => b.room - a.room || b.number - a.number);
+    }
+    setFilteredClassroom(sorted);
+    setCurrentPage(1); // reset ไปหน้าแรกทุกครั้งที่เรียงใหม่
+  }, [selectedOption, classrooms]);
+
+  const handleDeleteClassroom = async (id) => {
+    deleteClassroom(id);
+    setFilteredClassroom(classrooms);
+  };
+
+  return (
+    <div className="section-container">
+      <div className="flex items-center space-x-2">
+        <ArrowBack to={`/year/${yearId}/${year}`} />
+        <Breadcrumbs />
+      </div>
+      <div>
+        <h1 className="text-lg md:text-xl text-center">
+          เพิ่มชั้นเรียนของปีการศึกษา {year}
+        </h1>
+        {/* กล่องสำหรับกำหนดช่วงเวลานัดเยี่ยมบ้าน */}
+        <div className="flex justify-center items-center">
+          <div className="card w-xl md:w-2xl p-4 shadow-sm flex flex-col items-center justify-center">
+            <h2 className="text-lg">กำหนดช่วงเวลานัดเยี่ยมบ้าน</h2>
+            <div className="flex gap-2">
+              <DateInput />
+            </div>
+          </div>
+        </div>
+
+        {/* ฟีเจอร์เสริม */}
+        <div className="flex flex-col md:flex-row items-center justify-between m-2 mt-4 mb-4 gap-4">
+          <FilterDropdown
+            selectedOption={selectedOption}
+            setSelectedOption={setSelectedOption}
+            options={optionsForClassroom}
+          />
+          <div className="flex items-center gap-4">
+            <SearchClass
+              classroom={classrooms}
+              setFilteredClassroom={setFilteredClassroom}
+              setCurrentPage={setCurrentPage}
+            />
+          </div>
+          {/* ปุ่มเพิ่มบุคลากร */}
+          <div className="flex justify-center w-full md:w-auto">
+            <button
+              onClick={() =>
+                document.getElementById("add_classroom").showModal()
+              }
+              className="btn-green"
+            >
+              เพิ่มชั้นเรียน
+            </button>
+           <ModalAddClassroom addClassroomSuccess={() => fetchData(yearId)} />
+
+          </div>
+        </div>
+
+        {/* ข้อมูลชั้นเรียนรูปแบบตาราง */}
+
+        <table className="table text-center">
+          {/* head */}
+          <thead>
+            <tr>
+              <th>
+                <label>
+                  <input type="checkbox" className="checkbox" />
+                </label>
+              </th>
+              <th>ชั้นเรียน</th>
+              <th>จำนวนสมาชิก</th>
+              <th>แก้ไข/ลบ</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* row 1 */}
+
+            {currentItems.map((classroom, index) => (
+              <tr key={classroom._id}>
+                <th>
+                  <label>
+                    <input type="checkbox" className="checkbox" />
+                  </label>
+                </th>
+                <td>
+                  ม.{classroom.room}/{classroom.number}
+                </td>
+                <td>{classroom?.quantity}</td>
+
+                <td className="flex gap-2 items-center justify-center">
+                  <button
+                    onClick={() =>
+                      document
+                        .getElementById(`edit_classroom_${classroom._id}`)
+                        .showModal()
+                    }
+                    className="btn btn-warning"
+                  >
+                    <BiSolidEdit size={20} />
+                  </button>
+
+                  <button
+                    onClick={() => handleDeleteClassroom(classroom._id)}
+                    className="btn btn-error"
+                  >
+                    <AiOutlineDelete size={20} />
+                  </button>
+                  <ModalEditClassroom
+                    id={classroom._id}
+                    onUpdateSuccess={() => fetchData(yearId)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+          {/* foot */}
+          <tfoot>
+            <tr>
+              <th>
+                <label>
+                  <input type="checkbox" className="checkbox" />
+                </label>
+              </th>
+              <th>ชั้นเรียน</th>
+              <th>จำนวนสมาชิก</th>
+              <th>แก้ไข/ลบ</th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+      {/* Pagination */}
+      <Pagiantion
+        totalItems={filteredClassroom.length}
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
+    </div>
+  );
+};
+
+export default Classroom;

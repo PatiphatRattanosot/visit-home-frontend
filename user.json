@@ -1,0 +1,184 @@
+{
+  "user": [
+    {
+      "prefix": "นาย",
+      "first_name": "ลาพักร้อน",
+      "last_name": "ไม่นานมาก",
+      "user_id": "001",
+      "rank": "เจ้าหน้าที่ฝ่ายทะเบียน",
+      "phone": "0817283940",
+      "status": "ลาออก",
+      "id": "1"
+    },
+    {
+      "id": "2",
+      "type": "teacher",
+      "user_id": "002",
+      "prefix": "นางสาว",
+      "first_name": "วิพรญา",
+      "last_name": "ยาชา",
+      "rank": "ครูที่ปรึกษา",
+      "phone": "0948573645",
+      "status": "ลาออก"
+    },
+    {
+      "id": "3",
+      "type": "teacher",
+      "user_id": "003",
+      "prefix": "นางสาว",
+      "first_name": "นฤมล",
+      "last_name": "สุดประเสริฐ",
+      "rank": "ครูที่ปรึกษา",
+      "phone": "0824445566",
+      "status": "รับราชการ"
+    },
+    {
+      "id": "5",
+      "type": "Admin",
+      "user_id": "005",
+      "prefix": "นาง",
+      "first_name": "จารุวรรณ",
+      "last_name": "พัฒนากุล",
+      "rank": "เจ้าหน้าที่ฝ่ายทะเบียน",
+      "phone": "0861234567",
+      "status": "รับราชการ"
+    },
+    {
+      "id": "6",
+      "type": "teacher",
+      "user_id": "006",
+      "prefix": "นาย",
+      "first_name": "วีระชัย",
+      "last_name": "สุวรรณ",
+      "rank": "เจ้าหน้าที่ฝ่ายทะเบียน",
+      "phone": "0876543210",
+      "status": "เกษียณ"
+    },
+    {
+      "id": "7",
+      "type": "teacher",
+      "user_id": "007",
+      "prefix": "นางสาว",
+      "first_name": "กนกพร",
+      "last_name": "อุดมผล",
+      "rank": "เจ้าหน้าที่ฝ่ายทะเบียน",
+      "phone": "0898765432",
+      "status": ""
+    },
+    {
+      "id": "8",
+      "type": "teacher",
+      "user_id": "008",
+      "prefix": "นาย",
+      "first_name": "ธีรภัทร",
+      "last_name": "ชาญศิลป์",
+      "rank": "ครูที่ปรึกษา",
+      "phone": "0881234567",
+      "status": "รับราชการ"
+    },
+    {
+      "id": "9",
+      "type": "teacher",
+      "user_id": "009",
+      "prefix": "นางสาว",
+      "first_name": "พิมพ์ชนก",
+      "last_name": "สายสมร",
+      "rank": "ครูที่ปรึกษา",
+      "phone": "0881234567",
+      "status": "เกษียณ"
+    },
+    {
+      "id": "10",
+      "type": "Admin",
+      "user_id": "010",
+      "prefix": "นาย",
+      "first_name": "ธนากร",
+      "last_name": "บุญช่วย",
+      "rank": "ครูที่ปรึกษา",
+      "phone": "0855556666",
+      "status": "รับราชการ"
+    },
+    {
+      "id": "11",
+      "type": "teacher",
+      "user_id": "011",
+      "prefix": "นาง",
+      "first_name": "อรพิน",
+      "last_name": "สุขเกษม",
+      "rank": "เจ้าหน้าที่ฝ่ายทะเบียน",
+      "phone": "0844443333",
+      "status": "ลาออก"
+    },
+    {
+      "id": "12",
+      "type": "teacher",
+      "user_id": "012",
+      "prefix": "นาย",
+      "first_name": "ศุภชัย",
+      "last_name": "เกษมศักดิ์",
+      "rank": "ครูที่ปรึกษา",
+      "phone": "0867778888",
+      "status": "เกษียณ"
+    },
+    {
+      "id": "07fb",
+      "prefix": "นาย",
+      "first_name": "พันแสน",
+      "last_name": "สมกล้า",
+      "user_id": "056",
+      "rank": "เจ้าหน้าที่ฝ่ายทะเบียน",
+      "phone": "0879697455",
+      "status": "เกษียณ"
+    },
+    {
+      "id": "fa38",
+      "prefix": "นางสาว",
+      "first_name": "วิภา",
+      "last_name": "สุงสิง",
+      "user_id": "057",
+      "rank": "ครูที่ปรึกษา",
+      "phone": "0837462839",
+      "status": "เกษียณ"
+    },
+    {
+      "id": "d4dc",
+      "prefix": "นาย",
+      "first_name": "แทน",
+      "last_name": "นี่",
+      "user_id": "100",
+      "rank": "เจ้าหน้าที่ฝ่ายทะเบียน",
+      "phone": "0824445566",
+      "status": "รับราชการ"
+    },
+    {
+      "id": "3ad4",
+      "prefix": "นางสาว",
+      "first_name": "สุชาติ",
+      "last_name": "รอดผล",
+      "user_id": "200",
+      "rank": "ครูที่ปรึกษา",
+      "phone": "0485434453",
+      "status": "รับราชการ"
+    },
+    {
+      "id": "a79c",
+      "prefix": "นาย",
+      "first_name": "อีซี่",
+      "last_name": "มาก",
+      "user_id": "333",
+      "rank": "ครูที่ปรึกษา",
+      "phone": "0948594837",
+      "status": "รับราชการ"
+    },
+    {
+      "id": "41fa",
+      "prefix": "นางสาว",
+      "first_name": "กหฟ",
+      "last_name": "ฟหกฟหก",
+      "user_id": "323",
+      "rank": "ครูที่ปรึกษา",
+      "phone": "0948574657",
+      "status": "รับราชการ"
+    }
+  ]
+}
