@@ -123,7 +123,9 @@ function App() {
               !userInfo?.role.includes("Teacher") && <Navigate to={"/"} />
             }
           >
-            <Route path="" element={<div>Hello, Teacher!!!</div>} />
+            <Route path="" element={<div className="text-xl">Teacher Page</div>} />
+            {/* <Route path="visit-info" element={<VisitInfo />} />
+            <Route path="student-list" element={<StudentList />} /> */}
           </Route>
         </Routes>
       </div>
