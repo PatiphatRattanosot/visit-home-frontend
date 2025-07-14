@@ -14,7 +14,7 @@ import Status from "./pages/students/Status";
 import SelfInfo from "./pages/students/self-info/SelfInfo";
 import AddSelfInfoForm from "./pages/students/self-info/AddSelfInfoForm";
 import UpdateSelfInfoForm from "./pages/students/self-info/UpdateSelfInfoForm";
-import VisitInfo from "./pages/students/VisitInfo";
+
 import Relation from "./pages/students/relation/Relation";
 import AddRelationForm from "./pages/students/relation/AddRelationForm";
 import UpdateRelationForm from "./pages/students/relation/UpdateRelationForm";
@@ -24,7 +24,8 @@ import UpdateFamilyStatusForm from "./pages/students/family-status/UpdateFamilyS
 import Behavior from "./pages/students/behavior/Behavior";
 import AddBehaviorForm from "./pages/students/behavior/AddBehaviorForm";
 import UpdateBehaviorForm from "./pages/students/behavior/UpdateBehaviorForm";
-
+import StudentList from "./pages/teacher/StudentList";
+import VisitInfo from "./pages/teacher/VisitInfo";
 function App() {
   const { user, userInfo, isLoading, signInSystem, signOutSystem } =
     useAuthStore();
@@ -119,13 +120,16 @@ function App() {
           {/* Teacher */}
           <Route
             path="teacher"
-            element={
-              !userInfo?.role.includes("Teacher") && <Navigate to={"/"} />
-            }
+            // element={
+            //   !userInfo?.role.includes("Teacher") && <Navigate to={"/"} />
+            // }
           >
-            <Route path="" element={<div className="text-xl">Teacher Page</div>} />
-            {/* <Route path="visit-info" element={<VisitInfo />} />
-            <Route path="student-list" element={<StudentList />} /> */}
+            <Route
+              path=""
+              element={<div className="text-xl">Teacher Page</div>}
+            />
+            <Route path="student-list" element={<StudentList />} />
+            <Route path="visit-info" element={<VisitInfo />} />
           </Route>
         </Routes>
       </div>
