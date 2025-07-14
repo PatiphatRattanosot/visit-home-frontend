@@ -118,16 +118,16 @@ function App() {
           {/* Teacher */}
           <Route
             path="teacher"
-            element={
-              !userInfo?.role.includes("Teacher") && <Navigate to={"/"} />
-            }
+            // element={
+            //   !userInfo?.role.includes("Teacher") && <Navigate to={"/"} />
+            // }
           >
             <Route
               path=""
               element={<div className="text-xl">Teacher Page</div>}
             />
-            {/* <Route path="visit-info" element={<VisitInfo />} />
-            <Route path="student-list" element={<StudentList />} /> */}
+            <Route path="student-list" element={<StudentList />} />
+            <Route path="visit-info" element={<VisitInfo />} />
           </Route>
         </Routes>
       </div>
