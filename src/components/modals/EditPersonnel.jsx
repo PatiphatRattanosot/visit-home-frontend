@@ -23,7 +23,7 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
     { value: "นางสาว", label: "นางสาว" },
   ];
   const statusOptions = [
-    { value: "รับราชการ", label: "รับราชการ" },
+    { value: "ทำงาน", label: "ทำงาน" },
     { value: "เกษียณ", label: "เกษียณอายุ" },
     { value: "ลาออก", label: "ลาออก" },
   ];
