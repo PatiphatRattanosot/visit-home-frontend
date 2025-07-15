@@ -108,7 +108,7 @@ const Personnel = () => {
 
   const showStatus = (status) => {
     switch (status) {
-      case "รับราชการ":
+      case "ทำงาน":
         return (
           <div className="inline-block px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">
             ทำงาน
