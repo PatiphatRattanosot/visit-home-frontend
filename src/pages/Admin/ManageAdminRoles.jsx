@@ -35,7 +35,7 @@ const ManageAdminRoles = () => {
     const fetchAndFilter = async () => {
       const allPersonnel = await fetchData(); // สมมุติ return เป็น array
       const activePersonnel = allPersonnel.filter(
-        (person) => person.status === "รับราชการ"
+        (person) => person.status === "ทำงาน"
       );
       setFilteredPersonnel(activePersonnel);
     };
@@ -83,8 +83,8 @@ const ManageAdminRoles = () => {
       });
     }
 
-    // กรองข้อมูลตามสถานะ "รับราชการ"
-    filtered = filtered.filter((person) => person.status === "รับราชการ");
+    // กรองข้อมูลตามสถานะ "ทำงาน"
+    filtered = filtered.filter((person) => person.status === "ทำงาน");
 
     let sorted = [...filtered];
     // เรียงลำดับข้อมูลตามตัวเลือกที่เลือก

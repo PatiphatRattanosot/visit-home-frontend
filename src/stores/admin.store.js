@@ -19,7 +19,6 @@ export const usePersonnelStore = create((set, get) => ({
     } catch (error) {
       console.error(error.response.data.message);
       toast.error(error.response.data.message);
-     
     }
   },
   getPersonnelById: async (id) => {
@@ -71,8 +70,10 @@ export const usePersonnelStore = create((set, get) => ({
           "เกิดข้อผิดพลาดในการอัปเดตข้อมูลบุคลากร"
       );
     }
-  },
  
+},
+
+
 
   deletePersonnel: async (email) => {
     Swal.fire({
@@ -118,7 +119,7 @@ export const usePersonnelStore = create((set, get) => ({
       }
     });
   },
-  addAdminRole: async (email, newRole) => {
+  addAdminRole: async (email) => {
     try {
       const response = await UserService.addAdminRole(email, newRole);
 
@@ -127,9 +128,13 @@ export const usePersonnelStore = create((set, get) => ({
         get().fetchData(); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลบุคลากรใหม่
       }
     } catch (error) {
-    
-      console.error("Error changing role:", error?.response?.data?.message || "เกิดข้อผิดพลาดในการเปลี่ยนบทบาท");
-      toast.error(error?.response?.data?.message || "เกิดข้อผิดพลาดในการเปลี่ยนบทบาท");
+      console.error(
+        "Error changing role:",
+        error?.response?.data?.message || "เกิดข้อผิดพลาดในการเปลี่ยนบทบาท"
+      );
+      toast.error(
+        error?.response?.data?.message || "เกิดข้อผิดพลาดในการเปลี่ยนบทบาท"
+      );
     }
   },
   removeAdminRole: async (email, roleToRemove) => {

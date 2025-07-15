@@ -1,6 +1,6 @@
 import api from "../api";
 
-const baseUrl = "/users/student";
+const baseUrl = "/users";
 
 const getAllStudents = async () => {
   return await api.get(`${baseUrl}`);
