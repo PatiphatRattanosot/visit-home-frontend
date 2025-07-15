@@ -50,6 +50,7 @@ const AddClassroom = ({ addClassroomSuccess }) => {
                 type="number"
                 name="room"
                 placeholder="เลขชั้น"
+                maxLength={3}
                 disabled={false}
                 value={formik.values.room}
                 onChange={formik.handleChange}
@@ -64,6 +65,7 @@ const AddClassroom = ({ addClassroomSuccess }) => {
                 className="w-64 md:w-72"
                 label="ห้อง"
                 placeholder="เลขห้อง"
+                maxLength={3}
                 disabled={false}
                 value={formik.values.number}
                 onChange={formik.handleChange}
