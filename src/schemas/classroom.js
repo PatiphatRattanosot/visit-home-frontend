@@ -2,6 +2,7 @@ import * as yup from "yup";
 
 const onlyNumber = /^\d+$/;
 
+
 export const ClassroomSchema = yup.object().shape({
   room: yup
     .number()
