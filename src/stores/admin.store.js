@@ -52,51 +52,18 @@ export const usePersonnelStore = create((set, get) => ({
       console.log("เพิ่มผิดพลาดนะ", error.response.data.message);
     }
   },
-  // updatePersonnel: async (id, values) => {
-
-  //   try {
-  //     const res = await UserService.updateTeacher({ ...values, _id: id });
-  //     console.log("res", res);
-  //     if (res.status === 200) {
-  //       document.getElementById(`edit_personnel_${id}`).close();
-  //       toast.success(res.data.message);
-  //       const updatedPersonnel = get().data.map((person) =>
-  //         person._id === id ? { ...person, ...values } : person
-  //       );
-  //       set({ data: updatedPersonnel }); // อัปเดตข้อมูล personnel หลังจากแก้ไขสำเร็จ
-  //     }
-  //   } catch (error) {
-  //     toast.error(
-  //       error.response?.data?.message ||
-  //         "เกิดข้อผิดพลาดในการอัปเดตข้อมูลบุคลากร"
-  //     );
-  //   }
-  // },
   updatePersonnel: async (id, values) => {
+
     try {
       const res = await UserService.updateTeacher({ ...values, _id: id });
       console.log("res", res);
-
       if (res.status === 200) {
         document.getElementById(`edit_personnel_${id}`).close();
-
-        // ดึงข้อมูล role ของคนที่แก้ไขจาก state เดิม
-        //ยังไม่ค่อยเข้าใจ p มาจากไหน
-        const person = get().data.find((p) => p._id === id);
-        const isAdmin = person?.role?.includes("Admin");
-
-        // แสดงข้อความตาม role
-        if (isAdmin) {
-          toast.success("แก้ไขข้อมูลเจ้าหน้าที่สำเร็จ");
-        } else {
-          toast.success(res.data.message || "แก้ไขข้อมูลบุคลากรสำเร็จ");
-        }
-
-        // อัปเดตข้อมูลใน store
+        toast.success(res.data.message);
         const updatedPersonnel = get().data.map((person) =>
           person._id === id ? { ...person, ...values } : person
         );
-        set({ data: updatedPersonnel });
+        set({ data: updatedPersonnel }); // อัปเดตข้อมูล personnel หลังจากแก้ไขสำเร็จ
       }
     } catch (error) {
       toast.error(
@@ -105,6 +72,7 @@ export const usePersonnelStore = create((set, get) => ({
       );
     }
   },
+ 
 
   deletePersonnel: async (email) => {
     Swal.fire({
