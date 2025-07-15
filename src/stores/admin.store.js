@@ -338,50 +338,56 @@ export const useClassroomStore = create((set, get) => ({
     }
   },
 
-  deleteClassroom: async (id) =>
-    Swal.fire({
-      title: "คุณแน่ใจหรือไม่?",
-      text: "คุณต้องการลบข้อมูลชั้นเรียนนี้!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "ยืนยัน",
-      cancelButtonText: "ยกเลิก",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const response = await ClassroomService.deleteClass(id);
-          Swal.fire({
-            title: "ลบข้อมูลเรียบร้อย",
-            text: response.data.message,
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500,
-          }).then(() => {
-            const updatedClassrooms = get().data.filter(
-              (classroom) => classroom._id !== id
-            );
-            set({ data: updatedClassrooms });
-          });
-        } catch (err) {
-          Swal.fire({
-            title: "เกิดข้อผิดพลาด",
-            text:
-              err.response?.data?.message || "ไม่สามารถลบข้อมูลชั้นเรียนได้",
-            icon: "error",
-            confirmButtonText: "ตกลง",
-          });
-          console.log(err);
-        }
-      } else if (result.isDismissed) {
+ deleteClassroom: async (id) => {
+  const classRoom = get().data.find((classroom) => classroom._id === id);
+  const room = classRoom ? classRoom.room : "ไม่ทราบห้อง";
+  const number = classRoom ? classRoom.number : "ไม่ทราบชั้น";
+
+  Swal.fire({
+    title: "คุณแน่ใจหรือไม่?",
+    text: `คุณต้องการลบข้อมูลชั้นเรียน ม.${room}/${number} หรือไม่!`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "ยืนยัน",
+    cancelButtonText: "ยกเลิก",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const response = await ClassroomService.deleteClass(id);
         Swal.fire({
-          title: "ยกเลิกการลบข้อมูล",
-          icon: "info",
+          title: "ลบข้อมูลเรียบร้อย",
+          text: response.data.message,
+          icon: "success",
           showConfirmButton: false,
           timer: 1500,
+        }).then(() => {
+          const updatedClassrooms = get().data.filter(
+            (classroom) => classroom._id !== id
+          );
+          set({ data: updatedClassrooms });
         });
+      } catch (err) {
+        Swal.fire({
+          title: "เกิดข้อผิดพลาด",
+          text:
+            err.response?.data?.message || "ไม่สามารถลบข้อมูลชั้นเรียนได้",
+          icon: "error",
+          confirmButtonText: "ตกลง",
+        });
+        console.log(err);
       }
-    }),
+    } else if (result.isDismissed) {
+      Swal.fire({
+        title: "ยกเลิกการลบข้อมูล",
+        icon: "info",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+  });
+},
+
 }));
 >>>>>>> a9455de (Update personnel status filter and improve error handling in admin store and edit schema limit class room)
