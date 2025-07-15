@@ -41,8 +41,8 @@ const RadioInput = ({
               className="radio"
               id={`${name}_${index}`}
               name={name}
-              value={item}
-              checked={value === item}
+              value={extraOpt ? item : index}
+              checked={value === (extraOpt ? item : index)}
               onChange={onChange}
               onBlur={onBlur}
             />

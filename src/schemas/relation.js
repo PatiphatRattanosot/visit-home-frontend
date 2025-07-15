@@ -8,17 +8,38 @@ export const RelationSchema = yup.object().shape({
     .min(1, "กรุณากรอกจำนวนให้ถูกต้อง")
     .integer("จำนวนสมาชิกไม่ควรเป็นทศนิยม"),
   family_time: yup.number().min(0, "กรุณากรอกจำนวนชั่วโมงให้ถูกต้อง"),
-  father_relation: yup.string().matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย"),
-  mother_relation: yup.string().matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย"),
-  brother_relation: yup.string().matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย"),
-  sister_relation: yup.string().matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย"),
+  father_relation: yup
+    .number()
+    .min(0, "กรุณาเลือกความสัมพันธ์")
+    .max(4, "กรุณาเลือกความสัมพันธ์ที่ถูกต้อง"),
+  mother_relation: yup
+    .number()
+    .min(0, "กรุณาเลือกความสัมพันธ์")
+    .max(4, "กรุณาเลือกความสัมพันธ์ที่ถูกต้อง"),
+  brother_relation: yup
+    .number()
+    .min(0, "กรุณาเลือกความสัมพันธ์")
+    .max(4, "กรุณาเลือกความสัมพันธ์ที่ถูกต้อง"),
+  sister_relation: yup
+    .number()
+    .min(0, "กรุณาเลือกความสัมพันธ์")
+    .max(4, "กรุณาเลือกความสัมพันธ์ที่ถูกต้อง"),
   grand_parent_relation: yup
-    .string()
-    .matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย"),
-  relatives_relation: yup.string().matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย"),
+    .number()
+    .min(0, "กรุณาเลือกความสัมพันธ์")
+    .max(4, "กรุณาเลือกความสัมพันธ์ที่ถูกต้อง"),
+  relatives_relation: yup
+    .number()
+    .min(0, "กรุณาเลือกความสัมพันธ์")
+    .max(4, "กรุณาเลือกความสัมพันธ์ที่ถูกต้อง"),
   other_relative: yup.string().matches(onlyThaiLang, "กรุณากรอกเป็นภาษาไทย"),
-  other_relation: yup.string().matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย"),
-  when_student_alone: yup.string().matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย"),
+  other_relation: yup
+    .number()
+    .min(0, "กรุณาเลือกความสัมพันธ์")
+    .max(4, "กรุณาเลือกความสัมพันธ์ที่ถูกต้อง"),
+  when_student_alone: yup
+    .string()
+    .matches(onlyThaiLang, "กรุณากรอกเป็นภาษาไทย"),
   total_household_income: yup.number().min(0, "กรุณากรอกจำนวนเงินให้ถูกต้อง"),
   daily_total_to_school: yup.number().min(0, "กรุณากรอกจำนวนเงินให้ถูกต้อง"),
   received_daily_from: yup

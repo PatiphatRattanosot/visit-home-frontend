@@ -10,6 +10,7 @@ const SelectInput = ({
   error,
   touched,
   onBlur,
+  indexValue = false,
 }) => {
   return (
     <div className={`flex flex-col ${className}`}>
@@ -26,8 +27,8 @@ const SelectInput = ({
         disabled={disabled}
       >
         {defaultOpt && <option value="">{defaultOpt}</option>}
-        {options?.map((option) => (
-          <option key={option} value={option}>
+        {options?.map((option, index) => (
+          <option key={option} value={indexValue ? index : option}>
             {option}
           </option>
         ))}

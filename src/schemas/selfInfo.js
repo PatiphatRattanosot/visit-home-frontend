@@ -2,7 +2,6 @@ import * as yup from "yup";
 
 const onlyThaiLang = /^[\u0E00-\u0E7F\s]+$/;
 const phoneRule = /^\d+$/;
-const latLngRegex = /^-?\d+(\.\d+)?$/;
 
 export const SelfInfoSchema = yup.object().shape({
   father_prefix: yup.string().matches(onlyThaiLang, "จำเป็นต้องเป็นภาษาไทย"),
@@ -41,6 +40,6 @@ export const SelfInfoSchema = yup.object().shape({
     .min(10, "กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง")
     .max(10, "กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง"),
   parent_job: yup.string().matches(onlyThaiLang, "จำเป็นต้องเป็นภาษาไทย"),
-  lat: yup.string().matches(latLngRegex, "กรุณากรอกเป็นตัวเลข"),
-  lng: yup.string().matches(latLngRegex, "กรุณากรอกเป็นตัวเลข"),
+  lat: yup.number(),
+  lng: yup.number(),
 });
