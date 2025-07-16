@@ -46,7 +46,12 @@ const UpdateRelationForm = () => {
       support_from_organize: "",
       parent_concern: "",
     },
-    validationSchema: RelationSchema,
+    // validationSchema: RelationSchema,
+    onSubmit: async (values, actions) => {
+      console.log("Submitting", values);
+      console.log("Submitting", actions);
+      actions.resetForm();
+    },
   });
 
   const relationOpts = ["สนิทสนม", "เฉยๆ", "ห่างเหิน", "ขัดแย้ง", "ไม่มี"];

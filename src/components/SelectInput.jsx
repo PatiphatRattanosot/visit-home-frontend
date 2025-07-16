@@ -28,7 +28,7 @@ const SelectInput = ({
       >
         {defaultOpt && <option value="">{defaultOpt}</option>}
         {options?.map((option, index) => (
-          <option key={option} value={indexValue ? index : option}>
+          <option key={option} value={indexValue ? String(index) : option}>
             {option}
           </option>
         ))}

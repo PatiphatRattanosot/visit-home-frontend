@@ -8,35 +8,16 @@ export const RelationSchema = yup.object().shape({
     .min(1, "กรุณากรอกจำนวนให้ถูกต้อง")
     .integer("จำนวนสมาชิกไม่ควรเป็นทศนิยม"),
   family_time: yup.number().min(0, "กรุณากรอกจำนวนชั่วโมงให้ถูกต้อง"),
-  father_relation: yup
-    .number()
-    .min(0, "กรุณาเลือกความสัมพันธ์")
-    .max(4, "กรุณาเลือกความสัมพันธ์ที่ถูกต้อง"),
-  mother_relation: yup
-    .number()
-    .min(0, "กรุณาเลือกความสัมพันธ์")
-    .max(4, "กรุณาเลือกความสัมพันธ์ที่ถูกต้อง"),
-  brother_relation: yup
-    .number()
-    .min(0, "กรุณาเลือกความสัมพันธ์")
-    .max(4, "กรุณาเลือกความสัมพันธ์ที่ถูกต้อง"),
-  sister_relation: yup
-    .number()
-    .min(0, "กรุณาเลือกความสัมพันธ์")
-    .max(4, "กรุณาเลือกความสัมพันธ์ที่ถูกต้อง"),
+  father_relation: yup.string().matches(/^[0-4]$/, "กรุณาเลือกความสัมพันธ์"),
+  mother_relation: yup.string().matches(/^[0-4]$/, "กรุณาเลือกความสัมพันธ์"),
+  brother_relation: yup.string().matches(/^[0-4]$/, "กรุณาเลือกความสัมพันธ์"),
+  sister_relation: yup.string().matches(/^[0-4]$/, "กรุณาเลือกความสัมพันธ์"),
   grand_parent_relation: yup
-    .number()
-    .min(0, "กรุณาเลือกความสัมพันธ์")
-    .max(4, "กรุณาเลือกความสัมพันธ์ที่ถูกต้อง"),
-  relatives_relation: yup
-    .number()
-    .min(0, "กรุณาเลือกความสัมพันธ์")
-    .max(4, "กรุณาเลือกความสัมพันธ์ที่ถูกต้อง"),
+    .string()
+    .matches(/^[0-4]$/, "กรุณาเลือกความสัมพันธ์"),
+  relatives_relation: yup.string().matches(/^[0-4]$/, "กรุณาเลือกความสัมพันธ์"),
   other_relative: yup.string().matches(onlyThaiLang, "กรุณากรอกเป็นภาษาไทย"),
-  other_relation: yup
-    .number()
-    .min(0, "กรุณาเลือกความสัมพันธ์")
-    .max(4, "กรุณาเลือกความสัมพันธ์ที่ถูกต้อง"),
+  other_relation: yup.string().matches(/^[0-4]$/, "กรุณาเลือกความสัมพันธ์"),
   when_student_alone: yup
     .string()
     .matches(onlyThaiLang, "กรุณากรอกเป็นภาษาไทย"),

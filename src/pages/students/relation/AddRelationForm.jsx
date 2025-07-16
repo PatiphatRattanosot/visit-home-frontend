@@ -56,7 +56,7 @@ const AddRelationForm = () => {
       support_from_organize: "",
       parent_concern: "",
     },
-    validationSchema: RelationSchema,
+    // validationSchema: RelationSchema,
     onSubmit: async (values, actions) => {
       console.log("Submitting", values);
       console.log("Submitting", actions);
@@ -150,6 +150,7 @@ const AddRelationForm = () => {
               onBlur={handleBlur}
               error={errors.father_relation}
               touched={touched.father_relation}
+              indexValue
             />
             {/* ความสัมพันธ์ มารดา */}
             <SelectInput
@@ -162,6 +163,7 @@ const AddRelationForm = () => {
               onBlur={handleBlur}
               error={errors.mother_relation}
               touched={touched.mother_relation}
+              indexValue
             />
             {/* ความสัมพันธ์ พี่/น้องชาย */}
             <SelectInput
@@ -174,6 +176,7 @@ const AddRelationForm = () => {
               onBlur={handleBlur}
               error={errors.brother_relation}
               touched={touched.brother_relation}
+              indexValue
             />
             {/* ความสัมพันธ์ พี่/น้องสาว */}
             <SelectInput
@@ -186,6 +189,7 @@ const AddRelationForm = () => {
               onBlur={handleBlur}
               error={errors.sister_relation}
               touched={touched.sister_relation}
+              indexValue
             />
             {/* ความสัมพันธ์ ปู่/ย่า/ตา/ยาย */}
             <SelectInput
@@ -198,6 +202,7 @@ const AddRelationForm = () => {
               onBlur={handleBlur}
               error={errors.grand_parent_relation}
               touched={touched.grand_parent_relation}
+              indexValue
             />
             {/* ความสัมพันธ์ ญาติๆ */}
             <SelectInput
@@ -210,6 +215,7 @@ const AddRelationForm = () => {
               onBlur={handleBlur}
               error={errors.relatives_relation}
               touched={touched.relatives_relation}
+              indexValue
             />
             {/* ความสัมพันธ์อื่นๆ */}
             <TextInput
@@ -233,6 +239,7 @@ const AddRelationForm = () => {
               onBlur={handleBlur}
               error={errors.other_relation}
               touched={touched.other_relation}
+              indexValue
             />
             {/* เวลาผู้ปกครองไม่อยู่ */}
             <div className="md:col-span-2">

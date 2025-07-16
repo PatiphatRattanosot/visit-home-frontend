@@ -39,7 +39,7 @@ const UpdateSelfInfoForm = () => {
       lat: "",
       lng: "",
     },
-    validationSchema: SelfInfoSchema,
+    // validationSchema: SelfInfoSchema,
     onSubmit: async (values, actions) => {
       console.log("Submitting", values);
       console.log("Submitting", actions);

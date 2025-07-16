@@ -32,7 +32,12 @@ const UpdateFamilyStatusForm = () => {
       owned_land: 0,
       rented_land: 0,
     },
-    validationSchema: FamilyStatusSchema,
+    // validationSchema: FamilyStatusSchema,
+    onSubmit: async (values, actions) => {
+      console.log("Submitting", values);
+      console.log("Submitting", actions);
+      actions.resetForm();
+    },
   });
   console.log(values);
 

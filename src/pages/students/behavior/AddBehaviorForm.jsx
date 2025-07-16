@@ -42,7 +42,7 @@ const AddBehaviorForm = () => {
       tech_use_behavior: "",
       information_giver: "",
     },
-    validationSchema: BehaviorSchema,
+    // validationSchema: BehaviorSchema,
     onSubmit: async (values, actions) => {
       console.log("Submitting", values);
       console.log("Submitting", actions);
