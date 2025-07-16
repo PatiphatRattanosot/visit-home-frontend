@@ -9,6 +9,7 @@ import Stepper from "../../../components/Stepper";
 import { useNavigate, useParams } from "react-router";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
+import RadioInput from "../../../components/RadioInput";
 
 const AddSelfInfoForm = () => {
   const { userInfo } = useAuthStore();
@@ -38,8 +39,8 @@ const AddSelfInfoForm = () => {
       parent_last_name: "",
       parent_phone: "",
       parent_job: "",
-      lat: "",
-      lng: "",
+      lat: 0,
+      lng: 0,
     },
     validationSchema: SelfInfoSchema,
     onSubmit: async (values, actions) => {
@@ -96,6 +97,9 @@ const AddSelfInfoForm = () => {
     stepThree: `/student/visit-info/${year}/family-status/add`,
     stepFour: `/student/visit-info/${year}/behavior/add`,
   };
+
+  console.log(formik.values);
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-9">
@@ -258,90 +262,22 @@ const AddSelfInfoForm = () => {
               onBlur={formik.handleBlur}
             />
             <div className="md:col-span-2">
-              <label
-                className="mb-1 text-sm font-medium text-gray-700"
-                htmlFor="family_relation"
-              >
-                ความสัมพันธ์ของครอบครัว <span className="text-red-600">*</span>
-              </label>
-              <div
-                className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2"
-                id="family_relation"
-              >
-                <div className="flex space-x-1 items-center text-sm">
-                  <input
-                    type="radio"
-                    name="family_relation_status"
-                    id="family_relation_status_1"
-                    className="radio"
-                    value="อยู่ด้วยกัน"
-                    checked={
-                      formik.values.family_relation_status === "อยู่ด้วยกัน"
-                    }
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  <label htmlFor="family_relation_status_1">อยู่ด้วยกัน</label>
-                </div>
-                <div className="flex space-x-1 items-center text-sm">
-                  <input
-                    type="radio"
-                    name="family_relation_status"
-                    id="family_relation_status_2"
-                    className="radio"
-                    value="แยกกันอยู่"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  <label htmlFor="family_relation_status_2">แยกกันอยู่</label>
-                </div>
-                <div className="flex space-x-1 items-center text-sm">
-                  <input
-                    type="radio"
-                    name="family_relation_status"
-                    id="family_relation_status_3"
-                    className="radio"
-                    value="อย่าร้าง"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  <label htmlFor="family_relation_status_3">อย่าร้าง</label>
-                </div>
-                <div className="flex space-x-1 items-center text-sm">
-                  <input
-                    type="radio"
-                    name="family_relation_status"
-                    id="family_relation_status_4"
-                    className="radio"
-                    value="บิดาเสียชีวิต"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  <label htmlFor="family_relation_status_4">
-                    บิดาเสียชีวิต
-                  </label>
-                </div>
-                <div className="flex space-x-1 items-center text-sm">
-                  <input
-                    type="radio"
-                    name="family_relation_status"
-                    id="family_relation_status_5"
-                    className="radio"
-                    value="มารดาเสียชีวิต"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  <label htmlFor="family_relation_status_5">
-                    มารดาเสียชีวิต
-                  </label>
-                </div>
-              </div>
-              {formik.errors.family_relation_status &&
-                formik.touched.family_relation_status && (
-                  <div className="text-red-600 text-xs mt-1">
-                    {formik.errors.family_relation_status}
-                  </div>
-                )}
+              <RadioInput
+                label={"ความสัมพันธ์ของครอบครัว"}
+                name={"family_relation_status"}
+                value={formik.values.family_relation_status}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                touched={formik.touched.family_relation_status}
+                error={formik.errors.family_relation_status}
+                options={[
+                  "อยู่ด้วยกัน",
+                  "แยกกันอยู่",
+                  "หย่าร้าง",
+                  "บิดาเสียชีวิต",
+                  "มารดาเสียชีวิต",
+                ]}
+              />
             </div>
             {/* ดึงข้อมูลจากบิดาหรือมารดา */}
             <div className="flex space-x-2 items-center">

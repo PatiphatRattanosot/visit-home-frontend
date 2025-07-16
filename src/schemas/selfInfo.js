@@ -28,7 +28,7 @@ export const SelfInfoSchema = yup.object().shape({
   mother_job: yup.string().matches(onlyThaiLang, "จำเป็นต้องเป็นภาษาไทย"),
   family_relation_status: yup
     .string()
-    .matches(onlyThaiLang, "จำเป็นต้องเป็นภาษาไทย"),
+    .matches(/^[0-4]$/, "กรุณาเลือกความสัมพันธ์กับครอบครัว"),
   parent_prefix: yup.string().matches(onlyThaiLang, "จำเป็นต้องเป็นภาษาไทย"),
   parent_first_name: yup
     .string()
