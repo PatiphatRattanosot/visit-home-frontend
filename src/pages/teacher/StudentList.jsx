@@ -27,7 +27,7 @@ const StudentList = () => {
       // trim() ใช้เพื่อลบช่องว่างที่ไม่จำเป็น และ toLowerCase() เพื่อเปรียบเทียบแบบไม่สนใจตัวพิมพ์ใหญ่-เล็ก
       const keyword = searchKeyword.trim().toLowerCase();
       filtered = students.filter((student) => {
-        const student_id = student.student_id.toLowerCase();
+        const user_id = student.user_id.toLowerCase();
         const firstName = student.first_name.toLowerCase();
         const lastName = student.last_name.toLowerCase();
         const fullName =
@@ -37,7 +37,7 @@ const StudentList = () => {
           firstName.includes(keyword) ||
           lastName.includes(keyword) ||
           fullName.includes(keyword) ||
-          student_id.includes(keyword)
+          user_id.includes(keyword)
         );
       });
     }
@@ -45,10 +45,10 @@ const StudentList = () => {
     let sorted = [...filtered];
     switch (selectedOption) {
       case "SortToMost":
-        sorted.sort((a, b) => a.student_id - b.student_id);
+        sorted.sort((a, b) => a.user_id - b.user_id);
         break;
       case "MostToSort":
-        sorted.sort((a, b) => b.student_id - a.student_id);
+        sorted.sort((a, b) => b.user_id - a.user_id);
         break;
       case "AlphaSortToMost":
         sorted.sort((a, b) => {
@@ -125,7 +125,7 @@ const StudentList = () => {
         </button>
       </div>
       {/* ตาราง */}
-      <div className="overflow-x-auto">
+      <div className="">
         <table className="table table-zebra w-full">
           <thead>
             <tr>
@@ -139,9 +139,9 @@ const StudentList = () => {
           </thead>
           <tbody>
             {currentItems.map((student, index) => (
-              <tr key={index}>
+              <tr key={index} className="hover:bg-gray-200">
                 <td className="text-center">{student.number}</td>
-                <td className="text-center">{student.student_id}</td>
+                <td className="text-center">{student.user_id}</td>
                 <td>{student.prefix}</td>
                 <td>{student.first_name}</td>
                 <td>{student.last_name}</td>
