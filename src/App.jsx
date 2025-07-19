@@ -126,7 +126,7 @@ function App() {
               path=""
               element={<div className="text-xl">Teacher Page</div>}
             />
-            <Route path="student-list" element={<StudentList />} />
+            <Route path="students" element={<StudentList />} />
             <Route path="visit-info" element={<VisitInfo />} />
           </Route>
         </Routes>
