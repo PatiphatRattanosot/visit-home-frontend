@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useTeacherStore } from "../../stores/teacher.store";
+import { useStudentStore } from "../../stores/student.store";
 import FilterDropdown from "../../components/FilterDropdown";
 import Search from "../../components/Search";
 import Pagination from "../../components/Pagination";
 const StudentList = () => {
-  const { data: students, fetchData } = useTeacherStore();
+  const { data: students, fetchData } = useStudentStore();
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   // state สำหรับจัดการ Search
   const [searchKeyword, setSearchKeyword] = useState("");
