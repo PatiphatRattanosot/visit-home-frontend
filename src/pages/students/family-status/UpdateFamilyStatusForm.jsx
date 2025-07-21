@@ -6,7 +6,7 @@ import RadioInput from "../../../components/RadioInput";
 import TextInput from "../../../components/TextInput";
 import { useEffect } from "react";
 import axios from "axios";
-import { FamilyStatusSchema } from "../../../schemas/familyStatus";
+import { FamilyStatusSchema,FamilyStatusInitialValues } from "../../../schemas/familyStatus";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
 
 const UpdateFamilyStatusForm = () => {
@@ -24,15 +24,8 @@ const UpdateFamilyStatusForm = () => {
     handleChange,
     handleSubmit,
   } = useFormik({
-    initialValues: {
-      household_burdens: [],
-      housing_type: "",
-      housing_condition: "",
-      family_vehicles: [],
-      owned_land: 0,
-      rented_land: 0,
-    },
-    // validationSchema: FamilyStatusSchema,
+    initialValues: FamilyStatusInitialValues,
+    validationSchema: FamilyStatusSchema,
     onSubmit: async (values, actions) => {
       console.log("Submitting", values);
       console.log("Submitting", actions);

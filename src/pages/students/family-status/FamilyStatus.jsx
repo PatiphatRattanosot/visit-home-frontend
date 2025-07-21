@@ -26,7 +26,7 @@ const FamilyStatus = () => {
   }, []);
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/self-info`,
+    stepOne: `/student/visit-info/${year}/personal-info`,
     stepTwo: `/student/visit-info/${year}/relation`,
     stepThree: `/student/visit-info/${year}/family-status`,
     stepFour: `/student/visit-info/${year}/behavior`,

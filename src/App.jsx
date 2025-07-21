@@ -11,9 +11,9 @@ import ManageAdminRoles from "./pages/admin/ManageAdminRoles";
 import YearManagement from "./pages/Admin/Year";
 import Classroom from "./pages/Admin/Classroom";
 import Status from "./pages/students/Status";
-import SelfInfo from "./pages/students/self-info/SelfInfo";
-import AddSelfInfoForm from "./pages/students/self-info/AddSelfInfoForm";
-import UpdateSelfInfoForm from "./pages/students/self-info/UpdateSelfInfoForm";
+import PersonalInfo from "./pages/students/personal-info/PersonalInfo";
+import AddPersonalInfoForm from "./pages/students/personal-info/AddPersonalInfoForm";
+import UpdatePersonalInfoForm from "./pages/students/personal-info/UpdatePersonalInfoForm";
 import VisitInfo from "./pages/students/VisitInfo";
 import Relation from "./pages/students/relation/Relation";
 import AddRelationForm from "./pages/students/relation/AddRelationForm";
@@ -88,10 +88,10 @@ function App() {
               <Route path="" element={<VisitInfo />} />
               <Route path=":year">
                 {/* ข้อมูลส่วนตัว */}
-                <Route path="self-info">
-                  <Route path="" element={<SelfInfo />} />
-                  <Route path="add" element={<AddSelfInfoForm />} />
-                  <Route path="update" element={<UpdateSelfInfoForm />} />
+                <Route path="personal-info">
+                  <Route path="" element={<PersonalInfo />} />
+                  <Route path="add" element={<AddPersonalInfoForm />} />
+                  <Route path="update" element={<UpdatePersonalInfoForm />} />
                 </Route>
 
                 {/* ข้อมูลความสัมพันธ์ */}
@@ -123,7 +123,10 @@ function App() {
               !userInfo?.role.includes("Teacher") && <Navigate to={"/"} />
             }
           >
-            <Route path="" element={<div className="text-xl">Teacher Page</div>} />
+            <Route
+              path=""
+              element={<div className="text-xl">Teacher Page</div>}
+            />
             {/* <Route path="visit-info" element={<VisitInfo />} />
             <Route path="student-list" element={<StudentList />} /> */}
           </Route>

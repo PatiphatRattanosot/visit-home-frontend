@@ -6,7 +6,7 @@ import Stepper from "../../../components/Stepper";
 import { useParams } from "react-router";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
 
-const SelfInfo = () => {
+const PersonalInfo = () => {
   const { userInfo } = useAuthStore();
   const { year } = useParams();
   // สร้าง state มาเก็นข้อมูล
@@ -31,7 +31,7 @@ const SelfInfo = () => {
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/self-info`,
+    stepOne: `/student/visit-info/${year}/personal-info`,
     stepTwo: `/student/visit-info/${year}/relation`,
     stepThree: `/student/visit-info/${year}/family-status`,
     stepFour: `/student/visit-info/${year}/behavior`,
@@ -67,8 +67,8 @@ const SelfInfo = () => {
             className={personalInfo === null ? "btn-green" : "btn-yellow"}
             href={
               personalInfo === null
-                ? `/student/visit-info/${year}/self-info/add`
-                : `/student/visit-info/${year}/self-info/update`
+                ? `/student/visit-info/${year}/personal-info/add`
+                : `/student/visit-info/${year}/personal-info/update`
             }
           >
             {personalInfo === null ? "เพิ่มข้อมูล" : "แก้ไขข้อมูล"}
@@ -204,4 +204,4 @@ const SelfInfo = () => {
   );
 };
 
-export default SelfInfo;
+export default PersonalInfo;

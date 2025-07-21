@@ -4,112 +4,72 @@ import SelectInput from "../../../components/SelectInput";
 import StudentPicture from "../../../components/students/StudentPicture";
 import { useAuthStore } from "../../../stores/auth.store";
 import { useFormik } from "formik";
-import { SelfInfoSchema } from "../../../schemas/selfInfo";
-import axios from "axios";
+import {
+  PersonalInfoSchema,
+  PersonalInfoInitialValues,
+} from "../../../schemas/personalInfo";
+import Stepper from "../../../components/Stepper";
 import { useNavigate, useParams } from "react-router";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import { useStudentFormStore } from "../../../stores/student.store";
 import RadioInput from "../../../components/RadioInput";
 
-const UpdateSelfInfoForm = () => {
+const AddPersonalInfoForm = () => {
   const { userInfo } = useAuthStore();
   const [parentToggle, setParentToggle] = useState(true);
   const [parentFetch, setParentFetch] = useState("dad");
 
+  const { setFormData } = useStudentFormStore();
+
   const navigate = useNavigate();
   const { year } = useParams();
 
-  const formik = useFormik({
-    initialValues: {
-      father_prefix: "",
-      father_first_name: "",
-      father_last_name: "",
-      father_phone: "",
-      father_job: "",
-      mother_prefix: "",
-      mother_first_name: "",
-      mother_last_name: "",
-      mother_phone: "",
-      mother_job: "",
-      family_relation_status: "",
-      parent_prefix: "",
-      parent_first_name: "",
-      parent_last_name: "",
-      parent_phone: "",
-      parent_job: "",
-      lat: "",
-      lng: "",
-    },
-    // validationSchema: SelfInfoSchema,
+  const {
+    initialValues,
+    values,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    errors,
+    touched,
+    setValues,
+    setFieldValue,
+  } = useFormik({
+    initialValues: PersonalInfoInitialValues,
+    validationSchema: PersonalInfoSchema,
     onSubmit: async (values, actions) => {
       console.log("Submitting", values);
       console.log("Submitting", actions);
-      window.alert(values);
+      setFormData({ personal_info: values });
       actions.resetForm();
+      navigate(`/student/visit-info/${year}/relation/add`);
     },
   });
 
-  // เช็คว่ามีการติ๊กเลือกดึงข้อมูลจากบิดาหรือมารดารึป่าว และนำค่าไป่ใส่ใน formik values
   useEffect(() => {
     if (!parentToggle) {
       const parentData =
         parentFetch === "dad"
           ? {
-              parent_prefix: formik.values.father_prefix,
-              parent_first_name: formik.values.father_first_name,
-              parent_last_name: formik.values.father_last_name,
-              parent_job: formik.values.father_job,
-              parent_phone: formik.values.father_phone,
+              parent_prefix: values.father_prefix,
+              parent_name: values.father_name,
+              parent_last_name: values.father_last_name,
+              parent_job: values.father_job,
+              parent_phone: values.father_phone,
             }
           : {
-              parent_prefix: formik.values.mother_prefix,
-              parent_first_name: formik.values.mother_first_name,
-              parent_last_name: formik.values.mother_last_name,
-              parent_job: formik.values.mother_job,
-              parent_phone: formik.values.mother_phone,
+              parent_prefix: values.mother_prefix,
+              parent_name: values.mother_name,
+              parent_last_name: values.mother_last_name,
+              parent_job: values.mother_job,
+              parent_phone: values.mother_phone,
             };
 
       Object.entries(parentData).forEach(([key, val]) =>
-        formik.setFieldValue(key, val)
+        setFieldValue(key, val)
       );
     }
   }, [parentToggle, parentFetch]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/studentInfo/1");
-        if (res.status === 200 && res.data?.personal_info) {
-          const info = res.data.personal_info[0];
-          formik.setValues({
-            father_prefix: info.father_prefix || "",
-            father_first_name: info.father_first_name || "",
-            father_last_name: info.father_last_name || "",
-            father_phone: info.father_phone || "",
-            father_job: info.father_job || "",
-            mother_prefix: info.mother_prefix || "",
-            mother_first_name: info.mother_first_name || "",
-            mother_last_name: info.mother_last_name || "",
-            mother_phone: info.mother_phone || "",
-            mother_job: info.mother_job || "",
-            family_relation_status: info.family_relation_status || "",
-            parent_prefix: info.parent_prefix || "",
-            parent_first_name: info.parent_first_name || "",
-            parent_last_name: info.parent_last_name || "",
-            parent_phone: info.parent_phone || "",
-            parent_job: info.parent_job || "",
-            lat: info.lat || "",
-            lng: info.lng || "",
-          });
-          setImage(info?.image);
-        }
-      } catch (error) {
-        console.log("Fetching bug", error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  console.log(formik.values);
 
   const [image, setImage] = useState(null);
 
@@ -124,6 +84,16 @@ const UpdateSelfInfoForm = () => {
     }
   };
 
+  // stepper path
+  const stepperPath = {
+    stepOne: `/student/visit-info/${year}/personal-info/add`,
+    stepTwo: `/student/visit-info/${year}/relation/add`,
+    stepThree: `/student/visit-info/${year}/family-status/add`,
+    stepFour: `/student/visit-info/${year}/behavior/add`,
+  };
+
+  console.log(values);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-9">
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
@@ -131,18 +101,22 @@ const UpdateSelfInfoForm = () => {
           options={[
             { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
             {
-              link: `/student/visit-info/${year}/self-info`,
+              link: `/student/visit-info/${year}/personal-info`,
               label: "ข้อมูลส่วนตัว",
             },
-            { label: "แก้ไขข้อมูลส่วนตัว" },
+            { label: "เพิ่มข้อมูลส่วนตัว" },
           ]}
         />
-        <h3 className="text-center text-xl font-bold text-gray-600">
-          ข้อมูลส่วนตัวของ{" "}
-          <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
-        </h3>
+        <div className="flex justify-center mb-9">
+          <Stepper step={1} path={stepperPath} />
+        </div>
 
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={handleSubmit}>
+          <h3 className="text-center text-xl font-bold text-gray-600">
+            ข้อมูลส่วนตัวของ{" "}
+            <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
+          </h3>
+
           <div className="mt-8 flex justify-center">
             <StudentPicture
               studentPic={image}
@@ -155,28 +129,28 @@ const UpdateSelfInfoForm = () => {
               {/* คำนำหน้า บิดา */}
               <SelectInput
                 name={"father_prefix"}
-                value={formik.values.father_prefix}
-                onChange={formik.handleChange}
+                value={values.father_prefix}
+                onChange={handleChange}
                 label={"คำนำหน้า"}
                 disabled={false}
                 defaultOpt={"คำนำหน้า"}
                 options={prefixOptions}
-                error={formik.errors.father_prefix}
-                touched={formik.touched.father_prefix}
-                onBlur={formik.handleBlur}
+                error={errors.father_prefix}
+                touched={touched.father_prefix}
+                onBlur={handleBlur}
               />
               {/* ชื่อ บิดา */}
               <TextInput
-                name={"father_first_name"}
+                name={"father_name"}
                 placeholder={"กรอกชื่อบิดา"}
                 disabled={false}
-                value={formik.values.father_first_name}
-                onChange={formik.handleChange}
+                value={values.father_name}
+                onChange={handleChange}
                 label={"ชื่อบิดา"}
                 className={"w-3/4"}
-                error={formik.errors.father_first_name}
-                touched={formik.touched.father_first_name}
-                onBlur={formik.handleBlur}
+                error={errors.father_name}
+                touched={touched.father_name}
+                onBlur={handleBlur}
               />
             </div>
             {/* นามสกุลบิดา */}
@@ -184,64 +158,64 @@ const UpdateSelfInfoForm = () => {
               name={"father_last_name"}
               placeholder={"กรอกนาสกุลบิดา"}
               disabled={false}
-              value={formik.values.father_last_name}
-              onChange={formik.handleChange}
+              value={values.father_last_name}
+              onChange={handleChange}
               label={"นามสกุลบิดา"}
-              error={formik.errors.father_last_name}
-              touched={formik.touched.father_last_name}
-              onBlur={formik.handleBlur}
+              error={errors.father_last_name}
+              touched={touched.father_last_name}
+              onBlur={handleBlur}
             />
             {/* อาชีพบิดา */}
             <TextInput
               name={"father_job"}
               placeholder={"กรอกอาชีพของบิดา"}
               disabled={false}
-              value={formik.values.father_job}
-              onChange={formik.handleChange}
+              value={values.father_job}
+              onChange={handleChange}
               label={"อาชีพ"}
-              error={formik.errors.father_job}
-              touched={formik.touched.father_job}
-              onBlur={formik.handleBlur}
+              error={errors.father_job}
+              touched={touched.father_job}
+              onBlur={handleBlur}
             />
             {/* เบอร์โทรศัพท์ */}
             <TextInput
               name={"father_phone"}
               placeholder={"กรอกเบอร์โทรศัพท์ของบิดา"}
               disabled={false}
-              value={formik.values.father_phone}
-              onChange={formik.handleChange}
+              value={values.father_phone}
+              onChange={handleChange}
               label={"เบอร์โทรศัพท์"}
-              error={formik.errors.father_phone}
-              touched={formik.touched.father_phone}
-              onBlur={formik.handleBlur}
+              error={errors.father_phone}
+              touched={touched.father_phone}
+              onBlur={handleBlur}
             />
             {/* ชื่อและคำนำหน้า */}
             <div className="flex space-x-2">
               {/* คำนำหน้า มารดา */}
               <SelectInput
                 name={"mother_prefix"}
-                value={formik.values.mother_prefix}
-                onChange={formik.handleChange}
+                value={values.mother_prefix}
+                onChange={handleChange}
                 label={"คำนำหน้า"}
                 disabled={false}
                 defaultOpt={"คำนำหน้า"}
                 options={prefixOptions}
-                error={formik.errors.mother_prefix}
-                touched={formik.touched.mother_prefix}
-                onBlur={formik.handleBlur}
+                error={errors.mother_prefix}
+                touched={touched.mother_prefix}
+                onBlur={handleBlur}
               />
               {/* ชื่อ มารดา */}
               <TextInput
-                name={"mother_first_name"}
+                name={"mother_name"}
                 placeholder={"กรอกชื่อมารดา"}
                 disabled={false}
-                value={formik.values.mother_first_name}
-                onChange={formik.handleChange}
+                value={values.mother_name}
+                onChange={handleChange}
                 label={"ชื่อมารดา"}
                 className={"w-3/4"}
-                error={formik.errors.mother_first_name}
-                touched={formik.touched.mother_first_name}
-                onBlur={formik.handleBlur}
+                error={errors.mother_name}
+                touched={touched.mother_name}
+                onBlur={handleBlur}
               />
             </div>
             {/* นามสกุลมารดา */}
@@ -249,46 +223,46 @@ const UpdateSelfInfoForm = () => {
               name={"mother_last_name"}
               placeholder={"กรอกนาสกุลมารดา"}
               disabled={false}
-              value={formik.values.mother_last_name}
-              onChange={formik.handleChange}
+              value={values.mother_last_name}
+              onChange={handleChange}
               label={"นามสกุลมารดา"}
-              error={formik.errors.mother_last_name}
-              touched={formik.touched.mother_last_name}
-              onBlur={formik.handleBlur}
+              error={errors.mother_last_name}
+              touched={touched.mother_last_name}
+              onBlur={handleBlur}
             />
             {/* อาชีพมารดา */}
             <TextInput
               name={"mother_job"}
               placeholder={"กรอกอาชีพของมารดา"}
               disabled={false}
-              value={formik.values.mother_job}
-              onChange={formik.handleChange}
+              value={values.mother_job}
+              onChange={handleChange}
               label={"อาชีพ"}
-              error={formik.errors.mother_job}
-              touched={formik.touched.mother_job}
-              onBlur={formik.handleBlur}
+              error={errors.mother_job}
+              touched={touched.mother_job}
+              onBlur={handleBlur}
             />
             {/* เบอร์โทรศัพท์ */}
             <TextInput
               name={"mother_phone"}
               placeholder={"กรอกเบอร์โทรศัพท์ของมารดา"}
               disabled={false}
-              value={formik.values.mother_phone}
-              onChange={formik.handleChange}
+              value={values.mother_phone}
+              onChange={handleChange}
               label={"เบอร์โทรศัพท์"}
-              error={formik.errors.mother_phone}
-              touched={formik.touched.mother_phone}
-              onBlur={formik.handleBlur}
+              error={errors.mother_phone}
+              touched={touched.mother_phone}
+              onBlur={handleBlur}
             />
             <div className="md:col-span-2">
               <RadioInput
                 label={"ความสัมพันธ์ของครอบครัว"}
                 name={"family_relation_status"}
-                value={formik.values.family_relation_status}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                touched={formik.touched.family_relation_status}
-                error={formik.errors.family_relation_status}
+                value={values.family_relation_status}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                touched={touched.family_relation_status}
+                error={errors.family_relation_status}
                 options={[
                   "อยู่ด้วยกัน",
                   "แยกกันอยู่",
@@ -306,7 +280,7 @@ const UpdateSelfInfoForm = () => {
                 id="parentToggle"
                 name="parentToggle"
                 onChange={() => setParentToggle(!parentToggle)}
-                onBlur={formik.handleBlur}
+                onBlur={handleBlur}
               />
               <span className="text-sm">ใช้ข้อมูลของบิดาหรือมารดา</span>
             </div>
@@ -317,7 +291,7 @@ const UpdateSelfInfoForm = () => {
                 name="parentFetch"
                 value={parentFetch}
                 onChange={(e) => setParentFetch(e.target.value)}
-                onBlur={formik.handleBlur}
+                onBlur={handleBlur}
                 disabled={parentToggle}
               >
                 <option value="dad">บิดา</option>
@@ -329,28 +303,28 @@ const UpdateSelfInfoForm = () => {
               {/* คำนำหน้า ผู้ปกครอง */}
               <SelectInput
                 name={"parent_prefix"}
-                value={formik.values.parent_prefix}
-                onChange={formik.handleChange}
+                value={values.parent_prefix}
+                onChange={handleChange}
                 label={"คำนำหน้า"}
                 disabled={!parentToggle}
                 defaultOpt={"คำนำหน้า"}
                 options={prefixOptions}
-                error={formik.errors.parent_prefix}
-                touched={formik.touched.parent_prefix}
-                onBlur={formik.handleBlur}
+                error={errors.parent_prefix}
+                touched={touched.parent_prefix}
+                onBlur={handleBlur}
               />
               {/* ชื่อ ผู้ปกครอง */}
               <TextInput
-                name={"parent_first_name"}
+                name={"parent_name"}
                 placeholder={"กรอกชื่อผู้ปกครอง"}
                 disabled={!parentToggle}
-                value={formik.values.parent_first_name}
-                onChange={formik.handleChange}
+                value={values.parent_name}
+                onChange={handleChange}
                 label={"ชื่อผู้ปกครอง"}
                 className={"w-3/4"}
-                error={formik.errors.parent_first_name}
-                touched={formik.touched.parent_first_name}
-                onBlur={formik.handleBlur}
+                error={errors.parent_name}
+                touched={touched.parent_name}
+                onBlur={handleBlur}
               />
             </div>
             {/* นามสกุลผู้ปกครอง */}
@@ -358,74 +332,75 @@ const UpdateSelfInfoForm = () => {
               name={"parent_last_name"}
               placeholder={"กรอกนาสกุลผู้ปกครอง"}
               disabled={!parentToggle}
-              value={formik.values.parent_last_name}
-              onChange={formik.handleChange}
+              value={values.parent_last_name}
+              onChange={handleChange}
               label={"นามสกุลผู้ปกครอง"}
-              error={formik.errors.parent_last_name}
-              touched={formik.touched.parent_last_name}
-              onBlur={formik.handleBlur}
+              error={errors.parent_last_name}
+              touched={touched.parent_last_name}
+              onBlur={handleBlur}
             />
             {/* อาชีพผู้ปกครอง */}
             <TextInput
               name={"parent_job"}
               placeholder={"กรอกอาชีพของผู้ปกครอง"}
               disabled={!parentToggle}
-              value={formik.values.parent_job}
-              onChange={formik.handleChange}
+              value={values.parent_job}
+              onChange={handleChange}
               label={"อาชีพ"}
-              error={formik.errors.parent_job}
-              touched={formik.touched.parent_job}
-              onBlur={formik.handleBlur}
+              error={errors.parent_job}
+              touched={touched.parent_job}
+              onBlur={handleBlur}
             />
             {/* เบอร์โทรศัพท์ */}
             <TextInput
               name={"parent_phone"}
               placeholder={"กรอกเบอร์โทรศัพท์ของผู้ปกครอง"}
               disabled={!parentToggle}
-              value={formik.values.parent_phone}
-              onChange={formik.handleChange}
+              value={values.parent_phone}
+              onChange={handleChange}
               label={"เบอร์โทรศัพท์"}
-              error={formik.errors.parent_phone}
-              touched={formik.touched.parent_phone}
-              onBlur={formik.handleBlur}
+              error={errors.parent_phone}
+              touched={touched.parent_phone}
+              onBlur={handleBlur}
             />
             {/* lat */}
             <TextInput
               name={"lat"}
               placeholder={"0.00"}
               disabled={false}
-              value={formik.values.lat}
-              onChange={formik.handleChange}
+              value={values.lat}
+              onChange={handleChange}
               label={"ละติจูด"}
-              error={formik.errors.lat}
-              touched={formik.touched.lat}
-              onBlur={formik.handleBlur}
+              error={errors.lat}
+              touched={touched.lat}
+              onBlur={handleBlur}
             />
             {/* lng */}
             <TextInput
               name={"lng"}
               placeholder={"0.00"}
               disabled={false}
-              value={formik.values.lng}
-              onChange={formik.handleChange}
+              value={values.lng}
+              onChange={handleChange}
               label={"ลองจิจูด"}
-              error={formik.errors.lng}
-              touched={formik.touched.lng}
-              onBlur={formik.handleBlur}
+              error={errors.lng}
+              touched={touched.lng}
+              onBlur={handleBlur}
             />
           </div>
           <div className="flex justify-between mt-10 space-x-2">
             <button
               className="btn-red w-1/2"
+              type="button"
               onClick={() => {
-                formik.setValues(formik.initialValues);
+                setValues(initialValues);
                 navigate(`/student/visit-info/${year}/self-info`);
               }}
             >
               ยกเลิก
             </button>
-            <button type="submit" className="btn-green w-1/2">
-              บันทึก
+            <button type="submit" className="btn-gray w-1/2">
+              ถัดไป
             </button>
           </div>
         </form>
@@ -434,4 +409,4 @@ const UpdateSelfInfoForm = () => {
   );
 };
 
-export default UpdateSelfInfoForm;
+export default AddPersonalInfoForm;

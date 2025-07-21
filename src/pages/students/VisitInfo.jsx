@@ -7,7 +7,6 @@ const VisitInfo = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  console.log(years);
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center">

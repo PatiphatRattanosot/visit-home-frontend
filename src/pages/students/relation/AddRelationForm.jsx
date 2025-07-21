@@ -6,7 +6,7 @@ import { useAuthStore } from "../../../stores/auth.store";
 import Stepper from "../../../components/Stepper";
 import { useFormik } from "formik";
 import { useNavigate, useParams } from "react-router";
-import { RelationSchema } from "../../../schemas/relation";
+import { RelationSchema,RelationInitialValues } from "../../../schemas/relation";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 
@@ -19,7 +19,7 @@ const AddRelationForm = () => {
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/self-info/add`,
+    stepOne: `/student/visit-info/${year}/personal-info/add`,
     stepTwo: `/student/visit-info/${year}/relation/add`,
     stepThree: `/student/visit-info/${year}/family-status/add`,
     stepFour: `/student/visit-info/${year}/behavior/add`,
@@ -35,28 +35,8 @@ const AddRelationForm = () => {
     setValues,
     initialValues,
   } = useFormik({
-    initialValues: {
-      family_member: 0,
-      family_time: 0,
-      father_relation: "สนิทสนม",
-      mother_relation: "สนิทสนม",
-      brother_relation: "สนิทสนม",
-      sister_relation: "สนิทสนม",
-      grand_parent_relation: "สนิทสนม",
-      relatives_relation: "สนิทสนม",
-      other_relative: "",
-      other_relation: "ไม่มี",
-      when_student_alone: "",
-      total_household_income: 0,
-      daily_total_to_school: 0,
-      received_daily_from: "บิดา",
-      student_part_time: "",
-      student_income: 0,
-      support_from_school: "",
-      support_from_organize: "",
-      parent_concern: "",
-    },
-    // validationSchema: RelationSchema,
+    initialValues: RelationInitialValues,
+    validationSchema: RelationSchema,
     onSubmit: async (values, actions) => {
       console.log("Submitting", values);
       console.log("Submitting", actions);
@@ -370,7 +350,7 @@ const AddRelationForm = () => {
               type="button"
               onClick={() => {
                 setValues(initialValues);
-                navigate(`/student/visit-info/${year}/self-info/add`);
+                navigate(`/student/visit-info/${year}/personal-info/add`);
               }}
             >
               ก่อนหน้า

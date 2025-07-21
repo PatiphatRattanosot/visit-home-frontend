@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router";
 import CheckboxInput from "../../../components/CheckboxInput";
 import RadioInput from "../../../components/RadioInput";
 import TextInput from "../../../components/TextInput";
-import { FamilyStatusSchema } from "../../../schemas/familyStatus";
+import { FamilyStatusSchema,FamilyStatusInitialValues } from "../../../schemas/familyStatus";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 
@@ -26,15 +26,8 @@ const AddFamilyStatusForm = () => {
     handleChange,
     handleSubmit,
   } = useFormik({
-    initialValues: {
-      household_burdens: [],
-      housing_type: "",
-      housing_condition: "",
-      family_vehicles: [],
-      owned_land: 0,
-      rented_land: 0,
-    },
-    // validationSchema: FamilyStatusSchema,
+    initialValues:FamilyStatusInitialValues,
+    validationSchema: FamilyStatusSchema,
     onSubmit: async (values, actions) => {
       console.log("Submitting", values);
       console.log("Submitting", actions);
@@ -47,7 +40,7 @@ const AddFamilyStatusForm = () => {
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/self-info/add`,
+    stepOne: `/student/visit-info/${year}/personal-info/add`,
     stepTwo: `/student/visit-info/${year}/relation/add`,
     stepThree: `/student/visit-info/${year}/family-status/add`,
     stepFour: `/student/visit-info/${year}/behavior/add`,

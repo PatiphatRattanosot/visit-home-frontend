@@ -6,7 +6,10 @@ import CheckboxInput from "../../../components/CheckboxInput";
 import RadioInput from "../../../components/RadioInput";
 import TextInput from "../../../components/TextInput";
 import SelectInput from "../../../components/SelectInput";
-import { BehaviorSchema } from "../../../schemas/behavior";
+import {
+  BehaviorSchema,
+  BehaviorInitialValues,
+} from "../../../schemas/behavior";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 
@@ -26,23 +29,8 @@ const AddBehaviorForm = () => {
     handleChange,
     handleSubmit,
   } = useFormik({
-    initialValues: {
-      health_risk: [],
-      welfare_and_safety: [],
-      distance_to_school: 0,
-      time_used: 0,
-      school_transport: "",
-      student_responsibilities: [],
-      hobbies: [],
-      drugs_behavior: [],
-      violent_behavior: [],
-      sexual_behavior: [],
-      gaming_behavior: [],
-      computer_internet_access: "",
-      tech_use_behavior: "",
-      information_giver: "",
-    },
-    // validationSchema: BehaviorSchema,
+    initialValues: BehaviorInitialValues,
+    validationSchema: BehaviorSchema,
     onSubmit: async (values, actions) => {
       console.log("Submitting", values);
       console.log("Submitting", actions);
@@ -56,7 +44,7 @@ const AddBehaviorForm = () => {
   const navigate = useNavigate();
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/self-info/add`,
+    stepOne: `/student/visit-info/${year}/personal-info/add`,
     stepTwo: `/student/visit-info/${year}/relation/add`,
     stepThree: `/student/visit-info/${year}/family-status/add`,
     stepFour: `/student/visit-info/${year}/behavior/add`,
@@ -243,12 +231,12 @@ const AddBehaviorForm = () => {
             {/* พฤติกรรมการใช้สารเสพติด */}
             <CheckboxInput
               label={"พฤติกรรมการใช้สารเสพติด (ตอบได้มากกว่า 1 ข้อ)"}
-              name={"drugs_behavior"}
-              value={values.drugs_behavior}
+              name={"drugs_behav"}
+              value={values.drugs_behav}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={errors.drugs_behavior}
-              touched={touched.drugs_behavior}
+              error={errors.drugs_behav}
+              touched={touched.drugs_behav}
               options={[
                 "คบเพื่อนในกลุ่มที่ใช้สารเสพติด",
                 "สมาชิกในครอบครัวข้องเกี่ยวกับยาเสพติด",
@@ -261,12 +249,12 @@ const AddBehaviorForm = () => {
             {/* พฤติกรรมการใช้ความรุนแรง */}
             <CheckboxInput
               label={"พฤติกรรมการใช้ความรุนแรง (ตอบได้มากกว่า 1 ข้อ)"}
-              name={"violent_behavior"}
-              value={values.violent_behavior}
+              name={"violent_behav"}
+              value={values.violent_behav}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={errors.violent_behavior}
-              touched={touched.violent_behavior}
+              error={errors.violent_behav}
+              touched={touched.violent_behav}
               options={[
                 "มีการทะเลาะวิวาท",
                 "ก้าวร้าว เกเร",
@@ -281,12 +269,12 @@ const AddBehaviorForm = () => {
             {/* พฤติกรรมทางเพศ */}
             <CheckboxInput
               label={"พฤติกรรมทางเพศ (ตอบได้มากกว่า 1 ข้อ)"}
-              name={"sexual_behavior"}
-              value={values.sexual_behavior}
+              name={"sexual_behav"}
+              value={values.sexual_behav}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={errors.sexual_behavior}
-              touched={touched.sexual_behavior}
+              error={errors.sexual_behav}
+              touched={touched.sexual_behav}
               options={[
                 "อยู่ในกลุ่มขายบริการ",
                 "ใช้เครื่องมือสื่อสารที่เกี่ยวข้องกับด้านเพศเป็นเวลานานและบ่อยครั้ง",
@@ -300,12 +288,12 @@ const AddBehaviorForm = () => {
             {/* การติดเกม */}
             <CheckboxInput
               label={"การติดเกม (ตอบได้มากกว่า 1 ข้อ)"}
-              name={"gaming_behavior"}
-              value={values.gaming_behavior}
+              name={"gaming_behav"}
+              value={values.gaming_behav}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={errors.gaming_behavior}
-              touched={touched.gaming_behavior}
+              error={errors.gaming_behav}
+              touched={touched.gaming_behav}
               options={[
                 "เล่นเกมเกินวันละ 1 ชั่วโมง",
                 "ขาดจินตนาการและความคิดสร้างสรรค์",
@@ -339,12 +327,12 @@ const AddBehaviorForm = () => {
             {/* การใช้เครื่องมือสื่อสารอิเล็กทรอนิกส์ */}
             <RadioInput
               label={"การใช้เครื่องมือสื่อสารอิเล็กทรอนิกส์"}
-              name={"tech_use_behavior"}
-              value={values.tech_use_behavior}
+              name={"tech_use_behav"}
+              value={values.tech_use_behav}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={errors.tech_use_behavior}
-              touched={touched.tech_use_behavior}
+              error={errors.tech_use_behav}
+              touched={touched.tech_use_behav}
               options={[
                 "ใช้ Social media/game (ไม่เกินวันละ 3 ชั่วโมง)",
                 "ใช้ Social media/game (วันละ 3 ชั่วโมงขึ้นไป)",
