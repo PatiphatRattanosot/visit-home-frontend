@@ -146,10 +146,11 @@ const StudentList = () => {
                 key={`${index}, ${student.id}`}
                 className="hover:bg-gray-200"
                 onClick={() => {
+                  setSelectedStudent(student);
                   document
                     .getElementById(`manage_student_${student.id}`)
                     .showModal();
-                  setSelectedStudent(student);
+                  
                 }}
               >
                 <td className="text-center">{student.number}</td>
@@ -182,7 +183,7 @@ const StudentList = () => {
         </table>
       </div>
       {/* pagination */}
-      <ManageStudent student={selectedStudent} />
+      <ManageStudent student={selectedStudent} onClose={() => setSelectedStudent(null)} />
       <Pagination
         totalItems={filteredStudent.length}
         itemsPerPage={itemsPerPage}
