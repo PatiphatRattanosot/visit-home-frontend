@@ -1,4 +1,5 @@
 const ManageStudent = ({ student }) => {
+    if (!student) return null; // Ensure student is defined before rendering
   return (
     <div>
       <dialog id={`manage_student_${student.id}`} className="modal">
@@ -26,3 +27,4 @@ const ManageStudent = ({ student }) => {
 };
 
 export default ManageStudent;
+ 
