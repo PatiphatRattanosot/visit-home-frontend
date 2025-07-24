@@ -169,6 +169,8 @@ const navigate = useNavigate();
                 <td className="text-center">
                   {showStatus(student.visit_status)}
                 </td>
+
+                
               </tr>
             ))}
           </tbody>
