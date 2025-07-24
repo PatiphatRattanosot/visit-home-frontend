@@ -3,8 +3,11 @@ import { useStudentStore } from "../../stores/student.store";
 import FilterDropdown from "../../components/FilterDropdown";
 import Search from "../../components/Search";
 import Pagination from "../../components/Pagination";
+import ManageStudent from "../../components/modals/ManageStudent";
 const StudentList = () => {
   const { data: students, fetchData } = useStudentStore();
+  const [selectedStudent, setSelectedStudent] = useState(null);
+
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   // state สำหรับจัดการ Search
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -139,7 +142,16 @@ const StudentList = () => {
           </thead>
           <tbody>
             {currentItems.map((student, index) => (
-              <tr key={index} className="hover:bg-gray-200">
+              <tr
+                key={`${index}, ${student.id}`}
+                className="hover:bg-gray-200"
+                onClick={() => {
+                  document
+                    .getElementById(`manage_student_${student.id}`)
+                    .showModal();
+                  setSelectedStudent(student);
+                }}
+              >
                 <td className="text-center">{student.number}</td>
                 <td className="text-center">{student.user_id}</td>
                 <td>{student.prefix}</td>
@@ -148,6 +160,8 @@ const StudentList = () => {
                 <td className="text-center">
                   {showStatus(student.visit_status)}
                 </td>
+
+                
               </tr>
             ))}
           </tbody>
@@ -168,6 +182,7 @@ const StudentList = () => {
         </table>
       </div>
       {/* pagination */}
+      <ManageStudent student={selectedStudent} />
       <Pagination
         totalItems={filteredStudent.length}
         itemsPerPage={itemsPerPage}
@@ -178,5 +193,4 @@ const StudentList = () => {
   );
 };
 
-
-export default StudentList
+export default StudentList;
