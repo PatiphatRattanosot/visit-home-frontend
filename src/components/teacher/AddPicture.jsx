@@ -1,11 +1,11 @@
 import { MdUpload } from "react-icons/md";
 
-const AddPicture = ({ set, get, onClick, id }) => {
+const AddPicture = ({  get, id, onChange }) => {
   return (
     <>
       <div
         className="flex flex-col items-center justify-center w-78 h-60 border-2 border-gray-300 rounded-md bg-white hover:bg-gray-50 hover:border-gray-400 cursor-pointer transition"
-        onClick={onClick}
+        onClick={() => document.getElementById(id)?.click()}
       >
         {get ? (
           <img
@@ -27,7 +27,7 @@ const AddPicture = ({ set, get, onClick, id }) => {
         type="file"
         id={id}
         accept="image/jpeg, image/png"
-        onChange={(e) => set(e.target.files[0])}
+        onChange={onChange} 
       />
     </>
   );
