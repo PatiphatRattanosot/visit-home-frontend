@@ -1,5 +1,10 @@
+import { useNavigate } from "react-router";
 const ManageStudent = ({ student }) => {
     if (!student) return null; // Ensure student is defined before rendering
+    const navigate = useNavigate();
+    const goToVisitInfo = () => {
+    navigate("/teacher/visit-info", { state: { student } });
+  };
   return (
     <div>
       <dialog id={`manage_student_${student.id}`} className="modal">
@@ -16,7 +21,7 @@ const ManageStudent = ({ student }) => {
             <button className="btn">ประวัติการประเมิน SDQ</button>
             <button className="btn">ประเมิน SDQ</button>
             <button className="btn">ดูเส้นทาง</button>
-            <button className="btn">ผลการเยี่ยมบ้าน</button>
+            <button onClick={goToVisitInfo} className="btn">ผลการเยี่ยมบ้าน</button>
             <button className="btn">ข้อมูลการเยี่ยมบ้าน</button>
             <button className="btn">พิมพ์เอกสาร</button>
           </div>
