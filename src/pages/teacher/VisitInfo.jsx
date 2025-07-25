@@ -4,8 +4,12 @@ import TextInput from "../../components/modals/TexInputInModal";
 import TextArea from "../../components/TextArea";
 import TeacherService from "../../services/teacher/teacher.service";
 import toast from "react-hot-toast";
+import { useLocation } from "react-router";
 
 const VisitResult = () => {
+  const location = useLocation();
+  const student = location.state?.student;
+  if (!student) return null; 
   const [homepicture, setHomePicture] = useState(null);
   const [familypicture, setFamilyPicture] = useState(null);
 
@@ -31,7 +35,7 @@ const VisitResult = () => {
     <div className="section-c">
       <div className="flex justify-center items-center mt-4">
         <h5 className="font-semibold">
-          ข้อมูลของ <span>นาย</span> <span>กิตติพงษ์</span>
+          ข้อมูลของ <span>{student.prefix}</span> <span>{student.first_name}</span> <span>{student.last_name}</span>
         </h5>
       </div>
 
