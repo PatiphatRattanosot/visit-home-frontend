@@ -47,6 +47,14 @@ const AddPersonalInfoForm = () => {
   });
 
   useEffect(() => {
+    const localData = JSON.parse(localStorage.getItem("student-form-storage"));
+    console.log("Local Data:", localData);
+    if (localData && localData.state.formData.personal_info) {
+      setValues(localData.state.formData.personal_info);
+    }
+  }, []);
+
+  useEffect(() => {
     if (!parentToggle) {
       const parentData =
         parentFetch === "dad"
@@ -394,6 +402,7 @@ const AddPersonalInfoForm = () => {
               type="button"
               onClick={() => {
                 setValues(initialValues);
+                setFormData({ personal_info: values });
                 navigate(`/student/visit-info/${year}/self-info`);
               }}
             >

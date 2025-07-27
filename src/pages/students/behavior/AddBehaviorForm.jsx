@@ -12,11 +12,12 @@ import {
 } from "../../../schemas/behavior";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
+import { useEffect } from "react";
 
 const AddBehaviorForm = () => {
   const { userInfo } = useAuthStore();
 
-  const { setFormData } = useStudentFormStore();
+  const { setFormData, submitForm } = useStudentFormStore();
 
   const {
     initialValues,
@@ -35,10 +36,23 @@ const AddBehaviorForm = () => {
       console.log("Submitting", values);
       console.log("Submitting", actions);
       setFormData({ behavior_and_risk: values });
+      const localFormData = JSON.parse(
+        localStorage.getItem("student-form-storage")
+      );
+      if (localFormData) {
+        await submitForm(userInfo._id, year, localFormData.state.formData);
+      }
       actions.resetForm();
     },
   });
-  console.log(values);
+
+  useEffect(() => {
+    const localData = JSON.parse(localStorage.getItem("student-form-storage"));
+    console.log("Local Data:", localData);
+    if (localData && localData.state.formData.behavior_and_risk) {
+      setValues(localData.state.formData.behavior_and_risk);
+    }
+  }, []);
 
   const { year } = useParams();
   const navigate = useNavigate();
@@ -359,6 +373,7 @@ const AddBehaviorForm = () => {
               type="button"
               onClick={() => {
                 setValues(initialValues);
+                setFormData({ behavior_and_risk: values });
                 navigate(`/student/visit-info/${year}/family-status/add`);
               }}
             >

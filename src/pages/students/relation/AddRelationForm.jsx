@@ -6,9 +6,13 @@ import { useAuthStore } from "../../../stores/auth.store";
 import Stepper from "../../../components/Stepper";
 import { useFormik } from "formik";
 import { useNavigate, useParams } from "react-router";
-import { RelationSchema,RelationInitialValues } from "../../../schemas/relation";
+import {
+  RelationSchema,
+  RelationInitialValues,
+} from "../../../schemas/relation";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
+import { useEffect } from "react";
 
 const AddRelationForm = () => {
   const { userInfo } = useAuthStore();
@@ -45,6 +49,14 @@ const AddRelationForm = () => {
       navigate(`/student/visit-info/${year}/family-status/add`);
     },
   });
+
+  useEffect(() => {
+    const localData = JSON.parse(localStorage.getItem("student-form-storage"));
+    console.log("Local Data:", localData);
+    if (localData && localData.state.formData.relation_info) {
+      setValues(localData.state.formData.relation_info);
+    }
+  }, []);
 
   const relationOpts = ["สนิทสนม", "เฉยๆ", "ห่างเหิน", "ขัดแย้ง", "ไม่มี"];
   const studentAloneOpts = ["ญาติ", "เพื่อนบ้าน", "นักเรียนอยู่บ้านด้วยตนเอง"];
@@ -350,6 +362,7 @@ const AddRelationForm = () => {
               type="button"
               onClick={() => {
                 setValues(initialValues);
+                setFormData({ relation_info: values });
                 navigate(`/student/visit-info/${year}/personal-info/add`);
               }}
             >

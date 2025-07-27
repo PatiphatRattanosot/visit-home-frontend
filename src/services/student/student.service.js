@@ -18,10 +18,15 @@ const updateStudent = async (id, data) => {
   return await api.put(`${baseUrl}/${id}`, data);
 };
 
+const yearlyData = async (stdId, yearId, data) => {
+  return await api.put(`${baseUrl}/${stdId}/yearly/${yearId}`, data);
+};
+
 const StudentService = {
   getAllStudents,
   createStudent,
   getStudentById,
+  yearlyData,
   updateStudent,
 };
 

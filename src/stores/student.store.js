@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import StudentService from "../services/student/student.service";
+import Swal from "sweetalert2";
 
 export const useStudentFormStore = create(
   persist(
@@ -18,6 +19,27 @@ export const useStudentFormStore = create(
 
       // Optional: clear the form data, e.g., on submit
       clearFormData: () => set({ formData: {} }),
+      submitForm: async (stdId, yearId, data) => {
+        try {
+          const res = await StudentService.yearlyData(stdId, yearId, data);
+          if (res.status === 200) {
+            Swal.fire({
+              icon: "success",
+              title: "สำเร็จ",
+              text: "เพิ่มข้อมูลประจำปีเรียบร้อยแล้ว!",
+            });
+            get().clearFormData(); // Clear form data after successful submission
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "ข้อผิดพลาด",
+              text: "ไม่สามารถเพิ่มข้อมูลประจำปีได้.",
+            });
+          }
+        } catch (error) {
+          console.log("Error submitting form:", error);
+        }
+      },
     }),
     {
       name: "student-form-storage", // key in localStorage

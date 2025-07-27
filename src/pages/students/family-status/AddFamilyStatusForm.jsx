@@ -5,9 +5,13 @@ import { useNavigate, useParams } from "react-router";
 import CheckboxInput from "../../../components/CheckboxInput";
 import RadioInput from "../../../components/RadioInput";
 import TextInput from "../../../components/TextInput";
-import { FamilyStatusSchema,FamilyStatusInitialValues } from "../../../schemas/familyStatus";
+import {
+  FamilyStatusSchema,
+  FamilyStatusInitialValues,
+} from "../../../schemas/familyStatus";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
+import { useEffect } from "react";
 
 const AddFamilyStatusForm = () => {
   const { userInfo } = useAuthStore();
@@ -26,7 +30,7 @@ const AddFamilyStatusForm = () => {
     handleChange,
     handleSubmit,
   } = useFormik({
-    initialValues:FamilyStatusInitialValues,
+    initialValues: FamilyStatusInitialValues,
     validationSchema: FamilyStatusSchema,
     onSubmit: async (values, actions) => {
       console.log("Submitting", values);
@@ -36,7 +40,14 @@ const AddFamilyStatusForm = () => {
       navigate(`/student/visit-info/${year}/behavior/add`);
     },
   });
-  console.log(values);
+
+  useEffect(() => {
+    const localData = JSON.parse(localStorage.getItem("student-form-storage"));
+    console.log("Local Data:", localData);
+    if (localData && localData.state.formData.family_status_info) {
+      setValues(localData.state.formData.family_status_info);
+    }
+  }, []);
 
   // stepper path
   const stepperPath = {
@@ -170,6 +181,7 @@ const AddFamilyStatusForm = () => {
               type="button"
               onClick={() => {
                 setValues(initialValues);
+                setFormData({ family_status_info: values });
                 navigate(`/student/visit-info/${year}/relation/add`);
               }}
             >
