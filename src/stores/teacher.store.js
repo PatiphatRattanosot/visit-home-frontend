@@ -6,10 +6,8 @@ export const useTeacherStore = create((set) => ({
   setData: (data) => set({ data }),
   fetchData: async () => {
     try {
-        const response = await TeacherService.getAllStudentInclass();
-        
-            set({ data: response.data });
-    
+      const response = await TeacherService.getAllStudentInclass();
+      if (response === 200) set({ data: response.data });
     } catch (error) {
       console.log("fetchData error:", error);
     }
