@@ -104,8 +104,8 @@ const StudentList = () => {
         );
     }
   };
-const navigate = useNavigate();
-    const goToVisitInfo = () => {
+  const navigate = useNavigate();
+  const goToVisitInfo = () => {
     navigate("/teacher/visit-info", { state: { student } });
   };
   return (
@@ -160,17 +160,16 @@ const navigate = useNavigate();
                 <td>{`${student.prefix}${student.first_name} ${student.last_name}`}</td>
                 <td>
                   <div className="flex flex-wrap justify-center gap-2">
-            
-            <button onClick={goToVisitInfo} className="btn">ผลการเยี่ยมบ้าน</button>
-            <button className="btn">ข้อมูลการเยี่ยมบ้าน</button>
-            <button className="btn">พิมพ์เอกสาร</button>
-          </div>
+                    <button onClick={goToVisitInfo} className="btn">
+                      ผลการเยี่ยมบ้าน
+                    </button>
+                    <button className="btn">ข้อมูลการเยี่ยมบ้าน</button>
+                    <button className="btn">พิมพ์เอกสาร</button>
+                  </div>
                 </td>
                 <td className="text-center">
                   {showStatus(student.visit_status)}
                 </td>
-
-                
               </tr>
             ))}
           </tbody>
