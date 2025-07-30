@@ -35,16 +35,13 @@ const VisitResult = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const formData = new FormData()
-      formData.append("file", addVisitInfo.homePicture)
-      const res = await TeacherService.addVisitInfo(formData)
-      // const response = await TeacherService.addVisitInfo({
-      //   homePicture: addVisitInfo.homePicture,
-      //   familyPicture: addVisitInfo.familyPicture,
-      //   des_home: addVisitInfo.des_home,
-      //   des_family: addVisitInfo.des_family,
-      //   teacher_comment: addVisitInfo.teacher_comment,
-      // });
+      const response = await TeacherService.addVisitInfo({
+        homePicture: addVisitInfo.homePicture,
+        familyPicture: addVisitInfo.familyPicture,
+        des_home: addVisitInfo.des_home,
+        des_family: addVisitInfo.des_family,
+        teacher_comment: addVisitInfo.teacher_comment,
+      });
       toast.success("เพิ่มข้อมูลการเยี่ยมบ้านเรียบร้อยแล้ว");
       window.location.reload();
     } catch (error) {

@@ -5,11 +5,7 @@ const getAllStudentInclass = async () => {
 };
 
 const addVisitInfo = async (data) => {
-  return await api.post("/visitinfo", data, {
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    }
-  });
+  return await api.post("/visitinfo", data);
 };
 
 const TeacherService = {
