@@ -1,7 +1,7 @@
 import api from "../api";
 
 const getAllStudentInclass = async () => {
-  return await api.get("/users/student/students");
+  return await api.get("/users/student");
 };
 
 const addVisitInfo = async (data) => {
