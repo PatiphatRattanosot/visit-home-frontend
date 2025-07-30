@@ -64,7 +64,7 @@ const Behavior = () => {
             className={behaviorInfo === null ? "btn-green" : "btn-yellow"}
             href={
               behaviorInfo === null
-                ? `/student/visit-info/${year}/behavior/add`
+                ? `/student/visit-info/${year}/personal-info/add`
                 : `/student/visit-info/${year}/behavior/update`
             }
           >

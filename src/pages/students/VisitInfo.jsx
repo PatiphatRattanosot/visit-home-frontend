@@ -18,7 +18,7 @@ const VisitInfo = () => {
           {years.length > 0 &&
             years.map((year, index) => (
               <div key={index}>
-                <YearBtn year={year.year} />
+                <YearBtn year={year.year} _id={year._id} />
               </div>
             ))}
         </div>

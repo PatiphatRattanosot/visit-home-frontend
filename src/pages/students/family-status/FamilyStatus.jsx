@@ -62,7 +62,7 @@ const FamilyStatus = () => {
             className={familyStatusInfo === null ? "btn-green" : "btn-yellow"}
             href={
               familyStatusInfo === null
-                ? `/student/visit-info/${year}/family-status/add`
+                ? `/student/visit-info/${year}/personal-status/add`
                 : `/student/visit-info/${year}/family-status/update`
             }
           >

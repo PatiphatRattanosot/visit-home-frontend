@@ -63,7 +63,7 @@ const Relation = () => {
             className={relationInfo === null ? "btn-green" : "btn-yellow"}
             href={
               relationInfo === null
-                ? `/student/visit-info/${year}/relation/add`
+                ? `/student/visit-info/${year}/personal-info/add`
                 : `/student/visit-info/${year}/relation/update`
             }
           >

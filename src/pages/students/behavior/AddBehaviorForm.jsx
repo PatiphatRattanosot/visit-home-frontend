@@ -23,7 +23,6 @@ const AddBehaviorForm = () => {
     initialValues,
     values,
     setValues,
-    setFieldValue,
     errors,
     touched,
     handleBlur,
@@ -41,10 +40,14 @@ const AddBehaviorForm = () => {
       );
       if (localFormData) {
         await submitForm(userInfo._id, year, localFormData.state.formData);
+        localStorage.removeItem("student-form-storage");
+        navigate(`/student/visit-info/${year}`);
       }
       actions.resetForm();
     },
   });
+  console.log("Behavior Form Values:", values);
+  
 
   useEffect(() => {
     const localData = JSON.parse(localStorage.getItem("student-form-storage"));
@@ -202,12 +205,12 @@ const AddBehaviorForm = () => {
               label={
                 "ภาระงานความรับผิดชอบของนักเรียนที่มีต่อครอบครัว (ตอบได้มากกว่า 1 ข้อ)"
               }
-              name={"student_responsibilities"}
-              value={values.student_responsibilities}
+              name={"student_resp"}
+              value={values.student_resp}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={errors.student_responsibilities}
-              touched={touched.student_responsibilities}
+              error={errors.student_resp}
+              touched={touched.student_resp}
               options={[
                 "ช่วยงานบ้าน",
                 "ช่วยคนดูแลคนเจ็บป่วย/พิการ",
@@ -217,7 +220,10 @@ const AddBehaviorForm = () => {
               ]}
               extraOpt
               grid="grid-cols-2"
-              setFieldValue={setFieldValue}
+              nameExtra={"student_resp_other"}
+              valueExtra={values.student_resp_other}
+              errorExtra={errors.student_resp_other}
+              touchedExtra={touched.student_resp_other}
             />
             {/* กิจกรรมยามว่างหรืองานอดิเรก */}
             <CheckboxInput
@@ -240,7 +246,10 @@ const AddBehaviorForm = () => {
               ]}
               extraOpt
               grid="grid-cols-2"
-              setFieldValue={setFieldValue}
+              nameExtra={"other_hobbies"}
+              valueExtra={values.other_hobbies}
+              errorExtra={errors.other_hobbies}
+              touchedExtra={touched.other_hobbies}
             />
             {/* พฤติกรรมการใช้สารเสพติด */}
             <CheckboxInput
@@ -278,7 +287,10 @@ const AddBehaviorForm = () => {
               ]}
               extraOpt
               grid="grid-cols-2"
-              setFieldValue={setFieldValue}
+              nameExtra={"other_violent_behav"}
+              valueExtra={values.other_violent_behav}
+              errorExtra={errors.other_violent_behav}
+              touchedExtra={touched.other_violent_behav}
             />
             {/* พฤติกรรมทางเพศ */}
             <CheckboxInput
@@ -321,7 +333,10 @@ const AddBehaviorForm = () => {
               ]}
               extraOpt
               grid="grid-cols-2"
-              setFieldValue={setFieldValue}
+              nameExtra={"other_gaming_behav"}
+              valueExtra={values.other_gaming_behav}
+              errorExtra={errors.other_gaming_behav}
+              touchedExtra={touched.other_gaming_behav}
             />
             {/* การเข้าถึงสื่อคอมพิวเตอร์และอินเตอร์เน็ตที่บ้าน */}
             <RadioInput

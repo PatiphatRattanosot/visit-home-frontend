@@ -150,17 +150,32 @@ const AddFamilyStatusForm = () => {
                 เป็นเกษตรกรมีที่ดินทำกิน (รวมเช่า)
               </label>
               <div id="farmland" className="flex flex-col mt-3 gap-3">
-                <TextInput
-                  label={"เป็นเจ้าของจำนวน (ไร่)"}
-                  name={"owned_land"}
-                  value={values.owned_land}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={errors.owned_land}
-                  touched={touched.owned_land}
-                  type="number"
-                  className="w-2/6"
-                />
+                <div className="flex items-center text-sm space-x-2 my-2">
+                  <input
+                    type="checkbox"
+                    id="less_than_one"
+                    name="less_than_one"
+                    className="checkbox"
+                    value={true}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    checked={values.less_than_one}
+                  />
+                  <label htmlFor="less_than_one">มีที่ดินน้อยกว่า 1 ไร่</label>
+                </div>
+                {values.less_than_one === false && (
+                  <TextInput
+                    label={"เป็นเจ้าของจำนวน (ไร่)"}
+                    name={"owned_land"}
+                    value={values.owned_land}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={errors.owned_land}
+                    touched={touched.owned_land}
+                    type="number"
+                    className="w-2/6"
+                  />
+                )}
                 <TextInput
                   label={"เช่าจำนวน (ไร่)"}
                   name={"rented_land"}

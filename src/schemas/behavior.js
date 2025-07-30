@@ -5,34 +5,34 @@ const onlyThaiLang = /^[\u0E00-\u0E7F\s]+$/;
 export const BehaviorSchema = yup.object().shape({
   health_risk: yup
     .array()
-    .of(yup.string().matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย")),
+    .of(yup.string().matches(/^[0-5]$/, "กรุณาเลือกคำตอบ")),
   welfare_and_safety: yup
     .array()
-    .of(yup.string().matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย")),
+    .of(yup.string().matches(/^(?:[0-9]|10|11)$/, "กรุณาเลือกคำตอบ")),
   distance_to_school: yup.number().min(0, "ระยะทางไม่ควรเป็นลบ"),
   time_used: yup.number().min(0, "เวลาเดินทางไม่ควรเป็นลบ"),
   school_transport: yup.string().matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย"),
   student_resp: yup
     .array()
-    .of(yup.string().matches(/^[0-1]$/, "กรุณาเลือกคำตอบ")),
+    .of(yup.string().matches(/^[0-4]$/, "กรุณาเลือกคำตอบ")),
   student_resp_other: yup.string().matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย"),
-  hobbies: yup.array().of(yup.string().matches(/^[0-1]$/, "กรุณาเลือกคำตอบ")),
+  hobbies: yup.array().of(yup.string().matches(/^[0-7]$/, "กรุณาเลือกคำตอบ")),
   other_hobbies: yup.string().matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย"),
   drugs_behav: yup
     .array()
-    .of(yup.string().matches(/^[0-1]$/, "กรุณาเลือกคำตอบ")),
+    .of(yup.string().matches(/^[0-4]$/, "กรุณาเลือกคำตอบ")),
   violent_behav: yup
     .array()
-    .of(yup.string().matches(/^[0-1]$/, "กรุณาเลือกคำตอบ")),
+    .of(yup.string().matches(/^[0-4]$/, "กรุณาเลือกคำตอบ")),
   other_violent_behav: yup
     .string()
     .matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย"),
   sexual_behav: yup
     .array()
-    .of(yup.string().matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย")),
+    .of(yup.string().matches(/^[0-5]$/, "กรุณาเลือกคำตอบ")),
   gaming_behav: yup
     .array()
-    .of(yup.string().matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย")),
+    .of(yup.string().matches(/^[0-8]$/, "กรุณาตอบเป็นภาษาไทย")),
   other_gaming_behav: yup.string().matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย"),
   computer_internet_access: yup.string().matches(/^[0-1]$/, "กรุณาเลือกคำตอบ"),
   tech_use_behav: yup.string().matches(/^[0-1]$/, "กรุณาเลือกคำตอบ"),
