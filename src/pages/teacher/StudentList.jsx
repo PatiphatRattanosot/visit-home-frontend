@@ -134,9 +134,9 @@ const StudentList = () => {
             <tr>
               <th className="text-center">เลขที่</th>
               <th className="text-center">เลขที่ประจำตัว</th>
-              <th>คำนำหน้า</th>
-              <th>ชื่อ</th>
-              <th>นามสกุล</th>
+              <th>ชื่อ - นามสกุล</th>
+              {/*<th>ชื่อ</th>
+              <th>นามสกุล</th>*/}
               <th className="text-center">สถานะการเยี่ยมบ้าน</th>
             </tr>
           </thead>
@@ -155,9 +155,9 @@ const StudentList = () => {
               >
                 <td className="text-center">{student.number}</td>
                 <td className="text-center">{student.user_id}</td>
-                <td>{student.prefix}</td>
-                <td>{student.first_name}</td>
-                <td>{student.last_name}</td>
+                <td>{`${student.prefix}${student.first_name} ${student.last_name}`}</td>
+                {/* <td>{student.first_name}</td>
+                <td>{student.last_name}</td> */}
                 <td className="text-center">
                   {showStatus(student.visit_status)}
                 </td>
