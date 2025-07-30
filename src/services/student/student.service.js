@@ -4,6 +4,7 @@ const baseUrl = "/users/student";
 
 const getAllStudents = async () => {
 <<<<<<< HEAD
+<<<<<<< HEAD
   return await api.get(`${baseUrl}`);
 };
 
@@ -33,19 +34,26 @@ const updateProfile = async (data) => {
   });
 =======
   return await api.get(`${baseUrl}/students`);
+=======
+  return await api.get(`${baseUrl}`);
+>>>>>>> 2f183ef (Edit table in student list page)
 };
 
 const createStudent = async (data) => {
-  return await api.post(`${baseUrl}/students`, data);
+  return await api.post(`${baseUrl}`, data);
 };
 
 const getStudentById = async (id) => {
-  return await api.get(`${baseUrl}/students/${id}`);
+  return await api.get(`${baseUrl}/${id}`);
 };
 
 const updateStudent = async (id, data) => {
+<<<<<<< HEAD
   return await api.put(`${baseUrl}/students/${id}`, data);
 >>>>>>> bbd2882 (Debug student update imports and API endpoints in StudentList and StudentService)
+=======
+  return await api.put(`${baseUrl}/${id}`, data);
+>>>>>>> 2f183ef (Edit table in student list page)
 };
 
 const StudentService = {
