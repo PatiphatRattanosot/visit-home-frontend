@@ -3,17 +3,31 @@ import TextInput from "../../../components/TextInput";
 import SelectInput from "../../../components/SelectInput";
 import TextArea from "../../../components/TextArea";
 import { useAuthStore } from "../../../stores/auth.store";
+import Stepper from "../../../components/Stepper";
 import { useFormik } from "formik";
 import { useNavigate, useParams } from "react-router";
-import { RelationSchema,RelationInitialValues } from "../../../schemas/relation";
-import { useEffect } from "react";
-import axios from "axios";
+import {
+  RelationSchema,
+  RelationInitialValues,
+} from "../../../schemas/relation";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import { useStudentFormStore } from "../../../stores/student.store";
+import { useEffect } from "react";
 
 const UpdateRelationForm = () => {
   const { userInfo } = useAuthStore();
   const navigate = useNavigate();
   const { year } = useParams();
+
+  const { setFormData } = useStudentFormStore();
+
+  // stepper path
+  const stepperPath = {
+    stepOne: `/student/visit-info/${year}/personal-info/update`,
+    stepTwo: `/student/visit-info/${year}/relation/update`,
+    stepThree: `/student/visit-info/${year}/family-status/update`,
+    stepFour: `/student/visit-info/${year}/behavior/update`,
+  };
 
   const {
     values,
@@ -30,9 +44,19 @@ const UpdateRelationForm = () => {
     onSubmit: async (values, actions) => {
       console.log("Submitting", values);
       console.log("Submitting", actions);
+      setFormData({ relation_info: values });
       actions.resetForm();
+      navigate(`/student/visit-info/${year}/family-status/update`);
     },
   });
+
+  useEffect(() => {
+    const localData = JSON.parse(localStorage.getItem("student-form-storage"));
+    console.log("Local Data:", localData);
+    if (localData && localData.state.formData.relation_info) {
+      setValues(localData.state.formData.relation_info);
+    }
+  }, []);
 
   const relationOpts = ["สนิทสนม", "เฉยๆ", "ห่างเหิน", "ขัดแย้ง", "ไม่มี"];
   const studentAloneOpts = ["ญาติ", "เพื่อนบ้าน", "นักเรียนอยู่บ้านด้วยตนเอง"];
@@ -59,20 +83,6 @@ const UpdateRelationForm = () => {
 
   console.log(values);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/studentInfo/1");
-        if (res.status === 200) {
-          setValues(res.data.relation_info[0]);
-        }
-      } catch (error) {
-        console.log("Fetching bug", error);
-      }
-    };
-    fetchData();
-  }, []);
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-9">
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
@@ -83,15 +93,19 @@ const UpdateRelationForm = () => {
               link: `/student/visit-info/${year}/relation`,
               label: "ความสัมพันธ์ในครอบครัว",
             },
-            { label: "แก้ไขความสัมพันธ์ในครอบครัว" },
+            { label: "เพิ่มความสัมพันธ์ในครอบครัว" },
           ]}
         />
-        <h3 className="text-center text-xl font-bold text-gray-600">
-          ความสัมพันธ์ในครอบครัวของ{" "}
-          <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
-        </h3>
+        <div className="flex justify-center mb-9">
+          <Stepper step={2} path={stepperPath} />
+        </div>
 
         <form onSubmit={handleSubmit}>
+          <h3 className="text-center text-xl font-bold text-gray-600">
+            ความสัมพันธ์ในครอบครัวของ{" "}
+            <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
+          </h3>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
             {/* จำนวนสมาชิกในครอบครัว */}
             <TextInput
@@ -128,6 +142,7 @@ const UpdateRelationForm = () => {
               onBlur={handleBlur}
               error={errors.father_relation}
               touched={touched.father_relation}
+              indexValue
             />
             {/* ความสัมพันธ์ มารดา */}
             <SelectInput
@@ -140,6 +155,7 @@ const UpdateRelationForm = () => {
               onBlur={handleBlur}
               error={errors.mother_relation}
               touched={touched.mother_relation}
+              indexValue
             />
             {/* ความสัมพันธ์ พี่/น้องชาย */}
             <SelectInput
@@ -152,6 +168,7 @@ const UpdateRelationForm = () => {
               onBlur={handleBlur}
               error={errors.brother_relation}
               touched={touched.brother_relation}
+              indexValue
             />
             {/* ความสัมพันธ์ พี่/น้องสาว */}
             <SelectInput
@@ -164,6 +181,7 @@ const UpdateRelationForm = () => {
               onBlur={handleBlur}
               error={errors.sister_relation}
               touched={touched.sister_relation}
+              indexValue
             />
             {/* ความสัมพันธ์ ปู่/ย่า/ตา/ยาย */}
             <SelectInput
@@ -176,6 +194,7 @@ const UpdateRelationForm = () => {
               onBlur={handleBlur}
               error={errors.grand_parent_relation}
               touched={touched.grand_parent_relation}
+              indexValue
             />
             {/* ความสัมพันธ์ ญาติๆ */}
             <SelectInput
@@ -188,6 +207,7 @@ const UpdateRelationForm = () => {
               onBlur={handleBlur}
               error={errors.relatives_relation}
               touched={touched.relatives_relation}
+              indexValue
             />
             {/* ความสัมพันธ์อื่นๆ */}
             <TextInput
@@ -211,6 +231,7 @@ const UpdateRelationForm = () => {
               onBlur={handleBlur}
               error={errors.other_relation}
               touched={touched.other_relation}
+              indexValue
             />
             {/* เวลาผู้ปกครองไม่อยู่ */}
             <div className="md:col-span-2">
@@ -337,16 +358,18 @@ const UpdateRelationForm = () => {
           </div>
           <div className="flex justify-between mt-10 space-x-2">
             <button
-              className="btn-red w-1/2"
+              className="btn-gray w-1/2"
+              type="button"
               onClick={() => {
                 setValues(initialValues);
-                navigate(`/student/visit-info/${year}/relation`);
+                setFormData({ relation_info: values });
+                navigate(`/student/visit-info/${year}/personal-info/update`);
               }}
             >
-              ยกเลิก
+              ก่อนหน้า
             </button>
-            <button type="submit" className="btn-green w-1/2">
-              บันทึก
+            <button type="submit" className="btn-gray w-1/2">
+              ถัดไป
             </button>
           </div>
         </form>

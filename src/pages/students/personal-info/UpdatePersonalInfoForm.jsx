@@ -8,15 +8,18 @@ import {
   PersonalInfoSchema,
   PersonalInfoInitialValues,
 } from "../../../schemas/personalInfo";
-import axios from "axios";
+import Stepper from "../../../components/Stepper";
 import { useNavigate, useParams } from "react-router";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import { useStudentFormStore } from "../../../stores/student.store";
 import RadioInput from "../../../components/RadioInput";
 
 const UpdatePersonalInfoForm = () => {
   const { userInfo } = useAuthStore();
   const [parentToggle, setParentToggle] = useState(true);
   const [parentFetch, setParentFetch] = useState("dad");
+
+  const { setFormData } = useStudentFormStore();
 
   const navigate = useNavigate();
   const { year } = useParams();
@@ -37,12 +40,20 @@ const UpdatePersonalInfoForm = () => {
     onSubmit: async (values, actions) => {
       console.log("Submitting", values);
       console.log("Submitting", actions);
-      window.alert(values);
+      setFormData({ personal_info: values });
       actions.resetForm();
+      navigate(`/student/visit-info/${year}/relation/update`); 
     },
   });
 
-  // เช็คว่ามีการติ๊กเลือกดึงข้อมูลจากบิดาหรือมารดารึป่าว และนำค่าไป่ใส่ใน formik values
+  useEffect(() => {
+    const localData = JSON.parse(localStorage.getItem("student-form-storage"));
+    console.log("Local Data:", localData);
+    if (localData && localData.state.formData.personal_info) {
+      setValues(localData.state.formData.personal_info);
+    }
+  }, []);
+
   useEffect(() => {
     if (!parentToggle) {
       const parentData =
@@ -68,24 +79,6 @@ const UpdatePersonalInfoForm = () => {
     }
   }, [parentToggle, parentFetch]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/studentInfo/1");
-        if (res.status === 200 && res.data?.personal_info) {
-          const info = res.data.personal_info[0];
-          setValues(PersonalInfoInitialValues);
-          setImage(info?.image);
-        }
-      } catch (error) {
-        console.log("Fetching bug", error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  console.log(values);
-
   const [image, setImage] = useState(null);
 
   const prefixOptions = ["นาย", "นาง", "นางสาว"];
@@ -99,6 +92,16 @@ const UpdatePersonalInfoForm = () => {
     }
   };
 
+  // stepper path
+  const stepperPath = {
+    stepOne: `/student/visit-info/${year}/personal-info/update`,
+    stepTwo: `/student/visit-info/${year}/relation/update`,
+    stepThree: `/student/visit-info/${year}/family-status/update`,
+    stepFour: `/student/visit-info/${year}/behavior/update`,
+  };
+
+  console.log(values);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-9">
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
@@ -109,15 +112,19 @@ const UpdatePersonalInfoForm = () => {
               link: `/student/visit-info/${year}/personal-info`,
               label: "ข้อมูลส่วนตัว",
             },
-            { label: "แก้ไขข้อมูลส่วนตัว" },
+            { label: "เพิ่มข้อมูลส่วนตัว" },
           ]}
         />
-        <h3 className="text-center text-xl font-bold text-gray-600">
-          ข้อมูลส่วนตัวของ{" "}
-          <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
-        </h3>
+        <div className="flex justify-center mb-9">
+          <Stepper step={1} path={stepperPath} />
+        </div>
 
         <form onSubmit={handleSubmit}>
+          <h3 className="text-center text-xl font-bold text-gray-600">
+            ข้อมูลส่วนตัวของ{" "}
+            <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
+          </h3>
+
           <div className="mt-8 flex justify-center">
             <StudentPicture
               studentPic={image}
@@ -392,15 +399,17 @@ const UpdatePersonalInfoForm = () => {
           <div className="flex justify-between mt-10 space-x-2">
             <button
               className="btn-red w-1/2"
+              type="button"
               onClick={() => {
                 setValues(initialValues);
+                setFormData({ personal_info: values });
                 navigate(`/student/visit-info/${year}/personal-info`);
               }}
             >
               ยกเลิก
             </button>
-            <button type="submit" className="btn-green w-1/2">
-              บันทึก
+            <button type="submit" className="btn-gray w-1/2">
+              ถัดไป
             </button>
           </div>
         </form>

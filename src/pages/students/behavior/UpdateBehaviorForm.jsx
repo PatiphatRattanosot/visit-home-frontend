@@ -1,70 +1,70 @@
-import { useEffect } from "react";
 import { useFormik } from "formik";
 import { useParams, useNavigate } from "react-router";
 import { useAuthStore } from "../../../stores/auth.store";
+import Stepper from "../../../components/Stepper";
 import CheckboxInput from "../../../components/CheckboxInput";
 import RadioInput from "../../../components/RadioInput";
 import TextInput from "../../../components/TextInput";
 import SelectInput from "../../../components/SelectInput";
-import axios from "axios";
-import { BehaviorSchema } from "../../../schemas/behavior";
+import {
+  BehaviorSchema,
+  BehaviorInitialValues,
+} from "../../../schemas/behavior";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import { useStudentFormStore } from "../../../stores/student.store";
+import { useEffect } from "react";
 
 const UpdateBehaviorForm = () => {
   const { userInfo } = useAuthStore();
+
+  const { setFormData, submitForm } = useStudentFormStore();
 
   const {
     initialValues,
     values,
     setValues,
-    setFieldValue,
     errors,
     touched,
     handleBlur,
     handleChange,
     handleSubmit,
   } = useFormik({
-    initialValues: {
-      health_risk: [],
-      welfare_and_safety: [],
-      distance_to_school: 0,
-      time_used: 0,
-      school_transport: "",
-      student_responsibilities: [],
-      hobbies: [],
-      drugs_behavior: [],
-      violent_behavior: [],
-      sexual_behavior: [],
-      gaming_behavior: [],
-      computer_internet_access: "",
-      tech_use_behavior: "",
-      information_giver: "",
-    },
-    // validationSchema: BehaviorSchema,
+    initialValues: BehaviorInitialValues,
+    validationSchema: BehaviorSchema,
     onSubmit: async (values, actions) => {
-      console.log(values);
+      console.log("Submitting", values);
+      console.log("Submitting", actions);
+      setFormData({ behavior_and_risk: values });
+      const localFormData = JSON.parse(
+        localStorage.getItem("student-form-storage")
+      );
+      if (localFormData) {
+        await submitForm(userInfo._id, year, localFormData.state.formData);
+        localStorage.removeItem("student-form-storage");
+        navigate(`/student/visit-info/${year}`);
+      }
       actions.resetForm();
     },
   });
-  console.log(values);
+  console.log("Behavior Form Values:", values);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/studentInfo/1");
-        if (res.status === 200) {
-          setValues(res?.data?.behavior_and_risk[0]);
-          console.log(res);
-        }
-      } catch (error) {
-        console.log("Fetching bug", error);
-      }
-    };
-    fetchData();
+    const localData = JSON.parse(localStorage.getItem("student-form-storage"));
+    console.log("Local Data:", localData);
+    if (localData && localData.state.formData.behavior_and_risk) {
+      setValues(localData.state.formData.behavior_and_risk);
+    }
   }, []);
 
   const { year } = useParams();
   const navigate = useNavigate();
+  // stepper path
+  const stepperPath = {
+    stepOne: `/student/visit-info/${year}/personal-info/update`,
+    stepTwo: `/student/visit-info/${year}/relation/update`,
+    stepThree: `/student/visit-info/${year}/family-status/update`,
+    stepFour: `/student/visit-info/${year}/behavior/update`,
+  };
 
   const familyMember = [
     "บิดา",
@@ -93,15 +93,19 @@ const UpdateBehaviorForm = () => {
               link: `/student/visit-info/${year}/behavior`,
               label: "พฤติกรรมและความเสี่ยง",
             },
-            { label: "แก้ไขพฤติกรรมและความเสี่ยง" },
+            { label: "เพิ่มพฤติกรรมและความเสี่ยง" },
           ]}
         />
-        <h3 className="text-center text-xl font-bold text-gray-600">
-          พฤติกรรมและความเสี่ยงของ{" "}
-          <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
-        </h3>
+        <div className="flex justify-center mb-9">
+          <Stepper step={4} path={stepperPath} />
+        </div>
 
         <form onSubmit={handleSubmit}>
+          <h3 className="text-center text-xl font-bold text-gray-600">
+            พฤติกรรมและความเสี่ยงของ{" "}
+            <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
+          </h3>
+
           <div className="grid grid-cols-1 gap-6 mt-8">
             {/* สุขภาพ */}
             <CheckboxInput
@@ -200,12 +204,12 @@ const UpdateBehaviorForm = () => {
               label={
                 "ภาระงานความรับผิดชอบของนักเรียนที่มีต่อครอบครัว (ตอบได้มากกว่า 1 ข้อ)"
               }
-              name={"student_responsibilities"}
-              value={values.student_responsibilities}
+              name={"student_resp"}
+              value={values.student_resp}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={errors.student_responsibilities}
-              touched={touched.student_responsibilities}
+              error={errors.student_resp}
+              touched={touched.student_resp}
               options={[
                 "ช่วยงานบ้าน",
                 "ช่วยคนดูแลคนเจ็บป่วย/พิการ",
@@ -215,7 +219,10 @@ const UpdateBehaviorForm = () => {
               ]}
               extraOpt
               grid="grid-cols-2"
-              setFieldValue={setFieldValue}
+              nameExtra={"student_resp_other"}
+              valueExtra={values.student_resp_other}
+              errorExtra={errors.student_resp_other}
+              touchedExtra={touched.student_resp_other}
             />
             {/* กิจกรรมยามว่างหรืองานอดิเรก */}
             <CheckboxInput
@@ -238,17 +245,20 @@ const UpdateBehaviorForm = () => {
               ]}
               extraOpt
               grid="grid-cols-2"
-              setFieldValue={setFieldValue}
+              nameExtra={"other_hobbies"}
+              valueExtra={values.other_hobbies}
+              errorExtra={errors.other_hobbies}
+              touchedExtra={touched.other_hobbies}
             />
             {/* พฤติกรรมการใช้สารเสพติด */}
             <CheckboxInput
               label={"พฤติกรรมการใช้สารเสพติด (ตอบได้มากกว่า 1 ข้อ)"}
-              name={"drugs_behavior"}
-              value={values.drugs_behavior}
+              name={"drugs_behav"}
+              value={values.drugs_behav}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={errors.drugs_behavior}
-              touched={touched.drugs_behavior}
+              error={errors.drugs_behav}
+              touched={touched.drugs_behav}
               options={[
                 "คบเพื่อนในกลุ่มที่ใช้สารเสพติด",
                 "สมาชิกในครอบครัวข้องเกี่ยวกับยาเสพติด",
@@ -261,12 +271,12 @@ const UpdateBehaviorForm = () => {
             {/* พฤติกรรมการใช้ความรุนแรง */}
             <CheckboxInput
               label={"พฤติกรรมการใช้ความรุนแรง (ตอบได้มากกว่า 1 ข้อ)"}
-              name={"violent_behavior"}
-              value={values.violent_behavior}
+              name={"violent_behav"}
+              value={values.violent_behav}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={errors.violent_behavior}
-              touched={touched.violent_behavior}
+              error={errors.violent_behav}
+              touched={touched.violent_behav}
               options={[
                 "มีการทะเลาะวิวาท",
                 "ก้าวร้าว เกเร",
@@ -276,17 +286,20 @@ const UpdateBehaviorForm = () => {
               ]}
               extraOpt
               grid="grid-cols-2"
-              setFieldValue={setFieldValue}
+              nameExtra={"other_violent_behav"}
+              valueExtra={values.other_violent_behav}
+              errorExtra={errors.other_violent_behav}
+              touchedExtra={touched.other_violent_behav}
             />
             {/* พฤติกรรมทางเพศ */}
             <CheckboxInput
               label={"พฤติกรรมทางเพศ (ตอบได้มากกว่า 1 ข้อ)"}
-              name={"sexual_behavior"}
-              value={values.sexual_behavior}
+              name={"sexual_behav"}
+              value={values.sexual_behav}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={errors.sexual_behavior}
-              touched={touched.sexual_behavior}
+              error={errors.sexual_behav}
+              touched={touched.sexual_behav}
               options={[
                 "อยู่ในกลุ่มขายบริการ",
                 "ใช้เครื่องมือสื่อสารที่เกี่ยวข้องกับด้านเพศเป็นเวลานานและบ่อยครั้ง",
@@ -300,12 +313,12 @@ const UpdateBehaviorForm = () => {
             {/* การติดเกม */}
             <CheckboxInput
               label={"การติดเกม (ตอบได้มากกว่า 1 ข้อ)"}
-              name={"gaming_behavior"}
-              value={values.gaming_behavior}
+              name={"gaming_behav"}
+              value={values.gaming_behav}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={errors.gaming_behavior}
-              touched={touched.gaming_behavior}
+              error={errors.gaming_behav}
+              touched={touched.gaming_behav}
               options={[
                 "เล่นเกมเกินวันละ 1 ชั่วโมง",
                 "ขาดจินตนาการและความคิดสร้างสรรค์",
@@ -319,7 +332,10 @@ const UpdateBehaviorForm = () => {
               ]}
               extraOpt
               grid="grid-cols-2"
-              setFieldValue={setFieldValue}
+              nameExtra={"other_gaming_behav"}
+              valueExtra={values.other_gaming_behav}
+              errorExtra={errors.other_gaming_behav}
+              touchedExtra={touched.other_gaming_behav}
             />
             {/* การเข้าถึงสื่อคอมพิวเตอร์และอินเตอร์เน็ตที่บ้าน */}
             <RadioInput
@@ -339,12 +355,12 @@ const UpdateBehaviorForm = () => {
             {/* การใช้เครื่องมือสื่อสารอิเล็กทรอนิกส์ */}
             <RadioInput
               label={"การใช้เครื่องมือสื่อสารอิเล็กทรอนิกส์"}
-              name={"tech_use_behavior"}
-              value={values.tech_use_behavior}
+              name={"tech_use_behav"}
+              value={values.tech_use_behav}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={errors.tech_use_behavior}
-              touched={touched.tech_use_behavior}
+              error={errors.tech_use_behav}
+              touched={touched.tech_use_behav}
               options={[
                 "ใช้ Social media/game (ไม่เกินวันละ 3 ชั่วโมง)",
                 "ใช้ Social media/game (วันละ 3 ชั่วโมงขึ้นไป)",
@@ -367,13 +383,15 @@ const UpdateBehaviorForm = () => {
           </div>
           <div className="flex justify-between mt-10 space-x-2">
             <button
-              className="btn-red w-1/2"
+              className="btn-gray w-1/2"
+              type="button"
               onClick={() => {
                 setValues(initialValues);
-                navigate(`/student/visit-info/${year}/behavior/`);
+                setFormData({ behavior_and_risk: values });
+                navigate(`/student/visit-info/${year}/family-status/update`);
               }}
             >
-              ยกเลิก
+              ก่อนหน้า
             </button>
             <button type="submit" className="btn-green w-1/2">
               บันทึก

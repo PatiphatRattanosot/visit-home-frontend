@@ -1,18 +1,24 @@
 import { useFormik } from "formik";
+import Stepper from "../../../components/Stepper";
 import { useAuthStore } from "../../../stores/auth.store";
 import { useNavigate, useParams } from "react-router";
 import CheckboxInput from "../../../components/CheckboxInput";
 import RadioInput from "../../../components/RadioInput";
 import TextInput from "../../../components/TextInput";
-import { useEffect } from "react";
-import axios from "axios";
-import { FamilyStatusSchema,FamilyStatusInitialValues } from "../../../schemas/familyStatus";
+import {
+  FamilyStatusSchema,
+  FamilyStatusInitialValues,
+} from "../../../schemas/familyStatus";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import { useStudentFormStore } from "../../../stores/student.store";
+import { useEffect } from "react";
 
 const UpdateFamilyStatusForm = () => {
   const { userInfo } = useAuthStore();
   const { year } = useParams();
   const navigate = useNavigate();
+
+  const { setFormData } = useStudentFormStore();
 
   const {
     initialValues,
@@ -29,25 +35,27 @@ const UpdateFamilyStatusForm = () => {
     onSubmit: async (values, actions) => {
       console.log("Submitting", values);
       console.log("Submitting", actions);
+      setFormData({ family_status_info: values });
       actions.resetForm();
+      navigate(`/student/visit-info/${year}/behavior/update`);
     },
   });
-  console.log(values);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/studentInfo/1");
-        if (res.status === 200) {
-          setValues(res?.data?.family_status_info[0]);
-        }
-      } catch (error) {
-        console.log("Fetching bug", error);
-      }
-    };
-    fetchData();
+    const localData = JSON.parse(localStorage.getItem("student-form-storage"));
+    console.log("Local Data:", localData);
+    if (localData && localData.state.formData.family_status_info) {
+      setValues(localData.state.formData.family_status_info);
+    }
   }, []);
 
+  // stepper path
+  const stepperPath = {
+    stepOne: `/student/visit-info/${year}/personal-info/update`,
+    stepTwo: `/student/visit-info/${year}/relation/update`,
+    stepThree: `/student/visit-info/${year}/family-status/update`,
+    stepFour: `/student/visit-info/${year}/behavior/update`,
+  };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-9">
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
@@ -58,15 +66,19 @@ const UpdateFamilyStatusForm = () => {
               link: `/student/visit-info/${year}/family-status`,
               label: "สถานะของครัวเรือน",
             },
-            { label: "แก้ไขสถานะของครัวเรือน" },
+            { label: "เพิ่มสถานะของครัวเรือน" },
           ]}
         />
-        <h3 className="text-center text-xl font-bold text-gray-600">
-          สถานะของครัวเรือนของ{" "}
-          <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
-        </h3>
+        <div className="flex justify-center mb-9">
+          <Stepper step={3} path={stepperPath} />
+        </div>
 
         <form onSubmit={handleSubmit}>
+          <h3 className="text-center text-xl font-bold text-gray-600">
+            สถานะของครัวเรือนของ{" "}
+            <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
+          </h3>
+
           <div className="grid grid-cols-1 gap-6 mt-8">
             {/* ครัวเรือนมีภาระพึ่งพิง */}
             <CheckboxInput
@@ -138,17 +150,32 @@ const UpdateFamilyStatusForm = () => {
                 เป็นเกษตรกรมีที่ดินทำกิน (รวมเช่า)
               </label>
               <div id="farmland" className="flex flex-col mt-3 gap-3">
-                <TextInput
-                  label={"เป็นเจ้าของจำนวน (ไร่)"}
-                  name={"owned_land"}
-                  value={values.owned_land}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={errors.owned_land}
-                  touched={touched.owned_land}
-                  type="number"
-                  className="w-2/6"
-                />
+                <div className="flex items-center text-sm space-x-2 my-2">
+                  <input
+                    type="checkbox"
+                    id="less_than_one"
+                    name="less_than_one"
+                    className="checkbox"
+                    value={true}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    checked={values.less_than_one}
+                  />
+                  <label htmlFor="less_than_one">มีที่ดินน้อยกว่า 1 ไร่</label>
+                </div>
+                {values.less_than_one === false && (
+                  <TextInput
+                    label={"เป็นเจ้าของจำนวน (ไร่)"}
+                    name={"owned_land"}
+                    value={values.owned_land}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={errors.owned_land}
+                    touched={touched.owned_land}
+                    type="number"
+                    className="w-2/6"
+                  />
+                )}
                 <TextInput
                   label={"เช่าจำนวน (ไร่)"}
                   name={"rented_land"}
@@ -165,16 +192,18 @@ const UpdateFamilyStatusForm = () => {
           </div>
           <div className="flex justify-between mt-10 space-x-2">
             <button
-              className="btn-red w-1/2"
+              className="btn-gray w-1/2"
+              type="button"
               onClick={() => {
                 setValues(initialValues);
-                navigate(`/student/visit-info/${year}/family-status`);
+                setFormData({ family_status_info: values });
+                navigate(`/student/visit-info/${year}/relation/update`);
               }}
             >
-              ยกเลิก
+              ก่อนหน้า
             </button>
-            <button type="submit" className="btn-green w-1/2">
-              บันทึก
+            <button type="submit" className="btn-gray w-1/2">
+              ถัดไป
             </button>
           </div>
         </form>

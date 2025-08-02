@@ -403,7 +403,7 @@ const AddPersonalInfoForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ personal_info: values });
-                navigate(`/student/visit-info/${year}/self-info`);
+                navigate(`/student/visit-info/${year}/personal-info`);
               }}
             >
               ยกเลิก
