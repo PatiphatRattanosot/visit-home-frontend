@@ -25,8 +25,15 @@ export const useAuthStore = create(
             } else {
               set({ userInfo: null });
             }
-          } catch {
+          } catch (error) {
             set({ userInfo: null });
+            const errorMessage = error?.response?.data?.message || "ไม่พบผู้ใช้ในระบบ";
+            Swal.fire({
+              title: "เกิดข้อผิดพลาด",
+              text: errorMessage,
+              icon: "error",
+              showConfirmButton: true,
+            });
           }
         }
       });
@@ -39,7 +46,11 @@ export const useAuthStore = create(
           try {
             const result = await googleSignIn();
             // userInfo will be set by listenToAuthChanges
+
+            set({ isLoading: true });
             if (result.user) {
+              await listenToAuthChanges(result.user);
+
               Swal.fire({
                 title: "สำเร็จ!",
                 text: "เข้าสู่ระบบสำเร็จ",
@@ -49,7 +60,6 @@ export const useAuthStore = create(
               });
             }
           } catch (error) {
-            console.error("error at login:", error);
             await logout();
             Swal.fire({
               title: "เกิดข้อผิดพลาด",
