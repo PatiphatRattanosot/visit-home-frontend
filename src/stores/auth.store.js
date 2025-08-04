@@ -27,7 +27,8 @@ export const useAuthStore = create(
             }
           } catch (error) {
             set({ userInfo: null });
-            const errorMessage = error?.response?.data?.message || "ไม่พบผู้ใช้ในระบบ";
+            const errorMessage =
+              error?.response?.data?.message || "ไม่พบผู้ใช้ในระบบ";
             Swal.fire({
               title: "เกิดข้อผิดพลาด",
               text: errorMessage,
