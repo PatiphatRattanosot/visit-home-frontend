@@ -4,6 +4,7 @@ import FilterDropdown from "../../components/FilterDropdown";
 import Search from "../../components/Search";
 import Pagination from "../../components/Pagination";
 import ManageStudent from "../../components/modals/ManageStudent";
+import { useNavigate } from "react-router";
 const StudentList = () => {
   const { data: students, fetchData } = useStudentStore();
   const [selectedStudent, setSelectedStudent] = useState(null);
@@ -103,7 +104,10 @@ const StudentList = () => {
         );
     }
   };
-
+const navigate = useNavigate();
+    const goToVisitInfo = () => {
+    navigate("/teacher/visit-info", { state: { student } });
+  };
   return (
     <div className="section-container">
       <p className="text-xl text-center font-bold">รายชื่อนักเรียน ม.5/1</p>
@@ -135,8 +139,7 @@ const StudentList = () => {
               <th className="text-center">เลขที่</th>
               <th className="text-center">เลขที่ประจำตัว</th>
               <th>ชื่อ - นามสกุล</th>
-              {/*<th>ชื่อ</th>
-              <th>นามสกุล</th>*/}
+              <th className="text-center">จัดการนักเรียน</th>
               <th className="text-center">สถานะการเยี่ยมบ้าน</th>
             </tr>
           </thead>
@@ -150,19 +153,22 @@ const StudentList = () => {
                   document
                     .getElementById(`manage_student_${student.id}`)
                     .showModal();
-                  
                 }}
               >
                 <td className="text-center">{student.number}</td>
                 <td className="text-center">{student.user_id}</td>
                 <td>{`${student.prefix}${student.first_name} ${student.last_name}`}</td>
-                {/* <td>{student.first_name}</td>
-                <td>{student.last_name}</td> */}
+                <td>
+                  <div className="flex flex-wrap justify-center gap-2">
+            
+            <button onClick={goToVisitInfo} className="btn">ผลการเยี่ยมบ้าน</button>
+            <button className="btn">ข้อมูลการเยี่ยมบ้าน</button>
+            <button className="btn">พิมพ์เอกสาร</button>
+          </div>
+                </td>
                 <td className="text-center">
                   {showStatus(student.visit_status)}
                 </td>
-
-                
               </tr>
             ))}
           </tbody>
@@ -183,7 +189,10 @@ const StudentList = () => {
         </table>
       </div>
       {/* pagination */}
-      <ManageStudent student={selectedStudent} onClose={() => setSelectedStudent(null)} />
+      <ManageStudent
+        student={selectedStudent}
+        onClose={() => setSelectedStudent(null)}
+      />
       <Pagination
         totalItems={filteredStudent.length}
         itemsPerPage={itemsPerPage}
