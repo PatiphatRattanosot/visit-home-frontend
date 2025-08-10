@@ -7,7 +7,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AdminPage from "./pages/Admin/Home";
 import Personnel from "./pages/Admin/Personnel";
-import ManageAdminRoles from "./pages/admin/ManageAdminRoles";
+import ManageAdminRoles from "./pages/Admin/ManageAdminRoles";
 import YearManagement from "./pages/Admin/Year";
 import Classroom from "./pages/Admin/Classroom";
 import Status from "./pages/students/Status";
@@ -24,6 +24,7 @@ import UpdateFamilyStatusForm from "./pages/students/family-status/UpdateFamilyS
 import Behavior from "./pages/students/behavior/Behavior";
 import AddBehaviorForm from "./pages/students/behavior/AddBehaviorForm";
 import UpdateBehaviorForm from "./pages/students/behavior/UpdateBehaviorForm";
+import SDQFormStudent from "./pages/students/SDQFormStudent";
 
 function App() {
   const { user, userInfo, isLoading, signInSystem, signOutSystem } =
@@ -114,6 +115,7 @@ function App() {
                 </Route>
               </Route>
             </Route>
+            <Route path="sdq-student" element={<SDQFormStudent />} />
           </Route>
 
           {/* Teacher */}

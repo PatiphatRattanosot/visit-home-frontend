@@ -57,7 +57,7 @@ export const getNavLinks = (roles = [], activeRole = null) => {
             <summary>ประเมิน SDQ</summary>
             <ul className="p-2">
               <li>
-                <a href="/student">นักเรียน</a>
+                <a href="/student/sdq-student">นักเรียน</a>
               </li>
               <li>
                 <a href="/student">ผู้ปกครอง</a>
