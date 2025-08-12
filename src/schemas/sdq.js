@@ -2,7 +2,7 @@ import * as yup from "yup";
 
 const choiceOptions = /^[0-2]$/;
 
-export const SDQStudentInitValues = {
+export const SDQInitValues = {
   question_1: "",
   question_2: "",
   question_3: "",
@@ -30,7 +30,7 @@ export const SDQStudentInitValues = {
   question_25: "",
 };
 
-export const SDQStudentValidations = yup.object().shape({
+export const SDQValidations = yup.object().shape({
   question_1: yup
     .string()
     .matches(choiceOptions, "กรุณาเลือกคำตอบ")

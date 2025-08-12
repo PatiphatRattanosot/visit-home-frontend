@@ -25,6 +25,7 @@ import Behavior from "./pages/students/behavior/Behavior";
 import AddBehaviorForm from "./pages/students/behavior/AddBehaviorForm";
 import UpdateBehaviorForm from "./pages/students/behavior/UpdateBehaviorForm";
 import SDQFormStudent from "./pages/students/SDQFormStudent";
+import SDQFormParent from "./pages/students/SDQFormParent";
 
 function App() {
   const { user, userInfo, isLoading, signInSystem, signOutSystem } =
@@ -116,6 +117,7 @@ function App() {
               </Route>
             </Route>
             <Route path="sdq-student" element={<SDQFormStudent />} />
+            <Route path="sdq-parent" element={<SDQFormParent />} />
           </Route>
 
           {/* Teacher */}

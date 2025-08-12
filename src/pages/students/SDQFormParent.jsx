@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { useAuthStore } from "../../stores/auth.store";
 import { SDQInitValues, SDQValidations } from "../../schemas/sdq";
 
-const SDQFormStudent = () => {
+const SDQFormParent = () => {
   const {
     values,
     errors,
@@ -27,19 +27,19 @@ const SDQFormStudent = () => {
         <BreadcrumbsLoop
           options={[
             { link: "/student", label: "หน้าแรก" },
-            { label: "แบบประเมิน SDQ ของนักเรียน" },
+            { label: "แบบประเมิน SDQ ของผู้ปกครอง" },
           ]}
         />
 
         <form onSubmit={handleSubmit}>
           <h3 className="text-center text-xl font-bold text-gray-600">
-            แบบประเมิน SDQ ของนักเรียน
+            แบบประเมิน SDQ ของผู้ปกครอง
           </h3>
 
           <div className="grid grid-cols-1 gap-6 mt-8">
             {/* 1 */}
             <SDQRadio
-              label={"1.ฉันพยายามจะทำตัวดีกับคนอื่น ฉันใส่ใจความรู้สึกคนอื่น"}
+              label={"1.ห่วงใยความรู้สึกคนอื่น"}
               name={"question_1"}
               value={values.question_1}
               touched={touched.question_1}
@@ -50,7 +50,7 @@ const SDQFormStudent = () => {
             />
             {/* 2 */}
             <SDQRadio
-              label={"2.ฉันอยู่ไม่นิ่ง ฉันนั่งนานๆ ไม่ได้"}
+              label={"2.อยู่ไม่นิ่ง นั่งนิ่งๆ ไม่ได้"}
               name={"question_2"}
               value={values.question_2}
               touched={touched.question_2}
@@ -61,7 +61,7 @@ const SDQFormStudent = () => {
             />
             {/* 3 */}
             <SDQRadio
-              label={"3.ฉันปวดศีรษะ ปวดท้อง หรือไม่สบายบ่อยๆ"}
+              label={"3.มักจะบ่นว่าปวดศีรษะ ปวดท้อง หรือไม่สบาย"}
               name={"question_3"}
               value={values.question_3}
               touched={touched.question_3}
@@ -73,7 +73,7 @@ const SDQFormStudent = () => {
             {/* 4 */}
             <SDQRadio
               label={
-                "4.ฉันเต็มใจแบ่งปันสิ่งของให้คนอื่น (ของกิน เกม ปากกา เป็นต้น)"
+                "4.เต็มใจแบ่งปันสิ่งของให้เพื่อน (ขนม, ของเล่น, ดินสอ เป็นต้น)"
               }
               name={"question_4"}
               value={values.question_4}
@@ -85,7 +85,7 @@ const SDQFormStudent = () => {
             />
             {/* 5 */}
             <SDQRadio
-              label={"5.ฉันโกรธแรง และมักอารมณ์เสีย"}
+              label={"5.มักจะอาละวาด หรือโมโหร้าย"}
               name={"question_5"}
               value={values.question_5}
               touched={touched.question_5}
@@ -96,7 +96,7 @@ const SDQFormStudent = () => {
             />
             {/* 6 */}
             <SDQRadio
-              label={"6.ฉันชอบอยู่กับตัวเอง ฉันชอบเล่นคนเดียวหรืออยู่ตามลำพัง"}
+              label={"6.ค่อนข้างแยกตัว ชอบเล่นคนเดียว"}
               name={"question_6"}
               value={values.question_6}
               touched={touched.question_6}
@@ -107,7 +107,7 @@ const SDQFormStudent = () => {
             />
             {/* 7 */}
             <SDQRadio
-              label={"7.ฉันมักทำตามที่คนอื่นบอก"}
+              label={"7.เชื่อฟัง มักจะทำตามที่ผู้ใหญ่ต้องการ"}
               name={"question_7"}
               value={values.question_7}
               touched={touched.question_7}
@@ -118,7 +118,7 @@ const SDQFormStudent = () => {
             />
             {/* 8 */}
             <SDQRadio
-              label={"8.ฉันขี้กังวล"}
+              label={"8.กังวลใจหลายเรื่อง ดูวิตกกังวลเสมอ"}
               name={"question_8"}
               value={values.question_8}
               touched={touched.question_8}
@@ -130,7 +130,7 @@ const SDQFormStudent = () => {
             {/* 9 */}
             <SDQRadio
               label={
-                "9.ใคร ๆ ก็พึ่งฉันได้ถ้าเขาเสียใจ อารมณ์ไม่ดีหรือไม่สบายใจ"
+                "9.เป็นที่พึ่งได้เวลาที่คนอื่นเสียใจ อารมณ์ไม่ดี หรือไม่สบายใจ"
               }
               name={"question_9"}
               value={values.question_9}
@@ -142,7 +142,7 @@ const SDQFormStudent = () => {
             />
             {/* 10 */}
             <SDQRadio
-              label={"10.ฉันอยู่ไม่สุข วุ่นวาย"}
+              label={"10.อยู่ไม่สุข วุ่นวายอย่างมาก"}
               name={"question_10"}
               value={values.question_10}
               touched={touched.question_10}
@@ -153,7 +153,7 @@ const SDQFormStudent = () => {
             />
             {/* 11 */}
             <SDQRadio
-              label={"11.ฉันมีเพื่อนสนิท"}
+              label={"11.มีเพื่อนสนิท"}
               name={"question_11"}
               value={values.question_11}
               touched={touched.question_11}
@@ -165,7 +165,7 @@ const SDQFormStudent = () => {
             {/* 12 */}
             <SDQRadio
               label={
-                "12.ฉันมีเรื่องทะเลาะวิวาทบ่อย ฉันทำให้คนอื่นทำอย่างที่ฉันต้องการได้"
+                "12.มักมีเรื่องทะเลาะวิวาทกับเด็กอื่น หรือรังแกเด็กอื่น"
               }
               name={"question_12"}
               value={values.question_12}
@@ -177,7 +177,7 @@ const SDQFormStudent = () => {
             />
             {/* 13 */}
             <SDQRadio
-              label={"13.ฉันไม่มีความสุข ท้อแท้ ร้องไห้บ่อย"}
+              label={"13.ดูไม่มีความสุข ท้อแท้ ร้องไห้บ่อย"}
               name={"question_13"}
               value={values.question_13}
               touched={touched.question_13}
@@ -188,7 +188,7 @@ const SDQFormStudent = () => {
             />
             {/* 14 */}
             <SDQRadio
-              label={"14.เพื่อนๆ ส่วนมากชอบฉัน"}
+              label={"14.เป็นที่ชื่นชอบของเพื่อน"}
               name={"question_14"}
               value={values.question_14}
               touched={touched.question_14}
@@ -199,7 +199,7 @@ const SDQFormStudent = () => {
             />
             {/* 15 */}
             <SDQRadio
-              label={"15.ฉันวอกแวกง่าย ฉันรู้สึกว่าไม่มีสมาธิ"}
+              label={"15.วอกแวกง่าย สมาธิสั้น"}
               name={"question_15"}
               value={values.question_15}
               touched={touched.question_15}
@@ -211,7 +211,7 @@ const SDQFormStudent = () => {
             {/* 16 */}
             <SDQRadio
               label={
-                "16.ฉันกังวลเวลาอยู่ในสถานการณ์ที่ไม่คุ้น และเสียความเชื่อมั่นในตนเองง่าย"
+                "16.เครียด ไม่ยอมห่างเวลาอยู่ในสถานการณ์ที่ไม่คุ้น และขาดความเชื่อมั่นในตนเอง"
               }
               name={"question_16"}
               value={values.question_16}
@@ -222,7 +222,7 @@ const SDQFormStudent = () => {
             />
             {/* 17 */}
             <SDQRadio
-              label={"17.ฉันใจดีกับเด็กที่เล็กกว่า"}
+              label={"17.ใจดีกับเด็กที่เล็กกว่า"}
               name={"question_17"}
               value={values.question_17}
               touched={touched.question_17}
@@ -233,7 +233,7 @@ const SDQFormStudent = () => {
             />
             {/* 18 */}
             <SDQRadio
-              label={"18.มีคนว่าฉันโกหก หรือขี้โกงบ่อยๆ"}
+              label={"18.ชอบโกหก หรือขี้โกง"}
               name={"question_18"}
               value={values.question_18}
               touched={touched.question_18}
@@ -244,7 +244,7 @@ const SDQFormStudent = () => {
             />
             {/* 19 */}
             <SDQRadio
-              label={"19.เด็ก ๆ คนอื่น  ล้อเลียนหรือรังแกฉัน"}
+              label={"19.ถูกเด็กคนอื่นล้อเลียนหรือรังแก"}
               name={"question_19"}
               value={values.question_19}
               touched={touched.question_19}
@@ -255,7 +255,7 @@ const SDQFormStudent = () => {
             />
             {/* 20 */}
             <SDQRadio
-              label={"20.ฉันมักจะอาสาช่วยเหลือคนอื่น (พ่อแม่, ครู, เด็กคนอื่น)"}
+              label={"20.ชอบอาสาช่วยเหลือคนอื่น (พ่อแม่, ครู, เด็กคนอื่น)"}
               name={"question_20"}
               value={values.question_20}
               touched={touched.question_20}
@@ -266,7 +266,7 @@ const SDQFormStudent = () => {
             />
             {/* 21 */}
             <SDQRadio
-              label={"21.ฉันคิดก่อนทำ"}
+              label={"21.คิดก่อนทำ"}
               name={"question_21"}
               value={values.question_21}
               touched={touched.question_21}
@@ -277,7 +277,7 @@ const SDQFormStudent = () => {
             />
             {/* 22 */}
             <SDQRadio
-              label={"22.ฉันเอาของคนอื่นในบ้าน ที่โรงเรียน หรือที่อื่น"}
+              label={"22.ขโมยของของที่บ้าน ที่โรงเรียน หรือที่อื่น"}
               name={"question_22"}
               value={values.question_22}
               touched={touched.question_22}
@@ -288,7 +288,7 @@ const SDQFormStudent = () => {
             />
             {/* 23 */}
             <SDQRadio
-              label={"23.ฉันเข้ากับผู้ใหญ่ได้ดีกว่าเด็กวัยเดียวกัน"}
+              label={"23.เข้ากับผู้ใหญ่ได้ดีกว่าเด็กวัยเดียวกัน"}
               name={"question_23"}
               value={values.question_23}
               touched={touched.question_23}
@@ -299,7 +299,7 @@ const SDQFormStudent = () => {
             />
             {/* 24 */}
             <SDQRadio
-              label={"24.ฉันขี้กลัว รู้สึกหวาดกลัวได้ง่าย"}
+              label={"24.ขี้กลัว รู้สึกหวาดกลัวได้ง่าย"}
               name={"question_24"}
               value={values.question_24}
               touched={touched.question_24}
@@ -310,7 +310,7 @@ const SDQFormStudent = () => {
             />
             {/* 25 */}
             <SDQRadio
-              label={"25.ฉันทำงานได้จนเสร็จ ความตั้งใจในการทำงานของฉันดี"}
+              label={"25.ทำงานได้จนเสร็จ มีความตั้งใจในการทำงาน"}
               name={"question_25"}
               value={values.question_25}
               touched={touched.question_25}
@@ -341,4 +341,4 @@ const SDQFormStudent = () => {
   );
 };
 
-export default SDQFormStudent;
+export default SDQFormParent;
