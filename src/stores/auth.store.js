@@ -27,7 +27,8 @@ export const useAuthStore = create(
             }
           } catch (error) {
             set({ userInfo: null });
-            const errorMessage = error?.response?.data?.message || "ไม่พบผู้ใช้ในระบบ";
+            const errorMessage =
+              error?.response?.data?.message || "ไม่พบผู้ใช้ในระบบ";
             Swal.fire({
               title: "เกิดข้อผิดพลาด",
               text: errorMessage,
@@ -49,8 +50,6 @@ export const useAuthStore = create(
 
             set({ isLoading: true });
             if (result.user) {
-              await listenToAuthChanges(result.user);
-
               Swal.fire({
                 title: "สำเร็จ!",
                 text: "เข้าสู่ระบบสำเร็จ",
@@ -67,6 +66,8 @@ export const useAuthStore = create(
               icon: "error",
               showConfirmButton: true,
             });
+          } finally{
+            set({isLoading:false})
           }
         },
         signOutSystem: () => {
