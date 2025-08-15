@@ -37,6 +37,7 @@ export const useAuthStore = create(
         isLoading: false,
         signInSystem: async () => {
           try {
+            set({ isLoading: true });
             const result = await googleSignIn();
             // userInfo will be set by listenToAuthChanges
             if (result.user) {
@@ -51,12 +52,15 @@ export const useAuthStore = create(
           } catch (error) {
             console.error("error at login:", error);
             await logout();
+            set({ isLoading: false });
             Swal.fire({
               title: "เกิดข้อผิดพลาด",
               text: error?.response?.data?.message,
               icon: "error",
               showConfirmButton: true,
             });
+          } finally {
+            set({ isLoading: false });
           }
         },
         signOutSystem: () => {
@@ -72,8 +76,10 @@ export const useAuthStore = create(
               cancelButtonText: "ไม่",
             }).then(async (result) => {
               if (result.isConfirmed) {
+                set({ isLoading: true });
                 await logout();
                 await AuthServices.signOut();
+                set({ isLoading: false });
                 // userInfo will be set to null by listenToAuthChanges
                 Swal.fire({
                   title: "สำเร็จ!",
@@ -86,6 +92,7 @@ export const useAuthStore = create(
             });
           } catch (error) {
             console.log("error at logout:", error);
+            set({ isLoading: false });
             Swal.fire({
               title: "เกิดข้อผิดพลาด",
               text: "ไม่สามารถลงชื่อออกจากระบบได้ โปรดลองอีกครั้ง",
@@ -93,6 +100,8 @@ export const useAuthStore = create(
               timer: 1500,
               showConfirmButton: false,
             });
+          } finally {
+            set({ isLoading: false });
           }
         },
       };
