@@ -5,19 +5,19 @@ import SearchClass from "../../components/SearchClassroom";
 import { BiSolidEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useParams } from "react-router";
-import Swal from "sweetalert2";
-import classService from "../../services/class/class.service";
 import Pagiantion from "../../components/Pagination";
 import ModalAddClassroom from "../../components/modals/AddClassroom";
 import ModalEditClassroom from "../../components/modals/EditClassroom";
-import Breadcrumbs from "../../components/Breadcrumbs";
+import BreadcrumbsLoop from "../../components/Breadcrumbs";
 import ArrowBack from "../../components/ArrowBack";
-import { useClassroomStore } from "../../stores/admin.store";
+import { useClassroomStore, useYearStore } from "../../stores/admin.store";
+import useYearSelectStore from "../../stores/year_select.store";
 const Classroom = () => {
-  const {data: classrooms, fetchData, deleteClassroom} = useClassroomStore();
-  const { yearId, year } = useParams();
+  const { data: classrooms, fetchData, deleteClassroom } = useClassroomStore();
+  const { data: years, fetchData: fetchYears, getYearsById } = useYearStore();
+  const { selectedYear, setSelectedYear } = useYearSelectStore();
+  // const { yearId, year } = useParams();
   const [selectedOption, setSelectedOption] = useState("SortToMost");
-
   // สร้าง state สำหรับเก็บข้อมูลชั้นเรียนที่กรองแล้ว
   // เพื่อใช้ในการแสดงผลในตาราง
   const optionsForClassroom = [
@@ -37,11 +37,21 @@ const Classroom = () => {
     : [];
 
   useEffect(() => {
-   fetchData(yearId); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลชั้นเรียนตามปีการศึกษา
+    fetchData(selectedYear?.year); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลชั้นเรียนตามปีการศึกษา PARAM
     setFilteredClassroom(classrooms); // ตั้งค่าเริ่มต้นให้ classrooms ทั้งหมด
-  }, [yearId]);
+  }, [selectedYear?.year]);
 
+  useEffect(() => {
+    fetchYears(); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลปีการศึกษา
+  }, []);
 
+  useEffect(() => {
+    getYearsById(selectedYear?.year).then((data) => {
+      if (data && data.length > 0) {
+        setSelectedYear(data[0]);
+      }
+    });
+  }, [selectedYear?.year]);
 
   useEffect(() => {
     // กรองข้อมูลชั้นเรียนตามตัวเลือกที่เลือก
@@ -61,17 +71,35 @@ const Classroom = () => {
     deleteClassroom(id);
     setFilteredClassroom(classrooms);
   };
+  console.log("hello year", years);
+  console.log("hello selectedYear", selectedYear);
 
   return (
     <div className="section-container">
       <div className="flex items-center space-x-2">
-        <ArrowBack to={`/year/${yearId}/${year}`} />
-        <Breadcrumbs />
+        <BreadcrumbsLoop options={[{ label: "จัดการชั้นเรียน" }]} />
       </div>
       <div>
         <h1 className="text-lg md:text-xl text-center">
-          เพิ่มชั้นเรียนของปีการศึกษา {year}
+          เพิ่มชั้นเรียนของปีการศึกษา {selectedYear}
         </h1>
+        <div className="flex flex-row justify-end items-center m-2">
+          {/* dropdown จาก daisyUI */}
+          <select
+            name="select-year"
+            id="select-year"
+            className="select w-32"
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value)}
+          >
+            {years.map((year) => (
+              <option key={year._id} value={year.year}>
+                {year.year}
+              </option>
+            ))}
+          </select>
+        </div>
+
         {/* กล่องสำหรับกำหนดช่วงเวลานัดเยี่ยมบ้าน */}
         <div className="flex justify-center items-center">
           <div className="card w-xl md:w-2xl p-4 shadow-sm flex flex-col items-center justify-center">
@@ -106,8 +134,7 @@ const Classroom = () => {
             >
               เพิ่มชั้นเรียน
             </button>
-           <ModalAddClassroom addClassroomSuccess={() => fetchData(yearId)} />
-
+            <ModalAddClassroom addClassroomSuccess={() => fetchData(yearId)} />
           </div>
         </div>
 
@@ -131,7 +158,7 @@ const Classroom = () => {
             {/* row 1 */}
 
             {currentItems.map((classroom, index) => (
-              <tr key={classroom._id}>
+              <tr key={classroom.year}>
                 <th>
                   <label>
                     <input type="checkbox" className="checkbox" />
@@ -146,7 +173,7 @@ const Classroom = () => {
                   <button
                     onClick={() =>
                       document
-                        .getElementById(`edit_classroom_${classroom._id}`)
+                        .getElementById(`edit_classroom_${classroom.year}`)
                         .showModal()
                     }
                     className="btn btn-warning"
@@ -155,13 +182,13 @@ const Classroom = () => {
                   </button>
 
                   <button
-                    onClick={() => handleDeleteClassroom(classroom._id)}
+                    onClick={() => handleDeleteClassroom(classroom.year)}
                     className="btn btn-error"
                   >
                     <AiOutlineDelete size={20} />
                   </button>
                   <ModalEditClassroom
-                    id={classroom._id}
+                    id={classroom.year}
                     onUpdateSuccess={() => fetchData(yearId)}
                   />
                 </td>
