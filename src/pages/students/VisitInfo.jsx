@@ -1,9 +1,14 @@
 import YearBtn from "../../components/students/YearBtn";
 import { useEffect } from "react";
 import { useYearStore } from "../../stores/admin.store";
+import useYearSelectStore from "../../stores/year_select.store";
 
 const VisitInfo = () => {
   const { data: years, fetchData } = useYearStore();
+  const { selectedYear, setSelectedYear } = useYearSelectStore();
+
+  console.log(selectedYear);
+
   useEffect(() => {
     fetchData();
   }, []);
