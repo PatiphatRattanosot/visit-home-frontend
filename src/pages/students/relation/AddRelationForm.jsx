@@ -5,7 +5,7 @@ import TextArea from "../../../components/TextArea";
 import { useAuthStore } from "../../../stores/auth.store";
 import Stepper from "../../../components/Stepper";
 import { useFormik } from "formik";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import {
   RelationSchema,
   RelationInitialValues,
@@ -17,16 +17,14 @@ import { useEffect } from "react";
 const AddRelationForm = () => {
   const { userInfo } = useAuthStore();
   const navigate = useNavigate();
-  const { year } = useParams();
-
   const { setFormData } = useStudentFormStore();
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/personal-info/add`,
-    stepTwo: `/student/visit-info/${year}/relation/add`,
-    stepThree: `/student/visit-info/${year}/family-status/add`,
-    stepFour: `/student/visit-info/${year}/behavior/add`,
+    stepOne: `/student/personal-info/add`,
+    stepTwo: `/student/relation/add`,
+    stepThree: `/student/family-status/add`,
+    stepFour: `/student/behavior/add`,
   };
 
   const {
@@ -46,7 +44,7 @@ const AddRelationForm = () => {
       console.log("Submitting", actions);
       setFormData({ relation_info: values });
       actions.resetForm();
-      navigate(`/student/visit-info/${year}/family-status/add`);
+      navigate(`/student/family-status/add`);
     },
   });
 
@@ -88,9 +86,9 @@ const AddRelationForm = () => {
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
         <BreadcrumbsLoop
           options={[
-            { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
+            { link: "/student/personal-info/", label: "ข้อมูลเยี่ยมบ้าน" },
             {
-              link: `/student/visit-info/${year}/relation`,
+              link: `/student/relation`,
               label: "ความสัมพันธ์ในครอบครัว",
             },
             { label: "เพิ่มความสัมพันธ์ในครอบครัว" },
@@ -363,7 +361,7 @@ const AddRelationForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ relation_info: values });
-                navigate(`/student/visit-info/${year}/personal-info/add`);
+                navigate(`/student/personal-info/add`);
               }}
             >
               ก่อนหน้า

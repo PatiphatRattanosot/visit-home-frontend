@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../../../stores/auth.store";
-import { useParams } from "react-router";
 import Stepper from "../../../components/Stepper";
 import axios from "axios";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
@@ -9,7 +8,6 @@ const Relation = () => {
   const { userInfo } = useAuthStore();
   const [relationInfo, setRelationInfo] = useState(null);
 
-  const { year } = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,10 +25,10 @@ const Relation = () => {
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/personal-info`,
-    stepTwo: `/student/visit-info/${year}/relation`,
-    stepThree: `/student/visit-info/${year}/family-status`,
-    stepFour: `/student/visit-info/${year}/behavior`,
+    stepOne: `/student/personal-info`,
+    stepTwo: `/student/relation`,
+    stepThree: `/student/family-status`,
+    stepFour: `/student/behavior`,
   };
 
   return (
@@ -63,8 +61,8 @@ const Relation = () => {
             className={relationInfo === null ? "btn-green" : "btn-yellow"}
             href={
               relationInfo === null
-                ? `/student/visit-info/${year}/personal-info/add`
-                : `/student/visit-info/${year}/relation/update`
+                ? `/student/personal-info/add`
+                : `/student/relation/update`
             }
           >
             {relationInfo === null ? "เพิ่มข้อมูล" : "แก้ไขข้อมูล"}

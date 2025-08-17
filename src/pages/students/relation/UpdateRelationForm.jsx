@@ -5,7 +5,7 @@ import TextArea from "../../../components/TextArea";
 import { useAuthStore } from "../../../stores/auth.store";
 import Stepper from "../../../components/Stepper";
 import { useFormik } from "formik";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import {
   RelationSchema,
   RelationInitialValues,
@@ -17,16 +17,15 @@ import { useEffect } from "react";
 const UpdateRelationForm = () => {
   const { userInfo } = useAuthStore();
   const navigate = useNavigate();
-  const { year } = useParams();
 
   const { setFormData } = useStudentFormStore();
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/personal-info/update`,
-    stepTwo: `/student/visit-info/${year}/relation/update`,
-    stepThree: `/student/visit-info/${year}/family-status/update`,
-    stepFour: `/student/visit-info/${year}/behavior/update`,
+    stepOne: `/student/personal-info/update`,
+    stepTwo: `/student/relation/update`,
+    stepThree: `/student/family-status/update`,
+    stepFour: `/student/behavior/update`,
   };
 
   const {
@@ -46,7 +45,7 @@ const UpdateRelationForm = () => {
       console.log("Submitting", actions);
       setFormData({ relation_info: values });
       actions.resetForm();
-      navigate(`/student/visit-info/${year}/family-status/update`);
+      navigate(`/student/family-status/update`);
     },
   });
 
@@ -88,9 +87,9 @@ const UpdateRelationForm = () => {
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
         <BreadcrumbsLoop
           options={[
-            { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
+            { link: "/student/personal-info/", label: "ข้อมูลเยี่ยมบ้าน" },
             {
-              link: `/student/visit-info/${year}/relation`,
+              link: `/student/relation`,
               label: "ความสัมพันธ์ในครอบครัว",
             },
             { label: "เพิ่มความสัมพันธ์ในครอบครัว" },
@@ -363,7 +362,7 @@ const UpdateRelationForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ relation_info: values });
-                navigate(`/student/visit-info/${year}/personal-info/update`);
+                navigate(`/student/personal-info/update`);
               }}
             >
               ก่อนหน้า

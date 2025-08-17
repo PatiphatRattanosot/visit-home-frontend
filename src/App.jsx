@@ -14,7 +14,6 @@ import Status from "./pages/students/Status";
 import PersonalInfo from "./pages/students/personal-info/PersonalInfo";
 import AddPersonalInfoForm from "./pages/students/personal-info/AddPersonalInfoForm";
 import UpdatePersonalInfoForm from "./pages/students/personal-info/UpdatePersonalInfoForm";
-import VisitInfo from "./pages/students/VisitInfo";
 import Relation from "./pages/students/relation/Relation";
 import AddRelationForm from "./pages/students/relation/AddRelationForm";
 import UpdateRelationForm from "./pages/students/relation/UpdateRelationForm";
@@ -86,36 +85,31 @@ function App() {
             }
           >
             <Route path="" element={<Status />} />
-            <Route path="visit-info">
-              <Route path="" element={<VisitInfo />} />
-              <Route path=":year">
-                {/* ข้อมูลส่วนตัว */}
-                <Route path="personal-info">
-                  <Route path="" element={<PersonalInfo />} />
-                  <Route path="add" element={<AddPersonalInfoForm />} />
-                  <Route path="update" element={<UpdatePersonalInfoForm />} />
-                </Route>
-
-                {/* ข้อมูลความสัมพันธ์ */}
-                <Route path="relation">
-                  <Route path="" element={<Relation />} />
-                  <Route path="add" element={<AddRelationForm />} />
-                  <Route path="update" element={<UpdateRelationForm />} />
-                </Route>
-                {/* ข้อมูลสถานะครัวเรือน */}
-                <Route path="family-status">
-                  <Route path="" element={<FamilyStatus />} />
-                  <Route path="add" element={<AddFamilyStatusForm />} />
-                  <Route path="update" element={<UpdateFamilyStatusForm />} />
-                </Route>
-                {/* ข้อมูลพฤติกรรม */}
-                <Route path="behavior">
-                  <Route path="" element={<Behavior />} />
-                  <Route path="add" element={<AddBehaviorForm />} />
-                  <Route path="update" element={<UpdateBehaviorForm />} />
-                </Route>
-              </Route>
+            {/* ข้อมูลส่วนตัว */}
+            <Route path="personal-info">
+              <Route path="" element={<PersonalInfo />} />
+              <Route path="add" element={<AddPersonalInfoForm />} />
+              <Route path="update" element={<UpdatePersonalInfoForm />} />
             </Route>
+            {/* ข้อมูลความสัมพันธ์ */}
+            <Route path="relation">
+              <Route path="" element={<Relation />} />
+              <Route path="add" element={<AddRelationForm />} />
+              <Route path="update" element={<UpdateRelationForm />} />
+            </Route>
+            {/* ข้อมูลสถานะครัวเรือน */}
+            <Route path="family-status">
+              <Route path="" element={<FamilyStatus />} />
+              <Route path="add" element={<AddFamilyStatusForm />} />
+              <Route path="update" element={<UpdateFamilyStatusForm />} />
+            </Route>
+            {/* ข้อมูลพฤติกรรม */}
+            <Route path="behavior">
+              <Route path="" element={<Behavior />} />
+              <Route path="add" element={<AddBehaviorForm />} />
+              <Route path="update" element={<UpdateBehaviorForm />} />
+            </Route>
+            {/* ข้อมูล SDQ */}
             <Route path="sdq-student" element={<SDQFormStudent />} />
             <Route path="sdq-parent" element={<SDQFormParent />} />
           </Route>

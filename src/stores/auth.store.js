@@ -36,31 +36,49 @@ export const useAuthStore = create(
         userInfo: null,
         isLoading: false,
         signInSystem: async () => {
+          set({ isLoading: true });
+          let swalOptions = {};
           try {
-            set({ isLoading: true });
             const result = await googleSignIn();
-            // userInfo will be set by listenToAuthChanges
-            if (result.user) {
-              Swal.fire({
-                title: "สำเร็จ!",
-                text: "เข้าสู่ระบบสำเร็จ",
-                icon: "success",
-                timer: 1500,
-                showConfirmButton: false,
-              });
+            if (result.user && result.user.email) {
+              const res = await AuthServices.sign({ email: result.user.email });
+              if (res.status === 200) {
+                swalOptions = {
+                  title: "สำเร็จ!",
+                  text: res?.data?.message || "เข้าสู่ระบบสำเร็จ",
+                  icon: "success",
+                  timer: 1500,
+                  showConfirmButton: false,
+                };
+              } else {
+                swalOptions = {
+                  title: "เกิดข้อผิดพลาด",
+                  text: res?.data?.message || "ไม่สามารถเข้าสู่ระบบได้",
+                  icon: "error",
+                  showConfirmButton: true,
+                };
+              }
+            } else {
+              swalOptions = {
+                title: "เกิดข้อผิดพลาด",
+                text: "ไม่พบข้อมูลผู้ใช้จาก Google",
+                icon: "error",
+                showConfirmButton: true,
+              };
             }
           } catch (error) {
-            console.error("error at login:", error);
             await logout();
-            set({ isLoading: false });
-            Swal.fire({
+            swalOptions = {
               title: "เกิดข้อผิดพลาด",
-              text: error?.response?.data?.message,
+              text:
+                error?.response?.data?.message ||
+                "เกิดข้อผิดพลาดในการเข้าสู่ระบบ",
               icon: "error",
               showConfirmButton: true,
-            });
+            };
           } finally {
             set({ isLoading: false });
+            Swal.fire(swalOptions);
           }
         },
         signOutSystem: () => {
