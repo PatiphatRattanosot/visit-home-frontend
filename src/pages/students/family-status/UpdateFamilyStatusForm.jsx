@@ -7,7 +7,7 @@ import TextInput from "../../../components/TextInput";
 import { useEffect } from "react";
 import axios from "axios";
 import { FamilyStatusSchema } from "../../../schemas/familyStatus";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 
 const UpdateFamilyStatusForm = () => {
   const { userInfo } = useAuthStore();

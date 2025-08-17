@@ -8,7 +8,7 @@ import { useNavigate, useParams } from "react-router";
 import { RelationSchema } from "../../../schemas/relation";
 import { useEffect } from "react";
 import axios from "axios";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 
 const UpdateRelationForm = () => {
   const { userInfo } = useAuthStore();

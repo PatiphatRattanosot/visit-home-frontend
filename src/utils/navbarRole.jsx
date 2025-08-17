@@ -23,6 +23,9 @@ export const getNavLinks = (roles = [], activeRole = null) => {
         <li>
           <a href="/admin/year">จัดการปีการศึกษา</a>
         </li>
+        <li>
+          <a href="/admin/year/classroom">จัดการชั้นเรียน</a>
+        </li>
       </ul>
     );
   }

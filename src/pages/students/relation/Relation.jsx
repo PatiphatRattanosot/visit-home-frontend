@@ -3,7 +3,7 @@ import { useAuthStore } from "../../../stores/auth.store";
 import { useParams } from "react-router";
 import Stepper from "../../../components/Stepper";
 import axios from "axios";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 
 const Relation = () => {
   const { userInfo } = useAuthStore();

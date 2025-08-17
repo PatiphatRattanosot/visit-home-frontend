@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Stepper from "../../../components/Stepper";
 import { useParams } from "react-router";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 
 const SelfInfo = () => {
   const { userInfo } = useAuthStore();

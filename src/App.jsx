@@ -71,10 +71,11 @@ function App() {
             <Route path="manage-admin" element={<ManageAdminRoles />} />
             <Route path="year" element={<YearManagement />} />
             <Route
-              path="year/classroom/:yearId/:year"
+              path="year/classroom"
               element={<Classroom />}
             />
           </Route>
+         
 
           {/* Student */}
           <Route

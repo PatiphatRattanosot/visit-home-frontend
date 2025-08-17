@@ -7,7 +7,7 @@ import RadioInput from "../../../components/RadioInput";
 import TextInput from "../../../components/TextInput";
 import SelectInput from "../../../components/SelectInput";
 import { BehaviorSchema } from "../../../schemas/behavior";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 
 const AddBehaviorForm = () => {

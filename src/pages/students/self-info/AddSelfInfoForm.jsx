@@ -7,7 +7,7 @@ import { useFormik } from "formik";
 import { SelfInfoSchema } from "../../../schemas/selfInfo";
 import Stepper from "../../../components/Stepper";
 import { useNavigate, useParams } from "react-router";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 
 const AddSelfInfoForm = () => {

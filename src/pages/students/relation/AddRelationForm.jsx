@@ -7,7 +7,7 @@ import Stepper from "../../../components/Stepper";
 import { useFormik } from "formik";
 import { useNavigate, useParams } from "react-router";
 import { RelationSchema } from "../../../schemas/relation";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 
 const AddRelationForm = () => {
