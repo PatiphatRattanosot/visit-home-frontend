@@ -86,7 +86,6 @@ const AddRelationForm = () => {
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
         <BreadcrumbsLoop
           options={[
-            { link: "/student/personal-info/", label: "ข้อมูลเยี่ยมบ้าน" },
             {
               link: `/student/relation`,
               label: "ความสัมพันธ์ในครอบครัว",

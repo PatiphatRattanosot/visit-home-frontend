@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
 import Stepper from "../../../components/Stepper";
 import axios from "axios";
-import { useParams } from "react-router";
 import { useAuthStore } from "../../../stores/auth.store";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
 
 const FamilyStatus = () => {
   const { userInfo } = useAuthStore();
 
-  const { year } = useParams();
   const [familyStatusInfo, setFamilyStatusInfo] = useState(null);
 
   useEffect(() => {
@@ -26,21 +24,16 @@ const FamilyStatus = () => {
   }, []);
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/personal-info`,
-    stepTwo: `/student/visit-info/${year}/relation`,
-    stepThree: `/student/visit-info/${year}/family-status`,
-    stepFour: `/student/visit-info/${year}/behavior`,
+    stepOne: `/student/personal-info`,
+    stepTwo: `/student/relation`,
+    stepThree: `/student/family-status`,
+    stepFour: `/student/behavior`,
   };
 
   return (
     <div className="min-h-screen py-9 bg-gray-100 flex justify-center">
       <div className="bg-white px-4 py-6 w-9/12 rounded-lg">
-        <BreadcrumbsLoop
-          options={[
-            { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
-            { label: "สถานะครัวเรือน" },
-          ]}
-        />
+        <BreadcrumbsLoop options={[{ label: "สถานะครัวเรือน" }]} />
         {/* หัวข้อ */}
         <h3 className="text-center text-xl font-bold">
           ข้อมูลการเยี่ยมบ้านของ{" "}
@@ -62,8 +55,8 @@ const FamilyStatus = () => {
             className={familyStatusInfo === null ? "btn-green" : "btn-yellow"}
             href={
               familyStatusInfo === null
-                ? `/student/visit-info/${year}/personal-status/add`
-                : `/student/visit-info/${year}/family-status/update`
+                ? `/student/personal-status/add`
+                : `/student/family-status/update`
             }
           >
             {familyStatusInfo === null ? "เพิ่มข้อมูล" : "แก้ไขข้อมูล"}

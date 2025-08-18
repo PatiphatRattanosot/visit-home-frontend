@@ -8,7 +8,6 @@ const Relation = () => {
   const { userInfo } = useAuthStore();
   const [relationInfo, setRelationInfo] = useState(null);
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -34,12 +33,7 @@ const Relation = () => {
   return (
     <div className="min-h-screen py-9 bg-gray-100 flex justify-center">
       <div className="bg-white px-4 py-6 w-9/12 rounded-lg">
-        <BreadcrumbsLoop
-          options={[
-            { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
-            { label: "ความสัมพันธ์ในครอบครัว" },
-          ]}
-        />
+        <BreadcrumbsLoop options={[{ label: "ความสัมพันธ์ในครอบครัว" }]} />
         {/* หัวข้อ */}
         <h3 className="text-center text-xl font-bold">
           ข้อมูลการเยี่ยมบ้านของ{" "}

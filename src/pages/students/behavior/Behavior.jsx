@@ -1,14 +1,11 @@
 import { useState, useEffect } from "react";
 import Stepper from "../../../components/Stepper";
 import axios from "axios";
-import { useParams } from "react-router";
 import { useAuthStore } from "../../../stores/auth.store";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
 
 const Behavior = () => {
   const { userInfo } = useAuthStore();
-
-  const { year } = useParams();
 
   const [behaviorInfo, setBehaviorInfo] = useState(null);
 
@@ -28,21 +25,16 @@ const Behavior = () => {
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/personal-info`,
-    stepTwo: `/student/visit-info/${year}/relation`,
-    stepThree: `/student/visit-info/${year}/family-status`,
-    stepFour: `/student/visit-info/${year}/behavior`,
+    stepOne: `/student/personal-info`,
+    stepTwo: `/student/relation`,
+    stepThree: `/student/family-status`,
+    stepFour: `/student/behavior`,
   };
 
   return (
     <div className="min-h-screen py-9 bg-gray-100 flex justify-center">
       <div className="bg-white px-4 py-6 w-9/12 rounded-lg">
-        <BreadcrumbsLoop
-          options={[
-            { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
-            { label: "พฤติกรรมและความเสี่ยง" },
-          ]}
-        />
+        <BreadcrumbsLoop options={[{ label: "พฤติกรรมและความเสี่ยง" }]} />
         {/* หัวข้อ */}
         <h3 className="text-center text-xl font-bold">
           ข้อมูลการเยี่ยมบ้านของ{" "}
@@ -64,8 +56,8 @@ const Behavior = () => {
             className={behaviorInfo === null ? "btn-green" : "btn-yellow"}
             href={
               behaviorInfo === null
-                ? `/student/visit-info/${year}/personal-info/add`
-                : `/student/visit-info/${year}/behavior/update`
+                ? `/student/personal-info/add`
+                : `/student/behavior/update`
             }
           >
             {behaviorInfo === null ? "เพิ่มข้อมูล" : "แก้ไขข้อมูล"}

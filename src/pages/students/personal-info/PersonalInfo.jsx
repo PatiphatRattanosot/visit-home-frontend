@@ -3,12 +3,10 @@ import ShowPicture from "../../../components/students/ShowPicture";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Stepper from "../../../components/Stepper";
-import { useParams } from "react-router";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
 
 const PersonalInfo = () => {
   const { userInfo } = useAuthStore();
-  const { year } = useParams();
   // สร้าง state มาเก็นข้อมูล
   const [personalInfo, setPersonalInfo] = useState(null);
 
@@ -31,21 +29,16 @@ const PersonalInfo = () => {
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/personal-info`,
-    stepTwo: `/student/visit-info/${year}/relation`,
-    stepThree: `/student/visit-info/${year}/family-status`,
-    stepFour: `/student/visit-info/${year}/behavior`,
+    stepOne: `/student/personal-info`,
+    stepTwo: `/student/relation`,
+    stepThree: `/student/family-status`,
+    stepFour: `/student/behavior`,
   };
 
   return (
     <div className="min-h-screen py-9 bg-gray-100 flex justify-center">
       <div className="bg-white px-4 py-6 w-9/12 rounded-lg">
-        <BreadcrumbsLoop
-          options={[
-            { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
-            { label: "ข้อมูลส่วนตัว" },
-          ]}
-        />
+        <BreadcrumbsLoop options={[{ label: "ข้อมูลส่วนตัว" }]} />
         {/* หัวข้อ */}
         <h3 className="text-center text-xl font-bold">
           ข้อมูลการเยี่ยมบ้านของ{" "}
@@ -67,8 +60,8 @@ const PersonalInfo = () => {
             className={personalInfo === null ? "btn-green" : "btn-yellow"}
             href={
               personalInfo === null
-                ? `/student/visit-info/${year}/personal-info/add`
-                : `/student/visit-info/${year}/personal-info/update`
+                ? `/student/personal-info/add`
+                : `/student/personal-info/update`
             }
           >
             {personalInfo === null ? "เพิ่มข้อมูล" : "แก้ไขข้อมูล"}

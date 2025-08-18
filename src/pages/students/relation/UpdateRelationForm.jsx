@@ -87,12 +87,11 @@ const UpdateRelationForm = () => {
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
         <BreadcrumbsLoop
           options={[
-            { link: "/student/personal-info/", label: "ข้อมูลเยี่ยมบ้าน" },
             {
               link: `/student/relation`,
               label: "ความสัมพันธ์ในครอบครัว",
             },
-            { label: "เพิ่มความสัมพันธ์ในครอบครัว" },
+            { label: "แก้ไขความสัมพันธ์ในครอบครัว" },
           ]}
         />
         <div className="flex justify-center mb-9">

@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { useParams, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useAuthStore } from "../../../stores/auth.store";
 import Stepper from "../../../components/Stepper";
 import CheckboxInput from "../../../components/CheckboxInput";
@@ -41,13 +41,12 @@ const AddBehaviorForm = () => {
       if (localFormData) {
         await submitForm(userInfo._id, year, localFormData.state.formData);
         localStorage.removeItem("student-form-storage");
-        navigate(`/student/visit-info/${year}`);
+        navigate(`/student/personal-info`);
       }
       actions.resetForm();
     },
   });
   console.log("Behavior Form Values:", values);
-  
 
   useEffect(() => {
     const localData = JSON.parse(localStorage.getItem("student-form-storage"));
@@ -57,14 +56,13 @@ const AddBehaviorForm = () => {
     }
   }, []);
 
-  const { year } = useParams();
   const navigate = useNavigate();
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/personal-info/add`,
-    stepTwo: `/student/visit-info/${year}/relation/add`,
-    stepThree: `/student/visit-info/${year}/family-status/add`,
-    stepFour: `/student/visit-info/${year}/behavior/add`,
+    stepOne: `/student/personal-info/add`,
+    stepTwo: `/student/relation/add`,
+    stepThree: `/student/family-status/add`,
+    stepFour: `/student/behavior/add`,
   };
 
   const familyMember = [
@@ -89,9 +87,8 @@ const AddBehaviorForm = () => {
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
         <BreadcrumbsLoop
           options={[
-            { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
             {
-              link: `/student/visit-info/${year}/behavior`,
+              link: `/student/behavior`,
               label: "พฤติกรรมและความเสี่ยง",
             },
             { label: "เพิ่มพฤติกรรมและความเสี่ยง" },
@@ -389,7 +386,7 @@ const AddBehaviorForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ behavior_and_risk: values });
-                navigate(`/student/visit-info/${year}/family-status/add`);
+                navigate(`/student/family-status/add`);
               }}
             >
               ก่อนหน้า

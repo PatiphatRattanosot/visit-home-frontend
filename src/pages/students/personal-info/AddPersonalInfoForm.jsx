@@ -9,7 +9,7 @@ import {
   PersonalInfoInitialValues,
 } from "../../../schemas/personalInfo";
 import Stepper from "../../../components/Stepper";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import RadioInput from "../../../components/RadioInput";
@@ -23,7 +23,6 @@ const AddPersonalInfoForm = () => {
   const { setFormData } = useStudentFormStore();
 
   const navigate = useNavigate();
-  const { year } = useParams();
 
   const {
     initialValues,
@@ -43,7 +42,7 @@ const AddPersonalInfoForm = () => {
       console.log("Submitting", actions);
       setFormData({ personal_info: values });
       actions.resetForm();
-      navigate(`/student/visit-info/${year}/relation/add`);
+      navigate(`/student/relation/add`);
     },
   });
 
@@ -95,10 +94,10 @@ const AddPersonalInfoForm = () => {
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/personal-info/add`,
-    stepTwo: `/student/visit-info/${year}/relation/add`,
-    stepThree: `/student/visit-info/${year}/family-status/add`,
-    stepFour: `/student/visit-info/${year}/behavior/add`,
+    stepOne: `/student/personal-info/add`,
+    stepTwo: `/student/relation/add`,
+    stepThree: `/student/family-status/add`,
+    stepFour: `/student/behavior/add`,
   };
 
   console.log(values);
@@ -108,9 +107,8 @@ const AddPersonalInfoForm = () => {
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
         <BreadcrumbsLoop
           options={[
-            { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
             {
-              link: `/student/visit-info/${year}/personal-info`,
+              link: `/student/personal-info`,
               label: "ข้อมูลส่วนตัว",
             },
             { label: "เพิ่มข้อมูลส่วนตัว" },

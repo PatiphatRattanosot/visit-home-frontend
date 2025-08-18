@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import Stepper from "../../../components/Stepper";
 import { useAuthStore } from "../../../stores/auth.store";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import CheckboxInput from "../../../components/CheckboxInput";
 import RadioInput from "../../../components/RadioInput";
 import TextInput from "../../../components/TextInput";
@@ -15,7 +15,6 @@ import { useEffect } from "react";
 
 const UpdateFamilyStatusForm = () => {
   const { userInfo } = useAuthStore();
-  const { year } = useParams();
   const navigate = useNavigate();
 
   const { setFormData } = useStudentFormStore();
@@ -37,7 +36,7 @@ const UpdateFamilyStatusForm = () => {
       console.log("Submitting", actions);
       setFormData({ family_status_info: values });
       actions.resetForm();
-      navigate(`/student/visit-info/${year}/behavior/update`);
+      navigate(`/student/behavior/update`);
     },
   });
 
@@ -51,22 +50,21 @@ const UpdateFamilyStatusForm = () => {
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/personal-info/update`,
-    stepTwo: `/student/visit-info/${year}/relation/update`,
-    stepThree: `/student/visit-info/${year}/family-status/update`,
-    stepFour: `/student/visit-info/${year}/behavior/update`,
+    stepOne: `/student/personal-info/update`,
+    stepTwo: `/student/relation/update`,
+    stepThree: `/student/family-status/update`,
+    stepFour: `/student/behavior/update`,
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-9">
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
         <BreadcrumbsLoop
           options={[
-            { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
             {
-              link: `/student/visit-info/${year}/family-status`,
+              link: `/student/family-status`,
               label: "สถานะของครัวเรือน",
             },
-            { label: "เพิ่มสถานะของครัวเรือน" },
+            { label: "แก้ไขสถานะของครัวเรือน" },
           ]}
         />
         <div className="flex justify-center mb-9">
@@ -197,7 +195,7 @@ const UpdateFamilyStatusForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ family_status_info: values });
-                navigate(`/student/visit-info/${year}/relation/update`);
+                navigate(`/student/relation/update`);
               }}
             >
               ก่อนหน้า

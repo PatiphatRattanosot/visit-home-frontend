@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import Stepper from "../../../components/Stepper";
 import { useAuthStore } from "../../../stores/auth.store";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import CheckboxInput from "../../../components/CheckboxInput";
 import RadioInput from "../../../components/RadioInput";
 import TextInput from "../../../components/TextInput";
@@ -15,7 +15,6 @@ import { useEffect } from "react";
 
 const AddFamilyStatusForm = () => {
   const { userInfo } = useAuthStore();
-  const { year } = useParams();
   const navigate = useNavigate();
 
   const { setFormData } = useStudentFormStore();
@@ -37,7 +36,7 @@ const AddFamilyStatusForm = () => {
       console.log("Submitting", actions);
       setFormData({ family_status_info: values });
       actions.resetForm();
-      navigate(`/student/visit-info/${year}/behavior/add`);
+      navigate(`/student/behavior/add`);
     },
   });
 
@@ -51,19 +50,18 @@ const AddFamilyStatusForm = () => {
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/personal-info/add`,
-    stepTwo: `/student/visit-info/${year}/relation/add`,
-    stepThree: `/student/visit-info/${year}/family-status/add`,
-    stepFour: `/student/visit-info/${year}/behavior/add`,
+    stepOne: `/student/personal-info/add`,
+    stepTwo: `/student/relation/add`,
+    stepThree: `/student/family-status/add`,
+    stepFour: `/student/behavior/add`,
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-9">
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
         <BreadcrumbsLoop
           options={[
-            { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
             {
-              link: `/student/visit-info/${year}/family-status`,
+              link: `/student/family-status`,
               label: "สถานะของครัวเรือน",
             },
             { label: "เพิ่มสถานะของครัวเรือน" },
@@ -197,7 +195,7 @@ const AddFamilyStatusForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ family_status_info: values });
-                navigate(`/student/visit-info/${year}/relation/add`);
+                navigate(`/student/relation/add`);
               }}
             >
               ก่อนหน้า

@@ -9,7 +9,7 @@ import {
   PersonalInfoInitialValues,
 } from "../../../schemas/personalInfo";
 import Stepper from "../../../components/Stepper";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import RadioInput from "../../../components/RadioInput";
@@ -22,7 +22,6 @@ const UpdatePersonalInfoForm = () => {
   const { setFormData } = useStudentFormStore();
 
   const navigate = useNavigate();
-  const { year } = useParams();
 
   const {
     initialValues,
@@ -42,7 +41,7 @@ const UpdatePersonalInfoForm = () => {
       console.log("Submitting", actions);
       setFormData({ personal_info: values });
       actions.resetForm();
-      navigate(`/student/visit-info/${year}/relation/update`); 
+      navigate(`/student/relation/update`);
     },
   });
 
@@ -94,10 +93,10 @@ const UpdatePersonalInfoForm = () => {
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/personal-info/update`,
-    stepTwo: `/student/visit-info/${year}/relation/update`,
-    stepThree: `/student/visit-info/${year}/family-status/update`,
-    stepFour: `/student/visit-info/${year}/behavior/update`,
+    stepOne: `/student/personal-info/update`,
+    stepTwo: `/student/relation/update`,
+    stepThree: `/student/family-status/update`,
+    stepFour: `/student/behavior/update`,
   };
 
   console.log(values);
@@ -107,12 +106,11 @@ const UpdatePersonalInfoForm = () => {
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
         <BreadcrumbsLoop
           options={[
-            { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
             {
-              link: `/student/visit-info/${year}/personal-info`,
+              link: `/student/personal-info`,
               label: "ข้อมูลส่วนตัว",
             },
-            { label: "เพิ่มข้อมูลส่วนตัว" },
+            { label: "แก้ไขข้อมูลส่วนตัว" },
           ]}
         />
         <div className="flex justify-center mb-9">
@@ -403,7 +401,7 @@ const UpdatePersonalInfoForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ personal_info: values });
-                navigate(`/student/visit-info/${year}/personal-info`);
+                navigate(`/student/personal-info`);
               }}
             >
               ยกเลิก
