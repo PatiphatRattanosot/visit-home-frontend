@@ -1,26 +1,26 @@
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../../../stores/auth.store";
 import Stepper from "../../../components/Stepper";
-import axios from "axios";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import { useStudentStore } from "../../../stores/student.store";
+import useYearSelectStore from "../../../stores/year_select.store";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
+import YearSelector from "../../../components/YearSelector";
 
 const Relation = () => {
   const { userInfo } = useAuthStore();
   const [relationInfo, setRelationInfo] = useState(null);
 
+  const { getYearlyData } = useStudentStore();
+  const { selectedYear } = useYearSelectStore();
+
+  // ดึงข้อมูล
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/studentInfo/1");
-        if (res.status === 200) {
-          setRelationInfo(res.data.relation_info[0]);
-        }
-      } catch (error) {
-        console.log("Fetching bug", error);
-      }
+    const fetchRelationInfo = async () => {
+      const data = await getYearlyData(selectedYear);
+      setRelationInfo(data?.students[0].yearly_data[0]?.relation_info);
     };
-    fetchData();
-  }, []);
+    fetchRelationInfo();
+  }, [selectedYear]);
 
   // stepper path
   const stepperPath = {
@@ -34,6 +34,9 @@ const Relation = () => {
     <div className="min-h-screen py-9 bg-gray-100 flex justify-center">
       <div className="bg-white px-4 py-6 w-9/12 rounded-lg">
         <BreadcrumbsLoop options={[{ label: "ความสัมพันธ์ในครอบครัว" }]} />
+        <div className="flex justify-center md:justify-end items-center mb-6">
+          <YearSelector />
+        </div>
         {/* หัวข้อ */}
         <h3 className="text-center text-xl font-bold">
           ข้อมูลการเยี่ยมบ้านของ{" "}

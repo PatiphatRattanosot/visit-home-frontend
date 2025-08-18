@@ -10,7 +10,7 @@ import {
   RelationSchema,
   RelationInitialValues,
 } from "../../../schemas/relation";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import { useEffect } from "react";
 

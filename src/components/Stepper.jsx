@@ -2,22 +2,22 @@ const Stepper = ({ step, path }) => {
   return (
     <ul className="steps">
       <a className={`step ${step >= 1 && "step-warning"}`} href={path?.stepOne}>
-        ข้อมูลส่วนตัว
+        <p className="hidden md:block">ข้อมูลส่วนตัว</p>
       </a>
       <a className={`step ${step >= 2 && "step-warning"}`} href={path?.stepTwo}>
-        ความสัมพันธ์ในครอบครัว
+        <p className="hidden md:block">ความสัมพันธ์ในครอบครัว</p>
       </a>
       <a
         className={`step ${step >= 3 && "step-warning"}`}
         href={path?.stepThree}
       >
-        สถานะของครอบครัว
+        <p className="hidden md:block">สถานะของครอบครัว</p>
       </a>
       <a
         className={`step ${step >= 4 && "step-warning"}`}
         href={path?.stepFour}
       >
-        พฤติกรรมและความเสี่ยง
+        <p className="hidden md:block">พฤติกรรมและความเสี่ยง</p>
       </a>
     </ul>
   );

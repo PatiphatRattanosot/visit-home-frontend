@@ -10,9 +10,12 @@ import {
 } from "../../../schemas/personalInfo";
 import Stepper from "../../../components/Stepper";
 import { useNavigate } from "react-router";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import RadioInput from "../../../components/RadioInput";
+import YearSelector from "../../../components/YearSelector";
+import { useStudentStore } from "../../../stores/student.store";
+import useYearSelectStore from "../../../stores/year_select.store";
 
 const UpdatePersonalInfoForm = () => {
   const { userInfo } = useAuthStore();
@@ -20,6 +23,8 @@ const UpdatePersonalInfoForm = () => {
   const [parentFetch, setParentFetch] = useState("dad");
 
   const { setFormData } = useStudentFormStore();
+  const { getYearlyData } = useStudentStore();
+  const { selectedYear } = useYearSelectStore();
 
   const navigate = useNavigate();
 
@@ -46,12 +51,12 @@ const UpdatePersonalInfoForm = () => {
   });
 
   useEffect(() => {
-    const localData = JSON.parse(localStorage.getItem("student-form-storage"));
-    console.log("Local Data:", localData);
-    if (localData && localData.state.formData.personal_info) {
-      setValues(localData.state.formData.personal_info);
-    }
-  }, []);
+    const fetchPersonalInfo = async () => {
+      const data = await getYearlyData(selectedYear);
+      setValues(data?.students[0].yearly_data[0]?.personal_info);
+    };
+    fetchPersonalInfo();
+  }, [selectedYear]);
 
   useEffect(() => {
     if (!parentToggle) {
@@ -122,6 +127,10 @@ const UpdatePersonalInfoForm = () => {
             ข้อมูลส่วนตัวของ{" "}
             <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
           </h3>
+
+          <div className="flex justify-center md:justify-end items-center mb-6">
+            <YearSelector />
+          </div>
 
           <div className="mt-8 flex justify-center">
             <StudentPicture

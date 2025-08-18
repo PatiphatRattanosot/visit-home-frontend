@@ -1,5 +1,5 @@
 import SDQRadio from "../../components/SDQRadio";
-import BreadcrumbsLoop from "../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../components/Breadcrumbs";
 import { useFormik } from "formik";
 import { useAuthStore } from "../../stores/auth.store";
 import { SDQInitValues, SDQValidations } from "../../schemas/sdq";

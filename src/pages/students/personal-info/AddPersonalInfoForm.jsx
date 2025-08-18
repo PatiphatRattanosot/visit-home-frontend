@@ -10,7 +10,7 @@ import {
 } from "../../../schemas/personalInfo";
 import Stepper from "../../../components/Stepper";
 import { useNavigate } from "react-router";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import RadioInput from "../../../components/RadioInput";
 import MapComponent from "../../../components/students/MapComponent";

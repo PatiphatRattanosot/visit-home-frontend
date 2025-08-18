@@ -1,31 +1,28 @@
 import { useAuthStore } from "../../../stores/auth.store";
 import ShowPicture from "../../../components/students/ShowPicture";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Stepper from "../../../components/Stepper";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
+import YearSelector from "../../../components/YearSelector";
+import { useStudentStore } from "../../../stores/student.store";
+import useYearSelectStore from "../../../stores/year_select.store";
 
 const PersonalInfo = () => {
   const { userInfo } = useAuthStore();
   // สร้าง state มาเก็นข้อมูล
   const [personalInfo, setPersonalInfo] = useState(null);
 
+  const { getYearlyData } = useStudentStore();
+  const { selectedYear } = useYearSelectStore();
+
   // ดึงข้อมูล
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/studentInfo/1");
-        if (res.status === 200) {
-          setPersonalInfo(res.data.personal_info[0]);
-        }
-      } catch (error) {
-        console.log("Fetching bug", error);
-      }
+    const fetchPersonalInfo = async () => {
+      const data = await getYearlyData(selectedYear);
+      setPersonalInfo(data?.students[0].yearly_data[0]?.personal_info);
     };
-    fetchData();
-  }, []);
-
-  console.log("Self-Info", personalInfo);
+    fetchPersonalInfo();
+  }, [selectedYear]);
 
   // stepper path
   const stepperPath = {
@@ -39,6 +36,9 @@ const PersonalInfo = () => {
     <div className="min-h-screen py-9 bg-gray-100 flex justify-center">
       <div className="bg-white px-4 py-6 w-9/12 rounded-lg">
         <BreadcrumbsLoop options={[{ label: "ข้อมูลส่วนตัว" }]} />
+        <div className="flex justify-center md:justify-end items-center mb-6">
+          <YearSelector />
+        </div>
         {/* หัวข้อ */}
         <h3 className="text-center text-xl font-bold">
           ข้อมูลการเยี่ยมบ้านของ{" "}
@@ -99,7 +99,7 @@ const PersonalInfo = () => {
                       <span className="text-black">
                         {personalInfo?.father_prefix +
                           " " +
-                          personalInfo?.father_first_name}
+                          personalInfo?.father_name}
                       </span>
                     </div>
                     <div>
@@ -129,7 +129,7 @@ const PersonalInfo = () => {
                       <span className="text-black">
                         {personalInfo?.mother_prefix +
                           " " +
-                          personalInfo?.mother_first_name}
+                          personalInfo?.mother_name}
                       </span>
                     </div>
                     <div>
@@ -159,7 +159,7 @@ const PersonalInfo = () => {
                       <span className="text-black">
                         {personalInfo?.parent_prefix +
                           " " +
-                          personalInfo?.parent_first_name}
+                          personalInfo?.parent_name}
                       </span>
                     </div>
                     <div>

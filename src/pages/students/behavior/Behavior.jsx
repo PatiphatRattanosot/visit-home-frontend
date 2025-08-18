@@ -1,27 +1,28 @@
 import { useState, useEffect } from "react";
 import Stepper from "../../../components/Stepper";
-import axios from "axios";
+import { useStudentStore } from "../../../stores/student.store";
+import useYearSelectStore from "../../../stores/year_select.store";
 import { useAuthStore } from "../../../stores/auth.store";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
+import YearSelector from "../../../components/YearSelector";
 
 const Behavior = () => {
   const { userInfo } = useAuthStore();
 
   const [behaviorInfo, setBehaviorInfo] = useState(null);
+  console.log(behaviorInfo);
 
+  const { getYearlyData } = useStudentStore();
+  const { selectedYear } = useYearSelectStore();
+
+  // ดึงข้อมูล
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/studentInfo/1");
-        if (res.status === 200) {
-          setBehaviorInfo(res?.data?.behavior_and_risk[0]);
-        }
-      } catch (error) {
-        console.log("Fetching bug", error);
-      }
+    const fetchBehaviorInfo = async () => {
+      const data = await getYearlyData(selectedYear);
+      setBehaviorInfo(data?.students[0].yearly_data[0]?.behavior_and_risk);
     };
-    fetchData();
-  }, []);
+    fetchBehaviorInfo();
+  }, [selectedYear]);
 
   // stepper path
   const stepperPath = {
@@ -35,6 +36,9 @@ const Behavior = () => {
     <div className="min-h-screen py-9 bg-gray-100 flex justify-center">
       <div className="bg-white px-4 py-6 w-9/12 rounded-lg">
         <BreadcrumbsLoop options={[{ label: "พฤติกรรมและความเสี่ยง" }]} />
+        <div className="flex justify-center md:justify-end items-center mb-6">
+          <YearSelector />
+        </div>
         {/* หัวข้อ */}
         <h3 className="text-center text-xl font-bold">
           ข้อมูลการเยี่ยมบ้านของ{" "}
@@ -80,7 +84,7 @@ const Behavior = () => {
                       <span className="text-black">
                         {behaviorInfo?.health_risk.length === 0
                           ? "ไม่มีความเสี่ยง"
-                          : behaviorInfo.health_risk.join(", ")}
+                          : behaviorInfo?.health_risk.join(", ")}
                       </span>
                     </div>
                     {/* สวัสดิการหรือความปลอดภัย */}
@@ -89,7 +93,7 @@ const Behavior = () => {
                       <span className="text-black">
                         {behaviorInfo?.welfare_and_safety.length === 0
                           ? "ไม่มีความเสี่ยง"
-                          : behaviorInfo.welfare_and_safety.join(", ")}
+                          : behaviorInfo?.welfare_and_safety.join(", ")}
                       </span>
                     </div>
                     {/* ระยะทางระหว่างบ้านไปโรงเรียน */}
@@ -120,9 +124,9 @@ const Behavior = () => {
                       <div>
                         ภาระงานความรับผิดชอบของนักเรียนที่มีต่อครอบครัว:{" "}
                         <span className="text-black">
-                          {behaviorInfo?.student_responsibilities.length === 0
+                          {behaviorInfo?.student_resp.length === 0
                             ? "ไม่มีความเสี่ยง"
-                            : behaviorInfo.student_responsibilities.join(", ")}
+                            : behaviorInfo?.student_resp.join(", ")}
                         </span>
                       </div>
                     </div>
@@ -133,7 +137,9 @@ const Behavior = () => {
                         <span className="text-black">
                           {behaviorInfo?.hobbies.length === 0
                             ? "ไม่มีความเสี่ยง"
-                            : behaviorInfo.hobbies.join(", ")}
+                            : behaviorInfo?.hobbies.join(", ")}
+                          {behaviorInfo?.other_hobbies &&
+                            `, ${behaviorInfo?.other_hobbies}`}
                         </span>
                       </div>
                     </div>
@@ -142,9 +148,9 @@ const Behavior = () => {
                       <div>
                         พฤติกรรมการใช้สารเสพติด:{" "}
                         <span className="text-black">
-                          {behaviorInfo?.drugs_behavior.length === 0
+                          {behaviorInfo?.drugs_behav.length === 0
                             ? "ไม่มีความเสี่ยง"
-                            : behaviorInfo.drugs_behavior.join(", ")}
+                            : behaviorInfo?.drugs_behav.join(", ")}
                         </span>
                       </div>
                     </div>
@@ -153,9 +159,11 @@ const Behavior = () => {
                       <div>
                         พฤติกรรมการใช้ความรุนแรง:{" "}
                         <span className="text-black">
-                          {behaviorInfo?.violent_behavior.length === 0
+                          {behaviorInfo?.violent_behav.length === 0
                             ? "ไม่มีความเสี่ยง"
-                            : behaviorInfo.violent_behavior.join(", ")}
+                            : behaviorInfo?.violent_behav.join(", ")}
+                          {behaviorInfo?.other_violent_behav &&
+                            `, ${behaviorInfo?.other_violent_behav}`}
                         </span>
                       </div>
                     </div>
@@ -164,9 +172,9 @@ const Behavior = () => {
                       <div>
                         พฤติกรรมทางเพศ:{" "}
                         <span className="text-black">
-                          {behaviorInfo?.sexual_behavior.length === 0
+                          {behaviorInfo?.sexual_behav.length === 0
                             ? "ไม่มีความเสี่ยง"
-                            : behaviorInfo.sexual_behavior.join(", ")}
+                            : behaviorInfo?.sexual_behav.join(", ")}
                         </span>
                       </div>
                     </div>
@@ -175,9 +183,11 @@ const Behavior = () => {
                       <div>
                         การติดเกม:{" "}
                         <span className="text-black">
-                          {behaviorInfo?.gaming_behavior.length === 0
+                          {behaviorInfo?.gaming_behav.length === 0
                             ? "ไม่มีความเสี่ยง"
-                            : behaviorInfo.gaming_behavior.join(", ")}
+                            : behaviorInfo?.gaming_behav.join(", ")}
+                          {behaviorInfo?.other_gaming_behav &&
+                            `, ${behaviorInfo.other_gaming_behav}`}
                         </span>
                       </div>
                     </div>
@@ -195,7 +205,7 @@ const Behavior = () => {
                       <div>
                         การใช้เครื่องมือสื่อสารอิเล็กทรอนิกส์:{" "}
                         <span className="text-black">
-                          {behaviorInfo?.tech_use_behavior}
+                          {behaviorInfo?.tech_use_behav}
                         </span>
                       </div>
                     </div>

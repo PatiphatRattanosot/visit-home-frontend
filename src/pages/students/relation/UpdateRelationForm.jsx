@@ -10,15 +10,20 @@ import {
   RelationSchema,
   RelationInitialValues,
 } from "../../../schemas/relation";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import { useEffect } from "react";
+import YearSelector from "../../../components/YearSelector";
+import { useStudentStore } from "../../../stores/student.store";
+import useYearSelectStore from "../../../stores/year_select.store";
 
 const UpdateRelationForm = () => {
   const { userInfo } = useAuthStore();
   const navigate = useNavigate();
 
   const { setFormData } = useStudentFormStore();
+  const { getYearlyData } = useStudentStore();
+  const { selectedYear } = useYearSelectStore();
 
   // stepper path
   const stepperPath = {
@@ -49,13 +54,14 @@ const UpdateRelationForm = () => {
     },
   });
 
+  // ดึงข้อมูล
   useEffect(() => {
-    const localData = JSON.parse(localStorage.getItem("student-form-storage"));
-    console.log("Local Data:", localData);
-    if (localData && localData.state.formData.relation_info) {
-      setValues(localData.state.formData.relation_info);
-    }
-  }, []);
+    const fetchRelationInfo = async () => {
+      const data = await getYearlyData(selectedYear);
+      setValues(data?.students[0].yearly_data[0]?.relation_info);
+    };
+    fetchRelationInfo();
+  }, [selectedYear]);
 
   const relationOpts = ["สนิทสนม", "เฉยๆ", "ห่างเหิน", "ขัดแย้ง", "ไม่มี"];
   const studentAloneOpts = ["ญาติ", "เพื่อนบ้าน", "นักเรียนอยู่บ้านด้วยตนเอง"];
@@ -103,6 +109,9 @@ const UpdateRelationForm = () => {
             ความสัมพันธ์ในครอบครัวของ{" "}
             <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
           </h3>
+          <div className="flex justify-center md:justify-end items-center mb-6">
+            <YearSelector />
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
             {/* จำนวนสมาชิกในครอบครัว */}

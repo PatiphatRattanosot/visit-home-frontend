@@ -9,7 +9,7 @@ import {
   FamilyStatusSchema,
   FamilyStatusInitialValues,
 } from "../../../schemas/familyStatus";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import { useEffect } from "react";
 

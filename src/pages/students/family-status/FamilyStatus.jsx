@@ -1,27 +1,28 @@
 import { useState, useEffect } from "react";
 import Stepper from "../../../components/Stepper";
-import axios from "axios";
+import { useStudentStore } from "../../../stores/student.store";
+import useYearSelectStore from "../../../stores/year_select.store";
 import { useAuthStore } from "../../../stores/auth.store";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
+import YearSelector from "../../../components/YearSelector";
 
 const FamilyStatus = () => {
   const { userInfo } = useAuthStore();
 
   const [familyStatusInfo, setFamilyStatusInfo] = useState(null);
 
+  const { getYearlyData } = useStudentStore();
+  const { selectedYear } = useYearSelectStore();
+
+  // ดึงข้อมูล
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/studentInfo/1");
-        if (res.status === 200) {
-          setFamilyStatusInfo(res?.data?.family_status_info[0]);
-        }
-      } catch (error) {
-        console.log("Fetching bug", error);
-      }
+    const fetchFamilyStatusInfo = async () => {
+      const data = await getYearlyData(selectedYear);
+      setFamilyStatusInfo(data?.students[0].yearly_data[0]?.family_status_info);
     };
-    fetchData();
-  }, []);
+    fetchFamilyStatusInfo();
+  }, [selectedYear]);
+
   // stepper path
   const stepperPath = {
     stepOne: `/student/personal-info`,
@@ -34,6 +35,9 @@ const FamilyStatus = () => {
     <div className="min-h-screen py-9 bg-gray-100 flex justify-center">
       <div className="bg-white px-4 py-6 w-9/12 rounded-lg">
         <BreadcrumbsLoop options={[{ label: "สถานะครัวเรือน" }]} />
+        <div className="flex justify-center md:justify-end items-center mb-6">
+          <YearSelector />
+        </div>
         {/* หัวข้อ */}
         <h3 className="text-center text-xl font-bold">
           ข้อมูลการเยี่ยมบ้านของ{" "}
@@ -102,7 +106,7 @@ const FamilyStatus = () => {
                       <span className="text-black">
                         {familyStatusInfo?.owned_land !== 0 ? (
                           <>
-                            {familyStatusInfo.owned_land}{" "}
+                            {familyStatusInfo?.owned_land}{" "}
                             <span className="text-gray-600">ไร่</span>
                           </>
                         ) : (
@@ -115,7 +119,7 @@ const FamilyStatus = () => {
                       <span className="text-black">
                         {familyStatusInfo?.rented_land !== 0 ? (
                           <>
-                            {familyStatusInfo.rented_land}{" "}
+                            {familyStatusInfo?.rented_land}{" "}
                             <span className="text-gray-600">ไร่</span>
                           </>
                         ) : (

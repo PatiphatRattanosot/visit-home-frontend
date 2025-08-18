@@ -9,15 +9,20 @@ import {
   FamilyStatusSchema,
   FamilyStatusInitialValues,
 } from "../../../schemas/familyStatus";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import { useEffect } from "react";
+import YearSelector from "../../../components/YearSelector";
+import { useStudentStore } from "../../../stores/student.store";
+import useYearSelectStore from "../../../stores/year_select.store";
 
 const UpdateFamilyStatusForm = () => {
   const { userInfo } = useAuthStore();
   const navigate = useNavigate();
 
   const { setFormData } = useStudentFormStore();
+  const { getYearlyData } = useStudentStore();
+  const { selectedYear } = useYearSelectStore();
 
   const {
     initialValues,
@@ -40,13 +45,14 @@ const UpdateFamilyStatusForm = () => {
     },
   });
 
+  // ดึงข้อมูล
   useEffect(() => {
-    const localData = JSON.parse(localStorage.getItem("student-form-storage"));
-    console.log("Local Data:", localData);
-    if (localData && localData.state.formData.family_status_info) {
-      setValues(localData.state.formData.family_status_info);
-    }
-  }, []);
+    const fetchFamilyStatusInfo = async () => {
+      const data = await getYearlyData(selectedYear);
+      setValues(data?.students[0].yearly_data[0]?.family_status_info);
+    };
+    fetchFamilyStatusInfo();
+  }, [selectedYear]);
 
   // stepper path
   const stepperPath = {
@@ -76,6 +82,10 @@ const UpdateFamilyStatusForm = () => {
             สถานะของครัวเรือนของ{" "}
             <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
           </h3>
+
+          <div className="flex justify-center md:justify-end items-center mb-6">
+            <YearSelector />
+          </div>
 
           <div className="grid grid-cols-1 gap-6 mt-8">
             {/* ครัวเรือนมีภาระพึ่งพิง */}

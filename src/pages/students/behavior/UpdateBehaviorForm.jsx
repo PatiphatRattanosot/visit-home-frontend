@@ -10,14 +10,19 @@ import {
   BehaviorSchema,
   BehaviorInitialValues,
 } from "../../../schemas/behavior";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import { useEffect } from "react";
+import YearSelector from "../../../components/YearSelector";
+import { useStudentStore } from "../../../stores/student.store";
+import useYearSelectStore from "../../../stores/year_select.store";
 
 const UpdateBehaviorForm = () => {
   const { userInfo } = useAuthStore();
 
   const { setFormData, submitForm } = useStudentFormStore();
+  const { getYearlyData } = useStudentStore();
+  const { selectedYear } = useYearSelectStore();
 
   const {
     initialValues,
@@ -39,7 +44,7 @@ const UpdateBehaviorForm = () => {
         localStorage.getItem("student-form-storage")
       );
       if (localFormData) {
-        await submitForm(userInfo._id, year, localFormData.state.formData);
+        await submitForm(userInfo._id, selectedYear, localFormData.state.formData);
         localStorage.removeItem("student-form-storage");
         navigate(`/student/personal-info`);
       }
@@ -48,13 +53,14 @@ const UpdateBehaviorForm = () => {
   });
   console.log("Behavior Form Values:", values);
 
+  // ดึงข้อมูล
   useEffect(() => {
-    const localData = JSON.parse(localStorage.getItem("student-form-storage"));
-    console.log("Local Data:", localData);
-    if (localData && localData.state.formData.behavior_and_risk) {
-      setValues(localData.state.formData.behavior_and_risk);
-    }
-  }, []);
+    const fetchBehaviorInfo = async () => {
+      const data = await getYearlyData(selectedYear);
+      setValues(data?.students[0].yearly_data[0]?.behavior_and_risk);
+    };
+    fetchBehaviorInfo();
+  }, [selectedYear]);
 
   const navigate = useNavigate();
   // stepper path
@@ -103,6 +109,10 @@ const UpdateBehaviorForm = () => {
             พฤติกรรมและความเสี่ยงของ{" "}
             <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
           </h3>
+
+          <div className="flex justify-center md:justify-end items-center mb-6">
+            <YearSelector />
+          </div>
 
           <div className="grid grid-cols-1 gap-6 mt-8">
             {/* สุขภาพ */}

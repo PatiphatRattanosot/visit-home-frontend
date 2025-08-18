@@ -22,12 +22,17 @@ const yearlyData = async (stdId, yearId, data) => {
   return await api.put(`${baseUrl}/${stdId}/yearly/${yearId}`, data);
 };
 
+const getYearlyData = async (yearId) => {
+  return await api.get(`${baseUrl}/by_year/${yearId}`);
+};
+
 const StudentService = {
   getAllStudents,
   createStudent,
   getStudentById,
   yearlyData,
   updateStudent,
+  getYearlyData,
 };
 
 export default StudentService;
