@@ -9,13 +9,11 @@ import {
   PersonalInfoInitialValues,
 } from "../../../schemas/personalInfo";
 import Stepper from "../../../components/Stepper";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import RadioInput from "../../../components/RadioInput";
-import YearSelector from "../../../components/YearSelector";
 import { useStudentStore } from "../../../stores/student.store";
-import useYearSelectStore from "../../../stores/year_select.store";
 
 const UpdatePersonalInfoForm = () => {
   const { userInfo } = useAuthStore();
@@ -24,7 +22,7 @@ const UpdatePersonalInfoForm = () => {
 
   const { setFormData } = useStudentFormStore();
   const { getYearlyData } = useStudentStore();
-  const { selectedYear } = useYearSelectStore();
+  const { year } = useParams();
 
   const navigate = useNavigate();
 
@@ -46,17 +44,17 @@ const UpdatePersonalInfoForm = () => {
       console.log("Submitting", actions);
       setFormData({ personal_info: values });
       actions.resetForm();
-      navigate(`/student/relation/update`);
+      navigate(`/student/relation/${year}/update`);
     },
   });
 
   useEffect(() => {
     const fetchPersonalInfo = async () => {
-      const data = await getYearlyData(selectedYear);
+      const data = await getYearlyData(year);
       setValues(data?.students[0].yearly_data[0]?.personal_info);
     };
     fetchPersonalInfo();
-  }, [selectedYear]);
+  }, [year]);
 
   useEffect(() => {
     if (!parentToggle) {
@@ -98,10 +96,10 @@ const UpdatePersonalInfoForm = () => {
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/personal-info/update`,
-    stepTwo: `/student/relation/update`,
-    stepThree: `/student/family-status/update`,
-    stepFour: `/student/behavior/update`,
+    stepOne: `/student/personal-info/${year}/update`,
+    stepTwo: `/student/relation/${year}/update`,
+    stepThree: `/student/family-status/${year}/update`,
+    stepFour: `/student/behavior/${year}/update`,
   };
 
   console.log(values);
@@ -127,10 +125,6 @@ const UpdatePersonalInfoForm = () => {
             ข้อมูลส่วนตัวของ{" "}
             <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
           </h3>
-
-          <div className="flex justify-center md:justify-end items-center mb-6">
-            <YearSelector />
-          </div>
 
           <div className="mt-8 flex justify-center">
             <StudentPicture

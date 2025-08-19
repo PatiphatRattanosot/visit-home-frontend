@@ -5,7 +5,7 @@ import TextArea from "../../../components/TextArea";
 import { useAuthStore } from "../../../stores/auth.store";
 import Stepper from "../../../components/Stepper";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router";
+import { useNavigate,useParams } from "react-router";
 import {
   RelationSchema,
   RelationInitialValues,
@@ -18,13 +18,14 @@ const AddRelationForm = () => {
   const { userInfo } = useAuthStore();
   const navigate = useNavigate();
   const { setFormData } = useStudentFormStore();
+  const { year } = useParams();
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/personal-info/add`,
-    stepTwo: `/student/relation/add`,
-    stepThree: `/student/family-status/add`,
-    stepFour: `/student/behavior/add`,
+    stepOne: `/student/personal-info/${year}/add`,
+    stepTwo: `/student/relation/${year}/add`,
+    stepThree: `/student/family-status/${year}/add`,
+    stepFour: `/student/behavior/${year}/add`,
   };
 
   const {
@@ -44,7 +45,7 @@ const AddRelationForm = () => {
       console.log("Submitting", actions);
       setFormData({ relation_info: values });
       actions.resetForm();
-      navigate(`/student/family-status/add`);
+      navigate(`/student/family-status/${year}/add`);
     },
   });
 
@@ -360,7 +361,7 @@ const AddRelationForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ relation_info: values });
-                navigate(`/student/personal-info/add`);
+                navigate(`/student/personal-info/${year}/add`);
               }}
             >
               ก่อนหน้า

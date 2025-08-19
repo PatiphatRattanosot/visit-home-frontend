@@ -60,8 +60,8 @@ const Behavior = () => {
             className={behaviorInfo === null ? "btn-green" : "btn-yellow"}
             href={
               behaviorInfo === null
-                ? `/student/personal-info/add`
-                : `/student/behavior/update`
+                ? `/student/personal-info/${selectedYear}/add`
+                : `/student/behavior/${selectedYear}/update`
             }
           >
             {behaviorInfo === null ? "เพิ่มข้อมูล" : "แก้ไขข้อมูล"}

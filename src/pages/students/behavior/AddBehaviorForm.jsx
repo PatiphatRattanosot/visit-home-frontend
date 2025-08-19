@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { useNavigate } from "react-router";
+import { useNavigate,useParams } from "react-router";
 import { useAuthStore } from "../../../stores/auth.store";
 import Stepper from "../../../components/Stepper";
 import CheckboxInput from "../../../components/CheckboxInput";
@@ -16,6 +16,7 @@ import { useEffect } from "react";
 
 const AddBehaviorForm = () => {
   const { userInfo } = useAuthStore();
+  const { year } = useParams();
 
   const { setFormData, submitForm } = useStudentFormStore();
 
@@ -59,10 +60,10 @@ const AddBehaviorForm = () => {
   const navigate = useNavigate();
   // stepper path
   const stepperPath = {
-    stepOne: `/student/personal-info/add`,
-    stepTwo: `/student/relation/add`,
-    stepThree: `/student/family-status/add`,
-    stepFour: `/student/behavior/add`,
+    stepOne: `/student/personal-info/${year}/add`,
+    stepTwo: `/student/relation/${year}/add`,
+    stepThree: `/student/family-status/${year}/add`,
+    stepFour: `/student/behavior/${year}/add`,
   };
 
   const familyMember = [
@@ -386,7 +387,7 @@ const AddBehaviorForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ behavior_and_risk: values });
-                navigate(`/student/family-status/add`);
+                navigate(`/student/family-status/${year}/add`);
               }}
             >
               ก่อนหน้า

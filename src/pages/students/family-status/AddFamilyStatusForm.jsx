@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import Stepper from "../../../components/Stepper";
 import { useAuthStore } from "../../../stores/auth.store";
-import { useNavigate } from "react-router";
+import { useNavigate,useParams } from "react-router";
 import CheckboxInput from "../../../components/CheckboxInput";
 import RadioInput from "../../../components/RadioInput";
 import TextInput from "../../../components/TextInput";
@@ -16,6 +16,7 @@ import { useEffect } from "react";
 const AddFamilyStatusForm = () => {
   const { userInfo } = useAuthStore();
   const navigate = useNavigate();
+  const { year } = useParams();
 
   const { setFormData } = useStudentFormStore();
 
@@ -36,7 +37,7 @@ const AddFamilyStatusForm = () => {
       console.log("Submitting", actions);
       setFormData({ family_status_info: values });
       actions.resetForm();
-      navigate(`/student/behavior/add`);
+      navigate(`/student/behavior/${year}/add`);
     },
   });
 
@@ -50,10 +51,10 @@ const AddFamilyStatusForm = () => {
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/personal-info/add`,
-    stepTwo: `/student/relation/add`,
-    stepThree: `/student/family-status/add`,
-    stepFour: `/student/behavior/add`,
+    stepOne: `/student/personal-info/${year}/add`,
+    stepTwo: `/student/relation/${year}/add`,
+    stepThree: `/student/family-status/${year}/add`,
+    stepFour: `/student/behavior/${year}/add`,
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-9">
@@ -195,7 +196,7 @@ const AddFamilyStatusForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ family_status_info: values });
-                navigate(`/student/relation/add`);
+                navigate(`/student/relation/${year}/add`);
               }}
             >
               ก่อนหน้า

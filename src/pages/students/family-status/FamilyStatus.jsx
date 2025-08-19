@@ -59,8 +59,8 @@ const FamilyStatus = () => {
             className={familyStatusInfo === null ? "btn-green" : "btn-yellow"}
             href={
               familyStatusInfo === null
-                ? `/student/personal-status/add`
-                : `/student/family-status/update`
+                ? `/student/personal-status/${selectedYear}/add`
+                : `/student/family-status/${selectedYear}/update`
             }
           >
             {familyStatusInfo === null ? "เพิ่มข้อมูล" : "แก้ไขข้อมูล"}

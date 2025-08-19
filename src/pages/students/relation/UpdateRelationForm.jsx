@@ -5,7 +5,7 @@ import TextArea from "../../../components/TextArea";
 import { useAuthStore } from "../../../stores/auth.store";
 import Stepper from "../../../components/Stepper";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import {
   RelationSchema,
   RelationInitialValues,
@@ -13,24 +13,22 @@ import {
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import { useEffect } from "react";
-import YearSelector from "../../../components/YearSelector";
 import { useStudentStore } from "../../../stores/student.store";
-import useYearSelectStore from "../../../stores/year_select.store";
 
 const UpdateRelationForm = () => {
   const { userInfo } = useAuthStore();
   const navigate = useNavigate();
+  const { year } = useParams();
 
   const { setFormData } = useStudentFormStore();
   const { getYearlyData } = useStudentStore();
-  const { selectedYear } = useYearSelectStore();
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/personal-info/update`,
-    stepTwo: `/student/relation/update`,
-    stepThree: `/student/family-status/update`,
-    stepFour: `/student/behavior/update`,
+    stepOne: `/student/personal-info/${year}/update`,
+    stepTwo: `/student/relation/${year}/update`,
+    stepThree: `/student/family-status/${year}/update`,
+    stepFour: `/student/behavior/${year}/update`,
   };
 
   const {
@@ -50,18 +48,18 @@ const UpdateRelationForm = () => {
       console.log("Submitting", actions);
       setFormData({ relation_info: values });
       actions.resetForm();
-      navigate(`/student/family-status/update`);
+      navigate(`/student/family-status/${year}/update`);
     },
   });
 
   // ดึงข้อมูล
   useEffect(() => {
     const fetchRelationInfo = async () => {
-      const data = await getYearlyData(selectedYear);
+      const data = await getYearlyData(year);
       setValues(data?.students[0].yearly_data[0]?.relation_info);
     };
     fetchRelationInfo();
-  }, [selectedYear]);
+  }, [year]);
 
   const relationOpts = ["สนิทสนม", "เฉยๆ", "ห่างเหิน", "ขัดแย้ง", "ไม่มี"];
   const studentAloneOpts = ["ญาติ", "เพื่อนบ้าน", "นักเรียนอยู่บ้านด้วยตนเอง"];
@@ -109,9 +107,6 @@ const UpdateRelationForm = () => {
             ความสัมพันธ์ในครอบครัวของ{" "}
             <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
           </h3>
-          <div className="flex justify-center md:justify-end items-center mb-6">
-            <YearSelector />
-          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
             {/* จำนวนสมาชิกในครอบครัว */}
@@ -370,7 +365,7 @@ const UpdateRelationForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ relation_info: values });
-                navigate(`/student/personal-info/update`);
+                navigate(`/student/personal-info/${year}/update`);
               }}
             >
               ก่อนหน้า

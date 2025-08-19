@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useAuthStore } from "../../../stores/auth.store";
 import Stepper from "../../../components/Stepper";
 import CheckboxInput from "../../../components/CheckboxInput";
@@ -13,16 +13,14 @@ import {
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import { useEffect } from "react";
-import YearSelector from "../../../components/YearSelector";
 import { useStudentStore } from "../../../stores/student.store";
-import useYearSelectStore from "../../../stores/year_select.store";
 
 const UpdateBehaviorForm = () => {
   const { userInfo } = useAuthStore();
+  const { year } = useParams();
 
   const { setFormData, submitForm } = useStudentFormStore();
   const { getYearlyData } = useStudentStore();
-  const { selectedYear } = useYearSelectStore();
 
   const {
     initialValues,
@@ -44,7 +42,11 @@ const UpdateBehaviorForm = () => {
         localStorage.getItem("student-form-storage")
       );
       if (localFormData) {
-        await submitForm(userInfo._id, selectedYear, localFormData.state.formData);
+        await submitForm(
+          userInfo._id,
+          year,
+          localFormData.state.formData
+        );
         localStorage.removeItem("student-form-storage");
         navigate(`/student/personal-info`);
       }
@@ -56,19 +58,19 @@ const UpdateBehaviorForm = () => {
   // ดึงข้อมูล
   useEffect(() => {
     const fetchBehaviorInfo = async () => {
-      const data = await getYearlyData(selectedYear);
+      const data = await getYearlyData(year);
       setValues(data?.students[0].yearly_data[0]?.behavior_and_risk);
     };
     fetchBehaviorInfo();
-  }, [selectedYear]);
+  }, [year]);
 
   const navigate = useNavigate();
   // stepper path
   const stepperPath = {
-    stepOne: `/student/personal-info/update`,
-    stepTwo: `/student/relation/update`,
-    stepThree: `/student/family-status/update`,
-    stepFour: `/student/behavior/update`,
+    stepOne: `/student/personal-info/${year}/update`,
+    stepTwo: `/student/relation/${year}/update`,
+    stepThree: `/student/family-status/${year}/update`,
+    stepFour: `/student/behavior/${year}/update`,
   };
 
   const familyMember = [
@@ -109,10 +111,6 @@ const UpdateBehaviorForm = () => {
             พฤติกรรมและความเสี่ยงของ{" "}
             <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
           </h3>
-
-          <div className="flex justify-center md:justify-end items-center mb-6">
-            <YearSelector />
-          </div>
 
           <div className="grid grid-cols-1 gap-6 mt-8">
             {/* สุขภาพ */}
@@ -176,7 +174,7 @@ const UpdateBehaviorForm = () => {
               {/* เวลาเดินทาง */}
               <TextInput
                 type="number"
-                label={"เวลาที่ใช้เดินทางโดยประมาณ (ชั่วโมง)"}
+                label={"เวลาที่ใช้เดินทางโดยประมาณ (นาที)"}
                 name={"time_used"}
                 value={values.time_used}
                 onChange={handleChange}
@@ -396,7 +394,7 @@ const UpdateBehaviorForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ behavior_and_risk: values });
-                navigate(`/student/family-status/update`);
+                navigate(`/student/family-status/${year}/update`);
               }}
             >
               ก่อนหน้า

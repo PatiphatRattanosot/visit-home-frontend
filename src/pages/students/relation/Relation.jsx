@@ -58,8 +58,8 @@ const Relation = () => {
             className={relationInfo === null ? "btn-green" : "btn-yellow"}
             href={
               relationInfo === null
-                ? `/student/personal-info/add`
-                : `/student/relation/update`
+                ? `/student/personal-info/${selectedYear}/add`
+                : `/student/relation/${selectedYear}/update`
             }
           >
             {relationInfo === null ? "เพิ่มข้อมูล" : "แก้ไขข้อมูล"}

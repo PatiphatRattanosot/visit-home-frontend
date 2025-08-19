@@ -60,8 +60,8 @@ const PersonalInfo = () => {
             className={personalInfo === null ? "btn-green" : "btn-yellow"}
             href={
               personalInfo === null
-                ? `/student/personal-info/add`
-                : `/student/personal-info/update`
+                ? `/student/personal-info/${selectedYear}/add`
+                : `/student/personal-info/${selectedYear}/update`
             }
           >
             {personalInfo === null ? "เพิ่มข้อมูล" : "แก้ไขข้อมูล"}

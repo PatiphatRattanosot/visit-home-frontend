@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import Stepper from "../../../components/Stepper";
 import { useAuthStore } from "../../../stores/auth.store";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import CheckboxInput from "../../../components/CheckboxInput";
 import RadioInput from "../../../components/RadioInput";
 import TextInput from "../../../components/TextInput";
@@ -12,17 +12,15 @@ import {
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import { useEffect } from "react";
-import YearSelector from "../../../components/YearSelector";
 import { useStudentStore } from "../../../stores/student.store";
-import useYearSelectStore from "../../../stores/year_select.store";
 
 const UpdateFamilyStatusForm = () => {
   const { userInfo } = useAuthStore();
   const navigate = useNavigate();
+  const { year } = useParams();
 
   const { setFormData } = useStudentFormStore();
   const { getYearlyData } = useStudentStore();
-  const { selectedYear } = useYearSelectStore();
 
   const {
     initialValues,
@@ -41,25 +39,32 @@ const UpdateFamilyStatusForm = () => {
       console.log("Submitting", actions);
       setFormData({ family_status_info: values });
       actions.resetForm();
-      navigate(`/student/behavior/update`);
+      navigate(`/student/behavior/${year}/update`);
     },
   });
+
+  const handleLessThanOneChange = (e) => {
+    setValues({ ...values, less_than_one: e.target.checked ? "1" : "0" });
+  };
+
+  console.log("form change", values);
+  console.log("fetch", getYearlyData(year));
 
   // ดึงข้อมูล
   useEffect(() => {
     const fetchFamilyStatusInfo = async () => {
-      const data = await getYearlyData(selectedYear);
+      const data = await getYearlyData(year);
       setValues(data?.students[0].yearly_data[0]?.family_status_info);
     };
     fetchFamilyStatusInfo();
-  }, [selectedYear]);
+  }, [year]);
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/personal-info/update`,
-    stepTwo: `/student/relation/update`,
-    stepThree: `/student/family-status/update`,
-    stepFour: `/student/behavior/update`,
+    stepOne: `/student/personal-info/${year}/update`,
+    stepTwo: `/student/relation/${year}/update`,
+    stepThree: `/student/family-status/${year}/update`,
+    stepFour: `/student/behavior/${year}/update`,
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-9">
@@ -82,10 +87,6 @@ const UpdateFamilyStatusForm = () => {
             สถานะของครัวเรือนของ{" "}
             <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
           </h3>
-
-          <div className="flex justify-center md:justify-end items-center mb-6">
-            <YearSelector />
-          </div>
 
           <div className="grid grid-cols-1 gap-6 mt-8">
             {/* ครัวเรือนมีภาระพึ่งพิง */}
@@ -164,14 +165,14 @@ const UpdateFamilyStatusForm = () => {
                     id="less_than_one"
                     name="less_than_one"
                     className="checkbox"
-                    value={true}
-                    onChange={handleChange}
+                    value={"1"}
+                    onChange={handleLessThanOneChange}
                     onBlur={handleBlur}
-                    checked={values.less_than_one}
+                    checked={values.less_than_one === "1"}
                   />
                   <label htmlFor="less_than_one">มีที่ดินน้อยกว่า 1 ไร่</label>
                 </div>
-                {values.less_than_one === false && (
+                {values.less_than_one !== "1" && (
                   <TextInput
                     label={"เป็นเจ้าของจำนวน (ไร่)"}
                     name={"owned_land"}
@@ -205,7 +206,7 @@ const UpdateFamilyStatusForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ family_status_info: values });
-                navigate(`/student/relation/update`);
+                navigate(`/student/relation/${year}/update`);
               }}
             >
               ก่อนหน้า

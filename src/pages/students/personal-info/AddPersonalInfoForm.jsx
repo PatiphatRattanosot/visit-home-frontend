@@ -9,7 +9,7 @@ import {
   PersonalInfoInitialValues,
 } from "../../../schemas/personalInfo";
 import Stepper from "../../../components/Stepper";
-import { useNavigate } from "react-router";
+import { useNavigate,useParams } from "react-router";
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import RadioInput from "../../../components/RadioInput";
@@ -23,6 +23,7 @@ const AddPersonalInfoForm = () => {
   const { setFormData } = useStudentFormStore();
 
   const navigate = useNavigate();
+  const { year } = useParams();
 
   const {
     initialValues,
@@ -42,7 +43,7 @@ const AddPersonalInfoForm = () => {
       console.log("Submitting", actions);
       setFormData({ personal_info: values });
       actions.resetForm();
-      navigate(`/student/relation/add`);
+      navigate(`/student/relation/${year}/add`);
     },
   });
 
@@ -94,10 +95,10 @@ const AddPersonalInfoForm = () => {
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/personal-info/add`,
-    stepTwo: `/student/relation/add`,
-    stepThree: `/student/family-status/add`,
-    stepFour: `/student/behavior/add`,
+    stepOne: `/student/personal-info/${year}/add`,
+    stepTwo: `/student/relation/${year}/add`,
+    stepThree: `/student/family-status/${year}/add`,
+    stepFour: `/student/behavior/${year}/add`,
   };
 
   console.log(values);
@@ -413,7 +414,7 @@ const AddPersonalInfoForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ personal_info: values });
-                navigate(`/student/visit-info/${year}/personal-info`);
+                navigate(`/student/personal-info`);
               }}
             >
               ยกเลิก
