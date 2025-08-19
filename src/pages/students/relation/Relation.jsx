@@ -79,120 +79,176 @@ const Relation = () => {
                     <div>
                       จำนวนสมาชิกในครอบครัว:{" "}
                       <span className="text-black">
-                        {relationInfo.family_member}
+                        {relationInfo?.family_member}
                       </span>{" "}
                       คน
                     </div>
                     <div>
                       เวลาที่ใช้ร่วมกันในครอบครัวต่อวัน:{" "}
                       <span className="text-black">
-                        {relationInfo.family_time}
+                        {relationInfo?.family_time}
                       </span>{" "}
                       ชั่วโมง
                     </div>
                     <div>
                       ความสัมพันธ์กับบิดา:{" "}
                       <span className="text-black">
-                        {relationInfo.father_relation}
+                        {relationInfo?.father_relation == "0"
+                          ? "สนิทสนม"
+                          : relationInfo?.father_relation == "1"
+                          ? "เฉยๆ"
+                          : relationInfo?.father_relation == "2"
+                          ? "ห่างเหิน"
+                          : relationInfo?.father_relation == "3"
+                          ? "ขัดแย้ง"
+                          : "ไม่มี"}
                       </span>
                     </div>
                     <div>
                       ความสัมพันธ์กับมารดา:{" "}
                       <span className="text-black">
-                        {relationInfo.mother_relation}
+                        {relationInfo?.mother_relation == "0"
+                          ? "สนิทสนม"
+                          : relationInfo?.mother_relation == "1"
+                          ? "เฉยๆ"
+                          : relationInfo?.mother_relation == "2"
+                          ? "ห่างเหิน"
+                          : relationInfo?.mother_relation == "3"
+                          ? "ขัดแย้ง"
+                          : "ไม่มี"}
                       </span>
                     </div>
                     <div>
                       ความสัมพันธ์กับพี่ชาย:{" "}
                       <span className="text-black">
-                        {relationInfo.brother_relation}
+                        {relationInfo?.brother_relation == "0"
+                          ? "สนิทสนม"
+                          : relationInfo?.brother_relation == "1"
+                          ? "เฉยๆ"
+                          : relationInfo?.brother_relation == "2"
+                          ? "ห่างเหิน"
+                          : relationInfo?.brother_relation == "3"
+                          ? "ขัดแย้ง"
+                          : "ไม่มี"}
                       </span>
                     </div>
                     <div>
                       ความสัมพันธ์กับพี่สาว:{" "}
                       <span className="text-black">
-                        {relationInfo.sister_relation}
+                        {relationInfo?.sister_relation == "0"
+                          ? "สนิทสนม"
+                          : relationInfo?.sister_relation == "1"
+                          ? "เฉยๆ"
+                          : relationInfo?.sister_relation == "2"
+                          ? "ห่างเหิน"
+                          : relationInfo?.sister_relation == "3"
+                          ? "ขัดแย้ง"
+                          : "ไม่มี"}
                       </span>
                     </div>
                     <div>
                       ความสัมพันธ์กับปู่ย่าตายาย:{" "}
                       <span className="text-black">
-                        {relationInfo.grand_parent_relation}
+                        {relationInfo?.grand_parent_relation == "0"
+                          ? "สนิทสนม"
+                          : relationInfo?.grand_parent_relation == "1"
+                          ? "เฉยๆ"
+                          : relationInfo?.grand_parent_relation == "2"
+                          ? "ห่างเหิน"
+                          : relationInfo?.grand_parent_relation == "3"
+                          ? "ขัดแย้ง"
+                          : "ไม่มี"}
                       </span>
                     </div>
                     <div>
                       ความสัมพันธ์กับญาติ:{" "}
                       <span className="text-black">
-                        {relationInfo.relatives_relation}
+                        {relationInfo?.relatives_relation == "0"
+                          ? "สนิทสนม"
+                          : relationInfo?.relatives_relation == "1"
+                          ? "เฉยๆ"
+                          : relationInfo?.relatives_relation == "2"
+                          ? "ห่างเหิน"
+                          : relationInfo?.relatives_relation == "3"
+                          ? "ขัดแย้ง"
+                          : "ไม่มี"}
                       </span>
                     </div>
                     <div>
                       บุคคลอื่น ๆ:{" "}
                       <span className="text-black">
-                        {relationInfo.other_relative || "ไม่มี"}
+                        {relationInfo?.other_relative || "ไม่มี"}
                       </span>
                     </div>
                     <div>
                       ความสัมพันธ์กับบุคคลอื่น ๆ:{" "}
                       <span className="text-black">
-                        {relationInfo.other_relation}
+                        {relationInfo?.other_relation == "0"
+                          ? "สนิทสนม"
+                          : relationInfo?.other_relation == "1"
+                          ? "เฉยๆ"
+                          : relationInfo?.other_relation == "2"
+                          ? "ห่างเหิน"
+                          : relationInfo?.other_relation == "3"
+                          ? "ขัดแย้ง"
+                          : "ไม่มี"}
                       </span>
                     </div>
                     <div>
                       เมื่อนักเรียนอยู่บ้านคนเดียว:{" "}
                       <span className="text-black">
-                        {relationInfo.when_student_alone}
+                        {relationInfo?.when_student_alone}
                       </span>
                     </div>
                     <div>
                       รายได้รวมของครอบครัว:{" "}
                       <span className="text-black">
-                        {relationInfo.total_household_income}
+                        {relationInfo?.total_household_income}
                       </span>{" "}
                       บาท
                     </div>
                     <div>
                       ค่าใช้จ่ายไปโรงเรียนต่อวัน:{" "}
                       <span className="text-black">
-                        {relationInfo.daily_total_to_school}
+                        {relationInfo?.daily_total_to_school}
                       </span>{" "}
                       บาท
                     </div>
                     <div>
                       ได้รับเงินจาก:{" "}
                       <span className="text-black">
-                        {relationInfo.received_daily_from}
+                        {relationInfo?.received_daily_from}
                       </span>
                     </div>
                     <div>
                       งานพิเศษ:{" "}
                       <span className="text-black">
-                        {relationInfo.student_part_time || "ไม่ได้ทำ"}
+                        {relationInfo?.student_part_time || "ไม่ได้ทำ"}
                       </span>
                     </div>
                     <div>
                       รายได้จากงานพิเศษ:{" "}
                       <span className="text-black">
-                        {relationInfo.student_income}
+                        {relationInfo?.student_income}
                       </span>{" "}
                       บาท
                     </div>
                     <div>
                       การสนับสนุนจากโรงเรียน:{" "}
                       <span className="text-black">
-                        {relationInfo.support_from_school}
+                        {relationInfo?.support_from_school}
                       </span>
                     </div>
                     <div>
                       การสนับสนุนจากหน่วยงานอื่น:{" "}
                       <span className="text-black">
-                        {relationInfo.support_from_organize}
+                        {relationInfo?.support_from_organize}
                       </span>
                     </div>
                     <div className="md:col-span-2">
                       ข้อกังวลของผู้ปกครอง:{" "}
                       <span className="text-black">
-                        {relationInfo.parent_concern}
+                        {relationInfo?.parent_concern}
                       </span>
                     </div>
                   </div>

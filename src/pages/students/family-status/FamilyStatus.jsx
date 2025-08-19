@@ -80,13 +80,29 @@ const FamilyStatus = () => {
                     <div>
                       ภาระพึ่งพิงของครัวเรือน:{" "}
                       <span className="text-black">
-                        {familyStatusInfo?.household_burdens.join(", ")}
+                        {familyStatusInfo?.household_burdens.map(
+                          (burden, index) => (
+                            <div key={index}>
+                              {burden == "0"
+                                ? "มีคนพิการ"
+                                : burden == "1"
+                                ? "มีผู้สูงอายุเกิน 60 ปี"
+                                : burden == "2"
+                                ? "เป็นพ่อ/แม่เลี้ยงเดี่ยว"
+                                : "มีคนอายุ 15-65 ปี ว่างงาน (ที่ไม่ใช่นักเรียน/นักศึกษา)"}
+                            </div>
+                          )
+                        )}
                       </span>
                     </div>
                     <div>
                       ประเภทที่อยู่อาศัย:{" "}
                       <span className="text-black">
-                        {familyStatusInfo?.housing_type}
+                        {familyStatusInfo?.housing_type == "0"
+                          ? "บ้านของตนเอง"
+                          : familyStatusInfo?.housing_type == "1"
+                          ? "บ้านเช่า"
+                          : "อาศัยอยู่กับผู้อื่น"}
                       </span>
                     </div>
                     <div>
@@ -98,19 +114,31 @@ const FamilyStatus = () => {
                     <div>
                       ยานพาหนะของครอบครัว:{" "}
                       <span className="text-black">
-                        {familyStatusInfo?.family_vehicles.join(", ")}
+                        {familyStatusInfo?.family_vehicles.map(
+                          (vehicle, index) => (
+                            <div key={index}>
+                              {vehicle == "0"
+                                ? "รถมอเตอร์ไซค์"
+                                : vehicle == "1"
+                                ? "รถยนต์ส่วนบุคคล"
+                                : vehicle == "2"
+                                ? "รถบรรทุกเล็ก/รถตู้"
+                                : "รถไถ/เกี่ยวข้าว/รถอีแต๋น/รถอื่นๆ ประเภทเดียวกัน"}
+                            </div>
+                          )
+                        )}
                       </span>
                     </div>
                     <div>
                       จำนวนที่ดินที่มี:{" "}
                       <span className="text-black">
-                        {familyStatusInfo?.owned_land !== 0 ? (
+                        {familyStatusInfo?.less_than_one == 0 ? (
                           <>
-                            {familyStatusInfo?.owned_land}{" "}
-                            <span className="text-gray-600">ไร่</span>
+                            {familyStatusInfo?.owned_land}
+                            {" ไร่"}
                           </>
                         ) : (
-                          " ไม่มี"
+                          "น้อยกว่า 1 ไร่"
                         )}
                       </span>
                     </div>
@@ -119,8 +147,8 @@ const FamilyStatus = () => {
                       <span className="text-black">
                         {familyStatusInfo?.rented_land !== 0 ? (
                           <>
-                            {familyStatusInfo?.rented_land}{" "}
-                            <span className="text-gray-600">ไร่</span>
+                            {familyStatusInfo?.rented_land}
+                            {" ไร่"}
                           </>
                         ) : (
                           " ไม่มี"

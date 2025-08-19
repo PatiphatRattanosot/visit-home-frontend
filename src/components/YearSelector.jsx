@@ -1,16 +1,21 @@
 import { useEffect } from "react";
-import { useYearStore } from "../stores/admin.store";
 import useYearSelectStore from "../stores/year_select.store";
 
 const YearSelector = () => {
-  const { selectedYear, setSelectedYear } = useYearSelectStore();
-  const { data: years, fetchData } = useYearStore();
+  const { selectedYear, setSelectedYear, years, fetchYears } =
+    useYearSelectStore();
   console.log(years);
   console.log(selectedYear);
 
   useEffect(() => {
-    fetchData();
+    fetchYears();
   }, []);
+
+  useEffect(() => {
+    if (years.length > 0 && !selectedYear) {
+      setSelectedYear(years[0]._id);
+    }
+  }, [years, selectedYear, setSelectedYear]);
 
   return (
     <select
