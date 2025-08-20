@@ -8,23 +8,30 @@ import YearSelector from "../../../components/YearSelector";
 
 const Behavior = () => {
   const { userInfo } = useAuthStore();
-
-  const [behaviorInfo, setBehaviorInfo] = useState(null);
-  console.log(behaviorInfo);
-
   const { getYearlyData } = useStudentStore();
   const { selectedYear } = useYearSelectStore();
 
-  // ดึงข้อมูล
+  const [behaviorInfo, setBehaviorInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchBehaviorInfo = async () => {
-      const data = await getYearlyData(selectedYear);
-      setBehaviorInfo(data?.students[0].yearly_data[0]?.behavior_and_risk);
+      setLoading(true);
+      try {
+        const data = await getYearlyData(selectedYear);
+        const info = data?.students?.[0]?.yearly_data?.[0]?.behavior_and_risk;
+        setBehaviorInfo(info || null);
+      } catch (error) {
+        console.error("Error fetching behavior info:", error);
+        setBehaviorInfo(null);
+      } finally {
+        setLoading(false);
+      }
     };
+
     fetchBehaviorInfo();
   }, [selectedYear]);
 
-  // stepper path
   const stepperPath = {
     stepOne: `/student/personal-info`,
     stepTwo: `/student/relation`,
@@ -32,30 +39,112 @@ const Behavior = () => {
     stepFour: `/student/behavior`,
   };
 
+  // Label Maps
+  const healthRiskMap = {
+    0: "ร่างกายแข็งแรง",
+    1: "ร่างกายไม่แข็งแรง",
+    2: "สมรรถภาพทางร่างกายต่ำ",
+    3: "มีโรคประจำตัวหรือเจ็บป่วยบ่อย",
+    4: "ป่วยเป็นโรคร้ายแรง/เรื้อรัง",
+    5: "มีภาวะทุพโภชนาการ",
+  };
+
+  const welfareSafetyMap = {
+    0: "ไม่มีความเสี่ยงใดๆ",
+    1: "พ่อแม่แยกทางกัน หรือ แต่งงานใหม่",
+    2: "มีบุคคลในครอบครัวเจ็บป่วยด้วยโรคร้าย",
+    3: "บุคคลในครอบครัวเล่นการพนัน",
+    4: "ไม่มีผู้ดูแล",
+    5: "ถูกทารุณ/ทำร้ายจากบุคคลในครอบครัว/เพื่อนบ้าน",
+    6: "พักอาศัยในชุมชนแออัด/ใกล้แหล่งมั่วสุม",
+    7: "เล่นการพนัน",
+    8: "คนในครอบครัวติดยาเสพติด",
+    9: "มีความขัดแย้งในครอบครัว",
+    10: "มีความรุนแรงในครอบครัว",
+    11: "ถูกล่วงละเมิดทางเพศ",
+  };
+
+  const studentRespMap = {
+    0: "ช่วยงานบ้าน",
+    1: "ดูแลคนเจ็บป่วย/พิการ",
+    2: "ช่วยค้าขายเล็กๆน้อยๆ",
+    3: "ทำงานพิเศษแถวบ้าน",
+    4: "ช่วยงานในนาไร่",
+  };
+
+  const hobbiesMap = {
+    0: "ดูทีวี/ฟังเพลง",
+    1: "เที่ยวห้าง/ดูหนัง",
+    2: "อ่านหนังสือ",
+    3: "ไปหาเพื่อน",
+    4: "แว้น/สก๊อย",
+    5: "เล่นเกมคอม/มือถือ",
+    6: "ไปสวนสาธารณะ",
+    7: "เล่นดนตรี",
+  };
+
+  const drugsMap = {
+    0: "คบเพื่อนในกลุ่มที่ใช้สารเสพติด",
+    1: "สมาชิกในครอบครัวข้องเกี่ยวกับยาเสพติด",
+    2: "อยู่ในสภาพแวดล้อมที่ใช้สารเสพติด",
+    3: "ปัจจุบันเกี่ยวข้องกับสารเสพติด",
+    4: "ติดบุหรี่/สุรา/สารเสพติดอื่นๆ",
+  };
+
+  const violenceMap = {
+    0: "มีการทะเลาะวิวาท",
+    1: "ก้าวร้าว เกเร",
+    2: "ทะเลาะวิวาทเป็นประจำ",
+    3: "ทำร้ายร่างกายผู้อื่น",
+    4: "ทำร้ายร่างกายตนเอง",
+  };
+
+  const sexualMap = {
+    0: "อยู่ในกลุ่มขายบริการ",
+    1: "ใช้เครื่องมือสื่อสารเกี่ยวกับเพศบ่อย",
+    2: "ตั้งครรภ์",
+    3: "ขายบริการทางเพศ",
+    4: "หมกมุ่นสื่อทางเพศ",
+    5: "มั่วสุมทางเพศ",
+  };
+
+  const gamingMap = {
+    0: "เล่นเกมเกินวันละ 1 ชั่วโมง",
+    1: "ขาดจินตนาการ/ความคิดสร้างสรรค์",
+    2: "เก็บตัว แยกจากเพื่อน",
+    3: "ใช้จ่ายเงินผิดปกติ",
+    4: "อยู่ในกลุ่มเพื่อนเล่นเกม",
+    5: "ร้านเกมอยู่ใกล้บ้าน/โรงเรียน",
+    6: "เล่นเกมเกิน 2 ชั่วโมง",
+    7: "หมกมุ่นจริงจังกับเกม",
+    8: "ใช้เงินฟุ่มเฟือย/โกหก/ขโมยเงินเพื่อเล่นเกม",
+  };
+
+  // Helpers
+  const renderMappedList = (data, map, fallback = "ไม่มี") =>
+    data?.length > 0 ? (
+      data.map((item, index) => <div key={index}>{map[item] || "ไม่ระบุ"}</div>)
+    ) : (
+      <div>{fallback}</div>
+    );
+
   return (
-    <div className="min-h-screen py-9 bg-gray-100 flex justify-center">
-      <div className="bg-white px-4 py-6 w-9/12 rounded-lg">
+    <div className="min-h-screen py-10 bg-gray-100 flex justify-center">
+      <div className="bg-white px-6 py-8 w-full max-w-screen-lg rounded-lg shadow-sm">
         <BreadcrumbsLoop options={[{ label: "พฤติกรรมและความเสี่ยง" }]} />
-        <div className="flex justify-center md:justify-end items-center mb-6">
+
+        <div className="flex justify-center md:justify-end mb-6">
           <YearSelector />
         </div>
-        {/* หัวข้อ */}
-        <h3 className="text-center text-xl font-bold">
+
+        <h3 className="text-xl font-bold text-center mb-3">
           ข้อมูลการเยี่ยมบ้านของ{" "}
           <span className="text-gray-600">
-            {userInfo?.prefix +
-              " " +
-              userInfo?.first_name +
-              " " +
-              userInfo?.last_name}
+            {userInfo?.prefix} {userInfo?.first_name} {userInfo?.last_name}
           </span>
         </h3>
-        {/* Stepper */}
-        <div className="my-3 flex justify-center">
-          <Stepper step={4} path={stepperPath} />
-        </div>
-        {/* Manage info btn */}
-        <div className="flex justify-end my-6">
+
+        <div className="flex justify-end my-4">
           <a
             className={behaviorInfo === null ? "btn-green" : "btn-yellow"}
             href={
@@ -68,282 +157,112 @@ const Behavior = () => {
           </a>
         </div>
 
-        {/* ข้อมูลนักเรียน */}
+        <div className="my-4 flex justify-center">
+          <Stepper step={4} path={stepperPath} />
+        </div>
+
         <div className="flex justify-center mt-6">
           <div className="w-full max-w-3xl">
             <div className="bg-gray-50 rounded-lg px-6 py-10">
-              <h3 className="text-xl font-bold text-gray-600 text-center mb-3">
+              <h3 className="text-lg font-bold text-center text-gray-600 mb-6">
                 พฤติกรรมและความเสี่ยง
               </h3>
-              {behaviorInfo !== null ? (
-                <div className="text-left flex flex-col gap-2.5">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-gray-600">
-                    {/* สุขภาพ */}
-                    <div>
-                      ด้านสุขภาพ:{" "}
-                      <span className="text-black">
-                        {behaviorInfo?.health_risk.length === 0
-                          ? "ไม่มีความเสี่ยง"
-                          : behaviorInfo?.health_risk.map((risk, index) => (
-                              <div key={index}>
-                                {risk == "0"
-                                  ? "ร่างกายแข็งแรง"
-                                  : risk == "1"
-                                  ? "ร่างกายไม่แข็งแรง"
-                                  : risk == "2"
-                                  ? "สมรรถภาพทางร่างกายต่ำ"
-                                  : risk == "3"
-                                  ? "มีโรคประจำตัวหรือเจ็บป่วยบ่อย"
-                                  : risk == "4"
-                                  ? "ป่วยเป็นโรคร้ายแรง/เรื้อรัง"
-                                  : "มีภาวะทุพโภชนาการ"}
-                              </div>
-                            ))}
-                      </span>
-                    </div>
-                    {/* สวัสดิการหรือความปลอดภัย */}
-                    <div>
-                      สวัสดิการหรือความปลอดภัย:{" "}
-                      <span className="text-black">
-                        {behaviorInfo?.welfare_and_safety.map((item, index) => (
-                          <div key={index}>
-                            {item == "0"
-                              ? "ไม่มีความเสี่ยงใดๆ"
-                              : item == "1"
-                              ? "พ่อแม่แยกทางกัน หรือ แต่งงานใหม่"
-                              : item == "2"
-                              ? "มีบุคคลในครอบครัวเจ็บป่วยด้วยโรคร้าย"
-                              : item == "3"
-                              ? "บุคคลในครอบครัวเล่นการพนัน"
-                              : item == "4"
-                              ? "ไม่มีผู้ดูแล"
-                              : item == "5"
-                              ? "ถูกทารุณ/ทำร้ายจากบุคคลในครอบครัว/เพื่อนบ้าน"
-                              : item == "6"
-                              ? "พักอาศัยอยู่ในชุมชนแออัดหรือใกล้แหล่งมั่วสุม/สถานเริงรมย์"
-                              : item == "7"
-                              ? "เล่นการพนัน"
-                              : item == "8"
-                              ? "บุคคลในครอบครัวติดสารเสพติดแรง/เรื้อรัง/ติดต่อ"
-                              : item == "9"
-                              ? "มีความขัดแย้ง/ทะเลาะกันในครอบครัว"
-                              : item == "10"
-                              ? "ความขัดแย้งและมีการใช้ความรุนแรงในครอบครัว"
-                              : "ถูกล่วงละเมิดทางเพศ"}
-                          </div>
-                        ))}
-                      </span>
-                    </div>
-                    {/* ระยะทางระหว่างบ้านไปโรงเรียน */}
-                    <div>
-                      ระยะทางระหว่างบ้านไปโรงเรียน:{" "}
-                      <span className="text-black">
-                        {behaviorInfo?.distance_to_school}
-                      </span>{" "}
-                      กิโลเมตร
-                    </div>
-                    {/* ใช้เวลาเดินทางประมาณ */}
-                    <div>
-                      ใช้เวลาเดินทางประมาณ:{" "}
-                      <span className="text-black">
-                        {behaviorInfo?.time_used}
-                      </span>{" "}
-                      นาที
-                    </div>
-                    {/* การเดินทางของนักเรียนไปโรงเรียน */}
-                    <div>
-                      การเดินทางของนักเรียนไปโรงเรียน:{" "}
-                      <span className="text-black">
-                        {behaviorInfo?.school_transport}
-                      </span>
-                    </div>
-                    <div className="md:col-span-2">
-                      {/* ภาระงานความรับผิดชอบของนักเรียนที่มีต่อครอบครัว */}
-                      <div>
-                        ภาระงานความรับผิดชอบของนักเรียนที่มีต่อครอบครัว:{" "}
-                        <span className="text-black">
-                          {behaviorInfo?.student_resp.map((resp, index) => (
-                            <div key={index}>
-                              {resp == "0"
-                                ? "ช่วยงานบ้าน"
-                                : resp == "1"
-                                ? "ช่วยคนดูแลคนเจ็บป่วย/พิการ"
-                                : resp == "2"
-                                ? "ช่วยค้าขายเล็กๆน้อยๆ"
-                                : resp == "3"
-                                ? "ทำงานพิเศษแถวบ้าน"
-                                : "ช่วยงานในนาไร่"}
-                            </div>
-                          ))}
-                          {behaviorInfo?.student_resp_other && (
-                            <div>{behaviorInfo?.student_resp_other}</div>
-                          )}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="md:col-span-2">
-                      {/* กิจกรรมยามว่างหรืองานอดิเรก */}
-                      <div>
-                        กิจกรรมยามว่างหรืองานอดิเรก:{" "}
-                        <span className="text-black">
-                          {behaviorInfo?.hobbies.map((hobby, index) => (
-                            <div key={index}>
-                              {hobby == "0"
-                                ? "ดูทีวี/ ฟังเพลง"
-                                : hobby == "1"
-                                ? "ปเที่ยวห้าง/ ดูหนัง"
-                                : hobby == "2"
-                                ? "อ่านหนังสือ"
-                                : hobby == "3"
-                                ? "ไปหาเพื่อน/ เพื่อน"
-                                : hobby == "4"
-                                ? "แว้น/ สก๊อย"
-                                : hobby == "5"
-                                ? "เล่นเกม คอม / มือถือ"
-                                : hobby == "6"
-                                ? "ไปสวนสาธารณะ"
-                                : "เล่นดนตรี"}
-                            </div>
-                          ))}
-                          {behaviorInfo?.other_hobbies && (
-                            <div>{behaviorInfo?.other_hobbies}</div>
-                          )}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="md:col-span-2">
-                      {/* พฤติกรรมการใช้สารเสพติด */}
-                      <div>
-                        พฤติกรรมการใช้สารเสพติด:{" "}
-                        <span className="text-black">
-                          {behaviorInfo?.drugs_behav.map((drug, index) => (
-                            <div key={index}>
-                              {drug == "0"
-                                ? "คบเพื่อนในกลุ่มที่ใช้สารเสพติด"
-                                : drug == "1"
-                                ? "สมาชิกในครอบครัวข้องเกี่ยวกับยาเสพติด"
-                                : drug == "2"
-                                ? "อยู่ในสภาพแวดล้อมที่ใช้สารเสพติด"
-                                : drug == "3"
-                                ? "ปัจจุบันเกี่ยวข้องกับสารเสพติด"
-                                : "เป็นผู้ติดบุหรี่ สุรา หรือการใช้สารเสพติดอื่นๆ"}
-                            </div>
-                          ))}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="md:col-span-2">
-                      {/* พฤติกรรมการใช้ความรุนแรง */}
-                      <div>
-                        พฤติกรรมการใช้ความรุนแรง:{" "}
-                        <span className="text-black">
-                          {behaviorInfo?.violent_behav.map(
-                            (violence, index) => (
-                              <div key={index}>
-                                {violence == "0"
-                                  ? "มีการทะเลาะวิวาท"
-                                  : violence == "1"
-                                  ? "ก้าวร้าว เกเร"
-                                  : violence == "2"
-                                  ? "ทะเลาะวิวาทเป็นประจำ"
-                                  : violence == "3"
-                                  ? "ทำร้ายร่างกายผู้อื่น"
-                                  : "ทำร้ายร่างกายตนเอง"}
-                              </div>
-                            )
-                          )}
-                          {behaviorInfo?.other_violent_behav && (
-                            <div>{behaviorInfo?.other_violent_behav}</div>
-                          )}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="md:col-span-2">
-                      {/* พฤติกรรมทางเพศ */}
-                      <div>
-                        พฤติกรรมทางเพศ:{" "}
-                        <span className="text-black">
-                          {behaviorInfo?.sexual_behav.map((sexual, index) => (
-                            <div key={index}>
-                              {sexual == "0"
-                                ? "อยู่ในกลุ่มขายบริการ"
-                                : sexual == "1"
-                                ? "ใช้เครื่องมือสื่อสารที่เกี่ยวข้องกับด้านเพศเป็นเวลานานและบ่อยครั้ง"
-                                : sexual == "2"
-                                ? "ตั้งครรภ์"
-                                : sexual == "3"
-                                ? "ขายบริการทางเพศ"
-                                : sexual == "4"
-                                ? "หมกมุ่นในการใช้เครื่องมือสื่อสารที่เกี่ยวข้องทางเพศ"
-                                : "มีการมั่วสุมทางเพศ"}
-                            </div>
-                          ))}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="md:col-span-2">
-                      {/* การติดเกม */}
-                      <div>
-                        การติดเกม:{" "}
-                        <span className="text-black">
-                          {behaviorInfo?.gaming_behav.map((game, index) => (
-                            <div key={index}>
-                              {game == "0"
-                                ? "เล่นเกมเกินวันละ 1 ชั่วโมง"
-                                : game == "1"
-                                ? "ขาดจินตนาการและความคิดสร้างสรรค์"
-                                : game == "2"
-                                ? "เก็บตัว แยกตัวจากกลุ่มเพื่อน"
-                                : game == "3"
-                                ? "ใช้จ่ายเงินผิดปกติ"
-                                : game == "4"
-                                ? "อยู่ในกลุ่มเพื่อนเล่นเกม"
-                                : game == "5"
-                                ? "ร้านเกมอยู่ใกล้บ้านหรือโรงเรียน"
-                                : game == "6"
-                                ? "ใช้เวลาเล่นเกมเกิน 2 ชั่วโมง"
-                                : game == "7"
-                                ? "หมกมุ่น จริงจังในการเล่นเกม"
-                                : "ใช้เงินสิ้นเปลือง โกหก ลักขโมยเงินเพื่อเล่นเกม"}
-                            </div>
-                          ))}
-                          {behaviorInfo?.other_gaming_behav && (
-                            <div>{behaviorInfo?.other_gaming_behav}</div>
-                          )}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="md:col-span-2">
-                      {/* การเข้าถึงสื่อคอมพิวเตอร์และอินเตอร์เน็ตที่บ้าน */}
-                      <div>
-                        การเข้าถึงสื่อคอมพิวเตอร์และอินเตอร์เน็ตที่บ้าน:{" "}
-                        <span className="text-black">
-                          {behaviorInfo?.computer_internet_access == "0"
-                            ? "สามารถเข้าถึง Internet ได้จากที่บ้าน"
-                            : "ไม่สามารถเข้าถึง Internet ได้จากที่บ้าน"}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="md:col-span-2">
-                      {/* การใช้เครื่องมือสื่อสารอิเล็กทรอนิกส์ */}
-                      <div>
-                        การใช้เครื่องมือสื่อสารอิเล็กทรอนิกส์:{" "}
-                        <span className="text-black">
-                          {behaviorInfo?.tech_use_behav == "0"
-                            ? "ใช้ Social media/game (ไม่เกินวันละ 3 ชั่วโมง)"
-                            : "ใช้ Social media/game (วันละ 3 ชั่วโมงขึ้นไป)"}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="md:col-span-2">
-                      {/* ผู้ให้ข้อมูลนักเรียน */}
-                      <div className="font-bold">
-                        ผู้ให้ข้อมูลนักเรียน:{" "}
-                        <span className="text-black">
-                          {behaviorInfo?.information_giver}
-                        </span>
-                      </div>
-                    </div>
+
+              {loading ? (
+                <div className="text-center text-gray-500">
+                  กำลังโหลดข้อมูล...
+                </div>
+              ) : behaviorInfo ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700 text-sm">
+                  <div>
+                    ด้านสุขภาพ:{" "}
+                    {renderMappedList(behaviorInfo.health_risk, healthRiskMap)}
+                  </div>
+                  <div>
+                    สวัสดิการ/ความปลอดภัย:{" "}
+                    {renderMappedList(
+                      behaviorInfo.welfare_and_safety,
+                      welfareSafetyMap
+                    )}
+                  </div>
+                  <div>
+                    ระยะทางบ้าน - โรงเรียน:{" "}
+                    <span className="text-black">
+                      {behaviorInfo.distance_to_school} กม.
+                    </span>
+                  </div>
+                  <div>
+                    ใช้เวลาเดินทาง:{" "}
+                    <span className="text-black">
+                      {behaviorInfo.time_used} นาที
+                    </span>
+                  </div>
+                  <div>
+                    วิธีเดินทาง:{" "}
+                    <span className="text-black">
+                      {behaviorInfo.school_transport}
+                    </span>
+                  </div>
+                  <div className="md:col-span-2">
+                    ภาระงานในครอบครัว:{" "}
+                    {renderMappedList(
+                      behaviorInfo.student_resp,
+                      studentRespMap
+                    )}
+                    {behaviorInfo.student_resp_other && (
+                      <div>{behaviorInfo.student_resp_other}</div>
+                    )}
+                  </div>
+                  <div className="md:col-span-2">
+                    งานอดิเรก:{" "}
+                    {renderMappedList(behaviorInfo.hobbies, hobbiesMap)}
+                    {behaviorInfo.other_hobbies && (
+                      <div>{behaviorInfo.other_hobbies}</div>
+                    )}
+                  </div>
+                  <div className="md:col-span-2">
+                    พฤติกรรมการใช้สารเสพติด:{" "}
+                    {renderMappedList(behaviorInfo.drugs_behav, drugsMap)}
+                  </div>
+                  <div className="md:col-span-2">
+                    พฤติกรรมรุนแรง:{" "}
+                    {renderMappedList(behaviorInfo.violent_behav, violenceMap)}
+                    {behaviorInfo.other_violent_behav && (
+                      <div>{behaviorInfo.other_violent_behav}</div>
+                    )}
+                  </div>
+                  <div className="md:col-span-2">
+                    พฤติกรรมทางเพศ:{" "}
+                    {renderMappedList(behaviorInfo.sexual_behav, sexualMap)}
+                  </div>
+                  <div className="md:col-span-2">
+                    การติดเกม:{" "}
+                    {renderMappedList(behaviorInfo.gaming_behav, gamingMap)}
+                    {behaviorInfo.other_gaming_behav && (
+                      <div>{behaviorInfo.other_gaming_behav}</div>
+                    )}
+                  </div>
+                  <div className="md:col-span-2">
+                    เข้าถึงอินเตอร์เน็ตที่บ้าน:{" "}
+                    <span className="text-black">
+                      {behaviorInfo.computer_internet_access === "0"
+                        ? "สามารถเข้าถึงได้"
+                        : "ไม่สามารถเข้าถึงได้"}
+                    </span>
+                  </div>
+                  <div className="md:col-span-2">
+                    ใช้เครื่องมือสื่อสารอิเล็กทรอนิกส์:{" "}
+                    <span className="text-black">
+                      {behaviorInfo.tech_use_behav === "0"
+                        ? "ใช้ไม่เกินวันละ 3 ชั่วโมง"
+                        : "ใช้เกินวันละ 3 ชั่วโมง"}
+                    </span>
+                  </div>
+                  <div className="md:col-span-2 font-bold">
+                    ผู้ให้ข้อมูล:{" "}
+                    <span className="text-black">
+                      {behaviorInfo.information_giver}
+                    </span>
                   </div>
                 </div>
               ) : (
