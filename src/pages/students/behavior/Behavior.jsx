@@ -39,7 +39,7 @@ const Behavior = () => {
     stepFour: `/student/behavior`,
   };
 
-  // Label Maps
+  // Mapping dictionaries
   const healthRiskMap = {
     0: "ร่างกายแข็งแรง",
     1: "ร่างกายไม่แข็งแรง",
@@ -120,7 +120,6 @@ const Behavior = () => {
     8: "ใช้เงินฟุ่มเฟือย/โกหก/ขโมยเงินเพื่อเล่นเกม",
   };
 
-  // Helpers
   const renderMappedList = (data, map, fallback = "ไม่มี") =>
     data?.length > 0 ? (
       data.map((item, index) => <div key={index}>{map[item] || "ไม่ระบุ"}</div>)
@@ -131,20 +130,24 @@ const Behavior = () => {
   return (
     <div className="min-h-screen py-10 bg-gray-100 flex justify-center">
       <div className="bg-white px-6 py-8 w-full max-w-screen-lg rounded-lg shadow-sm">
+        {/* Breadcrumbs */}
         <BreadcrumbsLoop options={[{ label: "พฤติกรรมและความเสี่ยง" }]} />
 
-        <div className="flex justify-center md:justify-end mb-6">
+        {/* Year Selector */}
+        <div className="flex justify-center md:justify-end items-center mb-6">
           <YearSelector />
         </div>
 
-        <h3 className="text-xl font-bold text-center mb-3">
-          ข้อมูลการเยี่ยมบ้านของ{" "}
-          <span className="text-gray-600">
+        {/* Heading */}
+        <h3 className="text-xl font-bold text-center w-full">
+          ข้อมูลการเยี่ยมบ้าน{" "}
+          <span className="text-gray-600 hidden md:block">
             {userInfo?.prefix} {userInfo?.first_name} {userInfo?.last_name}
           </span>
         </h3>
 
-        <div className="flex justify-end my-4">
+        {/* Manage Info Button */}
+        <div className="flex justify-end mt-2">
           <a
             className={behaviorInfo === null ? "btn-green" : "btn-yellow"}
             href={
@@ -157,14 +160,16 @@ const Behavior = () => {
           </a>
         </div>
 
+        {/* Stepper */}
         <div className="my-4 flex justify-center">
           <Stepper step={4} path={stepperPath} />
         </div>
 
-        <div className="flex justify-center mt-6">
+        {/* Data Section */}
+        <div className="flex justify-center mt-10">
           <div className="w-full max-w-3xl">
             <div className="bg-gray-50 rounded-lg px-6 py-10">
-              <h3 className="text-lg font-bold text-center text-gray-600 mb-6">
+              <h3 className="text-lg font-bold text-gray-600 text-center mb-6">
                 พฤติกรรมและความเสี่ยง
               </h3>
 
@@ -172,7 +177,7 @@ const Behavior = () => {
                 <div className="text-center text-gray-500">
                   กำลังโหลดข้อมูล...
                 </div>
-              ) : behaviorInfo ? (
+              ) : behaviorInfo !== null ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700 text-sm">
                   <div>
                     ด้านสุขภาพ:{" "}
@@ -203,6 +208,7 @@ const Behavior = () => {
                       {behaviorInfo.school_transport}
                     </span>
                   </div>
+
                   <div className="md:col-span-2">
                     ภาระงานในครอบครัว:{" "}
                     {renderMappedList(
@@ -213,6 +219,7 @@ const Behavior = () => {
                       <div>{behaviorInfo.student_resp_other}</div>
                     )}
                   </div>
+
                   <div className="md:col-span-2">
                     งานอดิเรก:{" "}
                     {renderMappedList(behaviorInfo.hobbies, hobbiesMap)}
@@ -220,10 +227,12 @@ const Behavior = () => {
                       <div>{behaviorInfo.other_hobbies}</div>
                     )}
                   </div>
+
                   <div className="md:col-span-2">
                     พฤติกรรมการใช้สารเสพติด:{" "}
                     {renderMappedList(behaviorInfo.drugs_behav, drugsMap)}
                   </div>
+
                   <div className="md:col-span-2">
                     พฤติกรรมรุนแรง:{" "}
                     {renderMappedList(behaviorInfo.violent_behav, violenceMap)}
@@ -231,10 +240,12 @@ const Behavior = () => {
                       <div>{behaviorInfo.other_violent_behav}</div>
                     )}
                   </div>
+
                   <div className="md:col-span-2">
                     พฤติกรรมทางเพศ:{" "}
                     {renderMappedList(behaviorInfo.sexual_behav, sexualMap)}
                   </div>
+
                   <div className="md:col-span-2">
                     การติดเกม:{" "}
                     {renderMappedList(behaviorInfo.gaming_behav, gamingMap)}
@@ -242,6 +253,7 @@ const Behavior = () => {
                       <div>{behaviorInfo.other_gaming_behav}</div>
                     )}
                   </div>
+
                   <div className="md:col-span-2">
                     เข้าถึงอินเตอร์เน็ตที่บ้าน:{" "}
                     <span className="text-black">
@@ -250,6 +262,7 @@ const Behavior = () => {
                         : "ไม่สามารถเข้าถึงได้"}
                     </span>
                   </div>
+
                   <div className="md:col-span-2">
                     ใช้เครื่องมือสื่อสารอิเล็กทรอนิกส์:{" "}
                     <span className="text-black">
@@ -258,6 +271,7 @@ const Behavior = () => {
                         : "ใช้เกินวันละ 3 ชั่วโมง"}
                     </span>
                   </div>
+
                   <div className="md:col-span-2 font-bold">
                     ผู้ให้ข้อมูล:{" "}
                     <span className="text-black">
@@ -266,7 +280,7 @@ const Behavior = () => {
                   </div>
                 </div>
               ) : (
-                <div className="text-center my-16 text-gray-500">
+                <div className="text-center text-red-500 mt-8">
                   ยังไม่มีข้อมูล
                 </div>
               )}
