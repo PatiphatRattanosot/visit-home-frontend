@@ -4,18 +4,21 @@ import FilterDropdown from "../../components/FilterDropdown";
 import SearchClass from "../../components/SearchClassroom";
 import { BiSolidEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
-import { useParams } from "react-router";
 import Pagiantion from "../../components/Pagination";
 import ModalAddClassroom from "../../components/modals/AddClassroom";
 import ModalEditClassroom from "../../components/modals/EditClassroom";
 import BreadcrumbsLoop from "../../components/Breadcrumbs";
-import ArrowBack from "../../components/ArrowBack";
-import { useClassroomStore, useYearStore } from "../../stores/admin.store";
+import { useClassroomStore } from "../../stores/admin.store";
 import useYearSelectStore from "../../stores/year_select.store";
 const Classroom = () => {
   const { data: classrooms, fetchData, deleteClassroom } = useClassroomStore();
-  const { data: years, fetchData: fetchYears, getYearsById } = useYearStore();
-  const { selectedYear, setSelectedYear } = useYearSelectStore();
+  const {
+    data: years,
+    fetchYears,
+    getYearsByYear,
+    selectedYear,
+    setSelectedYear,
+  } = useYearSelectStore();
   // const { yearId, year } = useParams();
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   // สร้าง state สำหรับเก็บข้อมูลชั้นเรียนที่กรองแล้ว
@@ -46,11 +49,7 @@ const Classroom = () => {
   }, []);
 
   useEffect(() => {
-    getYearsById(selectedYear?.year).then((data) => {
-      if (data && data.length > 0) {
-        setSelectedYear(data[0]);
-      }
-    });
+    getYearsByYear(selectedYear?.year);
   }, [selectedYear?.year]);
 
   useEffect(() => {
@@ -84,16 +83,15 @@ const Classroom = () => {
           เพิ่มชั้นเรียนของปีการศึกษา {selectedYear}
         </h1>
         <div className="flex flex-row justify-end items-center m-2">
-          {/* dropdown จาก daisyUI */}
           <select
             name="select-year"
             id="select-year"
             className="select w-32"
             value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
+            onChange={(e) => setSelectedYear(Number(e.target.value))}
           >
             {years.map((year) => (
-              <option key={year._id} value={year.year}>
+              <option key={year.year} value={year.year}>
                 {year.year}
               </option>
             ))}
