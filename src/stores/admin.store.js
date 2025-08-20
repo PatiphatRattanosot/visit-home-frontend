@@ -2,7 +2,6 @@ import { create } from "zustand";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import Userservice from "../services/users/users.service";
-import YearServices from "../services/years/years.service";
 import ClassroomService from "../services/class/class.service";
 
 export const usePersonnelStore = create((set, get) => ({
@@ -205,25 +204,12 @@ export const usePersonnelStore = create((set, get) => ({
   },
 }));
 
-export const useYearStore = create((set, get) => ({
- 
-}));
+
 
 export const useClassroomStore = create((set, get) => ({
   data: [],
   setData: (data) => set({ data }), // ตั้งค่าเริ่มต้นให้ชั้นเรียน
-  fetchData: async (yearId) => {
-    try {
-      const response = await ClassroomService.getClassroomsByYear(yearId);
-      console.log("yearId:", yearId); // ควรขึ้น ObjectId
-
-      if (response.status === 200) {
-        set({ data: response.data.classes });
-      }
-    } catch (error) {
-      console.log(error.response.data.message);
-    }
-  },
+ //ทำ fetchClassroom
   addClassroom: async (values, yearId) => {
     try {
       const response = await ClassroomService.createClass({

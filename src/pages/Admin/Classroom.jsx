@@ -19,7 +19,6 @@ const Classroom = () => {
     selectedYear,
     setSelectedYear,
   } = useYearSelectStore();
-  // const { yearId, year } = useParams();
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   // สร้าง state สำหรับเก็บข้อมูลชั้นเรียนที่กรองแล้ว
   // เพื่อใช้ในการแสดงผลในตาราง
@@ -40,9 +39,9 @@ const Classroom = () => {
     : [];
 
   useEffect(() => {
-    fetchData(selectedYear?.year); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลชั้นเรียนตามปีการศึกษา PARAM
+    fetchData(selectedYear?._id); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลชั้นเรียนตามปีการศึกษา PARAM
     setFilteredClassroom(classrooms); // ตั้งค่าเริ่มต้นให้ classrooms ทั้งหมด
-  }, [selectedYear?.year]);
+  }, [selectedYear?._id]);
 
   useEffect(() => {
     fetchYears(); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลปีการศึกษา
@@ -70,8 +69,6 @@ const Classroom = () => {
     deleteClassroom(id);
     setFilteredClassroom(classrooms);
   };
-  console.log("hello year", years);
-  console.log("hello selectedYear", selectedYear);
 
   return (
     <div className="section-container">
@@ -80,7 +77,7 @@ const Classroom = () => {
       </div>
       <div>
         <h1 className="text-lg md:text-xl text-center">
-          เพิ่มชั้นเรียนของปีการศึกษา {selectedYear}
+          เพิ่มชั้นเรียนของปีการศึกษา {selectedYear.year}
         </h1>
         <div className="flex flex-row justify-end items-center m-2">
           <select
@@ -156,7 +153,7 @@ const Classroom = () => {
             {/* row 1 */}
 
             {currentItems.map((classroom, index) => (
-              <tr key={classroom.year}>
+              <tr key={classroom._id || index}>
                 <th>
                   <label>
                     <input type="checkbox" className="checkbox" />

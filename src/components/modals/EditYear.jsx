@@ -1,12 +1,12 @@
 import { YearSchema } from "../../schemas/year";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
-import { useYearStore } from "../../stores/admin.store";
+import useYearSelectStore from "../../stores/year_select.store";
 import TextInputInModal from "./TexInputInModal";
 import toast from "react-hot-toast";
 
 const EditYear = ({ year, onUpdateSuccess }) => {
-  const { getYearsById, updateYear } = useYearStore();
+  const { getYearsById, updateYear } = useYearSelectStore();
   const [update, setUpdate] = useState(0);
 
   const formik = useFormik({

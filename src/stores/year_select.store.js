@@ -5,27 +5,21 @@ import Swal from "sweetalert2";
 import YearServices from "../services/years/years.service";
 const useYearSelectStore = create(
   persist((set) => ({
-    data: [],
-    selectedYear: new Date().getFullYear() + 543, // Convert to Thai Buddhist year
+    selectedYear: [],
+    years: [],
     setSelectedYear: (year) => set({ selectedYear: year }),
-    
+
     setData: (data) => set({ data }), // ตั้งค่าเริ่มต้นให้ปีการศึกษา
     fetchYears: async () => {
       try {
-        const response = await YearServices.getYears();
-        if (response.status === 200) {
-          //ฟังก์ชัน sort ใช้สำหรับเรียงลำดับ element ใน array b.year - a.year: หากผลลัพธ์เป็นค่าบวก แสดงว่า b.year มีค่ามากกว่า a.year ดังนั้น b จะถูกวางไว้หน้า a ในลำดับการเรียง หากผลลัพธ์เป็นค่าลบ แสดงว่า a.year มีค่ามากกว่า b.year ดังนั้น a จะถูกวางไว้หน้า b ในลำดับการเรียง
-          const sortedYears = response.data.sort((a, b) => b.year - a.year);
-          console.log("sortedYears:", sortedYears);
-          set({ data: sortedYears, 
-            selectedYear: sortedYears[0]?.year || new Date().getFullYear() + 543
-           }); // ตั้งค่าเริ่มต้นให้ปีการศึกษา          
+        const res = await YearServices.getYears();
+        if (res.status === 200) {
+          const sorted = res.data.sort((a, b) => b.year - a.year);
+          set({ years: sorted });
+          set({ selectedYear: sorted[0] }); // ตั้งค่า selectedYear เป็นปีแรกที่ได้มา
         }
-      } catch (err) {
-        console.log(err);
-        toast.error(
-          err.response?.data?.message || "เกิดข้อผิดพลาดในการโหลดปีการศึกษา"
-        );
+      } catch (error) {
+        console.log("error fetching years:", error);
       }
     },
     addYear: async (values) => {
