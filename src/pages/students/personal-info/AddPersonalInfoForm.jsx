@@ -396,7 +396,7 @@ const AddPersonalInfoForm = () => {
               onBlur={handleBlur}
             />
             {/* Map Component */}
-            <div className="col-span-2 flex flex-col items-center justify-center">
+            <div className="md:col-span-2 flex flex-col items-center justify-center">
               <button
                 className="btn-blue"
                 type="button"
@@ -404,7 +404,7 @@ const AddPersonalInfoForm = () => {
               >
                 เลือกตำแหน่ง
               </button>
-              <MapComponent />
+              <MapComponent setFieldValue={setFieldValue} latValue={values.lat} lngValue={values.lng} />
             </div>
           </div>
           <div className="flex justify-between mt-10 space-x-2">

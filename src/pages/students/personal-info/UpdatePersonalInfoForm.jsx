@@ -14,6 +14,7 @@ import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import RadioInput from "../../../components/RadioInput";
 import { useStudentStore } from "../../../stores/student.store";
+import MapComponent from "../../../components/students/MapComponent";
 
 const UpdatePersonalInfoForm = () => {
   const { userInfo } = useAuthStore();
@@ -396,6 +397,17 @@ const UpdatePersonalInfoForm = () => {
               touched={touched.lng}
               onBlur={handleBlur}
             />
+            {/* Map Component */}
+            <div className="md:col-span-2 flex flex-col items-center justify-center">
+              <button
+                className="btn-blue"
+                type="button"
+                onClick={() => document.getElementById("map_modal").showModal()}
+              >
+                เลือกตำแหน่ง
+              </button>
+              <MapComponent setFieldValue={setFieldValue} latValue={values.lat} lngValue={values.lng} />
+            </div>
           </div>
           <div className="flex justify-between mt-10 space-x-2">
             <button
