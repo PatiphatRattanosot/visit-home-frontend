@@ -9,7 +9,7 @@ import {
   PersonalInfoInitialValues,
 } from "../../../schemas/personalInfo";
 import Stepper from "../../../components/Stepper";
-import { useNavigate,useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import RadioInput from "../../../components/RadioInput";
@@ -39,9 +39,7 @@ const AddPersonalInfoForm = () => {
     initialValues: PersonalInfoInitialValues,
     validationSchema: PersonalInfoSchema,
     onSubmit: async (values, actions) => {
-      console.log("Submitting", values);
-      console.log("Submitting", actions);
-      setFormData({ personal_info: values });
+      setFormData({ personal_info: values, image_url: image });
       actions.resetForm();
       navigate(`/student/relation/${year}/add`);
     },
@@ -404,7 +402,6 @@ const AddPersonalInfoForm = () => {
               >
                 เลือกตำแหน่ง
               </button>
-              <MapComponent setFieldValue={setFieldValue} latValue={values.lat} lngValue={values.lng} />
             </div>
           </div>
           <div className="flex justify-between mt-10 space-x-2">
@@ -424,6 +421,11 @@ const AddPersonalInfoForm = () => {
             </button>
           </div>
         </form>
+        <MapComponent
+          setFieldValue={setFieldValue}
+          latValue={values.lat}
+          lngValue={values.lng}
+        />
       </div>
     </div>
   );

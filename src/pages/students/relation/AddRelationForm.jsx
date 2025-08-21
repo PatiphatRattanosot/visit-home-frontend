@@ -5,7 +5,7 @@ import TextArea from "../../../components/TextArea";
 import { useAuthStore } from "../../../stores/auth.store";
 import Stepper from "../../../components/Stepper";
 import { useFormik } from "formik";
-import { useNavigate,useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import {
   RelationSchema,
   RelationInitialValues,
@@ -41,8 +41,6 @@ const AddRelationForm = () => {
     initialValues: RelationInitialValues,
     validationSchema: RelationSchema,
     onSubmit: async (values, actions) => {
-      console.log("Submitting", values);
-      console.log("Submitting", actions);
       setFormData({ relation_info: values });
       actions.resetForm();
       navigate(`/student/family-status/${year}/add`);

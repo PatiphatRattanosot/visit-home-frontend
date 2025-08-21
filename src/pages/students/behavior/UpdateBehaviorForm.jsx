@@ -19,7 +19,7 @@ const UpdateBehaviorForm = () => {
   const { userInfo } = useAuthStore();
   const { year } = useParams();
 
-  const { setFormData, submitForm } = useStudentFormStore();
+  const { formData, setFormData, submitForm } = useStudentFormStore();
   const { getYearlyData } = useStudentStore();
 
   const {
@@ -35,25 +35,22 @@ const UpdateBehaviorForm = () => {
     initialValues: BehaviorInitialValues,
     validationSchema: BehaviorSchema,
     onSubmit: async (values, actions) => {
-      console.log("Submitting", values);
-      console.log("Submitting", actions);
       setFormData({ behavior_and_risk: values });
-      const localFormData = JSON.parse(
-        localStorage.getItem("student-form-storage")
-      );
-      if (localFormData) {
-        await submitForm(
-          userInfo._id,
-          year,
-          localFormData.state.formData
-        );
-        localStorage.removeItem("student-form-storage");
-        navigate(`/student/personal-info`);
-      }
+      const data = new FormData();
+      data.append("personal_info", formData.personal_info);
+      data.append("relation_info", formData.relation_info);
+      data.append("family_status_info", formData.family_status_info);
+      data.append("behavior_and_risk", formData.behavior_and_risk);
+      data.append("image_url", formData.image_url);
+      await submitForm(userInfo._id, year, data);
+      localStorage.removeItem("student-form-storage");
+      navigate(`/student/personal-info`);
       actions.resetForm();
     },
   });
-  console.log("Behavior Form Values:", values);
+
+  console.log(formData);
+  
 
   // ดึงข้อมูล
   useEffect(() => {

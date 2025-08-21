@@ -44,8 +44,6 @@ const UpdateRelationForm = () => {
     initialValues: RelationInitialValues,
     validationSchema: RelationSchema,
     onSubmit: async (values, actions) => {
-      console.log("Submitting", values);
-      console.log("Submitting", actions);
       setFormData({ relation_info: values });
       actions.resetForm();
       navigate(`/student/family-status/${year}/update`);

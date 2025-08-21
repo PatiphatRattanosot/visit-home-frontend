@@ -22,6 +22,8 @@ export const useStudentFormStore = create(
       submitForm: async (stdId, yearId, data) => {
         try {
           const res = await StudentService.yearlyData(stdId, yearId, data);
+          console.log(res);
+
           if (res.status === 200) {
             Swal.fire({
               icon: "success",

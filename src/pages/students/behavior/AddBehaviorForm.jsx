@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { useNavigate,useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useAuthStore } from "../../../stores/auth.store";
 import Stepper from "../../../components/Stepper";
 import CheckboxInput from "../../../components/CheckboxInput";
@@ -18,7 +18,7 @@ const AddBehaviorForm = () => {
   const { userInfo } = useAuthStore();
   const { year } = useParams();
 
-  const { setFormData, submitForm } = useStudentFormStore();
+  const { setFormData, submitForm, formData } = useStudentFormStore();
 
   const {
     initialValues,
@@ -40,14 +40,32 @@ const AddBehaviorForm = () => {
         localStorage.getItem("student-form-storage")
       );
       if (localFormData) {
-        await submitForm(userInfo._id, year, localFormData.state.formData);
+        const data = new FormData();
+        data.append(
+          "personal_info",
+          localFormData.state.formData.personal_info
+        );
+        data.append(
+          "relation_info",
+          localFormData.state.formData.relation_info
+        );
+        data.append(
+          "family_status_info",
+          localFormData.state.formData.family_status_info
+        );
+        data.append(
+          "behavior_and_risk",
+          localFormData.state.formData.behavior_and_risk
+        );
+        data.append("image_url", formData.image_url);
+
+        await submitForm(userInfo._id, year, data);
         localStorage.removeItem("student-form-storage");
         navigate(`/student/personal-info`);
       }
       actions.resetForm();
     },
   });
-  console.log("Behavior Form Values:", values);
 
   useEffect(() => {
     const localData = JSON.parse(localStorage.getItem("student-form-storage"));

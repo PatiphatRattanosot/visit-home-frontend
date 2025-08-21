@@ -11,6 +11,7 @@ const PersonalInfo = () => {
   const { userInfo } = useAuthStore();
   // สร้าง state มาเก็นข้อมูล
   const [personalInfo, setPersonalInfo] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
 
   const { getYearlyData } = useStudentStore();
   const { selectedYear } = useYearSelectStore();
@@ -30,6 +31,12 @@ const PersonalInfo = () => {
           setPersonalInfo(yearlyData.personal_info);
         } else {
           setPersonalInfo(null);
+        }
+
+        if (yearlyData?.image_url) {
+          setImageUrl(yearlyData.image_url);
+        } else {
+          setImageUrl(null);
         }
       } catch (error) {
         console.error("Failed to fetch personal info:", error);

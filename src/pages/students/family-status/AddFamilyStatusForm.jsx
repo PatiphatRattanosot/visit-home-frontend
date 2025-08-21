@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import Stepper from "../../../components/Stepper";
 import { useAuthStore } from "../../../stores/auth.store";
-import { useNavigate,useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import CheckboxInput from "../../../components/CheckboxInput";
 import RadioInput from "../../../components/RadioInput";
 import TextInput from "../../../components/TextInput";
@@ -33,8 +33,6 @@ const AddFamilyStatusForm = () => {
     initialValues: FamilyStatusInitialValues,
     validationSchema: FamilyStatusSchema,
     onSubmit: async (values, actions) => {
-      console.log("Submitting", values);
-      console.log("Submitting", actions);
       setFormData({ family_status_info: values });
       actions.resetForm();
       navigate(`/student/behavior/${year}/add`);

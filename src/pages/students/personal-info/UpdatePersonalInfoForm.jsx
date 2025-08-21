@@ -41,9 +41,7 @@ const UpdatePersonalInfoForm = () => {
     initialValues: PersonalInfoInitialValues,
     validationSchema: PersonalInfoSchema,
     onSubmit: async (values, actions) => {
-      console.log("Submitting", values);
-      console.log("Submitting", actions);
-      setFormData({ personal_info: values });
+      setFormData({ personal_info: values, image_url: image });
       actions.resetForm();
       navigate(`/student/relation/${year}/update`);
     },
@@ -53,6 +51,7 @@ const UpdatePersonalInfoForm = () => {
     const fetchPersonalInfo = async () => {
       const data = await getYearlyData(year);
       setValues(data?.students[0].yearly_data[0]?.personal_info);
+      setImage(data?.students[0].yearly_data[0]?.image_url || null);
     };
     fetchPersonalInfo();
   }, [year]);
@@ -406,7 +405,6 @@ const UpdatePersonalInfoForm = () => {
               >
                 เลือกตำแหน่ง
               </button>
-              <MapComponent setFieldValue={setFieldValue} latValue={values.lat} lngValue={values.lng} />
             </div>
           </div>
           <div className="flex justify-between mt-10 space-x-2">
@@ -426,6 +424,11 @@ const UpdatePersonalInfoForm = () => {
             </button>
           </div>
         </form>
+        <MapComponent
+          setFieldValue={setFieldValue}
+          latValue={values.lat}
+          lngValue={values.lng}
+        />
       </div>
     </div>
   );
