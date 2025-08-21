@@ -33,8 +33,8 @@ const PersonalInfo = () => {
           setPersonalInfo(null);
         }
 
-        if (yearlyData?.image_url) {
-          setImageUrl(yearlyData.image_url);
+        if (student?.image_url) {
+          setImageUrl(student.image_url);
         } else {
           setImageUrl(null);
         }
@@ -91,7 +91,7 @@ const PersonalInfo = () => {
         </div>
         {/* Picture */}
         <div className="flex justify-center mt-8">
-          <ShowPicture studentPic={personalInfo?.image} />
+          <ShowPicture studentPic={imageUrl} />
         </div>
         {/* Student Info Section */}
         <div className="flex justify-center mt-10">

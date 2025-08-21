@@ -51,7 +51,7 @@ const UpdatePersonalInfoForm = () => {
     const fetchPersonalInfo = async () => {
       const data = await getYearlyData(year);
       setValues(data?.students[0].yearly_data[0]?.personal_info);
-      setImage(data?.students[0].yearly_data[0]?.image_url || null);
+      setImage(data?.students[0]?.image_url || null);
     };
     fetchPersonalInfo();
   }, [year]);
