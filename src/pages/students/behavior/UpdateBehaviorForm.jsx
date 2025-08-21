@@ -14,12 +14,13 @@ import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import { useEffect } from "react";
 import { useStudentStore } from "../../../stores/student.store";
+import StudentService from "../../../services/student/student.service";
 
 const UpdateBehaviorForm = () => {
   const { userInfo } = useAuthStore();
   const { year } = useParams();
 
-  const { setFormData, submitForm } = useStudentFormStore();
+  const { setFormData, submitForm, formData } = useStudentFormStore();
   const { getYearlyData } = useStudentStore();
 
   const {
@@ -40,6 +41,13 @@ const UpdateBehaviorForm = () => {
         localStorage.getItem("student-form-storage")
       );
       if (localFormData) {
+        const image = formData.file_image;
+        if (typeof image !== "string") {
+          const fileImage = new FormData();
+          fileImage.append("student_id", userInfo?._id);
+          fileImage.append("file_image", image);
+          await StudentService.updateProfile(fileImage);
+        }
         await submitForm(userInfo._id, year, localFormData.state.formData);
         localStorage.removeItem("student-form-storage");
         navigate(`/student/personal-info`);
@@ -58,7 +66,7 @@ const UpdateBehaviorForm = () => {
   }, [year]);
 
   useEffect(() => {
-    setFormData({ year_id: year, _id: userInfo?._id });
+    setFormData({ year_id: year, student_id: userInfo?._id });
   }, [year]);
 
   const navigate = useNavigate();

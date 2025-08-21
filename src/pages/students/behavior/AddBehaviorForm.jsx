@@ -38,10 +38,18 @@ const AddBehaviorForm = () => {
         localStorage.getItem("student-form-storage")
       );
       if (localFormData) {
+        const image = formData.file_image;
+        if (typeof image !== "string") {
+          const fileImage = new FormData();
+          fileImage.append("student_id", userInfo?._id);
+          fileImage.append("file_image", image);
+          await StudentService.updateProfile(fileImage);
+        }
         await submitForm(userInfo._id, year, localFormData.state.formData);
         localStorage.removeItem("student-form-storage");
         navigate(`/student/personal-info`);
       }
+
       actions.resetForm();
     },
   });
@@ -54,7 +62,7 @@ const AddBehaviorForm = () => {
   }, []);
 
   useEffect(() => {
-    setFormData({ year_id: year, _id: userInfo?._id });
+    setFormData({ year_id: year, student_id: userInfo?._id });
   }, [year]);
 
   const navigate = useNavigate();

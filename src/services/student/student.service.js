@@ -26,6 +26,12 @@ const getYearlyData = async (yearId) => {
   return await api.get(`${baseUrl}/by_year/${yearId}`);
 };
 
+const updateProfile = async (data) => {
+  return await api.put(`${baseUrl}/profile-image`, data, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+};
+
 const StudentService = {
   getAllStudents,
   createStudent,
@@ -33,6 +39,7 @@ const StudentService = {
   yearlyData,
   updateStudent,
   getYearlyData,
+  updateProfile,
 };
 
 export default StudentService;
