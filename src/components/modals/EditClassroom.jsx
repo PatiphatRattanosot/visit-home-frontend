@@ -3,14 +3,41 @@ import { useFormik } from "formik";
 import { ClassroomSchema } from "../../schemas/classroom";
 import TextInputInModal from "./TexInputInModal";
 import SelectInputInModal from "./SelectInputInModal";
-
+import {useClassroomStore} from "../../stores/classroom.store";
+import {usePersonnelStore} from "../../stores/admin.store";
 const EditClassroom = () => {
+  const { data: teachers } = usePersonnelStore();
+  const { getClassroomById, updateClassroom } = useClassroomStore();
+  const selectTeacherOptions = teachers.map((teacher) => ({
+    value: teacher._id,
+    label: teacher.name,
+  }));
+
   const formik = useFormik({
-    initialValues: {},
+    initialValues: {
+      room: "",
+      number: "",
+      teacherId: "",
+    },
     enableReinitialize: true, // ให้ Formik อัปเดตค่าเมื่อ initialValues เปลี่ยน
     validationSchema: ClassroomSchema,
-    onSubmit: async (values, actions) => {},
+    onSubmit: async (values, actions) => {
+      console.log("Submitting", values);
+      await updateClassroom(values);
+      actions.resetForm();
+      document.getElementById(`edit_classroom_${values._id}`).close(); // ปิด modal หลังจากบันทึกสำเร็จ
+    },
   });
+
+  useEffect(() => {
+    getClassroomById(id).then((data) => {
+      formik.setValues({
+        room: data.room,
+        number: data.number,
+        teacherId: data.teacher_id,
+      });
+    });
+  }, [id, getClassroomById, formik]);
 
   return (
     <div>
@@ -69,9 +96,12 @@ const EditClassroom = () => {
                     type="button"
                     className="btn-red"
                     onClick={() => {
-                      formik.resetForm({
-                        values: {},
+                      formik.setValues({
+                        room: data.room,
+                        number: data.number,
+                        teacherId: data.teacher_id,
                       });
+                      document.getElementById(`edit_classroom_${id}`).close();
                     }}
                   >
                     ยกเลิก
