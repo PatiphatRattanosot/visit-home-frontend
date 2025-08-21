@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import YearServices from "../services/years/years.service";
 const useYearSelectStore = create(
   persist((set) => ({
-    selectedYear: [],
+    selectedYear: null,
     years: [],
     setSelectedYear: (year) => set({ selectedYear: year }),
 
@@ -13,10 +13,11 @@ const useYearSelectStore = create(
     fetchYears: async () => {
       try {
         const res = await YearServices.getYears();
+        
         if (res.status === 200) {
           const sorted = res.data.sort((a, b) => b.year - a.year);
           set({ years: sorted });
-          set({ selectedYear: sorted[0] }); // ตั้งค่า selectedYear เป็นปีแรกที่ได้มา
+         
         }
       } catch (error) {
         console.log("error fetching years:", error);

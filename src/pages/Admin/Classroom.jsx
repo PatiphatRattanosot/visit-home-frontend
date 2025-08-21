@@ -8,17 +8,12 @@ import Pagiantion from "../../components/Pagination";
 import ModalAddClassroom from "../../components/modals/AddClassroom";
 import ModalEditClassroom from "../../components/modals/EditClassroom";
 import BreadcrumbsLoop from "../../components/Breadcrumbs";
-import { useClassroomStore } from "../../stores/admin.store";
+import { useClassroomStore } from "../../stores/classroom.store";
 import useYearSelectStore from "../../stores/year_select.store";
 const Classroom = () => {
-  const { data: classrooms, fetchData, deleteClassroom } = useClassroomStore();
-  const {
-    data: years,
-    fetchYears,
-    getYearsByYear,
-    selectedYear,
-    setSelectedYear,
-  } = useYearSelectStore();
+  const { classrooms, fetchClassrooms, deleteClassroom } = useClassroomStore();
+  const { years, fetchYears, getYearsByYear, selectedYear, setSelectedYear } =
+    useYearSelectStore();
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   // สร้าง state สำหรับเก็บข้อมูลชั้นเรียนที่กรองแล้ว
   // เพื่อใช้ในการแสดงผลในตาราง
@@ -39,9 +34,13 @@ const Classroom = () => {
     : [];
 
   useEffect(() => {
-    fetchData(selectedYear?._id); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลชั้นเรียนตามปีการศึกษา PARAM
-    setFilteredClassroom(classrooms); // ตั้งค่าเริ่มต้นให้ classrooms ทั้งหมด
-  }, [selectedYear?._id]);
+    if (selectedYear) {
+      fetchClassrooms(selectedYear._id);
+      setFilteredClassroom(classrooms);
+      getYearsByYear(selectedYear.year);
+    }
+  }, [selectedYear]);
+  
 
   useEffect(() => {
     fetchYears(); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลปีการศึกษา
@@ -85,7 +84,11 @@ const Classroom = () => {
             id="select-year"
             className="select w-32"
             value={selectedYear}
-            onChange={(e) => setSelectedYear(Number(e.target.value))}
+            onChange={(e) =>
+              setSelectedYear(
+                years.find((year) => year.year === Number(e.target.value))
+              )
+            }
           >
             {years.map((year) => (
               <option key={year.year} value={year.year}>
@@ -129,7 +132,9 @@ const Classroom = () => {
             >
               เพิ่มชั้นเรียน
             </button>
-            <ModalAddClassroom addClassroomSuccess={() => fetchData(yearId)} />
+            <ModalAddClassroom
+              addClassroomSuccess={() => fetchClassrooms(yearId)}
+            />
           </div>
         </div>
 
@@ -165,26 +170,27 @@ const Classroom = () => {
                 <td>{classroom?.quantity}</td>
 
                 <td className="flex gap-2 items-center justify-center">
+                  // ปุ่ม edit
                   <button
                     onClick={() =>
                       document
-                        .getElementById(`edit_classroom_${classroom.year}`)
+                        .getElementById(`edit_classroom_${classroom._id}`)
                         .showModal()
                     }
                     className="btn btn-warning"
                   >
                     <BiSolidEdit size={20} />
                   </button>
-
+                  // ปุ่ม delete
                   <button
-                    onClick={() => handleDeleteClassroom(classroom.year)}
+                    onClick={() => handleDeleteClassroom(classroom._id)}
                     className="btn btn-error"
                   >
                     <AiOutlineDelete size={20} />
                   </button>
                   <ModalEditClassroom
                     id={classroom.year}
-                    onUpdateSuccess={() => fetchData(yearId)}
+                    onUpdateSuccess={() => fetchClassrooms(yearId)}
                   />
                 </td>
               </tr>
@@ -207,7 +213,7 @@ const Classroom = () => {
       </div>
       {/* Pagination */}
       <Pagiantion
-        totalItems={filteredClassroom.length}
+        totalItems={Array.isArray(filteredClassroom) ? filteredClassroom.length : 0}
         itemsPerPage={itemsPerPage}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
