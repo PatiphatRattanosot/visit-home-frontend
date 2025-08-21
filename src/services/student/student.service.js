@@ -18,10 +18,8 @@ const updateStudent = async (id, data) => {
   return await api.put(`${baseUrl}/${id}`, data);
 };
 
-const yearlyData = async (stdId, yearId, data) => {
-  return await api.put(`${baseUrl}/${stdId}/yearly/${yearId}`, data, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+const yearlyData = async (data) => {
+  return await api.put(`${baseUrl}/yearly`, data);
 };
 
 const getYearlyData = async (yearId) => {

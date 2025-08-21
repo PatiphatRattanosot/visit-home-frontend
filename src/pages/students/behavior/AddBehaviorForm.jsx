@@ -18,7 +18,7 @@ const AddBehaviorForm = () => {
   const { userInfo } = useAuthStore();
   const { year } = useParams();
 
-  const { setFormData, submitForm, formData } = useStudentFormStore();
+  const { setFormData, submitForm } = useStudentFormStore();
 
   const {
     initialValues,
@@ -33,33 +33,12 @@ const AddBehaviorForm = () => {
     initialValues: BehaviorInitialValues,
     validationSchema: BehaviorSchema,
     onSubmit: async (values, actions) => {
-      console.log("Submitting", values);
-      console.log("Submitting", actions);
       setFormData({ behavior_and_risk: values });
       const localFormData = JSON.parse(
         localStorage.getItem("student-form-storage")
       );
       if (localFormData) {
-        const data = new FormData();
-        data.append(
-          "personal_info",
-          localFormData.state.formData.personal_info
-        );
-        data.append(
-          "relation_info",
-          localFormData.state.formData.relation_info
-        );
-        data.append(
-          "family_status_info",
-          localFormData.state.formData.family_status_info
-        );
-        data.append(
-          "behavior_and_risk",
-          localFormData.state.formData.behavior_and_risk
-        );
-        data.append("image_url", formData.image_url);
-
-        await submitForm(userInfo._id, year, data);
+        await submitForm(userInfo._id, year, localFormData.state.formData);
         localStorage.removeItem("student-form-storage");
         navigate(`/student/personal-info`);
       }
@@ -69,11 +48,14 @@ const AddBehaviorForm = () => {
 
   useEffect(() => {
     const localData = JSON.parse(localStorage.getItem("student-form-storage"));
-    console.log("Local Data:", localData);
     if (localData && localData.state.formData.behavior_and_risk) {
       setValues(localData.state.formData.behavior_and_risk);
     }
   }, []);
+
+  useEffect(() => {
+    setFormData({ year_id: year, _id: userInfo?._id });
+  }, [year]);
 
   const navigate = useNavigate();
   // stepper path

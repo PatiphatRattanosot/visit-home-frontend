@@ -41,7 +41,7 @@ const UpdatePersonalInfoForm = () => {
     initialValues: PersonalInfoInitialValues,
     validationSchema: PersonalInfoSchema,
     onSubmit: async (values, actions) => {
-      setFormData({ personal_info: values, image_url: image });
+      setFormData({ personal_info: values });
       actions.resetForm();
       navigate(`/student/relation/${year}/update`);
     },
@@ -51,7 +51,6 @@ const UpdatePersonalInfoForm = () => {
     const fetchPersonalInfo = async () => {
       const data = await getYearlyData(year);
       setValues(data?.students[0].yearly_data[0]?.personal_info);
-      setImage(data?.students[0]?.image_url || null);
     };
     fetchPersonalInfo();
   }, [year]);

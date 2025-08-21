@@ -39,7 +39,7 @@ const AddPersonalInfoForm = () => {
     initialValues: PersonalInfoInitialValues,
     validationSchema: PersonalInfoSchema,
     onSubmit: async (values, actions) => {
-      setFormData({ personal_info: values, image_url: image });
+      setFormData({ personal_info: values });
       actions.resetForm();
       navigate(`/student/relation/${year}/add`);
     },

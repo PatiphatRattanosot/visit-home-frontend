@@ -19,7 +19,7 @@ const UpdateBehaviorForm = () => {
   const { userInfo } = useAuthStore();
   const { year } = useParams();
 
-  const { formData, setFormData, submitForm } = useStudentFormStore();
+  const { setFormData, submitForm } = useStudentFormStore();
   const { getYearlyData } = useStudentStore();
 
   const {
@@ -36,21 +36,17 @@ const UpdateBehaviorForm = () => {
     validationSchema: BehaviorSchema,
     onSubmit: async (values, actions) => {
       setFormData({ behavior_and_risk: values });
-      const data = new FormData();
-      data.append("personal_info", formData.personal_info);
-      data.append("relation_info", formData.relation_info);
-      data.append("family_status_info", formData.family_status_info);
-      data.append("behavior_and_risk", formData.behavior_and_risk);
-      data.append("image_url", formData.image_url);
-      await submitForm(userInfo._id, year, data);
-      localStorage.removeItem("student-form-storage");
-      navigate(`/student/personal-info`);
+      const localFormData = JSON.parse(
+        localStorage.getItem("student-form-storage")
+      );
+      if (localFormData) {
+        await submitForm(userInfo._id, year, localFormData.state.formData);
+        localStorage.removeItem("student-form-storage");
+        navigate(`/student/personal-info`);
+      }
       actions.resetForm();
     },
   });
-
-  console.log(formData);
-  
 
   // ดึงข้อมูล
   useEffect(() => {
@@ -59,6 +55,10 @@ const UpdateBehaviorForm = () => {
       setValues(data?.students[0].yearly_data[0]?.behavior_and_risk);
     };
     fetchBehaviorInfo();
+  }, [year]);
+
+  useEffect(() => {
+    setFormData({ year_id: year, _id: userInfo?._id });
   }, [year]);
 
   const navigate = useNavigate();
