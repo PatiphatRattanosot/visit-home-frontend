@@ -7,7 +7,7 @@ import { useClassroomStore } from "../../stores/classroom.store";
 import { usePersonnelStore } from "../../stores/admin.store";
 const EditClassroom = ({ id, onUpdateClassroom }) => {
   const { data: teachers, fetchData: fetchTeachers } = usePersonnelStore();
-  const { getClassroomById, updateClassroom } = useClassroomStore();
+  const { getClassroomById, updateClassroom, getClassroomByTeacherId } = useClassroomStore();
   const selectTeacherOptions = teachers.map((teacher) => ({
     value: teacher._id,
     label: teacher.name,

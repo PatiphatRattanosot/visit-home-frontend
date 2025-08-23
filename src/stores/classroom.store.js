@@ -59,6 +59,17 @@ export const useClassroomStore = create((set, get) => ({
       console.error("Error in getClassroomById:", error);
     }
   },
+  getClassroomByTeacherId: async (teacherId) => {
+    try {
+      const response = await ClassroomService.getClassByTeacherId(teacherId);
+      if (response.status === 200) {
+        return response.data.classes; // ส่งคืนข้อมูลชั้นเรียนที่ได้
+      }
+    } catch (error) {
+      toast.error(response.data.message || "เกิดข้อผิดพลาดในการดึงข้อมูลชั้นเรียน");
+      console.error("Error in getClassroomByTeacherId:", error);
+    }
+  },
   updateClassroom: async (id, values) => {
     try {
       const response = await ClassroomService.updateClass({
