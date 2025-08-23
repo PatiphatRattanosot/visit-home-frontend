@@ -11,9 +11,13 @@ export const useClassroomStore = create((set, get) => ({
     try {
       const response = await ClassroomService.getClassroomsByYear(yearId);
       if (response.status === 200) {
-        set({ classrooms: response.data.classrooms });
+        set({ classrooms: response.data.classes });
       }
     } catch (error) {
+      if (error?.response?.status === 404) {
+      //ปีนี้ยังไม่มีชั้นเรียน ให้ลิสต์ว่าง
+      set({ classrooms: [] });
+    }
       console.error("Error fetching classrooms:", error);
     }
   },

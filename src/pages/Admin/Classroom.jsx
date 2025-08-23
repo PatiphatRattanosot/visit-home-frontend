@@ -34,13 +34,16 @@ const Classroom = () => {
     : [];
 
   useEffect(() => {
-    if (selectedYear) {
+    if (selectedYear?._id) {
       fetchClassrooms(selectedYear._id);
-      setFilteredClassroom(classrooms);
+
       getYearsByYear(selectedYear.year);
     }
   }, [selectedYear]);
-  
+
+  useEffect(() => {
+    setFilteredClassroom(Array.isArray(classrooms) ? classrooms : []);
+  }, [classrooms]);
 
   useEffect(() => {
     fetchYears(); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลปีการศึกษา
@@ -76,22 +79,22 @@ const Classroom = () => {
       </div>
       <div>
         <h1 className="text-lg md:text-xl text-center">
-          เพิ่มชั้นเรียนของปีการศึกษา {selectedYear.year}
+          เพิ่มชั้นเรียนของปีการศึกษา {selectedYear?.year}
         </h1>
         <div className="flex flex-row justify-end items-center m-2">
           <select
             name="select-year"
             id="select-year"
             className="select w-32"
-            value={selectedYear}
-            onChange={(e) =>
-              setSelectedYear(
-                years.find((year) => year.year === Number(e.target.value))
-              )
-            }
+            value={selectedYear?._id ?? ""}
+            onChange={(e) => {
+              const id = e.target.value;
+              const found = years.find((y) => y._id === id);
+              if (found) setSelectedYear(found);
+            }}
           >
             {years.map((year) => (
-              <option key={year.year} value={year.year}>
+              <option key={year._id} value={year._id}>
                 {year.year}
               </option>
             ))}
@@ -170,7 +173,6 @@ const Classroom = () => {
                 <td>{classroom?.quantity}</td>
 
                 <td className="flex gap-2 items-center justify-center">
-                  // ปุ่ม edit
                   <button
                     onClick={() =>
                       document
@@ -181,7 +183,7 @@ const Classroom = () => {
                   >
                     <BiSolidEdit size={20} />
                   </button>
-                  // ปุ่ม delete
+
                   <button
                     onClick={() => handleDeleteClassroom(classroom._id)}
                     className="btn btn-error"
@@ -189,8 +191,8 @@ const Classroom = () => {
                     <AiOutlineDelete size={20} />
                   </button>
                   <ModalEditClassroom
-                    id={classroom.year}
-                    onUpdateSuccess={() => fetchClassrooms(yearId)}
+                    id={classroom._id}
+                    onUpdateSuccess={() => fetchClassrooms(selectedYear._id)}
                   />
                 </td>
               </tr>
@@ -213,7 +215,9 @@ const Classroom = () => {
       </div>
       {/* Pagination */}
       <Pagiantion
-        totalItems={Array.isArray(filteredClassroom) ? filteredClassroom.length : 0}
+        totalItems={
+          Array.isArray(filteredClassroom) ? filteredClassroom.length : 0
+        }
         itemsPerPage={itemsPerPage}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}

@@ -3,10 +3,10 @@ import { useFormik } from "formik";
 import { ClassroomSchema } from "../../schemas/classroom";
 import TextInputInModal from "./TexInputInModal";
 import SelectInputInModal from "./SelectInputInModal";
-import {useClassroomStore} from "../../stores/classroom.store";
-import {usePersonnelStore} from "../../stores/admin.store";
-const EditClassroom = () => {
-  const { data: teachers } = usePersonnelStore();
+import { useClassroomStore } from "../../stores/classroom.store";
+import { usePersonnelStore } from "../../stores/admin.store";
+const EditClassroom = ({ id, onUpdateClassroom }) => {
+  const { data: teachers, fetchData: fetchTeachers } = usePersonnelStore();
   const { getClassroomById, updateClassroom } = useClassroomStore();
   const selectTeacherOptions = teachers.map((teacher) => ({
     value: teacher._id,
@@ -23,8 +23,9 @@ const EditClassroom = () => {
     validationSchema: ClassroomSchema,
     onSubmit: async (values, actions) => {
       console.log("Submitting", values);
-      await updateClassroom(values);
+      await updateClassroom(id, values);
       actions.resetForm();
+      onUpdateClassroom(); // เรียกฟังก์ชัน callback หลังจากอัปเดตสำเร็จ
       document.getElementById(`edit_classroom_${values._id}`).close(); // ปิด modal หลังจากบันทึกสำเร็จ
     },
   });
