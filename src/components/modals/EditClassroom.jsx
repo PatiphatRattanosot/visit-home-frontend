@@ -28,11 +28,10 @@ const EditClassroom = ({ id, onUpdateSuccess }) => {
     enableReinitialize: true, // ให้ Formik อัปเดตค่าเมื่อ initialValues เปลี่ยน
     validationSchema: ClassroomSchema,
     onSubmit: async (values, actions) => {
-      console.log("Submitting", values);
       await updateClassroom(id, values);
-      actions.resetForm();
-      onUpdateSuccess(); // เรียกฟังก์ชัน callback หลังจากอัปเดตสำเร็จ
-      document.getElementById(`edit_classroom_${values._id}`).close(); // ปิด modal หลังจากบันทึกสำเร็จ
+      await onUpdateSuccess(); // เรียกฟังก์ชัน callback หลังจากอัปเดตสำเร็จ
+      document.getElementById(`edit_classroom_${id}`)?.close();
+      // ปิด modal หลังจากบันทึกสำเร็จ
     },
   });
 
@@ -103,12 +102,12 @@ const EditClassroom = ({ id, onUpdateSuccess }) => {
                     type="button"
                     className="btn-red"
                     onClick={() => {
-                      formik.setValues({
-                        room: data.room,
-                        number: data.number,
-                        teacherId: data.teacher_id,
+                      formik.setFieldValue({
+                        room: room,
+                        number: number,
+                        teacherId: teacherId,
                       });
-                      document.getElementById(`edit_classroom_${id}`).close();
+                      document.getElementById(`edit_classroom_${id}`)?.close();
                     }}
                   >
                     ยกเลิก

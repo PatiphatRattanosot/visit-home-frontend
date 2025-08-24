@@ -32,19 +32,19 @@ export const useClassroomStore = create((set, get) => ({
       });
 
       if (response.status === 201) {
-        toast.success(response.classrooms.message || "เพิ่มชั้นเรียนสำเร็จ");
-        set({ classrooms: response.classrooms.classes });
+        toast.success(response.data.message || "เพิ่มชั้นเรียนสำเร็จ");
+        set({ classrooms: response.data.classes });
 
         document.getElementById("add_classroom").close(); // ปิด modal
       }
     } catch (error) {
       console.error(
         "Error in classService.createClass:",
-        error.response?.classrooms.message
+        error.response?.data.message
       );
 
       toast.error(
-        error.response?.classrooms?.message ||
+        error.response?.data?.message ||
           "เกิดข้อผิดพลาดในการเพิ่มชั้นเรียน"
       );
     }
@@ -96,50 +96,41 @@ export const useClassroomStore = create((set, get) => ({
     }
   },
 
-  deleteClassroom: async (id) =>
-    Swal.fire({
-      title: "คุณแน่ใจหรือไม่?",
-      text: "คุณต้องการลบข้อมูลชั้นเรียนนี้!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "ยืนยัน",
-      cancelButtonText: "ยกเลิก",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const response = await ClassroomService.deleteClass(id);
-          Swal.fire({
-            title: "ลบข้อมูลเรียบร้อย",
-            text: response.classrooms.message,
-            icon: "success",
-            showConfirmButton: false,
-            timer: 1500,
-          }).then(() => {
-            const updatedClassrooms = get().classrooms.filter(
-              (classroom) => classroom._id !== id
-            );
-            set({ classrooms: updatedClassrooms });
-          });
-        } catch (err) {
-          Swal.fire({
-            title: "เกิดข้อผิดพลาด",
-            text:
-              err.response?.classrooms?.message ||
-              "ไม่สามารถลบข้อมูลชั้นเรียนได้",
-            icon: "error",
-            confirmButtonText: "ตกลง",
-          });
-          console.log(err);
+  deleteClassroom: async (id) => {
+  const result = await Swal.fire({
+    title: "คุณแน่ใจหรือไม่?",
+    text: "คุณต้องการลบข้อมูลชั้นเรียนนี้!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "ยืนยัน",
+    cancelButtonText: "ยกเลิก",
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        const response = await ClassroomService.deleteClass(id);
+        if (response.status === 200) {
+          toast.success(response.data.message || "ลบชั้นเรียนสำเร็จ");
+          // อัปเดตรายการใน store
+          const updatedClassrooms = get().classrooms.filter((classroom) => classroom._id !== id);
+          set({ classrooms: updatedClassrooms });
         }
-      } else if (result.isDismissed) {
-        Swal.fire({
-          title: "ยกเลิกการลบข้อมูล",
+      } catch (error) {
+        toast.error(
+          error.response?.data?.message ||
+            "เกิดข้อผิดพลาดในการลบชั้นเรียน"
+        );
+      }
+    }else if (result.isDismissed) {
+      Swal.fire({
+         title: "ยกเลิกการลบข้อมูล",
           icon: "info",
           showConfirmButton: false,
           timer: 1500,
-        });
-      }
-    }),
+      })
+    }
+  });
+},
+
 }));
