@@ -60,7 +60,20 @@ const Navbar = ({ user, userInfo, googleSignIn, logout }) => {
           </label>
         )}
         {/* Home btn */}
-        <a href="/" className="flex items-center gap-2" id="btn-home">
+        <a
+          href={
+            userInfo?.role.includes("Admin")
+              ? "/admin"
+              : userInfo?.role.includes("Teacher") &&
+                userInfo?.role.length === 1
+              ? "/teacher"
+              : userInfo?.role.includes("Student")
+              ? "/student"
+              : "/"
+          }
+          className="flex items-center gap-2"
+          id="btn-home"
+        >
           <img src="/logo.png" alt="logo" className="size-11" />
           <span className="font-semibold hidden md:flex">
             ระบบบันทึกการเยี่ยมบ้านโรงเรียนบางแพปฐมพิทยา

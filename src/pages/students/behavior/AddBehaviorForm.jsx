@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { useParams, useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useAuthStore } from "../../../stores/auth.store";
 import Stepper from "../../../components/Stepper";
 import CheckboxInput from "../../../components/CheckboxInput";
@@ -10,12 +10,13 @@ import {
   BehaviorSchema,
   BehaviorInitialValues,
 } from "../../../schemas/behavior";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import { useEffect } from "react";
 
 const AddBehaviorForm = () => {
   const { userInfo } = useAuthStore();
+  const { year } = useParams();
 
   const { setFormData, submitForm } = useStudentFormStore();
 
@@ -32,39 +33,45 @@ const AddBehaviorForm = () => {
     initialValues: BehaviorInitialValues,
     validationSchema: BehaviorSchema,
     onSubmit: async (values, actions) => {
-      console.log("Submitting", values);
-      console.log("Submitting", actions);
       setFormData({ behavior_and_risk: values });
       const localFormData = JSON.parse(
         localStorage.getItem("student-form-storage")
       );
       if (localFormData) {
+        const image = formData.file_image;
+        if (typeof image !== "string") {
+          const fileImage = new FormData();
+          fileImage.append("student_id", userInfo?._id);
+          fileImage.append("file_image", image);
+          await StudentService.updateProfile(fileImage);
+        }
         await submitForm(userInfo._id, year, localFormData.state.formData);
         localStorage.removeItem("student-form-storage");
-        navigate(`/student/visit-info/${year}`);
+        navigate(`/student/personal-info`);
       }
+
       actions.resetForm();
     },
   });
-  console.log("Behavior Form Values:", values);
-  
 
   useEffect(() => {
     const localData = JSON.parse(localStorage.getItem("student-form-storage"));
-    console.log("Local Data:", localData);
     if (localData && localData.state.formData.behavior_and_risk) {
       setValues(localData.state.formData.behavior_and_risk);
     }
   }, []);
 
-  const { year } = useParams();
+  useEffect(() => {
+    setFormData({ year_id: year, student_id: userInfo?._id });
+  }, [year]);
+
   const navigate = useNavigate();
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/personal-info/add`,
-    stepTwo: `/student/visit-info/${year}/relation/add`,
-    stepThree: `/student/visit-info/${year}/family-status/add`,
-    stepFour: `/student/visit-info/${year}/behavior/add`,
+    stepOne: `/student/personal-info/${year}/add`,
+    stepTwo: `/student/relation/${year}/add`,
+    stepThree: `/student/family-status/${year}/add`,
+    stepFour: `/student/behavior/${year}/add`,
   };
 
   const familyMember = [
@@ -89,9 +96,8 @@ const AddBehaviorForm = () => {
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
         <BreadcrumbsLoop
           options={[
-            { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
             {
-              link: `/student/visit-info/${year}/behavior`,
+              link: `/student/behavior`,
               label: "พฤติกรรมและความเสี่ยง",
             },
             { label: "เพิ่มพฤติกรรมและความเสี่ยง" },
@@ -102,9 +108,12 @@ const AddBehaviorForm = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <h3 className="text-center text-xl font-bold text-gray-600">
-            พฤติกรรมและความเสี่ยงของ{" "}
-            <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
+          {/* Heading */}
+          <h3 className="text-xl font-bold text-center w-full">
+            พฤติกรรมและความเสี่ยง{" "}
+            <span className="text-gray-600 hidden md:inline">
+              {userInfo?.prefix} {userInfo?.first_name} {userInfo?.last_name}
+            </span>
           </h3>
 
           <div className="grid grid-cols-1 gap-6 mt-8">
@@ -389,7 +398,7 @@ const AddBehaviorForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ behavior_and_risk: values });
-                navigate(`/student/visit-info/${year}/family-status/add`);
+                navigate(`/student/family-status/${year}/add`);
               }}
             >
               ก่อนหน้า

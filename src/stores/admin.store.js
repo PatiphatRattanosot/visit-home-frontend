@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
-import Userservice from "../services/users/users.service";
+import UserService from "../services/users/users.service";
 import YearServices from "../services/years/years.service";
 import ClassroomService from "../services/class/class.service";
 
@@ -10,7 +10,7 @@ export const usePersonnelStore = create((set, get) => ({
   setData: (data) => set({ data }), // js ชื่อตัวแปรตรงกัน
   fetchData: async () => {
     try {
-      const response = await Userservice.getAllTeacher();
+      const response = await UserService.getAllTeacher();
       //ถ้า Log User จะต้องเป็น response.data.users
       console.log("hello teacher", response.data);
       if (response.status === 200) {
@@ -25,7 +25,7 @@ export const usePersonnelStore = create((set, get) => ({
   },
   getPersonnelById: async (id) => {
     try {
-      const response = await Userservice.getTeacherById(id);
+      const response = await UserService.getTeacherById(id);
       console.log("getPersonnelById = ", response);
       if (response.status === 200) {
         return response.data.teacher; // ส่งคืนข้อมูลบุคลากรที่ได้
@@ -38,7 +38,7 @@ export const usePersonnelStore = create((set, get) => ({
   },
   addPersonnel: async (values) => {
     try {
-      const res = await Userservice.addTeacher(values);
+      const res = await UserService.addTeacher(values);
       console.log(res);
 
       if (res.status === 201) {
@@ -56,7 +56,7 @@ export const usePersonnelStore = create((set, get) => ({
   // updatePersonnel: async (id, values) => {
 
   //   try {
-  //     const res = await Userservice.updateTeacher({ ...values, _id: id });
+  //     const res = await UserService.updateTeacher({ ...values, _id: id });
   //     console.log("res", res);
   //     if (res.status === 200) {
   //       document.getElementById(`edit_personnel_${id}`).close();
@@ -75,7 +75,7 @@ export const usePersonnelStore = create((set, get) => ({
   // },
   updatePersonnel: async (id, values) => {
     try {
-      const res = await Userservice.updateTeacher({ ...values, _id: id });
+      const res = await UserService.updateTeacher({ ...values, _id: id });
       console.log("res", res);
 
       if (res.status === 200) {
@@ -120,7 +120,7 @@ export const usePersonnelStore = create((set, get) => ({
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await Userservice.deleteUser(email); // ลบหลังจากผู้ใช้ยืนยันแล้ว
+          const response = await UserService.deleteUser(email); // ลบหลังจากผู้ใช้ยืนยันแล้ว
           Swal.fire({
             title: "ลบข้อมูลเรียบร้อย",
             text: response.data.message,
@@ -153,7 +153,7 @@ export const usePersonnelStore = create((set, get) => ({
   },
   addAdminRole: async (email, newRole) => {
     try {
-      const response = await Userservice.addAdminRole(email, newRole);
+      const response = await UserService.addAdminRole(email, newRole);
 
       if (response.status === 200) {
         toast.success(response.data.message || "บทบาทถูกเปลี่ยนเรียบร้อยแล้ว");
@@ -176,7 +176,7 @@ export const usePersonnelStore = create((set, get) => ({
         cancelButtonText: "ยกเลิก",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          const response = await Userservice.removeAdminRole(
+          const response = await UserService.removeAdminRole(
             email,
             roleToRemove
           );

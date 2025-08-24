@@ -22,6 +22,8 @@ export const useStudentFormStore = create(
       submitForm: async (stdId, yearId, data) => {
         try {
           const res = await StudentService.yearlyData(stdId, yearId, data);
+          console.log(res);
+
           if (res.status === 200) {
             Swal.fire({
               icon: "success",
@@ -85,6 +87,15 @@ export const useStudentStore = create((set, get) => ({
       return response.data;
     } catch (error) {
       console.error("Failed to fetch student by ID:", error);
+      return null;
+    }
+  },
+  getYearlyData: async (yearId) => {
+    try {
+      const response = await StudentService.getYearlyData(yearId);
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch yearly data:", error);
       return null;
     }
   },

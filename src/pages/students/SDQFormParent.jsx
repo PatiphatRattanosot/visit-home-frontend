@@ -1,8 +1,9 @@
 import SDQRadio from "../../components/SDQRadio";
-import BreadcrumbsLoop from "../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../components/Breadcrumbs";
 import { useFormik } from "formik";
 import { useAuthStore } from "../../stores/auth.store";
 import { SDQInitValues, SDQValidations } from "../../schemas/sdq";
+import YearSelector from "../../components/YearSelector";
 
 const SDQFormParent = () => {
   const {
@@ -30,6 +31,11 @@ const SDQFormParent = () => {
             { label: "แบบประเมิน SDQ ของผู้ปกครอง" },
           ]}
         />
+
+        {/* Year Selector */}
+        <div className="flex justify-center md:justify-end items-center mb-6">
+          <YearSelector />
+        </div>
 
         <form onSubmit={handleSubmit}>
           <h3 className="text-center text-xl font-bold text-gray-600">
@@ -164,9 +170,7 @@ const SDQFormParent = () => {
             />
             {/* 12 */}
             <SDQRadio
-              label={
-                "12.มักมีเรื่องทะเลาะวิวาทกับเด็กอื่น หรือรังแกเด็กอื่น"
-              }
+              label={"12.มักมีเรื่องทะเลาะวิวาทกับเด็กอื่น หรือรังแกเด็กอื่น"}
               name={"question_12"}
               value={values.question_12}
               touched={touched.question_12}

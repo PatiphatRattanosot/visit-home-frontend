@@ -9,16 +9,18 @@ import {
   FamilyStatusSchema,
   FamilyStatusInitialValues,
 } from "../../../schemas/familyStatus";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import { useEffect } from "react";
+import { useStudentStore } from "../../../stores/student.store";
 
 const UpdateFamilyStatusForm = () => {
   const { userInfo } = useAuthStore();
-  const { year } = useParams();
   const navigate = useNavigate();
+  const { year } = useParams();
 
   const { setFormData } = useStudentFormStore();
+  const { getYearlyData } = useStudentStore();
 
   const {
     initialValues,
@@ -37,36 +39,43 @@ const UpdateFamilyStatusForm = () => {
       console.log("Submitting", actions);
       setFormData({ family_status_info: values });
       actions.resetForm();
-      navigate(`/student/visit-info/${year}/behavior/update`);
+      navigate(`/student/behavior/${year}/update`);
     },
   });
 
+  const handleLessThanOneChange = (e) => {
+    setValues({ ...values, less_than_one: e.target.checked ? "1" : "0" });
+  };
+
+  console.log("form change", values);
+  console.log("fetch", getYearlyData(year));
+
+  // ดึงข้อมูล
   useEffect(() => {
-    const localData = JSON.parse(localStorage.getItem("student-form-storage"));
-    console.log("Local Data:", localData);
-    if (localData && localData.state.formData.family_status_info) {
-      setValues(localData.state.formData.family_status_info);
-    }
-  }, []);
+    const fetchFamilyStatusInfo = async () => {
+      const data = await getYearlyData(year);
+      setValues(data?.students[0].yearly_data[0]?.family_status_info);
+    };
+    fetchFamilyStatusInfo();
+  }, [year]);
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/personal-info/update`,
-    stepTwo: `/student/visit-info/${year}/relation/update`,
-    stepThree: `/student/visit-info/${year}/family-status/update`,
-    stepFour: `/student/visit-info/${year}/behavior/update`,
+    stepOne: `/student/personal-info/${year}/update`,
+    stepTwo: `/student/relation/${year}/update`,
+    stepThree: `/student/family-status/${year}/update`,
+    stepFour: `/student/behavior/${year}/update`,
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-9">
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
         <BreadcrumbsLoop
           options={[
-            { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
             {
-              link: `/student/visit-info/${year}/family-status`,
+              link: `/student/family-status`,
               label: "สถานะของครัวเรือน",
             },
-            { label: "เพิ่มสถานะของครัวเรือน" },
+            { label: "แก้ไขสถานะของครัวเรือน" },
           ]}
         />
         <div className="flex justify-center mb-9">
@@ -74,9 +83,12 @@ const UpdateFamilyStatusForm = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <h3 className="text-center text-xl font-bold text-gray-600">
-            สถานะของครัวเรือนของ{" "}
-            <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
+          {/* Heading */}
+          <h3 className="text-xl font-bold text-center w-full">
+            สถานะของครัวเรือน{" "}
+            <span className="text-gray-600 hidden md:inline">
+              {userInfo?.prefix} {userInfo?.first_name} {userInfo?.last_name}
+            </span>
           </h3>
 
           <div className="grid grid-cols-1 gap-6 mt-8">
@@ -156,14 +168,14 @@ const UpdateFamilyStatusForm = () => {
                     id="less_than_one"
                     name="less_than_one"
                     className="checkbox"
-                    value={true}
-                    onChange={handleChange}
+                    value={"1"}
+                    onChange={handleLessThanOneChange}
                     onBlur={handleBlur}
-                    checked={values.less_than_one}
+                    checked={values.less_than_one === "1"}
                   />
                   <label htmlFor="less_than_one">มีที่ดินน้อยกว่า 1 ไร่</label>
                 </div>
-                {values.less_than_one === false && (
+                {values.less_than_one !== "1" && (
                   <TextInput
                     label={"เป็นเจ้าของจำนวน (ไร่)"}
                     name={"owned_land"}
@@ -197,7 +209,7 @@ const UpdateFamilyStatusForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ family_status_info: values });
-                navigate(`/student/visit-info/${year}/relation/update`);
+                navigate(`/student/relation/${year}/update`);
               }}
             >
               ก่อนหน้า

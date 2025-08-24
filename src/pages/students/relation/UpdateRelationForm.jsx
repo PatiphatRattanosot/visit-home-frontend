@@ -10,9 +10,10 @@ import {
   RelationSchema,
   RelationInitialValues,
 } from "../../../schemas/relation";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import { useEffect } from "react";
+import { useStudentStore } from "../../../stores/student.store";
 
 const UpdateRelationForm = () => {
   const { userInfo } = useAuthStore();
@@ -20,13 +21,14 @@ const UpdateRelationForm = () => {
   const { year } = useParams();
 
   const { setFormData } = useStudentFormStore();
+  const { getYearlyData } = useStudentStore();
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/personal-info/update`,
-    stepTwo: `/student/visit-info/${year}/relation/update`,
-    stepThree: `/student/visit-info/${year}/family-status/update`,
-    stepFour: `/student/visit-info/${year}/behavior/update`,
+    stepOne: `/student/personal-info/${year}/update`,
+    stepTwo: `/student/relation/${year}/update`,
+    stepThree: `/student/family-status/${year}/update`,
+    stepFour: `/student/behavior/${year}/update`,
   };
 
   const {
@@ -42,21 +44,20 @@ const UpdateRelationForm = () => {
     initialValues: RelationInitialValues,
     validationSchema: RelationSchema,
     onSubmit: async (values, actions) => {
-      console.log("Submitting", values);
-      console.log("Submitting", actions);
       setFormData({ relation_info: values });
       actions.resetForm();
-      navigate(`/student/visit-info/${year}/family-status/update`);
+      navigate(`/student/family-status/${year}/update`);
     },
   });
 
+  // ดึงข้อมูล
   useEffect(() => {
-    const localData = JSON.parse(localStorage.getItem("student-form-storage"));
-    console.log("Local Data:", localData);
-    if (localData && localData.state.formData.relation_info) {
-      setValues(localData.state.formData.relation_info);
-    }
-  }, []);
+    const fetchRelationInfo = async () => {
+      const data = await getYearlyData(year);
+      setValues(data?.students[0].yearly_data[0]?.relation_info);
+    };
+    fetchRelationInfo();
+  }, [year]);
 
   const relationOpts = ["สนิทสนม", "เฉยๆ", "ห่างเหิน", "ขัดแย้ง", "ไม่มี"];
   const studentAloneOpts = ["ญาติ", "เพื่อนบ้าน", "นักเรียนอยู่บ้านด้วยตนเอง"];
@@ -88,12 +89,11 @@ const UpdateRelationForm = () => {
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
         <BreadcrumbsLoop
           options={[
-            { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
             {
-              link: `/student/visit-info/${year}/relation`,
+              link: `/student/relation`,
               label: "ความสัมพันธ์ในครอบครัว",
             },
-            { label: "เพิ่มความสัมพันธ์ในครอบครัว" },
+            { label: "แก้ไขความสัมพันธ์ในครอบครัว" },
           ]}
         />
         <div className="flex justify-center mb-9">
@@ -101,9 +101,12 @@ const UpdateRelationForm = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <h3 className="text-center text-xl font-bold text-gray-600">
-            ความสัมพันธ์ในครอบครัวของ{" "}
-            <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
+          {/* Heading */}
+          <h3 className="text-xl font-bold text-center w-full">
+            ความสัมพันธ์ในครอบครัว{" "}
+            <span className="text-gray-600 hidden md:inline">
+              {userInfo?.prefix} {userInfo?.first_name} {userInfo?.last_name}
+            </span>
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
@@ -363,7 +366,7 @@ const UpdateRelationForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ relation_info: values });
-                navigate(`/student/visit-info/${year}/personal-info/update`);
+                navigate(`/student/personal-info/${year}/update`);
               }}
             >
               ก่อนหน้า

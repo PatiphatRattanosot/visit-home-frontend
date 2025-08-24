@@ -10,7 +10,7 @@ import {
 } from "../../../schemas/personalInfo";
 import Stepper from "../../../components/Stepper";
 import { useNavigate, useParams } from "react-router";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import RadioInput from "../../../components/RadioInput";
 import MapComponent from "../../../components/students/MapComponent";
@@ -39,11 +39,9 @@ const AddPersonalInfoForm = () => {
     initialValues: PersonalInfoInitialValues,
     validationSchema: PersonalInfoSchema,
     onSubmit: async (values, actions) => {
-      console.log("Submitting", values);
-      console.log("Submitting", actions);
-      setFormData({ personal_info: values });
+      setFormData({ personal_info: values, file_image: image });
       actions.resetForm();
-      navigate(`/student/visit-info/${year}/relation/add`);
+      navigate(`/student/relation/${year}/add`);
     },
   });
 
@@ -95,10 +93,10 @@ const AddPersonalInfoForm = () => {
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/personal-info/add`,
-    stepTwo: `/student/visit-info/${year}/relation/add`,
-    stepThree: `/student/visit-info/${year}/family-status/add`,
-    stepFour: `/student/visit-info/${year}/behavior/add`,
+    stepOne: `/student/personal-info/${year}/add`,
+    stepTwo: `/student/relation/${year}/add`,
+    stepThree: `/student/family-status/${year}/add`,
+    stepFour: `/student/behavior/${year}/add`,
   };
 
   console.log(values);
@@ -108,9 +106,8 @@ const AddPersonalInfoForm = () => {
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
         <BreadcrumbsLoop
           options={[
-            { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
             {
-              link: `/student/visit-info/${year}/personal-info`,
+              link: `/student/personal-info`,
               label: "ข้อมูลส่วนตัว",
             },
             { label: "เพิ่มข้อมูลส่วนตัว" },
@@ -121,9 +118,12 @@ const AddPersonalInfoForm = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <h3 className="text-center text-xl font-bold text-gray-600">
-            ข้อมูลส่วนตัวของ{" "}
-            <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
+          {/* Heading */}
+          <h3 className="text-xl font-bold text-center w-full">
+            ข้อมูลส่วนตัว{" "}
+            <span className="text-gray-600 hidden md:inline">
+              {userInfo?.prefix} {userInfo?.first_name} {userInfo?.last_name}
+            </span>
           </h3>
 
           <div className="mt-8 flex justify-center">
@@ -397,7 +397,7 @@ const AddPersonalInfoForm = () => {
               onBlur={handleBlur}
             />
             {/* Map Component */}
-            <div className="col-span-2 flex flex-col items-center justify-center">
+            <div className="md:col-span-2 flex flex-col items-center justify-center">
               <button
                 className="btn-blue"
                 type="button"
@@ -405,7 +405,6 @@ const AddPersonalInfoForm = () => {
               >
                 เลือกตำแหน่ง
               </button>
-              <MapComponent />
             </div>
           </div>
           <div className="flex justify-between mt-10 space-x-2">
@@ -415,7 +414,7 @@ const AddPersonalInfoForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ personal_info: values });
-                navigate(`/student/visit-info/${year}/personal-info`);
+                navigate(`/student/personal-info`);
               }}
             >
               ยกเลิก
@@ -425,6 +424,11 @@ const AddPersonalInfoForm = () => {
             </button>
           </div>
         </form>
+        <MapComponent
+          setFieldValue={setFieldValue}
+          latValue={values.lat}
+          lngValue={values.lng}
+        />
       </div>
     </div>
   );

@@ -10,23 +10,22 @@ import {
   RelationSchema,
   RelationInitialValues,
 } from "../../../schemas/relation";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import { useEffect } from "react";
 
 const AddRelationForm = () => {
   const { userInfo } = useAuthStore();
   const navigate = useNavigate();
-  const { year } = useParams();
-
   const { setFormData } = useStudentFormStore();
+  const { year } = useParams();
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/personal-info/add`,
-    stepTwo: `/student/visit-info/${year}/relation/add`,
-    stepThree: `/student/visit-info/${year}/family-status/add`,
-    stepFour: `/student/visit-info/${year}/behavior/add`,
+    stepOne: `/student/personal-info/${year}/add`,
+    stepTwo: `/student/relation/${year}/add`,
+    stepThree: `/student/family-status/${year}/add`,
+    stepFour: `/student/behavior/${year}/add`,
   };
 
   const {
@@ -42,11 +41,9 @@ const AddRelationForm = () => {
     initialValues: RelationInitialValues,
     validationSchema: RelationSchema,
     onSubmit: async (values, actions) => {
-      console.log("Submitting", values);
-      console.log("Submitting", actions);
       setFormData({ relation_info: values });
       actions.resetForm();
-      navigate(`/student/visit-info/${year}/family-status/add`);
+      navigate(`/student/family-status/${year}/add`);
     },
   });
 
@@ -88,9 +85,8 @@ const AddRelationForm = () => {
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
         <BreadcrumbsLoop
           options={[
-            { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
             {
-              link: `/student/visit-info/${year}/relation`,
+              link: `/student/relation`,
               label: "ความสัมพันธ์ในครอบครัว",
             },
             { label: "เพิ่มความสัมพันธ์ในครอบครัว" },
@@ -101,9 +97,12 @@ const AddRelationForm = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <h3 className="text-center text-xl font-bold text-gray-600">
-            ความสัมพันธ์ในครอบครัวของ{" "}
-            <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
+          {/* Heading */}
+          <h3 className="text-xl font-bold text-center w-full">
+            ความสัมพันธ์ในครอบครัว{" "}
+            <span className="text-gray-600 hidden md:inline">
+              {userInfo?.prefix} {userInfo?.first_name} {userInfo?.last_name}
+            </span>
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
@@ -363,7 +362,7 @@ const AddRelationForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ relation_info: values });
-                navigate(`/student/visit-info/${year}/personal-info/add`);
+                navigate(`/student/personal-info/${year}/add`);
               }}
             >
               ก่อนหน้า

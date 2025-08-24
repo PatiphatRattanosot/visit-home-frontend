@@ -24,7 +24,7 @@ const deleteUser = async (email) => {
   return res;
 };
 
-const Uservervices = {
+const UserServices = {
   deleteUser,
   getAllUsers,
   addUser,
@@ -32,4 +32,4 @@ const Uservervices = {
   getUserById,
 };
 
-export default Uservervices;
+export default UserServices;

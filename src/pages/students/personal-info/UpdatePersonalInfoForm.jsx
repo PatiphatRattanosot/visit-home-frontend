@@ -10,9 +10,11 @@ import {
 } from "../../../schemas/personalInfo";
 import Stepper from "../../../components/Stepper";
 import { useNavigate, useParams } from "react-router";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import RadioInput from "../../../components/RadioInput";
+import { useStudentStore } from "../../../stores/student.store";
+import MapComponent from "../../../components/students/MapComponent";
 
 const UpdatePersonalInfoForm = () => {
   const { userInfo } = useAuthStore();
@@ -20,9 +22,10 @@ const UpdatePersonalInfoForm = () => {
   const [parentFetch, setParentFetch] = useState("dad");
 
   const { setFormData } = useStudentFormStore();
+  const { getYearlyData } = useStudentStore();
+  const { year } = useParams();
 
   const navigate = useNavigate();
-  const { year } = useParams();
 
   const {
     initialValues,
@@ -38,21 +41,20 @@ const UpdatePersonalInfoForm = () => {
     initialValues: PersonalInfoInitialValues,
     validationSchema: PersonalInfoSchema,
     onSubmit: async (values, actions) => {
-      console.log("Submitting", values);
-      console.log("Submitting", actions);
-      setFormData({ personal_info: values });
+      setFormData({ personal_info: values, file_image: image });
       actions.resetForm();
-      navigate(`/student/visit-info/${year}/relation/update`); 
+      navigate(`/student/relation/${year}/update`);
     },
   });
 
   useEffect(() => {
-    const localData = JSON.parse(localStorage.getItem("student-form-storage"));
-    console.log("Local Data:", localData);
-    if (localData && localData.state.formData.personal_info) {
-      setValues(localData.state.formData.personal_info);
-    }
-  }, []);
+    const fetchPersonalInfo = async () => {
+      const data = await getYearlyData(year);
+      setValues(data?.students[0].yearly_data[0]?.personal_info);
+      setImage(data?.students[0]?.image_url);
+    };
+    fetchPersonalInfo();
+  }, [year]);
 
   useEffect(() => {
     if (!parentToggle) {
@@ -94,10 +96,10 @@ const UpdatePersonalInfoForm = () => {
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/personal-info/update`,
-    stepTwo: `/student/visit-info/${year}/relation/update`,
-    stepThree: `/student/visit-info/${year}/family-status/update`,
-    stepFour: `/student/visit-info/${year}/behavior/update`,
+    stepOne: `/student/personal-info/${year}/update`,
+    stepTwo: `/student/relation/${year}/update`,
+    stepThree: `/student/family-status/${year}/update`,
+    stepFour: `/student/behavior/${year}/update`,
   };
 
   console.log(values);
@@ -107,12 +109,11 @@ const UpdatePersonalInfoForm = () => {
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
         <BreadcrumbsLoop
           options={[
-            { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
             {
-              link: `/student/visit-info/${year}/personal-info`,
+              link: `/student/personal-info`,
               label: "ข้อมูลส่วนตัว",
             },
-            { label: "เพิ่มข้อมูลส่วนตัว" },
+            { label: "แก้ไขข้อมูลส่วนตัว" },
           ]}
         />
         <div className="flex justify-center mb-9">
@@ -120,9 +121,12 @@ const UpdatePersonalInfoForm = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <h3 className="text-center text-xl font-bold text-gray-600">
-            ข้อมูลส่วนตัวของ{" "}
-            <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
+          {/* Heading */}
+          <h3 className="text-xl font-bold text-center w-full">
+            ข้อมูลส่วนตัว{" "}
+            <span className="text-gray-600 hidden md:inline">
+              {userInfo?.prefix} {userInfo?.first_name} {userInfo?.last_name}
+            </span>
           </h3>
 
           <div className="mt-8 flex justify-center">
@@ -395,6 +399,16 @@ const UpdatePersonalInfoForm = () => {
               touched={touched.lng}
               onBlur={handleBlur}
             />
+            {/* Map Component */}
+            <div className="md:col-span-2 flex flex-col items-center justify-center">
+              <button
+                className="btn-blue"
+                type="button"
+                onClick={() => document.getElementById("map_modal").showModal()}
+              >
+                เลือกตำแหน่ง
+              </button>
+            </div>
           </div>
           <div className="flex justify-between mt-10 space-x-2">
             <button
@@ -403,7 +417,7 @@ const UpdatePersonalInfoForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ personal_info: values });
-                navigate(`/student/visit-info/${year}/personal-info`);
+                navigate(`/student/personal-info`);
               }}
             >
               ยกเลิก
@@ -413,6 +427,11 @@ const UpdatePersonalInfoForm = () => {
             </button>
           </div>
         </form>
+        <MapComponent
+          setFieldValue={setFieldValue}
+          latValue={values.lat}
+          lngValue={values.lng}
+        />
       </div>
     </div>
   );

@@ -50,7 +50,7 @@ export const getNavLinks = (roles = [], activeRole = null) => {
           <a href={`/student`}>หน้าแรก</a>
         </li>
         <li>
-          <a href={`/student/visit-info`}>ข้อมูลการเยี่ยมบ้าน</a>
+          <a href={`/student/personal-info`}>ข้อมูลการเยี่ยมบ้าน</a>
         </li>
         <li>
           <details>

@@ -9,14 +9,14 @@ import {
   FamilyStatusSchema,
   FamilyStatusInitialValues,
 } from "../../../schemas/familyStatus";
-import BreadcrumbsLoop from "../../../components/students/Breadcrumbs";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useStudentFormStore } from "../../../stores/student.store";
 import { useEffect } from "react";
 
 const AddFamilyStatusForm = () => {
   const { userInfo } = useAuthStore();
-  const { year } = useParams();
   const navigate = useNavigate();
+  const { year } = useParams();
 
   const { setFormData } = useStudentFormStore();
 
@@ -33,11 +33,9 @@ const AddFamilyStatusForm = () => {
     initialValues: FamilyStatusInitialValues,
     validationSchema: FamilyStatusSchema,
     onSubmit: async (values, actions) => {
-      console.log("Submitting", values);
-      console.log("Submitting", actions);
       setFormData({ family_status_info: values });
       actions.resetForm();
-      navigate(`/student/visit-info/${year}/behavior/add`);
+      navigate(`/student/behavior/${year}/add`);
     },
   });
 
@@ -51,19 +49,18 @@ const AddFamilyStatusForm = () => {
 
   // stepper path
   const stepperPath = {
-    stepOne: `/student/visit-info/${year}/personal-info/add`,
-    stepTwo: `/student/visit-info/${year}/relation/add`,
-    stepThree: `/student/visit-info/${year}/family-status/add`,
-    stepFour: `/student/visit-info/${year}/behavior/add`,
+    stepOne: `/student/personal-info/${year}/add`,
+    stepTwo: `/student/relation/${year}/add`,
+    stepThree: `/student/family-status/${year}/add`,
+    stepFour: `/student/behavior/${year}/add`,
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 py-9">
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
         <BreadcrumbsLoop
           options={[
-            { link: "/student/visit-info/", label: "ข้อมูลเยี่ยมบ้าน" },
             {
-              link: `/student/visit-info/${year}/family-status`,
+              link: `/student/family-status`,
               label: "สถานะของครัวเรือน",
             },
             { label: "เพิ่มสถานะของครัวเรือน" },
@@ -74,9 +71,12 @@ const AddFamilyStatusForm = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <h3 className="text-center text-xl font-bold text-gray-600">
-            สถานะของครัวเรือนของ{" "}
-            <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
+          {/* Heading */}
+          <h3 className="text-xl font-bold text-center w-full">
+            สถานะของครัวเรือน{" "}
+            <span className="text-gray-600 hidden md:inline">
+              {userInfo?.prefix} {userInfo?.first_name} {userInfo?.last_name}
+            </span>
           </h3>
 
           <div className="grid grid-cols-1 gap-6 mt-8">
@@ -197,7 +197,7 @@ const AddFamilyStatusForm = () => {
               onClick={() => {
                 setValues(initialValues);
                 setFormData({ family_status_info: values });
-                navigate(`/student/visit-info/${year}/relation/add`);
+                navigate(`/student/relation/${year}/add`);
               }}
             >
               ก่อนหน้า
