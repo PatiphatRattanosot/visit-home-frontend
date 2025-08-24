@@ -5,13 +5,19 @@ import TextInputInModal from "./TexInputInModal";
 import SelectInputInModal from "./SelectInputInModal";
 import { useClassroomStore } from "../../stores/classroom.store";
 import { usePersonnelStore } from "../../stores/admin.store";
-const EditClassroom = ({ id, onUpdateClassroom }) => {
-  const { data: teachers, fetchData: fetchTeachers } = usePersonnelStore();
-  const { getClassroomById, updateClassroom, getClassroomByTeacherId } = useClassroomStore();
+const EditClassroom = ({ id, onUpdateSuccess }) => {
+  const { data: teachers = [], fetchData: fetchTeachers } = usePersonnelStore();
+  const { getClassroomById, updateClassroom } = useClassroomStore();
   const selectTeacherOptions = teachers.map((teacher) => ({
     value: teacher._id,
-    label: teacher.name,
+    label: teacher.first_name + " " + teacher.last_name,
   }));
+
+  useEffect(() => {
+    if (!teachers.length) {
+      fetchTeachers();
+    }
+  }, [fetchTeachers, teachers.length]);
 
   const formik = useFormik({
     initialValues: {
@@ -25,7 +31,7 @@ const EditClassroom = ({ id, onUpdateClassroom }) => {
       console.log("Submitting", values);
       await updateClassroom(id, values);
       actions.resetForm();
-      onUpdateClassroom(); // เรียกฟังก์ชัน callback หลังจากอัปเดตสำเร็จ
+      onUpdateSuccess(); // เรียกฟังก์ชัน callback หลังจากอัปเดตสำเร็จ
       document.getElementById(`edit_classroom_${values._id}`).close(); // ปิด modal หลังจากบันทึกสำเร็จ
     },
   });
@@ -35,10 +41,10 @@ const EditClassroom = ({ id, onUpdateClassroom }) => {
       formik.setValues({
         room: data.room,
         number: data.number,
-        teacherId: data.teacher_id,
+        teacherId: data.teacher_id?._id ?? "", //ทำให้เป็น string เราจะแสดงชื่อไม่ใช่ id
       });
     });
-  }, [id, getClassroomById, formik]);
+  }, [id]);
 
   return (
     <div>
@@ -81,7 +87,7 @@ const EditClassroom = ({ id, onUpdateClassroom }) => {
                   className="w-64 md:w-72"
                   label="ครูที่ปรึกษา"
                   name="teacherId"
-                  value={formik.values.teacherId}
+                  value={formik.values.teacherId ?? ""}
                   onChange={formik.handleChange}
                   error={formik.errors.teacherId}
                   touched={formik.touched.teacherId}

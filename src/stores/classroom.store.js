@@ -79,7 +79,7 @@ export const useClassroomStore = create((set, get) => ({
         teacher_id: values.teacherId,
       });
       if (response.status === 200) {
-        toast.success(response.classrooms.message || "แก้ไขชั้นเรียนสำเร็จ");
+        toast.success(response.data.message || "แก้ไขชั้นเรียนสำเร็จ");
         // updateClassroom ใน store
         const updatedClassrooms = get().classrooms.map((classroom) =>
           classroom._id === id ? { ...classroom, ...values } : classroom
@@ -90,7 +90,7 @@ export const useClassroomStore = create((set, get) => ({
     } catch (error) {
       console.error("Error in updateClassroom:", error);
       toast.error(
-        error.response?.classrooms?.message ||
+        error.response?.data?.message ||
           "เกิดข้อผิดพลาดในการแก้ไขชั้นเรียน"
       );
     }
