@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import YearServices from "../../services/years/years.service";
 import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa";
-import Swal from "sweetalert2";
 import ModalAddYear from "../../components/modals/AddYear";
 import ModalEditYear from "../../components/modals/EditYear";
 import { useNavigate } from "react-router";
@@ -10,18 +9,19 @@ import { FaPencilAlt } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import ArrowBack from "../../components/ArrowBack";
-import { useYearStore, useClassroomStore } from "../../stores/admin.store";
+import {useClassroomStore} from "../../stores/classroom.store";
+import useYearSelectStore from "../../stores/year_select.store";
 const YearManagement = () => {
   // ใช้ Zustand store เพื่อจัดการข้อมูลปีการศึกษา
-  const { data: years, fetchData, deleteYear } = useYearStore();
-  const {setData: setClassroom} = useClassroomStore();
+  const { years, fetchData, deleteYear } = useYearSelectStore();
+  const { setClassrooms } = useClassroomStore();
   const navigate = useNavigate();
 
   // เรียกข้อมูลปีการศึกษา
   useEffect(() => {
     fetchData();
-    setClassroom([]); // เคลียร์ข้อมูลชั้นเรียนเมื่อเปลี่ยนปีการศึกษา
-  }, [years, fetchData, setClassroom]);
+    setClassrooms([]); // เคลียร์ข้อมูลชั้นเรียนเมื่อเปลี่ยนปีการศึกษา
+  }, [years, fetchData, setClassrooms]);
 
   // เลือกปีแล้วมันจะเกิดแอ็คชั่น
   const handleSelectYear = async (year) => {

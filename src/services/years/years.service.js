@@ -13,8 +13,8 @@ const getYears = async () => {
 };
 
 //params
-const getYearById = async (year_id) => {
-  return await api.get(`/year/${year_id}`);
+const getYearsByYear = async (year) => {
+  return await api.get(`/year/${year}`);
 };
 
 const updateYear = async (data) => {
@@ -32,7 +32,7 @@ const YearServices = {
   getYears,
   updateYear,
   deleteYear,
-  getYearById,
+  getYearsByYear,
 };
 
 export default YearServices;
