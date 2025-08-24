@@ -3,6 +3,7 @@ import BreadcrumbsLoop from "../../components/Breadcrumbs";
 import { useFormik } from "formik";
 import { useAuthStore } from "../../stores/auth.store";
 import { SDQInitValues, SDQValidations } from "../../schemas/sdq";
+import YearSelector from "../../components/YearSelector";
 
 const SDQFormStudent = () => {
   const {
@@ -30,6 +31,11 @@ const SDQFormStudent = () => {
             { label: "แบบประเมิน SDQ ของนักเรียน" },
           ]}
         />
+
+        {/* Year Selector */}
+        <div className="flex justify-center md:justify-end items-center mb-6">
+          <YearSelector />
+        </div>
 
         <form onSubmit={handleSubmit}>
           <h3 className="text-center text-xl font-bold text-gray-600">
