@@ -35,6 +35,17 @@ const EditClassroom = ({ id, onUpdateSuccess }) => {
     },
   });
 
+  const handleCancel = () => {
+    getClassroomById(id).then((data) => {
+      formik.setValues({
+        room: data.room,
+        number: data.number,
+        teacherId: data.teacher_id?._id ?? "", //ทำให้เป็น string เราจะแสดงชื่อไม่ใช่ id
+      });
+    });
+    document.getElementById(`edit_classroom_${id}`)?.close();
+  };
+
   useEffect(() => {
     getClassroomById(id).then((data) => {
       formik.setValues({
@@ -102,12 +113,7 @@ const EditClassroom = ({ id, onUpdateSuccess }) => {
                     type="button"
                     className="btn-red"
                     onClick={() => {
-                      formik.setFieldValue({
-                        room: room,
-                        number: number,
-                        teacherId: teacherId,
-                      });
-                      document.getElementById(`edit_classroom_${id}`)?.close();
+                      handleCancel();
                     }}
                   >
                     ยกเลิก
