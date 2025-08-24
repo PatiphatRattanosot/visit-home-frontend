@@ -136,6 +136,7 @@ const Classroom = () => {
               เพิ่มชั้นเรียน
             </button>
             <ModalAddClassroom
+              yearId={selectedYear._id}
               addClassroomSuccess={() => fetchClassrooms(selectedYear._id)}
             />
           </div>

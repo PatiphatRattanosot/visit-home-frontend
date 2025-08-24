@@ -3,12 +3,11 @@ import TextInputInModal from "./TexInputInModal";
 import SelectInputInModal from "./SelectInputInModal";
 import { useFormik } from "formik";
 import { ClassroomSchema } from "../../schemas/classroom";
-import { useParams } from "react-router";
 import {usePersonnelStore} from "../../stores/admin.store";
 import { useClassroomStore } from "../../stores/classroom.store";
 
-const AddClassroom = ({ addClassroomSuccess }) => {
-  const { yearId } = useParams();
+const AddClassroom = ({ yearId,addClassroomSuccess }) => {
+  
   const { addClassroom } = useClassroomStore();
   const { fetchData, data: personnel } = usePersonnelStore();
 
