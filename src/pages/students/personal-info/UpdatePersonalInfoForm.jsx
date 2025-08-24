@@ -41,7 +41,7 @@ const UpdatePersonalInfoForm = () => {
     initialValues: PersonalInfoInitialValues,
     validationSchema: PersonalInfoSchema,
     onSubmit: async (values, actions) => {
-      setFormData({ personal_info: values ,file_image: image });
+      setFormData({ personal_info: values, file_image: image });
       actions.resetForm();
       navigate(`/student/relation/${year}/update`);
     },
@@ -121,9 +121,12 @@ const UpdatePersonalInfoForm = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <h3 className="text-center text-xl font-bold text-gray-600">
-            ข้อมูลส่วนตัวของ{" "}
-            <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
+          {/* Heading */}
+          <h3 className="text-xl font-bold text-center w-full">
+            ข้อมูลส่วนตัว{" "}
+            <span className="text-gray-600 hidden md:inline">
+              {userInfo?.prefix} {userInfo?.first_name} {userInfo?.last_name}
+            </span>
           </h3>
 
           <div className="mt-8 flex justify-center">

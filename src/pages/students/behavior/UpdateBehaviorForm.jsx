@@ -112,9 +112,12 @@ const UpdateBehaviorForm = () => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <h3 className="text-center text-xl font-bold text-gray-600">
-            พฤติกรรมและความเสี่ยงของ{" "}
-            <span className="text-black">{`${userInfo?.prefix} ${userInfo?.first_name} ${userInfo?.last_name}`}</span>
+          {/* Heading */}
+          <h3 className="text-xl font-bold text-center w-full">
+            พฤติกรรมและความเสี่ยง{" "}
+            <span className="text-gray-600 hidden md:inline">
+              {userInfo?.prefix} {userInfo?.first_name} {userInfo?.last_name}
+            </span>
           </h3>
 
           <div className="grid grid-cols-1 gap-6 mt-8">

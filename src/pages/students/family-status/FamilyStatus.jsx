@@ -73,7 +73,7 @@ const FamilyStatus = () => {
         {/* Heading */}
         <h3 className="text-xl font-bold text-center w-full">
           ข้อมูลการเยี่ยมบ้าน{" "}
-          <span className="text-gray-600 hidden md:inline">
+          <span className="text-gray-600 hidden md:block">
             {userInfo?.prefix} {userInfo?.first_name} {userInfo?.last_name}
           </span>
         </h3>
