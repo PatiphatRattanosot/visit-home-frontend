@@ -5,6 +5,9 @@ const baseUrl = "/users/student";
 const getAllStudents = async () => {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2806f634ee5e68113af2822c700f6588a8b28896
   return await api.get(`${baseUrl}`);
 };
 
@@ -18,6 +21,7 @@ const getStudentById = async (id) => {
 
 const updateStudent = async (id, data) => {
   return await api.put(`${baseUrl}/${id}`, data);
+<<<<<<< HEAD
 };
 
 const yearlyData = async (data) => {
@@ -54,6 +58,8 @@ const updateStudent = async (id, data) => {
 =======
   return await api.put(`${baseUrl}/${id}`, data);
 >>>>>>> 2f183ef (Edit table in student list page)
+=======
+>>>>>>> 2806f634ee5e68113af2822c700f6588a8b28896
 };
 
 const StudentService = {
