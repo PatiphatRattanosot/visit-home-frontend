@@ -118,9 +118,9 @@ function App() {
           {/* Teacher */}
           <Route
             path="teacher"
-            // element={
-            //   !userInfo?.role.includes("Teacher") && <Navigate to={"/"} />
-            // }
+            element={
+              !userInfo?.role.includes("Teacher") && <Navigate to={"/"} />
+            }
           >
             <Route
               path=""

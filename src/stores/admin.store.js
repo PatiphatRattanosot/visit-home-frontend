@@ -3,7 +3,6 @@ import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import UserService from "../services/users/users.service";
 
-
 export const usePersonnelStore = create((set, get) => ({
   data: [], // state ของข้อมูลเปลี่ยนชื่อได้
   setData: (data) => set({ data }), // js ชื่อตัวแปรตรงกัน
@@ -52,7 +51,6 @@ export const usePersonnelStore = create((set, get) => ({
     }
   },
   updatePersonnel: async (id, values) => {
-
     try {
       const res = await UserService.updateTeacher({ ...values, _id: id });
       console.log("res", res);
@@ -70,10 +68,7 @@ export const usePersonnelStore = create((set, get) => ({
           "เกิดข้อผิดพลาดในการอัปเดตข้อมูลบุคลากร"
       );
     }
- 
-},
-
-
+  },
 
   deletePersonnel: async (email) => {
     Swal.fire({
@@ -152,7 +147,7 @@ export const usePersonnelStore = create((set, get) => ({
             email,
             roleToRemove
           );
-          
+
           const message = response.data.message || "บทบาทถูกลบเรียบร้อยแล้ว";
 
           if (response.status === 200) {
@@ -176,5 +171,3 @@ export const usePersonnelStore = create((set, get) => ({
     }
   },
 }));
-
-
