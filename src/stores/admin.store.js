@@ -70,11 +70,7 @@ export const usePersonnelStore = create((set, get) => ({
           "เกิดข้อผิดพลาดในการอัปเดตข้อมูลบุคลากร"
       );
     }
-  } catch (error) {
-    toast.error(
-      error.response?.data?.message || "เกิดข้อผิดพลาดในการอัปเดตข้อมูลบุคลากร"
-    );
-  }
+
 },
 
 

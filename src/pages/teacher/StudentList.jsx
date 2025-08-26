@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
-import { useStudentStore } from "../../stores/student.store";
+import { useClassroomStore } from "../../stores/classroom.store";
+import { useAuthStore } from "../../stores/auth.store";
 import FilterDropdown from "../../components/FilterDropdown";
 import Search from "../../components/Search";
 import Pagination from "../../components/Pagination";
 import ManageStudent from "../../components/modals/ManageStudent";
 import { useNavigate } from "react-router";
 const StudentList = () => {
-  const { data: students, fetchData } = useStudentStore();
+  const { classroomsByTeacherId, getClassroomByTeacherId } = useClassroomStore();
+  const { userInfo } = useAuthStore();
+  const teacherId = userInfo?._id;
   const [selectedStudent, setSelectedStudent] = useState(null);
 
   const [selectedOption, setSelectedOption] = useState("SortToMost");
@@ -24,13 +27,13 @@ const StudentList = () => {
     : [];
 
   useEffect(() => {
-    let filtered = students;
+    let filtered = classroomsByTeacherId;
 
     if (searchKeyword) {
       // toLoqwer() ใช้เพื่อเปลี่ยนตัวอักษรเป็นตัวพิมพ์เล็ก
       // trim() ใช้เพื่อลบช่องว่างที่ไม่จำเป็น และ toLowerCase() เพื่อเปรียบเทียบแบบไม่สนใจตัวพิมพ์ใหญ่-เล็ก
       const keyword = searchKeyword.trim().toLowerCase();
-      filtered = students.filter((student) => {
+      filtered = classroomsByTeacherId.filter((student) => {
         const user_id = student.user_id.toLowerCase();
         const firstName = student.first_name.toLowerCase();
         const lastName = student.last_name.toLowerCase();
@@ -74,7 +77,7 @@ const StudentList = () => {
 
     setFilteredStudent(sorted);
     // setCurrentPage(1);
-  }, [searchKeyword, selectedOption, students]);
+  }, [searchKeyword, selectedOption, classroomsByTeacherId]);
 
   const optionsForStudent = [
     { value: "SortToMost", label: "เรียงจากน้อยไปมาก" },
@@ -83,10 +86,15 @@ const StudentList = () => {
     { value: "AlphaSortToMost", label: "เรียงตามลำดับตัวอักษร ฮ-ก" },
   ];
 
+  //useEffect สำหรับการดึงข้อมูลชั้นเรียนของครู
+  useEffect(()=> {
+    getClassroomByTeacherId(teacherId);
+  },[teacherId, getClassroomByTeacherId]);
+
+  //useEffect สำหรับการตั้งค่า filteredStudent
   useEffect(() => {
-    fetchData();
-    setFilteredStudent(students);
-  }, []);
+    setFilteredStudent(classroomsByTeacherId);
+  }, [classroomsByTeacherId]);
 
   const showStatus = (visit_status) => {
     switch (visit_status) {
@@ -110,7 +118,7 @@ const navigate = useNavigate();
   };
   return (
     <div className="section-container">
-      <p className="text-xl text-center font-bold">รายชื่อนักเรียน ม.5/1</p>
+      <p className="text-xl text-center font-bold">รายชื่อนักเรียน </p>
       {/* ฟีเจอร์เสริม */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-4 mt-4 gap-2">
         {/* Dropdown สำหรับการกรองข้อมูล */}

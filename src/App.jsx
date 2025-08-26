@@ -25,6 +25,8 @@ import AddBehaviorForm from "./pages/students/behavior/AddBehaviorForm";
 import UpdateBehaviorForm from "./pages/students/behavior/UpdateBehaviorForm";
 import SDQFormStudent from "./pages/students/SDQFormStudent";
 import SDQFormParent from "./pages/students/SDQFormParent";
+import StudentList from "./pages/teacher/StudentList";
+import VisitInfo from "./pages/teacher/VisitInfo";
 
 function App() {
   const { user, userInfo, isLoading, signInSystem, signOutSystem } =
@@ -118,9 +120,9 @@ function App() {
           {/* Teacher */}
           <Route
             path="teacher"
-            // element={
-            //   !userInfo?.role.includes("Teacher") && <Navigate to={"/"} />
-            // }
+            element={
+              !userInfo?.role.includes("Teacher") && <Navigate to={"/"} />
+            }
           >
             <Route
               path=""
