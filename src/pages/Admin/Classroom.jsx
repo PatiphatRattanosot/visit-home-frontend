@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 import DateInput from "../../components/DateInput";
 import FilterDropdown from "../../components/FilterDropdown";
 import SearchClass from "../../components/SearchClassroom";
@@ -10,10 +11,11 @@ import ModalEditClassroom from "../../components/modals/EditClassroom";
 import BreadcrumbsLoop from "../../components/Breadcrumbs";
 import { useClassroomStore } from "../../stores/classroom.store";
 import useYearSelectStore from "../../stores/year_select.store";
+
 const Classroom = () => {
   const { classrooms, fetchClassrooms, deleteClassroom } = useClassroomStore();
-  const { years, fetchYears, getYearsByYear, selectedYear, setSelectedYear } =
-    useYearSelectStore();
+  const { years, fetchYears, getYearsByYear, selectedYear, setSelectedYear } = useYearSelectStore();
+    const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   // สร้าง state สำหรับเก็บข้อมูลชั้นเรียนที่กรองแล้ว
   // เพื่อใช้ในการแสดงผลในตาราง
@@ -162,13 +164,18 @@ const Classroom = () => {
             {/* row 1 */}
 
             {currentItems.map((classroom, index) => (
-              <tr key={classroom._id || index}>
+              <tr key={classroom._id || index} 
+              onClick={() => navigate(`/admin/year/classroom/${classroom._id}`)}
+              className="hover:bg-gray-100"
+              >
                 <th>
                   <label>
                     <input type="checkbox" className="checkbox" />
                   </label>
                 </th>
-                <td>
+                <td className="cursor-pointer hover:underline"
+                  
+                >
                   ม.{classroom.room}/{classroom.number}
                 </td>
                 <td>{classroom?.quantity}</td>

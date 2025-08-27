@@ -25,6 +25,7 @@ import AddBehaviorForm from "./pages/students/behavior/AddBehaviorForm";
 import UpdateBehaviorForm from "./pages/students/behavior/UpdateBehaviorForm";
 import SDQFormStudent from "./pages/students/SDQFormStudent";
 import SDQFormParent from "./pages/students/SDQFormParent";
+import ClassroomDetail from "./pages/Admin/ClassroomDetail";
 
 function App() {
   const { user, userInfo, isLoading, signInSystem, signOutSystem } =
@@ -71,12 +72,11 @@ function App() {
             <Route path="personnel" element={<Personnel />} />
             <Route path="manage-admin" element={<ManageAdminRoles />} />
             <Route path="year" element={<YearManagement />} />
-            <Route
-              path="year/classroom"
-              element={<Classroom />}
-            />
+            <Route path="year/classroom">
+              <Route path="" element={<Classroom />} />
+              <Route path=":classroomId" element={<ClassroomDetail />} />
+            </Route>
           </Route>
-         
 
           {/* Student */}
           <Route

@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import StudentService from "../services/student/student.service";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 export const useStudentFormStore = create(
   persist(
@@ -64,6 +65,8 @@ export const useStudentStore = create((set, get) => ({
   createStudent: async (studentData) => {
     try {
       const response = await StudentService.createStudent(studentData);
+      document.getElementById("add_student_modal").close();
+      toast.success(response.data.message || "เพิ่มนักเรียนเรียบร้อยแล้ว", { duration: 3500 });
       set({ data: get().data.concat(response.data) });
     } catch (error) {
       console.error("Failed to create student:", error);

@@ -7,7 +7,7 @@ const getAllStudents = async () => {
 };
 
 const createStudent = async (data) => {
-  return await api.post(`${baseUrl}`, data);
+  return await api.post(`${baseUrl}/create`, data);
 };
 
 const getStudentById = async (id) => {
