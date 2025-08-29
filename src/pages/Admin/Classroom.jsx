@@ -14,8 +14,9 @@ import useYearSelectStore from "../../stores/year_select.store";
 
 const Classroom = () => {
   const { classrooms, fetchClassrooms, deleteClassroom } = useClassroomStore();
-  const { years, fetchYears, getYearsByYear, selectedYear, setSelectedYear } = useYearSelectStore();
-    const navigate = useNavigate();
+  const { years, fetchYears, getYearsByYear, selectedYear, setSelectedYear } =
+    useYearSelectStore();
+  const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   // สร้าง state สำหรับเก็บข้อมูลชั้นเรียนที่กรองแล้ว
   // เพื่อใช้ในการแสดงผลในตาราง
@@ -164,21 +165,23 @@ const Classroom = () => {
             {/* row 1 */}
 
             {currentItems.map((classroom, index) => (
-              <tr key={classroom._id || index} 
-              onClick={() => navigate(`/admin/year/classroom/${classroom._id}`)}
-              className="hover:bg-gray-100"
+              <tr
+                key={classroom._id || index}
+                
+                className="hover:bg-gray-100"
               >
                 <th>
                   <label>
                     <input type="checkbox" className="checkbox" />
                   </label>
                 </th>
-                <td className="cursor-pointer hover:underline"
-                  
-                >
+
+                <td onClick={() =>
+                  navigate(`/admin/year/classroom/${classroom._id}`)
+                } className="cursor-pointer hover:underline">
                   ม.{classroom.room}/{classroom.number}
                 </td>
-                <td>{classroom?.quantity}</td>
+                <td>{classroom.students?.length}</td>
 
                 <td className="flex gap-2 items-center justify-center">
                   <button

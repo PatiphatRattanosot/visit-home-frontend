@@ -27,7 +27,7 @@ const ClassroomDetail = () => {
       />
 
       {/* หัวข้อเลขห้อง */}
-      <h1 className="text-2xl font-bold mb-4">
+      <h1 className="text-2xl text-center md:text-left font-bold mb-4">
         ห้อง{" "}
         {classroom ? `${classroom.number}/${classroom.room}` : "Loading..."}
       </h1>
@@ -46,7 +46,11 @@ const ClassroomDetail = () => {
         </div>
 
         {/* ปุ่มเพิ่มนักเรียน */}
-        <div>
+        <div className="space-x-2">
+          <input type="file" accept=".xlsx" className="hidden" id="upload_excel" />
+          <button className="btn-blue"
+            onClick={()=>{document.getElementById("upload_excel").click()}}
+          >เพิ่มนักเรียนจากไฟล์ Excel...</button>
           <button
             className="btn-green"
             onClick={() =>
@@ -63,60 +67,82 @@ const ClassroomDetail = () => {
       </div>
 
       {/* ตารางชื่อนักเรียน */}
-      <table className="table table-zebra w-full">
-        <thead>
-          <tr>
-            <th>
+  <div className="rounded-xl border border-base-300 overflow-hidden">
+  <div className="overflow-x-auto">
+    <table className="table table-zebra w-full text-xs sm:text-sm">
+      <thead>
+        <tr>
+          {/* ซ่อน checkbox บนจอเล็ก */}
+          <th className="hidden sm:table-cell w-10">
+            <label>
+              <input type="checkbox" className="checkbox checkbox-sm" />
+            </label>
+          </th>
+
+          <th className="text-center">
+            {/* สลับข้อความตามขนาดจอ */}
+            <span className="hidden sm:inline">เลขที่ประจำตัวนักเรียน</span>
+            <span className="inline sm:hidden">เลขประจำตัว</span>
+          </th>
+
+          <th className="">คำนำหน้า</th>
+          <th className="">ชื่อ - นามสกุล</th>
+
+          <th className="text-center">
+            {/* ทำให้ปุ่มเล็กลงบนมือถือ */}
+            <span>แก้ไข/ลบ</span>
+          </th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {classroom?.students?.map((student) => (
+          <tr key={student?._id}>
+            {/* ซ่อน checkbox บนจอเล็ก */}
+            <td className="hidden sm:table-cell">
               <label>
-                <input type="checkbox" className="checkbox" />
+                <input type="checkbox" className="checkbox checkbox-sm" />
               </label>
-            </th>
-            <th className="text-center">เลขที่ประจำตัวนักเรียน</th>
-            <th className="">คำนำหน้า</th>
-            <th className="">ชื่อ - นามสกุล</th>
-            <th className="text-center">แก้ไข/ลบ</th> {/* เพิ่ม text-center */}
+            </td>
+
+            <td className="text-center">{student?.user_id}</td>
+            <td>{student?.prefix}</td>
+            <td>{student?.first_name} {student?.last_name}</td>
+
+            <td className="text-center">
+              <div className="flex justify-center gap-1 sm:gap-2">
+                <button className="btn btn-warning btn-xs sm:btn-sm">
+                  {/* ใช้ขนาดไอคอนตาม font-size */}
+                  <BiSolidEdit className="text-base sm:text-lg" />
+                </button>
+                <button className="btn btn-error btn-xs sm:btn-sm">
+                  <AiOutlineDelete className="text-base sm:text-lg" />
+                </button>
+              </div>
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {classroom?.students.map((student) => (
-            <tr key={student?._id}>
-              <td>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </td>
-              <td className="text-center">{student?.user_id}</td>
-              <td className="">{student?.prefix}</td>
-              <td className="">
-                {student?.first_name} {student?.last_name}
-              </td>
-              <td className="text-center">
-                <div className="flex gap-2 justify-center">
-                  <button className="btn btn-warning">
-                    <BiSolidEdit size={20} />
-                  </button>
-                  <button className="btn btn-error">
-                    <AiOutlineDelete size={20} />
-                  </button>
-                </div>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-        <tfoot>
-          <tr>
-            <th>
-              <label>
-                <input type="checkbox" className="checkbox" />
-              </label>
-            </th>
-            <th className="text-center">เลขที่ประจำตัวนักเรียน</th>
-            <th className="">คำนำหน้า</th>
-            <th className="">ชื่อ - นามสกุล</th>
-            <th className="text-center">แก้ไข/ลบ</th>
-          </tr>
-        </tfoot>
-      </table>
+        ))}
+      </tbody>
+
+      <tfoot>
+        <tr>
+          {/* ซ่อน checkbox บนจอเล็ก */}
+          <th className="hidden sm:table-cell"></th>
+
+          <th className="text-center">
+            <span className="hidden sm:inline">เลขที่ประจำตัวนักเรียน</span>
+            <span className="inline sm:hidden">เลขประจำตัว</span>
+          </th>
+
+          <th>คำนำหน้า</th>
+          <th>ชื่อ - นามสกุล</th>
+          <th className="text-center">แก้ไข/ลบ</th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
 
       {/* pagination */}
     </div>

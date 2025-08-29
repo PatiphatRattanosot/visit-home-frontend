@@ -10,6 +10,8 @@ const AddStudent = ({ classId, onAddStudentSuccess }) => {
   const prefixOptions = [
     { value: "เด็กชาย", label: "เด็กชาย" },
     { value: "เด็กหญิง", label: "เด็กหญิง" },
+    { value: "นาย", label: "นาย" },
+    { value: "นางสาว", label: "นางสาว" },
   ];
 
   const formik = useFormik({
@@ -35,7 +37,7 @@ const AddStudent = ({ classId, onAddStudentSuccess }) => {
           <h3>เพิ่มนักเรียน</h3>
 
           <form onSubmit={formik.handleSubmit}>
-            <div className="flex flex-col items-center justify-center space-y-2">
+            <div className="flex flex-col items-center justify-center space-y-3">
               <SelectInputInModal
                 name="prefix"
                 value={formik.values.prefix}
@@ -89,6 +91,7 @@ const AddStudent = ({ classId, onAddStudentSuccess }) => {
                 id="add-student-lastname-input"
               />
 
+              
 
               <div className="flex gap-6 justify-center mt-4">
                 <button
