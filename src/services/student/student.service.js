@@ -7,11 +7,7 @@ const getAllStudents = async () => {
 };
 
 const createStudent = async (data) => {
-<<<<<<< HEAD
   return await api.post(`${baseUrl}/create`, data);
-=======
-  return await api.post(`${baseUrl}`, data);
->>>>>>> 2f183ef (Edit table in student list page)
 };
 
 const getStudentById = async (id) => {
