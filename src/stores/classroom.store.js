@@ -61,15 +61,23 @@ export const useClassroomStore = create((set, get) => ({
       console.error("Error in getClassroomById:", error);
     }
   },
-  getClassroomByTeacherId: async (teacherId) => {
+ getClassroomByTeacherId: async (teacherId) => {
     try {
-      const response = await ClassroomService.getClassByTeacherId(teacherId);
+      const response = await ClassroomService.getClassesByTeacherId(teacherId);
       if (response.status === 200) {
-        return response.data.classes; // ส่งคืนข้อมูลชั้นเรียนที่ได้
+        const classes = Array.isArray(response?.data?.classes)
+          ? response.data.classes
+          : [];
+        set({ classroom: classes });
       }
+      return classes;
     } catch (error) {
-      toast.error(response.data.message || "เกิดข้อผิดพลาดในการดึงข้อมูลชั้นเรียน");
       console.error("Error in getClassroomByTeacherId:", error);
+      toast.error(
+        error?.response?.data?.message ||
+          "เกิดข้อผิดพลาดในการดึงข้อมูลชั้นเรียน"
+      );
+      return [];
     }
   },
   updateClassroom: async (id, values) => {

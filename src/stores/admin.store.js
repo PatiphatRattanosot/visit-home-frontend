@@ -179,7 +179,7 @@ export const usePersonnelStore = create((set, get) => ({
             email,
             roleToRemove
           );
-          console.log("RESPONSE =", response);
+          
           const message = response.data.message || "บทบาทถูกลบเรียบร้อยแล้ว";
 
           if (response.status === 200) {
