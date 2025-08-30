@@ -7,7 +7,8 @@ import Pagination from "../../components/Pagination";
 import ManageStudent from "../../components/modals/ManageStudent";
 import { useNavigate } from "react-router";
 const StudentList = () => {
-  const { classroomsByTeacherId, getClassroomByTeacherId } = useClassroomStore();
+  const { classroomsByTeacherId, getClassroomByTeacherId } =
+    useClassroomStore();
   const { userInfo } = useAuthStore();
   const teacherId = userInfo?._id;
   const [selectedStudent, setSelectedStudent] = useState(null);
@@ -87,9 +88,9 @@ const StudentList = () => {
   ];
 
   //useEffect สำหรับการดึงข้อมูลชั้นเรียนของครู
-  useEffect(()=> {
+  useEffect(() => {
     getClassroomByTeacherId(teacherId);
-  },[teacherId, getClassroomByTeacherId]);
+  }, [teacherId, getClassroomByTeacherId]);
 
   //useEffect สำหรับการตั้งค่า filteredStudent
   useEffect(() => {

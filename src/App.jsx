@@ -128,7 +128,6 @@ function App() {
             />
             <Route path="students" element={<StudentList />} />
             <Route path="visit-info" element={<VisitInfo />} />
-            
           </Route>
         </Routes>
       </div>
