@@ -6,7 +6,7 @@ import TextInputInModal from "./TexInputInModal";
 import toast from "react-hot-toast";
 
 const EditYear = ({ year, onUpdateSuccess }) => {
-  const { getYearsById, updateYear } = useYearSelectStore();
+  const { getYearsByYear, updateYear } = useYearSelectStore();
   const [update, setUpdate] = useState(0);
 
   const formik = useFormik({
@@ -25,13 +25,15 @@ const EditYear = ({ year, onUpdateSuccess }) => {
   useEffect(() => {
     const fetchYear = async () => {
       try {
-        const data = await getYearsById(year._id);
+        const data = await getYearsByYear(year.year);
         // ป้องกันการ setValues ซ้ำโดยไม่จำเป็น
         // หา data ที่มันตรงกับ year ID แล้วเช็คว่าตรงกับ values formik จากนั้นถ้าไม่ตรงก็เอาไปเซ็ตไว้ใน formik
         if (data && data.year !== formik.values.year) {
           formik.setValues({ year: data.year });
         }
       } catch (err) {
+        console.log(err);
+
         toast.error(
           err.response?.data?.message || "เกิดข้อผิดพลาดในการโหลดปีการศึกษา"
         );

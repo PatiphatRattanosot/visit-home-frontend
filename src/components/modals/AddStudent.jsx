@@ -1,43 +1,43 @@
 import { useFormik } from "formik";
 import TextInputInModal from "./TexInputInModal";
 import SelectInputInModal from "./SelectInputInModal";
-import { PersonnelSchema } from "../../schemas/personnel";
-import { usePersonnelStore } from "../../stores/admin.store";
-const AddPersonnel = ({ onSuccesAddPerson }) => {
-  const { data: personnel, addPersonnel } = usePersonnelStore();
+import { studentSchema } from "../../schemas/student";
+import { useStudentStore } from "../../stores/student.store";
+
+const AddStudent = ({ classId, onAddStudentSuccess }) => {
+  const { createStudent } = useStudentStore();
+
   const prefixOptions = [
+    { value: "เด็กชาย", label: "เด็กชาย" },
+    { value: "เด็กหญิง", label: "เด็กหญิง" },
     { value: "นาย", label: "นาย" },
-    { value: "นาง", label: "นาง" },
     { value: "นางสาว", label: "นางสาว" },
   ];
 
   const formik = useFormik({
     initialValues: {
-      prefix: "",
       first_name: "",
       last_name: "",
+      prefix: "",
       user_id: "",
-      phone: "",
     },
-    validationSchema: PersonnelSchema,
-    onSubmit: async (values, actions) => {
-      console.log("Submitting", values);
-      console.log("Submitting", actions);
 
-      await addPersonnel(values);
-      await onSuccesAddPerson();
+    validationSchema: studentSchema,
+
+    onSubmit: async (values, actions) => {
+      await createStudent({ ...values, class_id: classId });
+      await onAddStudentSuccess();
       actions.resetForm();
     },
   });
-
   return (
     <div>
-      <dialog id="add_personnel" className="modal">
+      <dialog id="add_student_modal" className="modal">
         <div className="modal-box flex flex-col items-center justify-center w-11/12">
-          <h3 className="font-bold text-lg text-center">เพิ่มข้อมูลบุคลากร</h3>
+          <h3>เพิ่มนักเรียน</h3>
 
           <form onSubmit={formik.handleSubmit}>
-            <div className="flex flex-col items-center justify-center space-y-2">
+            <div className="flex flex-col items-center justify-center space-y-3">
               <SelectInputInModal
                 name="prefix"
                 value={formik.values.prefix}
@@ -50,7 +50,20 @@ const AddPersonnel = ({ onSuccesAddPerson }) => {
                 touched={formik.touched.prefix}
                 onBlur={formik.handleBlur}
                 className="w-64 md:w-72"
-                id="add-personnel-prefix-select"
+                id="add-student-prefix-select"
+              />
+
+              <TextInputInModal
+                name="user_id"
+                placeholder="เลขที่ประจำตัวนักเรียน"
+                disabled={false}
+                value={formik.values.user_id}
+                onChange={formik.handleChange}
+                label="เลขที่ประจำตัวนักเรียน"
+                error={formik.errors.user_id}
+                touched={formik.touched.user_id}
+                onBlur={formik.handleBlur}
+                id="add-student-userid-input"
               />
 
               <TextInputInModal
@@ -63,9 +76,8 @@ const AddPersonnel = ({ onSuccesAddPerson }) => {
                 error={formik.errors.first_name}
                 touched={formik.touched.first_name}
                 onBlur={formik.handleBlur}
-                id="add-personnel-firstname-input"
+                id="add-student-firstname-input"
               />
-
               <TextInputInModal
                 name="last_name"
                 placeholder="นามสกุล"
@@ -76,48 +88,26 @@ const AddPersonnel = ({ onSuccesAddPerson }) => {
                 error={formik.errors.last_name}
                 touched={formik.touched.last_name}
                 onBlur={formik.handleBlur}
-                id="add-personnel-lastname-input"
+                id="add-student-lastname-input"
               />
 
-              <TextInputInModal
-                name="user_id"
-                placeholder="เลขที่ประจำตัวบุคลากร"
-                disabled={false}
-                value={formik.values.user_id}
-                onChange={formik.handleChange}
-                label="เลขที่ประจำตัวบุคลากร"
-                error={formik.errors.user_id}
-                touched={formik.touched.user_id}
-                onBlur={formik.handleBlur}
-                id="add-personnel-userid-input"
-              />
-
-              <TextInputInModal
-                name="phone"
-                maxLength={10}
-                placeholder="เบอร์โทรศัพท์"
-                disabled={false}
-                value={formik.values.phone}
-                onChange={formik.handleChange}
-                label="เบอร์โทรศัพท์"
-                error={formik.errors.phone}
-                touched={formik.touched.phone}
-                onBlur={formik.handleBlur}
-                id="add-personnel-phone-input"
-              />
+              
 
               <div className="flex gap-6 justify-center mt-4">
-                <button id="add-personnel-submit-button" type="submit" className="btn-green">
-                  เพิ่มข้อมูล
+                <button
+                  id="add-student-submit-button"
+                  type="submit"
+                  className="btn-green"
+                >
+                  เพิ่มนักเรียน
                 </button>
                 <button
+                  id="add-student-cancel-button"
                   type="button"
                   className="btn-red"
-                  
-                  id="add-personnel-cancel-button"
                   onClick={() => {
                     formik.resetForm();
-                    document.getElementById("add_personnel").close();
+                    document.getElementById("add_student_modal").close();
                   }}
                 >
                   ยกเลิก
@@ -131,4 +121,4 @@ const AddPersonnel = ({ onSuccesAddPerson }) => {
   );
 };
 
-export default AddPersonnel;
+export default AddStudent;

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import YearServices from "../../services/years/years.service";
 import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa";
 import ModalAddYear from "../../components/modals/AddYear";
@@ -8,20 +7,20 @@ import { useNavigate } from "react-router";
 import { FaPencilAlt } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
 import Breadcrumbs from "../../components/Breadcrumbs";
-import ArrowBack from "../../components/ArrowBack";
-import {useClassroomStore} from "../../stores/classroom.store";
+
+import { useClassroomStore } from "../../stores/classroom.store";
 import useYearSelectStore from "../../stores/year_select.store";
 const YearManagement = () => {
   // ใช้ Zustand store เพื่อจัดการข้อมูลปีการศึกษา
-  const { years, fetchData, deleteYear } = useYearSelectStore();
+  const { years, fetchYears, deleteYear } = useYearSelectStore();
   const { setClassrooms } = useClassroomStore();
   const navigate = useNavigate();
 
   // เรียกข้อมูลปีการศึกษา
   useEffect(() => {
-    fetchData();
+    fetchYears();
     setClassrooms([]); // เคลียร์ข้อมูลชั้นเรียนเมื่อเปลี่ยนปีการศึกษา
-  }, [years, fetchData, setClassrooms]);
+  }, [years, fetchYears, setClassrooms]);
 
   // เลือกปีแล้วมันจะเกิดแอ็คชั่น
   const handleSelectYear = async (year) => {
@@ -39,7 +38,6 @@ const YearManagement = () => {
     <>
       <div className="section-container">
         <div className="flex flex-row space-x-4">
-          <ArrowBack to={`/admin`} />
           <Breadcrumbs />
         </div>
         <h1 className="text-center text-2xl font-bold mt-4 mb-6">
@@ -100,7 +98,7 @@ const YearManagement = () => {
                     </div>
                   </div>
                   {/* Modal แก้ไขปีการศึกษา ย้ายออกมาอยู่ส่วนของ div ที่มี key*/}
-                  <ModalEditYear onUpdateSuccess={fetchData} year={year} />
+                  <ModalEditYear onUpdateSuccess={fetchYears} year={year} />
                 </div>
               ))}
 
@@ -115,7 +113,7 @@ const YearManagement = () => {
         </div>
       </div>
 
-      <ModalAddYear addDataSuccess={fetchData} />
+      <ModalAddYear addDataSuccess={fetchYears} />
     </>
   );
 };
