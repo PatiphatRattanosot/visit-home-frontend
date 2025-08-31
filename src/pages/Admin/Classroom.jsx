@@ -75,7 +75,6 @@ const Classroom = () => {
     setFilteredClassroom(classrooms);
   };
 
-
   return (
     <div className="section-container">
       <div className="flex items-center space-x-2">
@@ -166,20 +165,19 @@ const Classroom = () => {
             {/* row 1 */}
 
             {currentItems.map((classroom, index) => (
-              <tr
-                key={classroom._id || index}
-                
-                className="hover:bg-gray-100"
-              >
+              <tr key={classroom._id || index} className="hover:bg-gray-100">
                 <th>
                   <label>
                     <input type="checkbox" className="checkbox" />
                   </label>
                 </th>
 
-                <td onClick={() =>
-                  navigate(`/admin/year/classroom/${classroom._id}`)
-                } className="cursor-pointer hover:underline">
+                <td
+                  onClick={() =>
+                    navigate(`/admin/year/classroom/${classroom._id}`)
+                  }
+                  className="cursor-pointer hover:underline"
+                >
                   ม.{classroom.room}/{classroom.number}
                 </td>
                 <td>{classroom.students?.length}</td>

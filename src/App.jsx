@@ -26,6 +26,8 @@ import UpdateBehaviorForm from "./pages/students/behavior/UpdateBehaviorForm";
 import SDQFormStudent from "./pages/students/SDQFormStudent";
 import SDQFormParent from "./pages/students/SDQFormParent";
 import ClassroomDetail from "./pages/Admin/ClassroomDetail";
+import StudentList from "./pages/teacher/StudentList";
+import VisitInfo from "./pages/teacher/VisitInfo";
 
 function App() {
   const { user, userInfo, isLoading, signInSystem, signOutSystem } =
@@ -126,8 +128,8 @@ function App() {
               path=""
               element={<div className="text-xl">Teacher Page</div>}
             />
-            {/* <Route path="visit-info" element={<VisitInfo />} />
-            <Route path="student-list" element={<StudentList />} /> */}
+            <Route path="students" element={<StudentList />} />
+            <Route path="visit-info" element={<VisitInfo />} />
           </Route>
         </Routes>
       </div>

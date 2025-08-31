@@ -18,13 +18,6 @@ const ClassroomDetail = () => {
 
   const [selectedOption, setSelectedOption] = useState("SortToMost");
 
-  const optionsForStudents = [
-    { value: "SortToMost", label: "เรียงจากน้อยไปมาก" },
-    { value: "MostToSort", label: "เรียงจากมากไปน้อย" },
-    { value: "AlphaSortToMost", label: "เรียงตามลำดับตัวอักษร ก-ฮ" },
-    { value: "AlphaMostToSort", label: "เรียงตามลำดับตัวอักษร ฮ-ก" },
-  ];
-
   //state สำหรับนักเรียนที่กรองแล้ว
   const [filteredStudents, setFilteredStudents] = useState([]);
 
@@ -37,7 +30,10 @@ const ClassroomDetail = () => {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredStudents.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredStudents.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
   useEffect(() => {
     let filtered = classroom?.students || [];
@@ -107,14 +103,14 @@ const ClassroomDetail = () => {
         options={[
           { label: "หน้าหลัก", link: "/" },
           { label: "จัดการห้องเรียน", link: "/admin/year/classroom" },
-          { label: `ห้อง ${classroom?.number}/${classroom?.room}`, link: "#" },
+          { label: `ห้อง ${classroom?.room}/${classroom?.number}`, link: "#" },
         ]}
       />
 
       {/* หัวข้อเลขห้อง */}
       <h1 className="text-2xl text-center md:text-left font-bold mb-4">
         ห้อง{" "}
-        {classroom ? `${classroom.number}/${classroom.room}` : "Loading..."}
+        {classroom ? `${classroom.room}/${classroom.number}` : "Loading..."}
       </h1>
 
       <div className="flex justify-between items-center mb-4 md:flex-row flex-col gap-4">
@@ -129,8 +125,6 @@ const ClassroomDetail = () => {
               : "Loading..."}
           </h2>
         </div>
-
-        
 
         {/* ปุ่มเพิ่มนักเรียน */}
         <div className="space-x-2">
@@ -163,23 +157,27 @@ const ClassroomDetail = () => {
         </div>
       </div>
       <div className="flex flex-col md:flex-row justify-start mb-4 mt-4 gap-2">
+        {/* ค้นหานักเรียน */}
+        <SearchPersonnel
+          searchKeyword={searchKeyword}
+          setSearchKeyword={setSearchKeyword}
+          placeholder="ค้นหานักเรียน..."
+          setCurrentPage={setCurrentPage}
+        />
 
-          {/* ค้นหานักเรียน */}
-          <SearchPersonnel
-            searchKeyword={searchKeyword}
-            setSearchKeyword={setSearchKeyword}
-            placeholder="ค้นหานักเรียน..."
-            setCurrentPage={setCurrentPage}
-          />
-
-          {/* ตัวเลือกการเรียง */}
-          <FilterDropdown
-            setCurrentPage={setCurrentPage}
-            options={optionsForStudents}
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
-          />
-        </div>
+        {/* ตัวเลือกการเรียง */}
+        <FilterDropdown
+          setCurrentPage={setCurrentPage}
+          options={[
+            { value: "SortToMost", label: "เรียงเลข น้อย → มาก" },
+            { value: "MostToSort", label: "เรียงเลข มาก → น้อย" },
+            { value: "AlphaSortToMost", label: "ชื่อ ก → ฮ" },
+            { value: "AlphaMostToSort", label: "ชื่อ ฮ → ก" },
+          ]}
+          selectedOption={selectedOption}
+          setSelectedOption={setSelectedOption}
+        />
+      </div>
 
       {/* ตารางชื่อนักเรียน */}
       <div className="rounded-xl border border-base-300 overflow-hidden">
@@ -285,7 +283,7 @@ const ClassroomDetail = () => {
         setCurrentPage={setCurrentPage}
         totalItems={filteredStudents.length}
         itemsPerPage={itemsPerPage}
-          onPageChange={setCurrentPage}
+        onPageChange={setCurrentPage}
       />
     </div>
   );

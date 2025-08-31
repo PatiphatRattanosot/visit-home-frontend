@@ -3,7 +3,6 @@ import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import UserService from "../services/users/users.service";
 
-
 export const usePersonnelStore = create((set, get) => ({
   data: [], // state ของข้อมูลเปลี่ยนชื่อได้
   setData: (data) => set({ data }), // js ชื่อตัวแปรตรงกัน
@@ -19,7 +18,6 @@ export const usePersonnelStore = create((set, get) => ({
     } catch (error) {
       console.error(error.response.data.message);
       toast.error(error.response.data.message);
-     
     }
   },
   getPersonnelById: async (id) => {
@@ -52,51 +50,18 @@ export const usePersonnelStore = create((set, get) => ({
       console.log("เพิ่มผิดพลาดนะ", error.response.data.message);
     }
   },
-  // updatePersonnel: async (id, values) => {
-
-  //   try {
-  //     const res = await UserService.updateTeacher({ ...values, _id: id });
-  //     console.log("res", res);
-  //     if (res.status === 200) {
-  //       document.getElementById(`edit_personnel_${id}`).close();
-  //       toast.success(res.data.message);
-  //       const updatedPersonnel = get().data.map((person) =>
-  //         person._id === id ? { ...person, ...values } : person
-  //       );
-  //       set({ data: updatedPersonnel }); // อัปเดตข้อมูล personnel หลังจากแก้ไขสำเร็จ
-  //     }
-  //   } catch (error) {
-  //     toast.error(
-  //       error.response?.data?.message ||
-  //         "เกิดข้อผิดพลาดในการอัปเดตข้อมูลบุคลากร"
-  //     );
-  //   }
-  // },
   updatePersonnel: async (id, values) => {
+
     try {
       const res = await UserService.updateTeacher({ ...values, _id: id });
       console.log("res", res);
-
       if (res.status === 200) {
         document.getElementById(`edit_personnel_${id}`).close();
-
-        // ดึงข้อมูล role ของคนที่แก้ไขจาก state เดิม
-        //ยังไม่ค่อยเข้าใจ p มาจากไหน
-        const person = get().data.find((p) => p._id === id);
-        const isAdmin = person?.role?.includes("Admin");
-
-        // แสดงข้อความตาม role
-        if (isAdmin) {
-          toast.success("แก้ไขข้อมูลเจ้าหน้าที่สำเร็จ");
-        } else {
-          toast.success(res.data.message || "แก้ไขข้อมูลบุคลากรสำเร็จ");
-        }
-
-        // อัปเดตข้อมูลใน store
+        toast.success(res.data.message);
         const updatedPersonnel = get().data.map((person) =>
           person._id === id ? { ...person, ...values } : person
         );
-        set({ data: updatedPersonnel });
+        set({ data: updatedPersonnel }); // อัปเดตข้อมูล personnel หลังจากแก้ไขสำเร็จ
       }
     } catch (error) {
       toast.error(
@@ -104,7 +69,10 @@ export const usePersonnelStore = create((set, get) => ({
           "เกิดข้อผิดพลาดในการอัปเดตข้อมูลบุคลากร"
       );
     }
-  },
+
+},
+
+
 
   deletePersonnel: async (email) => {
     Swal.fire({
@@ -150,7 +118,7 @@ export const usePersonnelStore = create((set, get) => ({
       }
     });
   },
-  addAdminRole: async (email, newRole) => {
+  addAdminRole: async (email) => {
     try {
       const response = await UserService.addAdminRole(email, newRole);
 
@@ -159,9 +127,13 @@ export const usePersonnelStore = create((set, get) => ({
         get().fetchData(); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลบุคลากรใหม่
       }
     } catch (error) {
-    
-      console.error("Error changing role:", error?.response?.data?.message || "เกิดข้อผิดพลาดในการเปลี่ยนบทบาท");
-      toast.error(error?.response?.data?.message || "เกิดข้อผิดพลาดในการเปลี่ยนบทบาท");
+      console.error(
+        "Error changing role:",
+        error?.response?.data?.message || "เกิดข้อผิดพลาดในการเปลี่ยนบทบาท"
+      );
+      toast.error(
+        error?.response?.data?.message || "เกิดข้อผิดพลาดในการเปลี่ยนบทบาท"
+      );
     }
   },
   removeAdminRole: async (email, roleToRemove) => {
@@ -179,7 +151,7 @@ export const usePersonnelStore = create((set, get) => ({
             email,
             roleToRemove
           );
-          
+
           const message = response.data.message || "บทบาทถูกลบเรียบร้อยแล้ว";
 
           if (response.status === 200) {
@@ -203,6 +175,3 @@ export const usePersonnelStore = create((set, get) => ({
     }
   },
 }));
-
-
-

@@ -58,6 +58,8 @@ export const useStudentStore = create((set, get) => ({
   fetchData: async () => {
     try {
       const response = await StudentService.getAllStudents();
+      console.log(response);
+      
       set({ data: response.data });
     } catch (error) {
       console.error("Failed to fetch students:", error);

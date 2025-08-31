@@ -25,8 +25,16 @@ export const useAuthStore = create(
             } else {
               set({ userInfo: null });
             }
-          } catch {
+          } catch (error) {
             set({ userInfo: null });
+            const errorMessage =
+              error?.response?.data?.message || "ไม่พบผู้ใช้ในระบบ";
+            Swal.fire({
+              title: "เกิดข้อผิดพลาด",
+              text: errorMessage,
+              icon: "error",
+              showConfirmButton: true,
+            });
           }
         }
       });
