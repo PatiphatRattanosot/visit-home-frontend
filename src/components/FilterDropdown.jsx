@@ -1,4 +1,4 @@
-const FilterDropdown = ({ selectedOption, setSelectedOption, options }) => {
+const FilterDropdown = ({ selectedOption, setSelectedOption, options, className }) => {
   const handleChange = (e) => {
     setSelectedOption(e.target.value);
   };
@@ -7,7 +7,7 @@ const FilterDropdown = ({ selectedOption, setSelectedOption, options }) => {
     <select
       name="selectedOption"
       id="selectedOption"
-      className="select select-bordered w-40"
+      className={`${className}`}
       onChange={handleChange}
       value={selectedOption}
     >

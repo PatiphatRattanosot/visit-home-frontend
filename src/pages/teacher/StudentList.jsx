@@ -18,8 +18,7 @@ const StudentList = () => {
 
   // โหลดห้องของครู (คาดว่ามีห้องเดียว)
   useEffect(() => {
-    if (!userInfo?._id) return;
-    getClassroomByTeacherId(userInfo._id);
+    getClassroomByTeacherId(userInfo?._id);
   }, [userInfo?._id]);
 
   const currentClass =
@@ -30,17 +29,17 @@ const StudentList = () => {
     let list = currentClass?.students || [];
 
     if (searchKeyword) {
-      const q = searchKeyword.toLowerCase();
-      list = list.filter((s) => {
-        const first = s.first_name?.toLowerCase() || "";
-        const last = s.last_name?.toLowerCase() || "";
+      const keyword = searchKeyword.toLowerCase();
+      list = list.filter((student) => {
+        const first = student.first_name?.toLowerCase() || "";
+        const last = student.last_name?.toLowerCase() || "";
         const full = `${first} ${last}`;
-        const uid = String(s.user_id || "");
+        const uid = String(student.user_id || "");
         return (
-          first.includes(q) ||
-          last.includes(q) ||
-          full.includes(q) ||
-          uid.includes(q)
+          first.includes(keyword) ||
+          last.includes(keyword) ||
+          full.includes(keyword) ||
+          uid.includes(keyword)
         );
       });
     }
@@ -75,7 +74,7 @@ const StudentList = () => {
 
     setFilteredStudents(sorted);
     setCurrentPage(1);
-  }, [searchKeyword, selectedOption, classroom]); // ← ผูกกับ classroom แทน currentClass state
+  }, [searchKeyword, selectedOption, classroom]); 
 
   // pagination
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -90,20 +89,15 @@ const StudentList = () => {
       <BreadcrumbsLoop
         options={[
           { label: "หน้าหลัก", link: "/" },
-          { label: "จัดการห้องเรียน", link: "/admin/year/classroom" },
-          {
-            label: currentClass
-              ? `ห้อง ${currentClass.room}/${currentClass.number}`
-              : "Loading...",
-            link: "#",
-          },
+          { label: "รายชื่อนักเรียน", link: "/admin/year/classroom" },
+          
         ]}
       />
 
       <h1 className="text-2xl text-center md:text-left font-bold mb-4">
         ห้อง{" "}
         {currentClass
-          ? `${currentClass.room}/${currentClass.number}`
+          ? `${currentClass?.room}/${currentClass?.number}`
           : "Loading..."}
       </h1>
 
@@ -132,6 +126,7 @@ const StudentList = () => {
           ]}
           selectedOption={selectedOption}
           setSelectedOption={setSelectedOption}
+          className="select select-bordered w-42"
         />
       </div>
 
@@ -151,17 +146,17 @@ const StudentList = () => {
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((s) => (
-                <tr key={s?._id}>
+              {currentItems.map((student) => (
+                <tr key={student?._id}>
                   <td className="hidden sm:table-cell">
                     <label>
                       <input type="checkbox" className="checkbox checkbox-sm" />
                     </label>
                   </td>
-                  <td className="text-center">{s?.user_id}</td>
-                  <td>{s?.prefix}</td>
+                  <td className="text-center">{student?.user_id}</td>
+                  <td>{student?.prefix}</td>
                   <td>
-                    {s?.first_name} {s?.last_name}
+                    {student?.first_name} {student?.last_name}
                   </td>
                 </tr>
               ))}
