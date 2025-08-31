@@ -60,25 +60,26 @@ export const useClassroomStore = create((set, get) => ({
       console.error("Error in getClassroomById:", error);
     }
   },
-  getClassroomByTeacherId: async (teacherId) => {
-    try {
-      const response = await ClassroomService.getClassesByTeacherId(teacherId);
-      if (response.status === 200) {
-        const classes = Array.isArray(response?.data?.classes)
-          ? response.data.classes
-          : [];
-        set({ classroom: classes });
-      }
-      return classes;
-    } catch (error) {
-      console.error("Error in getClassroomByTeacherId:", error);
-      toast.error(
-        error?.response?.data?.message ||
-          "เกิดข้อผิดพลาดในการดึงข้อมูลชั้นเรียน"
-      );
-      return [];
+ getClassroomByTeacherId: async (teacherId) => {
+  try {
+    const response = await ClassroomService.getClassesByTeacherId(teacherId);
+    if (response.status === 200) {
+      const classes = Array.isArray(response?.data?.classes)
+        ? response.data.classes
+        : [];
+      set({ classroom: classes }); // set classroom เป็น array ห้องเรียน
+      return classes; // return array ห้องเรียน
     }
-  },
+    return [];
+  } catch (error) {
+    console.error("Error in getClassroomByTeacherId:", error);
+    toast.error(
+      error?.response?.data?.message ||
+        "เกิดข้อผิดพลาดในการดึงข้อมูลชั้นเรียน"
+    );
+    return [];
+  }
+},
   updateClassroom: async (id, values) => {
     try {
       const response = await ClassroomService.updateClass({

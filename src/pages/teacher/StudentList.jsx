@@ -1,63 +1,51 @@
 import { useEffect, useState } from "react";
 import { useClassroomStore } from "../../stores/classroom.store";
-import { useStudentStore } from "../../stores/student.store";
-import { BiSolidEdit } from "react-icons/bi";
-import { AiOutlineDelete } from "react-icons/ai";
-import AddStudentModal from "../../components/modals/AddStudent";
+import { useAuthStore } from "../../stores/auth.store";
 import BreadcrumbsLoop from "../../components/Breadcrumbs";
-import ModalEditStudent from "../../components/modals/EditStudent";
+import SearchPersonnel from "../../components/SearchPersonnel";
 import FilterDropdown from "../../components/FilterDropdown";
 import Pagination from "../../components/Pagination";
-import SearchPersonnel from "../../components/SearchPersonnel";
-import { useAuthStore } from "../../stores/auth.store";
 
 const StudentList = () => {
   const { userInfo } = useAuthStore();
-  const { classroom, getClassroomByTeacherId } = useClassroomStore();
-  const { deleteStudent } = useStudentStore();
+  const { classroom, getClassroomByTeacherId } = useClassroomStore(); // classroom = array ของห้อง
 
   const [selectedOption, setSelectedOption] = useState("SortToMost");
-
-  const optionsForstudents = [
-    { value: "SortToMost", label: "เรียงจากน้อยไปมาก" },
-    { value: "MostToSort", label: "เรียงจากมากไปน้อย" },
-    { value: "AlphaSortToMost", label: "เรียงตามลำดับตัวอักษร ก-ฮ" },
-    { value: "AlphaMostToSort", label: "เรียงตามลำดับตัวอักษร ฮ-ก" },
-  ];
-
-  //state สำหรับนักเรียนที่กรองแล้ว
-  const [filteredstudents, setFilteredstudents] = useState([]);
-
-  //state สำหรับเก็บ keyword การค้นหารายชื่อนักเรียนและเลข
   const [searchKeyword, setSearchKeyword] = useState("");
-
-  // สร้าง state สำหรับทำ Paginations
+  const [filteredStudents, setFilteredStudents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredstudents.slice(indexOfFirstItem, indexOfLastItem);
-
+  // โหลดห้องของครู (คาดว่ามีห้องเดียว)
   useEffect(() => {
-    let filtered = classroom[0]?.students || [];
+    if (!userInfo?._id) return;
+    getClassroomByTeacherId(userInfo._id);
+  }, [userInfo?._id]);
+
+  const currentClass =
+    Array.isArray(classroom) && classroom.length ? classroom[0] : null;
+
+  // ค้นหา + เรียง (แบบเดียวกับ ClassroomDetail)
+  useEffect(() => {
+    let list = currentClass?.students || [];
+
     if (searchKeyword) {
-      const keyword = searchKeyword.toLowerCase();
-      filtered = filtered.filter((student) => {
-        const firstName = classroom[0].studens[0].first_name?.toLowerCase() || "";
-        const lastName = classroom[0].studens[0].toLowerCase() || "";
-        const userId = String(classes[0].studens[0].user_id || "");
-        const fullName = `${firstName} ${lastName}`;
+      const q = searchKeyword.toLowerCase();
+      list = list.filter((s) => {
+        const first = s.first_name?.toLowerCase() || "";
+        const last = s.last_name?.toLowerCase() || "";
+        const full = `${first} ${last}`;
+        const uid = String(s.user_id || "");
         return (
-          firstName.includes(keyword) ||
-          lastName.includes(keyword) ||
-          fullName.includes(keyword) ||
-          userId.includes(keyword)
+          first.includes(q) ||
+          last.includes(q) ||
+          full.includes(q) ||
+          uid.includes(q)
         );
       });
     }
 
-    let sorted = [...filtered];
+    let sorted = [...list];
     switch (selectedOption) {
       case "SortToMost":
         sorted.sort((a, b) => Number(a.user_id) - Number(b.user_id));
@@ -84,210 +72,128 @@ const StudentList = () => {
       default:
         break;
     }
-    setFilteredstudents(sorted);
-    setCurrentPage(1); // รีเซ็ตไปที่หน้าแรกเมื่อมีการเปลี่ยนแปลงการค้นหาหรือการกรอง
-  }, [searchKeyword, classroom, selectedOption]);
 
-  useEffect(() => {
-    // Fetch classroom details
-    getClassroomByTeacherId(userInfo._id);
-  }, [userInfo._id, getClassroomByTeacherId]);
+    setFilteredStudents(sorted);
+    setCurrentPage(1);
+  }, [searchKeyword, selectedOption, classroom]); // ← ผูกกับ classroom แทน currentClass state
 
-  const handleDeleteStudent = async (email) => {
-    const ok = await deleteStudent(email); // ← รอผลลบ (true/false) จาก Swal flow
-    if (ok) {
-      await getClassroomByTeacherId(userInfo._id); // ← ค่อยรีเฟรชห้องเรียน
-    }
-  };
-
-  console.log("hello student", classroom.students[0]);
+  // pagination
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredStudents.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
   return (
     <div className="section-container">
-      {/* breadcrumb */}
       <BreadcrumbsLoop
         options={[
           { label: "หน้าหลัก", link: "/" },
           { label: "จัดการห้องเรียน", link: "/admin/year/classroom" },
-          { label: `ห้อง ${classroom?.number}/${classroom?.room}`, link: "#" },
+          {
+            label: currentClass
+              ? `ห้อง ${currentClass.room}/${currentClass.number}`
+              : "Loading...",
+            link: "#",
+          },
         ]}
       />
 
-      {/* หัวข้อเลขห้อง */}
       <h1 className="text-2xl text-center md:text-left font-bold mb-4">
         ห้อง{" "}
-        {classroom ? `${classroom[0].number}/${classroom[0].room}` : "Loading..."}
+        {currentClass
+          ? `${currentClass.room}/${currentClass.number}`
+          : "Loading..."}
       </h1>
 
-      <div className="flex justify-between items-center mb-4 md:flex-row flex-col gap-4">
-        <div>
-          {/* ชื่อคุณครูที่ปรึกษา */}
-          <h2 className="text-xl font-semibold mb-2">
-            คุณครูที่ปรึกษา:{" "}
-            {classroom
-              ? `${useAuthStore().userInfo.first_name}` +
-                " " +
-                `${useAuthStore().userInfo.last_name}`
-              : "Loading..."}
-          </h2>
-        </div>
-
-        
-
-        {/* ปุ่มเพิ่มนักเรียน */}
-        <div className="space-x-2">
-          <input
-            type="file"
-            accept=".xlsx"
-            className="hidden"
-            id="upload_excel"
-          />
-          <button
-            className="btn-blue"
-            onClick={() => {
-              document.getElementById("upload_excel").click();
-            }}
-          >
-            เพิ่มนักเรียนจากไฟล์ Excel...
-          </button>
-          <button
-            className="btn-green"
-            onClick={() =>
-              document.getElementById("add_student_modal").showModal()
-            }
-          >
-            เพิ่มนักเรียน
-          </button>
-          <AddStudentModal
-            classId={userInfo._id}
-            onAddstudentsuccess={() => getClassroomByTeacherId(userInfo._id)}
-          />
-        </div>
+      <div>
+        <h2 className="text-xl font-semibold mb-2">
+          คุณครูที่ปรึกษา:{" "}
+          {userInfo
+            ? `${userInfo.first_name} ${userInfo.last_name}`
+            : "Loading..."}
+        </h2>
       </div>
-      <div className="flex flex-col md:flex-row justify-start mb-4 mt-4 gap-2">
 
-          {/* ค้นหานักเรียน */}
-          <SearchPersonnel
-            searchKeyword={searchKeyword}
-            setSearchKeyword={setSearchKeyword}
-            placeholder="ค้นหานักเรียน..."
-            setCurrentPage={setCurrentPage}
-          />
+      <div className="flex flex-col md:flex-row items-center gap-2 mb-4">
+        <SearchPersonnel
+          searchKeyword={searchKeyword}
+          setSearchKeyword={setSearchKeyword}
+          placeholder="ค้นหานักเรียน..."
+          setCurrentPage={setCurrentPage}
+        />
+        <FilterDropdown
+          options={[
+            { value: "SortToMost", label: "เรียงเลข น้อย → มาก" },
+            { value: "MostToSort", label: "เรียงเลข มาก → น้อย" },
+            { value: "AlphaSortToMost", label: "ชื่อ ก → ฮ" },
+            { value: "AlphaMostToSort", label: "ชื่อ ฮ → ก" },
+          ]}
+          selectedOption={selectedOption}
+          setSelectedOption={setSelectedOption}
+        />
+      </div>
 
-          {/* ตัวเลือกการเรียง */}
-          <FilterDropdown
-            setCurrentPage={setCurrentPage}
-            options={optionsForstudents}
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
-          />
-        </div>
-
-      {/* ตารางชื่อนักเรียน */}
       <div className="rounded-xl border border-base-300 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="table table-zebra w-full text-xs sm:text-sm">
             <thead>
               <tr>
-                {/* ซ่อน checkbox บนจอเล็ก */}
                 <th className="hidden sm:table-cell w-10">
                   <label>
                     <input type="checkbox" className="checkbox checkbox-sm" />
                   </label>
                 </th>
-
-                <th className="text-center">
-                  {/* สลับข้อความตามขนาดจอ */}
-                  <span className="hidden sm:inline">
-                    เลขที่ประจำตัวนักเรียน
-                  </span>
-                  <span className="inline sm:hidden">เลขประจำตัว</span>
-                </th>
-
-                <th className="">คำนำหน้า</th>
-                <th className="">ชื่อ - นามสกุล</th>
-
-                <th className="text-center">
-                  {/* ทำให้ปุ่มเล็กลงบนมือถือ */}
-                  <span>แก้ไข/ลบ</span>
-                </th>
+                <th className="text-center">เลขที่ประจำตัวนักเรียน</th>
+                <th>คำนำหน้า</th>
+                <th>ชื่อ - นามสกุล</th>
               </tr>
             </thead>
-
             <tbody>
-              {currentItems.map((student) => (
-                <tr key={student?._id}>
-                  {/* ซ่อน checkbox บนจอเล็ก */}
+              {currentItems.map((s) => (
+                <tr key={s?._id}>
                   <td className="hidden sm:table-cell">
                     <label>
                       <input type="checkbox" className="checkbox checkbox-sm" />
                     </label>
                   </td>
-
-                  <td className="text-center">{classes[0].students[0].user_id}</td>
-                  <td>{classes[0].students[0].prefix}</td>
+                  <td className="text-center">{s?.user_id}</td>
+                  <td>{s?.prefix}</td>
                   <td>
-                    {classes[0].students[0].first_name} {classes[0].students[0].last_name}
-                  </td>
-
-                  <td className="text-center">
-                    <div className="flex justify-center gap-1 sm:gap-2">
-                      <button
-                        onClick={() => {
-                          document
-                            .getElementById(`edit_student_${student?._id}`)
-                            .showModal();
-                        }}
-                        className="btn btn-warning btn-xs sm:btn-sm"
-                      >
-                        {/* ใช้ขนาดไอคอนตาม font-size */}
-                        <BiSolidEdit className="text-base sm:text-lg" />
-                      </button>
-                      <ModalEditStudent
-                        id={student?._id}
-                        classId={teacherId}
-                        onUpdateStudent={() => getClassroomByTeacherId(teacherId)}
-                      />
-                      <button
-                        onClick={() => handleDeleteStudent(student?.email)}
-                        className="btn btn-error btn-xs sm:btn-sm"
-                      >
-                        <AiOutlineDelete className="text-base sm:text-lg" />
-                      </button>
-                    </div>
+                    {s?.first_name} {s?.last_name}
                   </td>
                 </tr>
               ))}
+              {currentItems.length === 0 && (
+                <tr>
+                  <td
+                    colSpan={4}
+                    className="text-center text-base text-gray-500 py-6"
+                  >
+                    ไม่พบข้อมูลนักเรียน
+                  </td>
+                </tr>
+              )}
             </tbody>
-
             <tfoot>
               <tr>
-                {/* ซ่อน checkbox บนจอเล็ก */}
                 <th className="hidden sm:table-cell"></th>
-
-                <th className="text-center">
-                  <span className="hidden sm:inline">
-                    เลขที่ประจำตัวนักเรียน
-                  </span>
-                  <span className="inline sm:hidden">เลขประจำตัว</span>
-                </th>
-
+                <th className="text-center">เลขที่ประจำตัวนักเรียน</th>
                 <th>คำนำหน้า</th>
                 <th>ชื่อ - นามสกุล</th>
-                <th className="text-center">แก้ไข/ลบ</th>
               </tr>
             </tfoot>
           </table>
         </div>
       </div>
 
-      {/* pagination */}
       <Pagination
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        totalItems={filteredstudents.length}
+        totalItems={filteredStudents.length}
         itemsPerPage={itemsPerPage}
-          onPageChange={setCurrentPage}
+        onPageChange={setCurrentPage}
       />
     </div>
   );
