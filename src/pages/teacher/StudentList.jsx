@@ -74,7 +74,7 @@ const StudentList = () => {
 
     setFilteredStudents(sorted);
     setCurrentPage(1);
-  }, [searchKeyword, selectedOption, classroom]); 
+  }, [searchKeyword, selectedOption, classroom]);
 
   // pagination
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -90,7 +90,6 @@ const StudentList = () => {
         options={[
           { label: "หน้าหลัก", link: "/" },
           { label: "รายชื่อนักเรียน", link: "/admin/year/classroom" },
-          
         ]}
       />
 

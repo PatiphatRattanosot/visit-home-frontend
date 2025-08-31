@@ -18,8 +18,6 @@ const ClassroomDetail = () => {
 
   const [selectedOption, setSelectedOption] = useState("SortToMost");
 
-
-
   //state สำหรับนักเรียนที่กรองแล้ว
   const [filteredStudents, setFilteredStudents] = useState([]);
 
@@ -32,7 +30,10 @@ const ClassroomDetail = () => {
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredStudents.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredStudents.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
   useEffect(() => {
     let filtered = classroom?.students || [];
@@ -125,8 +126,6 @@ const ClassroomDetail = () => {
           </h2>
         </div>
 
-        
-
         {/* ปุ่มเพิ่มนักเรียน */}
         <div className="space-x-2">
           <input
@@ -158,28 +157,27 @@ const ClassroomDetail = () => {
         </div>
       </div>
       <div className="flex flex-col md:flex-row justify-start mb-4 mt-4 gap-2">
+        {/* ค้นหานักเรียน */}
+        <SearchPersonnel
+          searchKeyword={searchKeyword}
+          setSearchKeyword={setSearchKeyword}
+          placeholder="ค้นหานักเรียน..."
+          setCurrentPage={setCurrentPage}
+        />
 
-          {/* ค้นหานักเรียน */}
-          <SearchPersonnel
-            searchKeyword={searchKeyword}
-            setSearchKeyword={setSearchKeyword}
-            placeholder="ค้นหานักเรียน..."
-            setCurrentPage={setCurrentPage}
-          />
-
-          {/* ตัวเลือกการเรียง */}
-          <FilterDropdown
-            setCurrentPage={setCurrentPage}
-            options={[
+        {/* ตัวเลือกการเรียง */}
+        <FilterDropdown
+          setCurrentPage={setCurrentPage}
+          options={[
             { value: "SortToMost", label: "เรียงเลข น้อย → มาก" },
             { value: "MostToSort", label: "เรียงเลข มาก → น้อย" },
             { value: "AlphaSortToMost", label: "ชื่อ ก → ฮ" },
             { value: "AlphaMostToSort", label: "ชื่อ ฮ → ก" },
           ]}
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
-          />
-        </div>
+          selectedOption={selectedOption}
+          setSelectedOption={setSelectedOption}
+        />
+      </div>
 
       {/* ตารางชื่อนักเรียน */}
       <div className="rounded-xl border border-base-300 overflow-hidden">
@@ -285,7 +283,7 @@ const ClassroomDetail = () => {
         setCurrentPage={setCurrentPage}
         totalItems={filteredStudents.length}
         itemsPerPage={itemsPerPage}
-          onPageChange={setCurrentPage}
+        onPageChange={setCurrentPage}
       />
     </div>
   );
