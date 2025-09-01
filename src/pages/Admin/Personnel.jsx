@@ -8,7 +8,6 @@ import Pagination from "../../components/Pagination";
 import ModalAddPersonnel from "../../components/modals/AddPersonnel";
 import ModalEditPersonnel from "../../components/modals/EditPersonnel";
 import Breadcrumbs from "../../components/Breadcrumbs";
-import ArrowBack from "../../components/ArrowBack";
 import { usePersonnelStore } from "../../stores/admin.store"; // ใช้ store ที่สร้างขึ้นมา
 const Personnel = () => {
   // ใช้ Zustand store เพื่อจัดการข้อมูลบุคลากร
@@ -50,61 +49,58 @@ const Personnel = () => {
     setFilteredPersonnel(personnel); // ตั้งค่าเริ่มต้นให้ personnel ทั้งหมด
   }, []);
 
- useEffect(() => {
-  let filtered = personnel;
+  useEffect(() => {
+    let filtered = personnel;
 
- 
-  if (searchKeyword) {
-    // toLoqwer() ใช้เพื่อเปลี่ยนตัวอักษรเป็นตัวพิมพ์เล็ก
-    // trim() ใช้เพื่อลบช่องว่างที่ไม่จำเป็น และ toLowerCase() เพื่อเปรียบเทียบแบบไม่สนใจตัวพิมพ์ใหญ่-เล็ก
-    const keyword = searchKeyword.trim().toLowerCase();
-    filtered = personnel.filter((person) => {
-      const firstName = person.first_name.toLowerCase();
-      const lastName = person.last_name.toLowerCase();
-      const fullName = `${person.first_name} ${person.last_name}`.toLowerCase();
-      const userId = person.user_id.toString();
+    if (searchKeyword) {
+      // toLoqwer() ใช้เพื่อเปลี่ยนตัวอักษรเป็นตัวพิมพ์เล็ก
+      // trim() ใช้เพื่อลบช่องว่างที่ไม่จำเป็น และ toLowerCase() เพื่อเปรียบเทียบแบบไม่สนใจตัวพิมพ์ใหญ่-เล็ก
+      const keyword = searchKeyword.trim().toLowerCase();
+      filtered = personnel.filter((person) => {
+        const firstName = person.first_name.toLowerCase();
+        const lastName = person.last_name.toLowerCase();
+        const fullName =
+          `${person.first_name} ${person.last_name}`.toLowerCase();
+        const userId = person.user_id.toString();
 
-      return (
-        firstName.includes(keyword) ||
-        lastName.includes(keyword) ||
-        fullName.includes(keyword) ||
-        userId.includes(keyword)
-      );
-    });
-  }
-
-  
-  let sorted = [...filtered];
-  switch (selectedOption) {
-    case "SortToMost":
-      sorted.sort((a, b) => a.user_id - b.user_id);
-      break;
-    case "MostToSort":
-      sorted.sort((a, b) => b.user_id - a.user_id);
-      break;
-    case "AlphaSortToMost":
-      sorted.sort((a, b) => {
-        const nameA = `${a.prefix}${a.first_name}${a.last_name}`;
-        const nameB = `${b.prefix}${b.first_name}${b.last_name}`;
-        return nameB.localeCompare(nameA, "th", { sensitivity: "base" });
+        return (
+          firstName.includes(keyword) ||
+          lastName.includes(keyword) ||
+          fullName.includes(keyword) ||
+          userId.includes(keyword)
+        );
       });
-      break;
-    case "AlphaMostToSort":
-      sorted.sort((a, b) => {
-        const nameA = `${a.prefix}${a.first_name}${a.last_name}`;
-        const nameB = `${b.prefix}${b.first_name}${b.last_name}`;
-        // { sensitivity: "base" } คือการเปรียบเทียบแบบไม่สนใจตัวพิมพ์ใหญ่-เล็ก
-        // localeCompare() ใช้สำหรับเปรียบเทียบสตริงตามภาษาที่กำหนด
-        return nameA.localeCompare(nameB, "th", { sensitivity: "base" });
-      });
-      break;
-  }
+    }
 
-  
-  setFilteredPersonnel(sorted);
-  setCurrentPage(1); 
-}, [searchKeyword, selectedOption, personnel]);
+    let sorted = [...filtered];
+    switch (selectedOption) {
+      case "SortToMost":
+        sorted.sort((a, b) => a.user_id - b.user_id);
+        break;
+      case "MostToSort":
+        sorted.sort((a, b) => b.user_id - a.user_id);
+        break;
+      case "AlphaSortToMost":
+        sorted.sort((a, b) => {
+          const nameA = `${a.prefix}${a.first_name}${a.last_name}`;
+          const nameB = `${b.prefix}${b.first_name}${b.last_name}`;
+          return nameB.localeCompare(nameA, "th", { sensitivity: "base" });
+        });
+        break;
+      case "AlphaMostToSort":
+        sorted.sort((a, b) => {
+          const nameA = `${a.prefix}${a.first_name}${a.last_name}`;
+          const nameB = `${b.prefix}${b.first_name}${b.last_name}`;
+          // { sensitivity: "base" } คือการเปรียบเทียบแบบไม่สนใจตัวพิมพ์ใหญ่-เล็ก
+          // localeCompare() ใช้สำหรับเปรียบเทียบสตริงตามภาษาที่กำหนด
+          return nameA.localeCompare(nameB, "th", { sensitivity: "base" });
+        });
+        break;
+    }
 
+    setFilteredPersonnel(sorted);
+    setCurrentPage(1);
+  }, [searchKeyword, selectedOption, personnel]);
 
   const showStatus = (status) => {
     switch (status) {
@@ -141,7 +137,6 @@ const Personnel = () => {
   return (
     <div className="section-container w-full">
       <div className="flex flex-row space-x-4">
-        <ArrowBack backPath="/admin" />
         <Breadcrumbs />
       </div>
 
@@ -157,9 +152,9 @@ const Personnel = () => {
 
         {/* ช่องค้นหา */}
         <SearchPersonnel
-  setSearchKeyword={setSearchKeyword}
-  setCurrentPage={setCurrentPage}
-/>
+          setSearchKeyword={setSearchKeyword}
+          setCurrentPage={setCurrentPage}
+        />
 
         {/* ปุ่มเพิ่มบุคลากร */}
         <button
