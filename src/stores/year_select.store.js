@@ -13,11 +13,10 @@ const useYearSelectStore = create(
     fetchYears: async () => {
       try {
         const res = await YearServices.getYears();
-        
+
         if (res.status === 200) {
           const sorted = res.data.sort((a, b) => b.year - a.year);
           set({ years: sorted });
-         
         }
       } catch (error) {
         console.log("error fetching years:", error);
@@ -75,8 +74,12 @@ const useYearSelectStore = create(
       } catch (err) {
         console.log(err);
         toast.error(
-          err.response?.data?.message || "เกิดข้อผิดพลาดในการแก้ไขปีการศึกษา"
+          err.response?.data?.message || "เกิดข้อผิดพลาดในการแก้ไขปีการศึกษา",
+          {
+            duration: 3500,
+          }
         );
+        document.getElementById(`Edit_year_${id}`).close();
       }
     },
 
