@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import DateInput from "../../components/DateInput";
 import FilterDropdown from "../../components/FilterDropdown";
 import SearchClass from "../../components/SearchClassroom";
@@ -17,6 +17,7 @@ const Classroom = () => {
   const { years, fetchYears, getYearsByYear, selectedYear, setSelectedYear } =
     useYearSelectStore();
   const navigate = useNavigate();
+  const { yearId, year } = useParams();
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   // สร้าง state สำหรับเก็บข้อมูลชั้นเรียนที่กรองแล้ว
   // เพื่อใช้ในการแสดงผลในตาราง

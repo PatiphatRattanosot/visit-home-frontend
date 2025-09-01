@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import YearServices from "../services/years/years.service";
 const useYearSelectStore = create(
-  persist((set) => ({
+  persist((set, get) => ({
     selectedYear: null,
     years: [],
     setSelectedYear: (year) => set({ selectedYear: year }),
@@ -13,11 +13,10 @@ const useYearSelectStore = create(
     fetchYears: async () => {
       try {
         const res = await YearServices.getYears();
-        
+
         if (res.status === 200) {
           const sorted = res.data.sort((a, b) => b.year - a.year);
           set({ years: sorted });
-         
         }
       } catch (error) {
         console.log("error fetching years:", error);
@@ -30,7 +29,7 @@ const useYearSelectStore = create(
         });
         if (res.status === 201) {
           toast.success(res.data.message);
-          get().fetchData(); // เรียกใช้ fetchData เพื่ออัปเดตข้อมูล
+          get().fetchYears(); // เรียกใช้ fetchData เพื่ออัปเดตข้อมูล
           document.getElementById("add_year").close(); // ปิด modal
         }
       } catch (err) {
@@ -69,14 +68,18 @@ const useYearSelectStore = create(
 
         if (response.status === 200) {
           toast.success("แก้ไขปีการศึกษาเรียบร้อยแล้ว");
-          get().fetchData(); // เรียกใช้ fetchData เพื่ออัปเดตข้อมูล
+          get().fetchYears(); // เรียกใช้ fetchYears เพื่ออัปเดตข้อมูล
           document.getElementById(`Edit_year_${id}`).close();
         }
       } catch (err) {
         console.log(err);
         toast.error(
-          err.response?.data?.message || "เกิดข้อผิดพลาดในการแก้ไขปีการศึกษา"
+          err.response?.data?.message || "เกิดข้อผิดพลาดในการแก้ไขปีการศึกษา",
+          {
+            duration: 3500,
+          }
         );
+        document.getElementById(`Edit_year_${id}`).close();
       }
     },
 
@@ -102,7 +105,7 @@ const useYearSelectStore = create(
                 showConfirmButton: false,
                 timer: 1500,
               }).then(() => {
-                get().fetchData(); // เรียกใช้ fetchData เพื่ออัปเดตข้อมูล
+                get().fetchYears(); // เรียกใช้ fetchData เพื่ออัปเดตข้อมูล
               });
             }
           } catch (err) {

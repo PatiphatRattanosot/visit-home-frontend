@@ -93,7 +93,7 @@ export const usePersonnelStore = create((set, get) => ({
             text: response.data.message,
             icon: "success",
             showConfirmButton: false,
-            timer: 1500,
+            timer: 3500,
           }).then(() => {
             const updatedPersonnel = get().data.filter(
               (person) => person.email !== email
@@ -118,9 +118,9 @@ export const usePersonnelStore = create((set, get) => ({
       }
     });
   },
-  addAdminRole: async (email) => {
+  addAdminRole: async (email, roleToAdd) => {
     try {
-      const response = await UserService.addAdminRole(email, newRole);
+      const response = await UserService.addAdminRole(email, roleToAdd);
 
       if (response.status === 200) {
         toast.success(response.data.message || "บทบาทถูกเปลี่ยนเรียบร้อยแล้ว");
