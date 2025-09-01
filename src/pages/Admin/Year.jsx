@@ -12,7 +12,8 @@ import { useClassroomStore } from "../../stores/classroom.store";
 import useYearSelectStore from "../../stores/year_select.store";
 const YearManagement = () => {
   // ใช้ Zustand store เพื่อจัดการข้อมูลปีการศึกษา
-  const { years, fetchYears, deleteYear ,setSelectedYear } = useYearSelectStore();
+  const { years, fetchYears, deleteYear, setSelectedYear } =
+    useYearSelectStore();
   const { setClassrooms } = useClassroomStore();
   const navigate = useNavigate();
 
@@ -40,7 +41,10 @@ const YearManagement = () => {
       <div className="section-container">
         <div className="flex flex-row space-x-4">
           <BreadcrumbsLoop
-            options={[{ label: "หน้าหลัก", link: "/" }, { label: "จัดการปีการศึกษา" }]}
+            options={[
+              { label: "หน้าหลัก", link: "/" },
+              { label: "จัดการปีการศึกษา" },
+            ]}
           />
         </div>
         <h1 className="text-center text-2xl font-bold mt-4 mb-6">
