@@ -65,19 +65,6 @@ const Relation = ({ page, setPage, formik }) => {
                 touched={formik.touched.family_relation_status}
               />
             </div>
-            {/* เวลาร่วมกัน */}
-            <Text
-              name="family_time"
-              label="สมาชิกในครอบครัวมีเวลาอยู่ร่วมกันประมาณกี่ชั่วโมงต่อวัน"
-              onChange={formik.handleChange}
-              value={formik.values.family_time}
-              placeholder="เวลาร่วมกัน"
-              onBlur={formik.handleBlur}
-              error={formik.errors.family_time}
-              touched={formik.touched.family_time}
-              type="number"
-              maxLength={24}
-            />
             {/* จำนวนสมาชิกในครอบครัว */}
             <Text
               label="จำนวนสมาชิกในครอบครัว (รวมตัวนักเรียนด้วย)"
@@ -90,6 +77,19 @@ const Relation = ({ page, setPage, formik }) => {
               type="number"
               maxLength={20}
               minLength={1}
+            />
+            {/* เวลาร่วมกัน */}
+            <Text
+              name="family_time"
+              label="สมาชิกในครอบครัวมีเวลาอยู่ร่วมกันประมาณกี่ชั่วโมงต่อวัน"
+              onChange={formik.handleChange}
+              value={formik.values.family_time}
+              placeholder="เวลาร่วมกัน"
+              onBlur={formik.handleBlur}
+              error={formik.errors.family_time}
+              touched={formik.touched.family_time}
+              type="number"
+              maxLength={24}
             />
             {/* ความสัมพันธ์ */}
             <Select

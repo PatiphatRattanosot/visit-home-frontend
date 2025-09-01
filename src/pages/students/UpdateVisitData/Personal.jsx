@@ -55,7 +55,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
             {/* เบอร์โทรศัพท์นักเรียน */}
-            {/* <div className="md:col-span-2 md:pr-3 md:w-1/2">
+            <div className="md:col-span-2 md:pr-3 md:w-1/2">
               <Text
                 name="student_phone"
                 label="เบอร์โทรศัพท์นักเรียน"
@@ -67,7 +67,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
                 touched={formik.touched.student_phone}
                 type="tel"
               />
-            </div> */}
+            </div>
             {/* ชื่อและคำนำหน้า */}
             <div className="flex space-x-2">
               {/* คำนำหน้า บิดา */}

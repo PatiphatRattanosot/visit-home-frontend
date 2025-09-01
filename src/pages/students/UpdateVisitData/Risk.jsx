@@ -129,7 +129,7 @@ const Risk = ({ page, setPage, formik }) => {
             {/* สวัสดิการหรือความปลอดภัย */}
             <div className="md:col-span-2">
               <Checkbox
-                label="เสี่ยงด้านสวัสดิการหรือความปลอดภัย"
+                label="ความเสี่ยงด้านสวัสดิการหรือความปลอดภัย"
                 name="welfare_and_safety"
                 options={welfare_and_safety}
                 value={formik.values.welfare_and_safety}

@@ -114,6 +114,25 @@ const Behavior = ({ page, setPage, formik }) => {
                 options={student_resp}
                 setFieldValue={formik.setFieldValue}
               />
+              <div className="md:w-1/2 mt-4 md:pr-3">
+                <input
+                  type="text"
+                  placeholder="ภาระงานความรับผิดชอบ อื่นๆ"
+                  className="input w-full"
+                  name="other_student_resp"
+                  value={formik.values.other_student_resp}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.errors.other_student_resp}
+                  touched={formik.touched.other_student_resp}
+                />
+                <div className="text-red-500 text-xs mt-2">
+                  {formik.errors.other_student_resp &&
+                    formik.touched.other_student_resp && (
+                      <div>{formik.errors.other_student_resp}</div>
+                    )}
+                </div>
+              </div>
             </div>
             {/* กิจกรรมยามว่าง */}
             <div className="md:col-span-2 flex flex-col">
@@ -140,7 +159,7 @@ const Behavior = ({ page, setPage, formik }) => {
                   error={formik.errors.other_hobbies}
                   touched={formik.touched.other_hobbies}
                 />
-                <div className="text-red-500 text-sm">
+                <div className="text-red-500 text-xs mt-2">
                   {formik.errors.other_hobbies &&
                     formik.touched.other_hobbies && (
                       <div>{formik.errors.other_hobbies}</div>
@@ -216,7 +235,7 @@ const Behavior = ({ page, setPage, formik }) => {
                     error={formik.errors.other_violent_behav}
                     touched={formik.touched.other_violent_behav}
                   />
-                  <div className="text-red-500 text-sm">
+                  <div className="text-red-500 text-xs mt-2">
                     {formik.errors.other_violent_behav &&
                       formik.touched.other_violent_behav && (
                         <div>{formik.errors.other_violent_behav}</div>
@@ -306,7 +325,7 @@ const Behavior = ({ page, setPage, formik }) => {
                   error={formik.errors.other_violent_behav}
                   touched={formik.touched.other_violent_behav}
                 />
-                <div className="text-red-500 text-sm">
+                <div className="text-red-500 text-xs mt-2">
                   {formik.errors.other_violent_behav &&
                     formik.touched.other_violent_behav && (
                       <div>{formik.errors.other_violent_behav}</div>
