@@ -118,9 +118,9 @@ export const usePersonnelStore = create((set, get) => ({
       }
     });
   },
-  addAdminRole: async (email) => {
+  addAdminRole: async (email, roleToAdd) => {
     try {
-      const response = await UserService.addAdminRole(email, newRole);
+      const response = await UserService.addAdminRole(email, roleToAdd);
 
       if (response.status === 200) {
         toast.success(response.data.message || "บทบาทถูกเปลี่ยนเรียบร้อยแล้ว");

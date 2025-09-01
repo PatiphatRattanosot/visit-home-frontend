@@ -77,6 +77,7 @@ function App() {
             <Route path="year/classroom">
               <Route path="" element={<Classroom />} />
               <Route path=":classroomId" element={<ClassroomDetail />} />
+              <Route path=":yearId/:year" element={<Classroom />} /> 
             </Route>
           </Route>
 

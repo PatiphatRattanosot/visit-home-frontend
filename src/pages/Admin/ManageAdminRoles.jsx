@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import FilterDropdown from "../../components/FilterDropdown";
 import SearchPersonnel from "../../components/SearchPersonnel";
 import Pagination from "../../components/Pagination";
-import Breadcrumbs from "../../components/Breadcrumbs";
-import ArrowBack from "./../../components/ArrowBack";
+import BreadcrumbsLoop from "../../components/Breadcrumbs";
 import { usePersonnelStore } from "../../stores/admin.store"; // ใช้ store ที่สร้างขึ้นมา
 const ManageAdminRoles = () => {
   // ใช้ Zustand store เพื่อจัดการข้อมูลบุคลากร
@@ -114,8 +113,9 @@ const ManageAdminRoles = () => {
     <div className="section-container">
       <div className="overflow-x-auto">
         <div className="flex flex-row space-x-4">
-          <ArrowBack backPath="/admin" />
-          <Breadcrumbs />
+          <BreadcrumbsLoop 
+            options={[{ label: "หน้าหลัก", link: "/" }, { label: "จัดการบทบาทผู้ดูแล" }]}
+          />
         </div>
         {/* หัวข้อ */}
         <p className="text-xl text-center">หน้าจัดการบทบาทผู้ดูแล</p>
