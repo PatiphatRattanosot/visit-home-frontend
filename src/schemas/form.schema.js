@@ -1,7 +1,7 @@
 import { string, number, object, array } from "yup";
 
 const onlyThaiLang = /^[\u0E00-\u0E7F\s]+$/;
-const phoneRule = /^(\+66|0)([1-9]\d{8})$/;
+const phoneRule = /^0[1-9]\d{8}$/;
 const choiceOptions = /^[0-4]$/;
 
 export const initialFormValues = {
