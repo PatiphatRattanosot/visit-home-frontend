@@ -1,24 +1,50 @@
-const Stepper = ({ step, path }) => {
+import React from "react";
+
+const Stepper = ({ page, setPage }) => {
   return (
-    <ul className="steps">
-      <a className={`step ${step >= 1 && "step-warning"}`} href={path?.stepOne}>
+    <ul className="steps steps-horizontal">
+      <li
+        data-content={page > 1 ? "✓" : "1"}
+        className={`step ${page >= 1 ? "step-warning" : ""} cursor-pointer`}
+        onClick={() => setPage(1)}
+      >
         <p className="hidden md:block">ข้อมูลส่วนตัว</p>
-      </a>
-      <a className={`step ${step >= 2 && "step-warning"}`} href={path?.stepTwo}>
-        <p className="hidden md:block">ความสัมพันธ์ในครอบครัว</p>
-      </a>
-      <a
-        className={`step ${step >= 3 && "step-warning"}`}
-        href={path?.stepThree}
+      </li>
+      <li
+        data-content={page > 2 ? "✓" : "2"}
+        className={`step ${page >= 2 ? "step-warning" : ""} cursor-pointer`}
+        onClick={() => setPage(2)}
       >
-        <p className="hidden md:block">สถานะของครอบครัว</p>
-      </a>
-      <a
-        className={`step ${step >= 4 && "step-warning"}`}
-        href={path?.stepFour}
+        <p className="hidden md:block">ความสัมพันธ์</p>
+      </li>
+      <li
+        data-content={page > 3 ? "✓" : "3"}
+        className={`step ${page >= 3 ? "step-warning" : ""} cursor-pointer`}
+        onClick={() => setPage(3)}
       >
-        <p className="hidden md:block">พฤติกรรมและความเสี่ยง</p>
-      </a>
+        <p className="hidden md:block">สถานะครัวเรือน</p>
+      </li>
+      <li
+        data-content={page > 4 ? "✓" : "4"}
+        className={`step ${page >= 4 ? "step-warning" : ""} cursor-pointer`}
+        onClick={() => setPage(4)}
+      >
+        <p className="hidden md:block">พฤติกรรม</p>
+      </li>
+      <li
+        data-content={page > 5 ? "✓" : "5"}
+        className={`step ${page >= 5 ? "step-warning" : ""} cursor-pointer`}
+        onClick={() => setPage(5)}
+      >
+        <p className="hidden md:block">ความเสี่ยง</p>
+      </li>
+      <li
+        data-content={page > 6 ? "✓" : "6"}
+        className={`step ${page >= 6 ? "step-warning" : ""} cursor-pointer`}
+        onClick={() => setPage(6)}
+      >
+        <p className="hidden md:block">จากผู้ปกครอง</p>
+      </li>
     </ul>
   );
 };

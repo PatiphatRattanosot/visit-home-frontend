@@ -21,7 +21,7 @@ const YearSelector = () => {
     <select
       name="year-selector"
       id="year-selector"
-      className="select-input w-full max-w-64 md:max-w-32"
+      className="select w-full max-w-64 md:max-w-32"
       value={selectedYear}
       onChange={(e) => setSelectedYear(e.target.value)}
     >
