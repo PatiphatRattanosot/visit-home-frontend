@@ -3,11 +3,17 @@ import Stepper from "../../../components/Stepper";
 import Checkbox from "../../../components/Checkbox";
 import Radio from "../../../components/Radio";
 import LabelCheck from "../../../components/LabelCheck";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 
 const Behavior = ({ page, setPage, formik }) => {
   const [isUseDrugs, setIsUseDrugs] = React.useState(false);
   const [isViolence, setIsViolence] = React.useState(false);
   const [haveSexualBehavior, setHaveSexualBehavior] = React.useState(false);
+
+  const breadcrumbsOptions = [
+    { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
+    { label: "เพิ่มข้อมูลพฤติกรรม" },
+  ];
 
   const hobbies = [
     { value: "0", label: "อ่านหนังสือ" },
@@ -91,6 +97,9 @@ const Behavior = ({ page, setPage, formik }) => {
   return (
     <div className="flex items-center justify-center py-9">
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
+        <div className="flex justify-start mb-2">
+          <BreadcrumbsLoop options={breadcrumbsOptions} />
+        </div>
         <div className="mb-8 flex justify-center">
           <Stepper page={page} setPage={setPage} />
         </div>

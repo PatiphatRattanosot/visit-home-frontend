@@ -3,9 +3,15 @@ import Stepper from "../../../components/Stepper";
 import Radio from "../../../components/Radio";
 import Textarea from "../../../components/Textarea";
 import LabelCheck from "../../../components/LabelCheck";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 
 const Other = ({ page, setPage, formik }) => {
   const [parentConcern, setParentConcern] = React.useState(false);
+
+  const breadcrumbsOptions = [
+    { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
+    { label: "เพิ่มความต้องการจากผู้ปกครอง" },
+  ];
 
   const support_from_organize = [
     { value: "0", label: "เบี้ยผู้สูงอายุ" },
@@ -21,6 +27,9 @@ const Other = ({ page, setPage, formik }) => {
   return (
     <div className="flex items-center justify-center py-9">
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
+        <div className="flex justify-start mb-2">
+          <BreadcrumbsLoop options={breadcrumbsOptions} />
+        </div>
         <div className="mb-8 flex justify-center">
           <Stepper page={page} setPage={setPage} />
         </div>

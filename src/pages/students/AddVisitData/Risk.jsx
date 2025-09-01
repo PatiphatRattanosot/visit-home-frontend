@@ -4,9 +4,15 @@ import Text from "../../../components/Text";
 import Radio from "../../../components/Radio";
 import Checkbox from "../../../components/Checkbox";
 import LabelCheck from "../../../components/LabelCheck";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 
 const Risk = ({ page, setPage, formik }) => {
   const [haveHealthIssues, setHaveHealthIssues] = React.useState(false);
+
+  const breadcrumbsOptions = [
+    { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
+    { label: "เพิ่มข้อมูลความเสี่ยง" },
+  ];
 
   const notHomeOptions = [
     { value: "0", label: "ญาติ" },
@@ -73,6 +79,9 @@ const Risk = ({ page, setPage, formik }) => {
   return (
     <div className="flex items-center justify-center py-9">
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
+        <div className="flex justify-start mb-2">
+          <BreadcrumbsLoop options={breadcrumbsOptions} />
+        </div>
         <div className="mb-8 flex justify-center">
           <Stepper page={page} setPage={setPage} />
         </div>

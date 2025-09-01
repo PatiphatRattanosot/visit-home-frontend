@@ -10,6 +10,9 @@ import {
   initialFormValues,
   formValidation,
 } from "../../../schemas/form.schema";
+import { useParams } from "react-router";
+import { useStudentFormStore } from "../../../stores/form.store";
+import { useAuthStore } from "../../../stores/auth.store";
 
 const Index = () => {
   const [page, setPage] = React.useState(1);
@@ -24,6 +27,10 @@ const Index = () => {
     }
   };
 
+  const { yearId } = useParams();
+  const { setFormData, submitForm } = useStudentFormStore();
+  const { userInfo } = useAuthStore();
+
   const formik = useFormik({
     initialValues: initialFormValues,
     validationSchema: formValidation,
@@ -31,6 +38,11 @@ const Index = () => {
       console.log(values);
     },
   });
+
+  React.useEffect(() => {
+    setFormData(formik?.values, yearId);
+  }, [formik?.values, yearId]);
+
   return (
     <div className="w-full max-w-screen h-full min-h-screen flex justify-center flex-col bg-gray-50">
       <form onSubmit={formik.handleSubmit} className="space-y-8">

@@ -4,6 +4,7 @@ import Text from "../../../components/Text";
 import Select from "../../../components/Select";
 import Radio from "../../../components/Radio";
 import LabelCheck from "../../../components/LabelCheck";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 
 const Relation = ({ page, setPage, formik }) => {
   const [bigBrotherCheck, setBigBrotherCheck] = React.useState(false);
@@ -12,6 +13,11 @@ const Relation = ({ page, setPage, formik }) => {
   const [lilSisterCheck, setLilSisterCheck] = React.useState(false);
   const [grandparentCheck, setGrandparentCheck] = React.useState(false);
   const [relativeCheck, setRelativeCheck] = React.useState(false);
+
+  const breadcrumbsOptions = [
+    { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
+    { label: "แก้ไขข้อมูลความสัมพันธ์" },
+  ];
 
   const family_relation_status_options = [
     { value: "0", label: "อยู่ด้วยกัน" },
@@ -42,6 +48,9 @@ const Relation = ({ page, setPage, formik }) => {
   return (
     <div className="flex items-center justify-center py-9">
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
+        <div className="flex justify-start mb-2">
+          <BreadcrumbsLoop options={breadcrumbsOptions} />
+        </div>
         <div className="mb-8 flex justify-center">
           <Stepper page={page} setPage={setPage} />
         </div>

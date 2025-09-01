@@ -5,6 +5,7 @@ import Select from "../../../components/Select";
 import Radio from "../../../components/Radio";
 import Checkbox from "../../../components/Checkbox";
 import LabelCheck from "../../../components/LabelCheck";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 
 const Family = ({ page, setPage, formik }) => {
   const [studentWork, setStudentWork] = React.useState(false);
@@ -12,6 +13,11 @@ const Family = ({ page, setPage, formik }) => {
   const [haveLand, setHaveLand] = React.useState(false);
   const [rentedLand, setRentedLand] = React.useState(false);
   const [haveVehicles, setHaveVehicles] = React.useState(false);
+
+  const breadcrumbsOptions = [
+    { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
+    { label: "แก้ไขข้อมูลสถานะครัวเรือน" },
+  ];
 
   const family_members = [
     { value: "0", label: "บิดา" },
@@ -64,6 +70,9 @@ const Family = ({ page, setPage, formik }) => {
   return (
     <div className="flex items-center justify-center py-9">
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
+        <div className="flex justify-start mb-2">
+          <BreadcrumbsLoop options={breadcrumbsOptions} />
+        </div>
         <div className="mb-8 flex justify-center">
           <Stepper page={page} setPage={setPage} />
         </div>

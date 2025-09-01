@@ -4,12 +4,18 @@ import Select from "../../../components/Select";
 import Stepper from "../../../components/Stepper";
 import LabelCheck from "../../../components/LabelCheck";
 import StudentPicture from "../../../components/students/StudentPicture";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 
 const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
   const prefixOptions = [
     { value: "นาย", label: "นาย" },
     { value: "นาง", label: "นาง" },
     { value: "นางสาว", label: "นางสาว" },
+  ];
+
+  const breadcrumbsOptions = [
+    { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
+    { label: "เพิ่มข้อมูลส่วนตัว" },
   ];
 
   const [checkParent, setCheckParent] = React.useState(true);
@@ -40,6 +46,9 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
   return (
     <div className="flex items-center justify-center py-9">
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
+        <div className="flex justify-start mb-2">
+          <BreadcrumbsLoop options={breadcrumbsOptions} />
+        </div>
         <div className="mb-8 flex justify-center">
           <Stepper page={page} setPage={setPage} />
         </div>

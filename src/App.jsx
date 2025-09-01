@@ -76,8 +76,8 @@ function App() {
             {/* Visit Data */}
             <Route path="visiting-info">
               <Route path="" element={<ViewVisitData />} />
-              <Route path="add/:id" element={<AddFormPages />} />
-              <Route path="update/:id" element={<UpdateFormPages />} />
+              <Route path="add/:yearId" element={<AddFormPages />} />
+              <Route path="update/:yearId" element={<UpdateFormPages />} />
             </Route>
             {/* ข้อมูล SDQ */}
             <Route path="sdq-student" element={<SDQFormStudent />} />
