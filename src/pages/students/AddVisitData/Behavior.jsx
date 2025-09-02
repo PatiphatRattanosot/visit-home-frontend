@@ -256,7 +256,10 @@ const Behavior = ({ page, setPage, formik }) => {
             {/* พฤติกรรมการใช้สารเสพติด */}
             <div className="md:col-span-2">
               <div className="flex flex-col">
-                <label htmlFor="isUseDrugs" className="text-sm text-start mb-3">
+                <label
+                  htmlFor="haveSexualBehavior"
+                  className="text-sm text-start mb-3"
+                >
                   พฤติกรรมทางเพศ
                 </label>
                 <LabelCheck

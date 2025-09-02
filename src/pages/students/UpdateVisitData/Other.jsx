@@ -1,6 +1,6 @@
 import React from "react";
 import Stepper from "../../../components/Stepper";
-import Radio from "../../../components/Radio";
+import Checkbox from "../../../components/Checkbox";
 import Textarea from "../../../components/Textarea";
 import LabelCheck from "../../../components/LabelCheck";
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
@@ -10,7 +10,7 @@ const Other = ({ page, setPage, formik }) => {
 
   const breadcrumbsOptions = [
     { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
-    { label: "แก้ไขความต้องการจากผู้ปกครอง" },
+    { label: "เพิ่มความต้องการจากผู้ปกครอง" },
   ];
 
   const support_from_organize = [
@@ -42,7 +42,7 @@ const Other = ({ page, setPage, formik }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
             {/* ความช่วยเหลือที่ครอบครัวเคยได้รับจากหน่วยงานหรือต้องการได้รับการช่วยเหลือ */}
             <div className="md:col-span-2">
-              <Radio
+              <Checkbox
                 label="ความช่วยเหลือที่ครอบครัวเคยได้รับจากหน่วยงานหรือต้องการได้รับการช่วยเหลือ"
                 name="support_from_organize"
                 options={support_from_organize}
@@ -51,11 +51,12 @@ const Other = ({ page, setPage, formik }) => {
                 onBlur={formik.handleBlur}
                 error={formik.errors.support_from_organize}
                 touched={formik.touched.support_from_organize}
+                setFieldValue={formik.setFieldValue}
               />
             </div>
             {/* สิ่งที่ผู้ปกครองต้องการให้โรงเรียนช่วยเหลือนักเรียน */}
             <div className="md:col-span-2">
-              <Radio
+              <Checkbox
                 label="สิ่งที่ผู้ปกครองต้องการให้โรงเรียนช่วยเหลือนักเรียน"
                 name="support_from_school"
                 options={support_from_school}
@@ -64,10 +65,17 @@ const Other = ({ page, setPage, formik }) => {
                 onBlur={formik.handleBlur}
                 error={formik.errors.support_from_school}
                 touched={formik.touched.support_from_school}
+                setFieldValue={formik.setFieldValue}
               />
             </div>
             {/* ความต้องการจากผู้ปกครอง */}
-            <div className="md:col-span-2">
+            <div className="md:col-span-2 flex flex-col">
+              <label
+                htmlFor="parentConcern"
+                className="text-sm text-start mb-3"
+              >
+                ความต้องการเพิ่มเติมอื่นๆ
+              </label>
               <LabelCheck
                 label="มีความต้องการเพิ่มเติมอื่นๆหรือไม่"
                 name="parentConcern"

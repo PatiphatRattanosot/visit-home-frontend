@@ -69,8 +69,8 @@ export const initialFormValues = {
   time_used: 0,
   school_transport: "",
   // Page 6 Additional Information
-  support_from_organize: "",
-  support_from_school: "",
+  support_from_organize: [],
+  support_from_school: [],
   parent_concern: "",
 };
 
@@ -153,7 +153,7 @@ export const formValidation = object().shape({
   // Page 2 Relationship Information
   family_relation_status: string()
     .transform((value) => value?.trim())
-    .matches(/^[0-4]$/, "กรุณาเลือกสถานะความสัมพันธ์ของครอบครัว")
+    .matches(/^[0-4]$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
     .required("กรุณาตอบคำถาม"),
   family_member: number()
     .min(1, "จำนวนสมาชิกในครอบครัวไม่ควรน้อยกว่า 1")
@@ -163,45 +163,37 @@ export const formValidation = object().shape({
     .required("กรุณาตอบคำถาม"),
   father_relation: string()
     .transform((value) => value?.trim())
-    .matches(choiceOptions, "กรุณาเลือกความสัมพันธ์กับบิดา")
+    .matches(choiceOptions, "กรุณาเลือกคำตอบให้ถูกต้อง")
     .required("กรุณาตอบคำถาม"),
   mother_relation: string()
     .transform((value) => value?.trim())
-    .matches(choiceOptions, "กรุณาเลือกความสัมพันธ์กับมารดา")
+    .matches(choiceOptions, "กรุณาเลือกคำตอบให้ถูกต้อง")
     .required("กรุณาตอบคำถาม"),
   big_brother_relation: string()
     .transform((value) => value?.trim())
-    .matches(choiceOptions, "กรุณาเลือกความสัมพันธ์กับพี่ชาย")
-    .required("กรุณาตอบคำถาม"),
+    .matches(choiceOptions, "กรุณาเลือกคำตอบให้ถูกต้อง"),
   lil_brother_relation: string()
     .transform((value) => value?.trim())
-    .matches(choiceOptions, "กรุณาเลือกความสัมพันธ์กับน้องชาย")
-    .required("กรุณาตอบคำถาม"),
+    .matches(choiceOptions, "กรุณาเลือกคำตอบให้ถูกต้อง"),
   big_sister_relation: string()
     .transform((value) => value?.trim())
-    .matches(choiceOptions, "กรุณาเลือกความสัมพันธ์กับพี่สาว")
-    .required("กรุณาตอบคำถาม"),
+    .matches(choiceOptions, "กรุณาเลือกคำตอบให้ถูกต้อง"),
   lil_sister_relation: string()
     .transform((value) => value?.trim())
-    .matches(choiceOptions, "กรุณาเลือกความสัมพันธ์กับน้องสาว")
-    .required("กรุณาตอบคำถาม"),
+    .matches(choiceOptions, "กรุณาเลือกคำตอบให้ถูกต้อง"),
   grandparent_relation: string()
     .transform((value) => value?.trim())
-    .matches(choiceOptions, "กรุณาเลือกความสัมพันธ์กับปู่ย่าตายาย")
-    .required("กรุณาตอบคำถาม"),
+    .matches(choiceOptions, "กรุณาเลือกคำตอบให้ถูกต้อง"),
   relative_relation: string()
     .transform((value) => value?.trim())
-    .matches(choiceOptions, "กรุณาเลือกความสัมพันธ์กับญาติพี่น้อง")
-    .required("กรุณาตอบคำถาม"),
+    .matches(choiceOptions, "กรุณาเลือกคำตอบให้ถูกต้อง"),
   // Page 3 Family Information
-  total_household_income: string()
-    .transform((value) => value?.trim())
-    .matches(/^\d+$/, "กรุณากรอกเป็นตัวเลข")
+  total_household_income: number()
     .min(0, "รายได้รวมของครัวเรือนไม่ควรน้อยกว่า 0")
     .required("กรุณาตอบคำถาม"),
   received_daily_from: string()
     .transform((value) => value?.trim())
-    .matches(onlyThaiLang, "กรุณากรอกเป็นภาษาไทย")
+    .matches(/^(?:[0-9]|10|11)$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
     .required("กรุณาตอบคำถาม"),
   daily_total_to_school: string()
     .transform((value) => value?.trim())
@@ -210,125 +202,96 @@ export const formValidation = object().shape({
     .required("กรุณาตอบคำถาม"),
   student_part_time: string()
     .transform((value) => value?.trim())
-    .matches(onlyThaiLang, "กรุณากรอกเป็นภาษาไทย")
-    .required("กรุณาตอบคำถาม"),
-  student_income: number()
-    .min(0, "รายได้ของนักเรียนไม่ควรน้อยกว่า 0")
-    .required("กรุณาตอบคำถาม"),
-  household_burdens: array()
-    .of(
-      string()
-        .transform((value) => value?.trim())
-        .matches(/^[0-3]$/, "กรุณากรอกเลือกคำตอบ")
-    )
-    .required("กรุณาตอบคำถาม"),
+    .matches(onlyThaiLang, "กรุณากรอกเป็นภาษาไทย"),
+  student_income: number().min(0, "รายได้ของนักเรียนไม่ควรน้อยกว่า 0"),
+  household_burdens: array().of(
+    string()
+      .transform((value) => value?.trim())
+      .matches(/^[0-3]$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
+  ),
   housing_type: string()
     .transform((value) => value?.trim())
-    .matches(/^[0-2]$/, "กรุณากรอกเลือกคำตอบ")
+    .matches(/^[0-2]$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
     .required("กรุณาตอบคำถาม"),
   housing_condition: string()
     .transform((value) => value?.trim())
-    .matches(onlyThaiLang, "กรุณากรอกเป็นภาษาไทย")
+    .matches(/^[0-2]$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
     .required("กรุณาตอบคำถาม"),
-  family_vehicles: array()
-    .of(
-      string()
-        .transform((value) => value?.trim())
-        .matches(/^[0-3]$/, "กรุณากรอกเลือกคำตอบ")
-    )
-    .required("กรุณาตอบคำถาม"),
-  owned_land: number()
-    .min(0, "จำนวนที่ดินไม่ควรน้อยกว่า 0")
-    .required("กรุณาตอบคำถาม"),
-  rented_land: number()
-    .min(0, "จำนวนที่ดินไม่ควรน้อยกว่า 0")
-    .required("กรุณาตอบคำถาม"),
+  family_vehicles: array().of(
+    string()
+      .transform((value) => value?.trim())
+      .matches(/^[0-3]$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
+  ),
+  owned_land: number().min(0, "จำนวนที่ดินไม่ควรน้อยกว่า 0"),
+  rented_land: number().min(0, "จำนวนที่ดินไม่ควรน้อยกว่า 0"),
   // Page 4 Behavioral Information
-  student_resp: array()
-    .of(
-      string()
-        .transform((value) => value?.trim())
-        .matches(/^[0-4]$/, "กรุณาเลือกคำตอบ")
-    )
-    .required("กรุณาตอบคำถาม"),
+  student_resp: array().of(
+    string()
+      .transform((value) => value?.trim())
+      .matches(/^[0-4]$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
+  ),
   other_student_resp: string()
     .transform((value) => value?.trim())
-    .matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย")
-    .required("กรุณาตอบคำถาม"),
-  hobbies: array()
-    .of(
-      string()
-        .transform((value) => value?.trim())
-        .matches(/^[0-7]$/, "กรุณาเลือกคำตอบ")
-    )
-    .required("กรุณาตอบคำถาม"),
+    .matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย"),
+  hobbies: array().of(
+    string()
+      .transform((value) => value?.trim())
+      .matches(/^[0-7]$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
+  ),
   other_hobbies: string()
     .transform((value) => value?.trim())
-    .matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย")
-    .required("กรุณาตอบคำถาม"),
-  drugs_behav: array()
-    .of(
-      string()
-        .transform((value) => value?.trim())
-        .matches(/^[0-4]$/, "กรุณาเลือกคำตอบ")
-    )
-    .required("กรุณาตอบคำถาม"),
-  violent_behav: array()
-    .of(
-      string()
-        .transform((value) => value?.trim())
-        .matches(/^[0-4]$/, "กรุณาเลือกคำตอบ")
-    )
-    .required("กรุณาตอบคำถาม"),
+    .matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย"),
+  drugs_behav: array().of(
+    string()
+      .transform((value) => value?.trim())
+      .matches(/^[0-4]$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
+  ),
+  violent_behav: array().of(
+    string()
+      .transform((value) => value?.trim())
+      .matches(/^[0-4]$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
+  ),
   other_violent_behav: string()
     .transform((value) => value?.trim())
-    .matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย")
-    .required("กรุณาตอบคำถาม"),
-  sexual_behav: array()
-    .of(
-      string()
-        .transform((value) => value?.trim())
-        .matches(/^[0-5]$/, "กรุณาเลือกคำตอบ")
-    )
-    .required("กรุณาตอบคำถาม"),
+    .matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย"),
+  sexual_behav: array().of(
+    string()
+      .transform((value) => value?.trim())
+      .matches(/^[0-5]$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
+  ),
   computer_internet_access: string()
     .transform((value) => value?.trim())
-    .matches(/^[0-1]$/, "กรุณาเลือกคำตอบ")
+    .matches(/^[0-1]$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
     .required("กรุณาตอบคำถาม"),
   tech_use_behav: string()
     .transform((value) => value?.trim())
-    .matches(/^[0-1]$/, "กรุณาเลือกคำตอบ")
+    .matches(/^[0-1]$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
     .required("กรุณาตอบคำถาม"),
   gaming_behav: array()
     .of(
       string()
         .transform((value) => value?.trim())
-        .matches(/^[0-8]$/, "กรุณาตอบเป็นภาษาไทย")
+        .matches(/^[0-8]$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
     )
     .required("กรุณาตอบคำถาม"),
   other_gaming_behav: string()
     .transform((value) => value?.trim())
-    .matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย")
-    .required("กรุณาตอบคำถาม"),
+    .matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย"),
   // Page 5 Risk Information
   when_student_alone: string()
     .transform((value) => value?.trim())
-    .matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย")
+    .matches(/^[0-2]$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
     .required("กรุณาตอบคำถาม"),
-  health_risk: array()
-    .of(
-      string()
-        .transform((value) => value?.trim())
-        .matches(/^[0-5]$/, "กรุณาเลือกคำตอบ")
-    )
-    .required("กรุณาตอบคำถาม"),
-  welfare_and_safety: array()
-    .of(
-      string()
-        .transform((value) => value?.trim())
-        .matches(/^(?:[0-9]|10|11)$/, "กรุณาเลือกคำตอบ")
-    )
-    .required("กรุณาตอบคำถาม"),
+  health_risk: array().of(
+    string()
+      .transform((value) => value?.trim())
+      .matches(/^[0-5]$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
+  ),
+  welfare_and_safety: array().of(
+    string()
+      .transform((value) => value?.trim())
+      .matches(/^(?:[0-9]|10|11)$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
+  ),
   distance_to_school: number()
     .min(0, "ระยะทางไม่ควรเป็นลบ")
     .required("กรุณาตอบคำถาม"),
@@ -337,17 +300,19 @@ export const formValidation = object().shape({
     .required("กรุณาตอบคำถาม"),
   school_transport: string()
     .transform((value) => value?.trim())
-    .matches(onlyThaiLang, "กรุณาตอบเป็นภาษาไทย")
+    .matches(/^[0-6]$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
     .required("กรุณาตอบคำถาม"),
   // Page 6 Additional Information
-  support_from_organize: string()
-    .transform((value) => value?.trim())
-    .matches(onlyThaiLang, "กรุณากรอกเป็นภาษาไทย")
-    .required("กรุณาตอบคำถาม"),
-  support_from_school: string()
-    .transform((value) => value?.trim())
-    .matches(onlyThaiLang, "กรุณากรอกเป็นภาษาไทย")
-    .required("กรุณาตอบคำถาม"),
+  support_from_organize: array().of(
+    string()
+      .transform((value) => value?.trim())
+      .matches(/^[0-1]$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
+  ),
+  support_from_school: array().of(
+    string()
+      .transform((value) => value?.trim())
+      .matches(/^[0-2]$/, "กรุณาเลือกคำตอบให้ถูกต้อง")
+  ),
   parent_concern: string()
     .transform((value) => value?.trim())
     .matches(onlyThaiLang, "กรุณากรอกเป็นภาษาไทย")
