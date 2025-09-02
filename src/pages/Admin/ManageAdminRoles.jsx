@@ -131,6 +131,7 @@ const ManageAdminRoles = () => {
           {/* ช่องค้นหา */}
           <div className="ml-auto">
             <SearchPersonnel
+              placeholder="ค้นหาผู้ดูแล"
               searchKeyword={searchKeyword}
               setSearchKeyword={setSearchKeyword}
             />

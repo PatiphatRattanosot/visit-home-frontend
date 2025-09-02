@@ -111,6 +111,7 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
 
               <TextInputInModal
                 name="phone"
+                maxLength={10}
                 placeholder="เบอร์โทรศัพท์"
                 disabled={false}
                 value={formik.values.phone}

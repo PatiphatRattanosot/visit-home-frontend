@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import Breadcrumbs from "../../components/Breadcrumbs";
@@ -106,7 +106,12 @@ const Home = () => {
 
   return (
     <div className="section-container">
-      <Breadcrumbs />
+      <Breadcrumbs
+        options={[
+          { label: "หน้าหลัก", link: "/admin" },
+          { label: "วิเคราะห์ข้อมูล", link: "/admin/dashboard" },
+        ]}
+      />
 
       <div className="flex flex-col md:flex-row justify-center items-start gap-4 min-h-[63.5vh]">
         {/* ชาร์ตสัดส่วนตำแหน่ง */}

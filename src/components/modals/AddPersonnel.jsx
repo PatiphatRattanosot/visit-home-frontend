@@ -95,6 +95,7 @@ const AddPersonnel = ({ onSuccesAddPerson }) => {
               <TextInputInModal
                 name="phone"
                 maxLength={10}
+                type="tel"
                 placeholder="เบอร์โทรศัพท์"
                 disabled={false}
                 value={formik.values.phone}
