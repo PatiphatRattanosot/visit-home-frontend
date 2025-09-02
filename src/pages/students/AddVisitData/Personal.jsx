@@ -66,14 +66,14 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
             {/* เบอร์โทรศัพท์นักเรียน */}
             <div className="md:col-span-2 md:pr-3 md:w-1/2">
               <Text
-                name="student_phone"
+                name="phone"
                 label="เบอร์โทรศัพท์นักเรียน"
                 onChange={formik.handleChange}
-                value={formik.values.student_phone}
+                value={formik.values.phone}
                 placeholder="เบอร์โทรศัพท์"
                 onBlur={formik.handleBlur}
-                error={formik.errors.student_phone}
-                touched={formik.touched.student_phone}
+                error={formik.errors.phone}
+                touched={formik.touched.phone}
                 type="tel"
               />
             </div>

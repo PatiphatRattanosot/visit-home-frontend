@@ -6,7 +6,7 @@ const choiceOptions = /^[0-4]$/;
 
 export const initialFormValues = {
   // Page 1 Personal Information
-  student_phone: "",
+  phone: "",
   father_prefix: "",
   father_name: "",
   father_last_name: "",
@@ -76,7 +76,7 @@ export const initialFormValues = {
 
 export const formValidation = object().shape({
   // Page 1 Personal Information
-  student_phone: string()
+  phone: string()
     .transform((value) => value?.trim())
     .matches(phoneRule, "กรุณากรอกตัวเลขอย่างเดียว")
     .min(10, "กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง")

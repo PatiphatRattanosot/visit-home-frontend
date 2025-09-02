@@ -57,7 +57,7 @@ const Personal = ({ page, setPage, image }) => {
                 เบอร์โทรศัพท์นักเรียน
               </label>
               <p className="w-full p-2 rounded-md text-gray-900">
-                {personalInfo?.student_phone || "-"}
+                {personalInfo?.phone || "-"}
               </p>
             </div>
 
