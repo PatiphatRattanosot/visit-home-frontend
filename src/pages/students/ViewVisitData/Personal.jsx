@@ -56,8 +56,8 @@ const Personal = ({ page, setPage, image }) => {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 เบอร์โทรศัพท์นักเรียน
               </label>
-              <p className="w-full p-2 bg-gray-100 rounded-md text-gray-900">
-                {formData.student_phone || "-"}
+              <p className="w-full p-2 rounded-md text-gray-900">
+                {personalInfo?.student_phone || "-"}
               </p>
             </div>
 
@@ -66,40 +66,40 @@ const Personal = ({ page, setPage, image }) => {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 คำนำหน้าชื่อบิดา
               </label>
-              <p className="w-full p-2 bg-gray-100 rounded-md text-gray-900">
-                {formData.father_prefix || "-"}
+              <p className="w-full p-2 rounded-md text-gray-900">
+                {personalInfo?.father_prefix || "-"}
               </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 ชื่อบิดา
               </label>
-              <p className="w-full p-2 bg-gray-100 rounded-md text-gray-900">
-                {formData.father_name || "-"}
+              <p className="w-full p-2 rounded-md text-gray-900">
+                {personalInfo?.father_name || "-"}
               </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 นามสกุลบิดา
               </label>
-              <p className="w-full p-2 bg-gray-100 rounded-md text-gray-900">
-                {formData.father_last_name || "-"}
+              <p className="w-full p-2 rounded-md text-gray-900">
+                {personalInfo?.father_last_name || "-"}
               </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 เบอร์โทรศัพท์บิดา
               </label>
-              <p className="w-full p-2 bg-gray-100 rounded-md text-gray-900">
-                {formData.father_phone || "-"}
+              <p className="w-full p-2 rounded-md text-gray-900">
+                {personalInfo?.father_phone || "-"}
               </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 อาชีพบิดา
               </label>
-              <p className="w-full p-2 bg-gray-100 rounded-md text-gray-900">
-                {formData.father_job || "-"}
+              <p className="w-full p-2 rounded-md text-gray-900">
+                {personalInfo?.father_job || "-"}
               </p>
             </div>
 
@@ -108,40 +108,40 @@ const Personal = ({ page, setPage, image }) => {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 คำนำหน้าชื่อมารดา
               </label>
-              <p className="w-full p-2 bg-gray-100 rounded-md text-gray-900">
-                {formData.mother_prefix || "-"}
+              <p className="w-full p-2 rounded-md text-gray-900">
+                {personalInfo?.mother_prefix || "-"}
               </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 ชื่อมารดา
               </label>
-              <p className="w-full p-2 bg-gray-100 rounded-md text-gray-900">
-                {formData.mother_name || "-"}
+              <p className="w-full p-2 rounded-md text-gray-900">
+                {personalInfo?.mother_name || "-"}
               </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 นามสกุลมารดา
               </label>
-              <p className="w-full p-2 bg-gray-100 rounded-md text-gray-900">
-                {formData.mother_last_name || "-"}
+              <p className="w-full p-2 rounded-md text-gray-900">
+                {personalInfo?.mother_last_name || "-"}
               </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 เบอร์โทรศัพท์มารดา
               </label>
-              <p className="w-full p-2 bg-gray-100 rounded-md text-gray-900">
-                {formData.mother_phone || "-"}
+              <p className="w-full p-2 rounded-md text-gray-900">
+                {personalInfo?.mother_phone || "-"}
               </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 อาชีพมารดา
               </label>
-              <p className="w-full p-2 bg-gray-100 rounded-md text-gray-900">
-                {formData.mother_job || "-"}
+              <p className="w-full p-2 rounded-md text-gray-900">
+                {personalInfo?.mother_job || "-"}
               </p>
             </div>
 
@@ -150,40 +150,40 @@ const Personal = ({ page, setPage, image }) => {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 คำนำหน้าชื่อผู้ปกครอง
               </label>
-              <p className="w-full p-2 bg-gray-100 rounded-md text-gray-900">
-                {formData.parent_prefix || "-"}
+              <p className="w-full p-2 rounded-md text-gray-900">
+                {personalInfo?.parent_prefix || "-"}
               </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 ชื่อผู้ปกครอง
               </label>
-              <p className="w-full p-2 bg-gray-100 rounded-md text-gray-900">
-                {formData.parent_name || "-"}
+              <p className="w-full p-2 rounded-md text-gray-900">
+                {personalInfo?.parent_name || "-"}
               </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 นามสกุลผู้ปกครอง
               </label>
-              <p className="w-full p-2 bg-gray-100 rounded-md text-gray-900">
-                {formData.parent_last_name || "-"}
+              <p className="w-full p-2 rounded-md text-gray-900">
+                {personalInfo?.parent_last_name || "-"}
               </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 เบอร์โทรศัพท์ผู้ปกครอง
               </label>
-              <p className="w-full p-2 bg-gray-100 rounded-md text-gray-900">
-                {formData.parent_phone || "-"}
+              <p className="w-full p-2 rounded-md text-gray-900">
+                {personalInfo?.parent_phone || "-"}
               </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 อาชีพผู้ปกครอง
               </label>
-              <p className="w-full p-2 bg-gray-100 rounded-md text-gray-900">
-                {formData.parent_job || "-"}
+              <p className="w-full p-2 rounded-md text-gray-900">
+                {personalInfo?.parent_job || "-"}
               </p>
             </div>
 
@@ -192,16 +192,16 @@ const Personal = ({ page, setPage, image }) => {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 ละติจูด (Latitude)
               </label>
-              <p className="w-full p-2 bg-gray-100 rounded-md text-gray-900">
-                {formData.lat || "-"}
+              <p className="w-full p-2 rounded-md text-gray-900">
+                {personalInfo?.lat || "-"}
               </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 ลองจิจูด (Longitude)
               </label>
-              <p className="w-full p-2 bg-gray-100 rounded-md text-gray-900">
-                {formData.lng || "-"}
+              <p className="w-full p-2 rounded-md text-gray-900">
+                {personalInfo?.lng || "-"}
               </p>
             </div>
           </div>
