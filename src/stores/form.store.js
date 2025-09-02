@@ -28,7 +28,12 @@ export const useStudentFormStore = create(
     },
     submitForm: async (stdId, yearId, data) => {
       try {
-        const res = await StudentService.yearlyData(stdId, yearId, data);
+        const reqData = {
+          ...data,
+          student_id: stdId,
+          year_id: yearId,
+        };
+        const res = await StudentService.yearlyData(reqData);
         console.log(res);
 
         if (res.status === 200) {

@@ -179,7 +179,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
             {/* อาชีพมารดา */}
             <Text
               name="mother_job"
-              label="อาชีพบิดา"
+              label="อาชีพมารดา"
               onChange={formik.handleChange}
               value={formik.values.mother_job}
               placeholder="อาชีพ"

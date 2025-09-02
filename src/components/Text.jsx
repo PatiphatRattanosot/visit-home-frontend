@@ -38,7 +38,9 @@ const Text = ({
         step={step}
       />
       {error && touched && (
-        <div className="text-red-500 text-xs mt-2">{error}</div>
+        <div className="text-red-500 text-xs mt-2" id={`${name}-error`}>
+          {error}
+        </div>
       )}
     </div>
   );
