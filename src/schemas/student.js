@@ -9,15 +9,15 @@ export const studentSchema = yup.object().shape({
     .matches(onlyThaiLang, "จำเป็นต้องเป็นภาษาไทย")
     .required("กรุณาเลือกคำนำหน้า"),
   first_name: yup
-    .string()
+    .string().transform((value) => value.trim())
     .matches(onlyThaiLang, "จำเป็นต้องเป็นภาษาไทย")
     .required("กรุณากรอกชื่อ"),
   last_name: yup
-    .string()
+    .string().transform((value) => value.trim())
     .matches(onlyThaiLang, "จำเป็นต้องเป็นภาษาไทย")
     .required("กรุณากรอกนามสกุล"),
   user_id: yup
-    .string()
+    .string().transform((value) => value.trim())
     .matches(numberRule, "กรุณากรอกเลขที่ประจำตัวบุคลากรให้ถูกต้อง")
     .required("กรุณากรอกเลขที่ประจำตัวบุคลากร"),
   class_id: yup.string(),

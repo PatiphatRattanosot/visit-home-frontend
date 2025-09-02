@@ -51,7 +51,6 @@ export const usePersonnelStore = create((set, get) => ({
     }
   },
   updatePersonnel: async (id, values) => {
-
     try {
       const res = await UserService.updateTeacher({ ...values, _id: id });
       console.log("res", res);
@@ -69,10 +68,7 @@ export const usePersonnelStore = create((set, get) => ({
           "เกิดข้อผิดพลาดในการอัปเดตข้อมูลบุคลากร"
       );
     }
-
-},
-
-
+  },
 
   deletePersonnel: async (email) => {
     Swal.fire({

@@ -196,7 +196,7 @@ const Personnel = () => {
                   <input type="checkbox" className="checkbox" />
                 </label>
               </th>
-              <th>เลขที่ประจำตัว</th>
+              <th className="px-1 w-20 whitespace-nowrap">เลขที่ประจำตัว</th>
               <th>คำนำหน้า</th>
               <th>ชื่อ</th>
               <th>นามสกุล</th>
@@ -214,12 +214,12 @@ const Personnel = () => {
                     <input type="checkbox" className="checkbox" />
                   </label>
                 </td>
-                <td>{person.user_id}</td>
-                <td>{person.prefix}</td>
-                <td>{person.first_name}</td>
-                <td>{person.last_name}</td>
-                <td>{getRoleDisplay(person.role)}</td>
-                <td>{person.phone}</td>
+                <td className="px-1 w-20 whitespace-nowrap">{person.user_id}</td>
+                <td className="px-2 w-24">{person.prefix}</td>
+                <td className="px-2 w-24">{person.first_name}</td>
+                <td className="px-2 w-24">{person.last_name}</td>
+                <td className="px-2 w-24">{getRoleDisplay(person.role)}</td>
+                <td className="px-2 w-24">{person.phone}</td>
                 <td>{showStatus(person.status)}</td>
                 <td className="flex gap-2">
                   <button

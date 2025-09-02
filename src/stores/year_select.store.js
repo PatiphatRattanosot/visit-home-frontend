@@ -103,7 +103,7 @@ const useYearSelectStore = create(
                 text: response.data.message,
                 icon: "success",
                 showConfirmButton: false,
-                timer: 1500,
+                timer: 3500,
               }).then(() => {
                 get().fetchYears(); // เรียกใช้ fetchData เพื่ออัปเดตข้อมูล
               });

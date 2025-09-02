@@ -47,6 +47,7 @@ const YearManagement = () => {
             ]}
           />
         </div>
+        {/* หัวข้อ */}
         <h1 className="text-center text-2xl font-bold mt-4 mb-6">
           จัดการปีการศึกษา
         </h1>
