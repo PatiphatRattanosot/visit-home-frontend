@@ -70,8 +70,8 @@ function App() {
             path="admin"
             element={!userInfo?.role.includes("Admin") && <Navigate to={"/"} />}
           >
-            <Route path="" element={<AdminPage />} />
-            <Route path="personnel" element={<Personnel />} />
+            <Route path="" element={<Personnel />} />
+            <Route path="dashboard" element={<AdminPage />} />
             <Route path="manage-admin" element={<ManageAdminRoles />} />
             <Route path="year" element={<YearManagement />} />
             <Route path="year/classroom">

@@ -15,7 +15,7 @@ export const getNavLinks = (roles = [], activeRole = null) => {
           <a href="/admin">หน้าแรก</a>
         </li>
         <li>
-          <a href="/admin/personnel">จัดการบุคลากร</a>
+          <a href="/admin/dashboard">วิเคราะห์ข้อมูล</a>
         </li>
         <li>
           <a href="/admin/manage-admin">จัดการสถานะบุคลากร</a>

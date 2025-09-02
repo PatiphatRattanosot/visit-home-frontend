@@ -137,12 +137,7 @@ const Personnel = () => {
   return (
     <div className="section-container w-full">
       <div className="flex flex-row space-x-4">
-        <Breadcrumbs
-          options={[
-            { label: "หน้าหลัก", link: "/admin" },
-            { label: "จัดการบุคลากร", link: "/admin/personnel" },
-          ]}
-        />
+        <Breadcrumbs options={[{ label: "หน้าหลัก", link: "/admin" }]} />
       </div>
 
       <h1 className="text-center">รายชื่อบุคลากร</h1>

@@ -106,7 +106,12 @@ const Home = () => {
 
   return (
     <div className="section-container">
-      <Breadcrumbs />
+      <Breadcrumbs
+        options={[
+          { label: "หน้าหลัก", link: "/admin" },
+          { label: "วิเคราะห์ข้อมูล", link: "/admin/dashboard" },
+        ]}
+      />
 
       <div className="flex flex-col md:flex-row justify-center items-start gap-4 min-h-[63.5vh]">
         {/* ชาร์ตสัดส่วนตำแหน่ง */}
