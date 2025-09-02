@@ -2,7 +2,7 @@ import * as yup from "yup";
 
 const onlyThaiLang = /^[\u0E00-\u0E7F]+$/;
 const phoneRule = /^0[1-9]\d{8}$/;
-const userIdRule = /^\d$/;
+const userIdRule = /^\d+$/;
 
 
 export const PersonnelSchema = yup.object().shape({
