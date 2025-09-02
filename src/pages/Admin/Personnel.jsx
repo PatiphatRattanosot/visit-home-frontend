@@ -137,12 +137,12 @@ const Personnel = () => {
   return (
     <div className="section-container w-full">
       <div className="flex flex-row space-x-4">
-        
-        <Breadcrumbs 
-        options={[
-          {label: "หน้าหลัก",link:"/admin"},
-          {label: "จัดการบุคลากร", link:"/admin/personnel"}
-        ]}/>
+        <Breadcrumbs
+          options={[
+            { label: "หน้าหลัก", link: "/admin" },
+            { label: "จัดการบุคลากร", link: "/admin/personnel" },
+          ]}
+        />
       </div>
 
       <h1 className="text-center">รายชื่อบุคลากร</h1>
@@ -187,8 +187,8 @@ const Personnel = () => {
       </div>
 
       {/* ตารางแสดงข้อมูลบุคลากร */}
-      <div className="overflow-x-auto">
-        <table className="table table-zebra w-full">
+      <div className="overflow-x-auto flex justify-center">
+        <table className="table table-zebra w-full max-w-7xl">
           <thead>
             <tr>
               <th>
@@ -196,10 +196,8 @@ const Personnel = () => {
                   <input type="checkbox" className="checkbox" />
                 </label>
               </th>
-              <th className="px-1 w-20 whitespace-nowrap">เลขที่ประจำตัว</th>
-              <th>คำนำหน้า</th>
-              <th>ชื่อ</th>
-              <th>นามสกุล</th>
+              <th className="">เลขที่ประจำตัว</th>
+              <th>ชื่อ - นามสกุล</th>
               <th>ตำแหน่ง</th>
               <th>เบอร์โทรศัพท์</th>
               <th>สถานะ</th>
@@ -214,12 +212,15 @@ const Personnel = () => {
                     <input type="checkbox" className="checkbox" />
                   </label>
                 </td>
-                <td className="px-1 w-20 whitespace-nowrap">{person.user_id}</td>
-                <td className="px-2 w-24">{person.prefix}</td>
-                <td className="px-2 w-24">{person.first_name}</td>
-                <td className="px-2 w-24">{person.last_name}</td>
-                <td className="px-2 w-24">{getRoleDisplay(person.role)}</td>
-                <td className="px-2 w-24">{person.phone}</td>
+                <td className="">{person.user_id}</td>
+                <td className="">
+                  <span>{person.prefix}</span>
+                  <span className="mr-2 ml-1">{person.first_name}</span>
+                  <span>{person.last_name}</span>
+                </td>
+
+                <td className="">{getRoleDisplay(person.role)}</td>
+                <td className="">{person.phone}</td>
                 <td>{showStatus(person.status)}</td>
                 <td className="flex gap-2">
                   <button
