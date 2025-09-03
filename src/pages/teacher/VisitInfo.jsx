@@ -1,7 +1,7 @@
 import { useState } from "react";
 import AddPicture from "../../components/teacher/AddPicture";
 import TextInput from "../../components/modals/TexInputInModal";
-import TextArea from "../../components/TextArea";
+import Textarea from "../../components/Textarea";
 import TeacherService from "../../services/teacher/teacher.service";
 import toast from "react-hot-toast";
 import { useLocation } from "react-router";
@@ -35,9 +35,9 @@ const VisitResult = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const formData = new FormData()
-      formData.append("file", addVisitInfo.homePicture)
-      const res = await TeacherService.addVisitInfo(formData)
+      const formData = new FormData();
+      formData.append("file", addVisitInfo.homePicture);
+      const res = await TeacherService.addVisitInfo(formData);
       // const response = await TeacherService.addVisitInfo({
       //   homePicture: addVisitInfo.homePicture,
       //   familyPicture: addVisitInfo.familyPicture,
@@ -101,7 +101,7 @@ const VisitResult = () => {
 
         {/* เพิ่ม flex justify-center สำหรับ TextArea */}
         <div className="flex flex-col justify-center items-center mt-4 m-2 space-y-4">
-          <TextArea
+          <Textarea
             label="ความคิดเห็นของอาจารย์"
             placeholder="กรอกความคิดเห็นของอาจารย์"
             name="teacher_comment"
