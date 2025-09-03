@@ -132,8 +132,6 @@ const Behavior = ({ page, setPage, formik }) => {
                   value={formik.values.other_student_resp}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={formik.errors.other_student_resp}
-                  touched={formik.touched.other_student_resp}
                 />
                 {formik.errors.other_student_resp &&
                   formik.touched.other_student_resp && (
@@ -165,8 +163,6 @@ const Behavior = ({ page, setPage, formik }) => {
                   value={formik.values.other_hobbies}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={formik.errors.other_hobbies}
-                  touched={formik.touched.other_hobbies}
                 />
                 {formik.errors.other_hobbies &&
                   formik.touched.other_hobbies && (
@@ -241,8 +237,6 @@ const Behavior = ({ page, setPage, formik }) => {
                     value={formik.values.other_violent_behav}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={formik.errors.other_violent_behav}
-                    touched={formik.touched.other_violent_behav}
                   />
                   {formik.errors.other_violent_behav &&
                     formik.touched.other_violent_behav && (
@@ -334,8 +328,6 @@ const Behavior = ({ page, setPage, formik }) => {
                   value={formik.values.other_violent_behav}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={formik.errors.other_violent_behav}
-                  touched={formik.touched.other_violent_behav}
                 />
                 {formik.errors.other_violent_behav &&
                   formik.touched.other_violent_behav && (
