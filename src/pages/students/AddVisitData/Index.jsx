@@ -33,7 +33,7 @@ const Index = () => {
 
   const formik = useFormik({
     initialValues: initialFormValues,
-    validationSchema: formValidation,
+    // validationSchema: formValidation,
     onSubmit: (values) => {
       console.log(values);
       const personal_info = {

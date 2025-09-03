@@ -135,12 +135,12 @@ const Behavior = ({ page, setPage, formik }) => {
                   error={formik.errors.other_student_resp}
                   touched={formik.touched.other_student_resp}
                 />
-                <div className="text-red-500 text-xs mt-2">
-                  {formik.errors.other_student_resp &&
-                    formik.touched.other_student_resp && (
-                      <div>{formik.errors.other_student_resp}</div>
-                    )}
-                </div>
+                {formik.errors.other_student_resp &&
+                  formik.touched.other_student_resp && (
+                    <div className="text-red-500 text-xs mt-2">
+                      {formik.errors.other_student_resp}
+                    </div>
+                  )}
               </div>
             </div>
             {/* กิจกรรมยามว่าง */}
@@ -168,12 +168,12 @@ const Behavior = ({ page, setPage, formik }) => {
                   error={formik.errors.other_hobbies}
                   touched={formik.touched.other_hobbies}
                 />
-                <div className="text-red-500 text-xs mt-2">
-                  {formik.errors.other_hobbies &&
-                    formik.touched.other_hobbies && (
-                      <div>{formik.errors.other_hobbies}</div>
-                    )}
-                </div>
+                {formik.errors.other_hobbies &&
+                  formik.touched.other_hobbies && (
+                    <div className="text-red-500 text-xs mt-2">
+                      {formik.errors.other_hobbies}
+                    </div>
+                  )}
               </div>
             </div>
             {/* พฤติกรรมการใช้สารเสพติด */}
@@ -244,12 +244,12 @@ const Behavior = ({ page, setPage, formik }) => {
                     error={formik.errors.other_violent_behav}
                     touched={formik.touched.other_violent_behav}
                   />
-                  <div className="text-red-500 text-xs mt-2">
-                    {formik.errors.other_violent_behav &&
-                      formik.touched.other_violent_behav && (
-                        <div>{formik.errors.other_violent_behav}</div>
-                      )}
-                  </div>
+                  {formik.errors.other_violent_behav &&
+                    formik.touched.other_violent_behav && (
+                      <div className="text-red-500 text-xs mt-2">
+                        {formik.errors.other_violent_behav}
+                      </div>
+                    )}
                 </div>
               </div>
             )}
@@ -337,12 +337,12 @@ const Behavior = ({ page, setPage, formik }) => {
                   error={formik.errors.other_violent_behav}
                   touched={formik.touched.other_violent_behav}
                 />
-                <div className="text-red-500 text-xs mt-2">
-                  {formik.errors.other_violent_behav &&
-                    formik.touched.other_violent_behav && (
-                      <div>{formik.errors.other_violent_behav}</div>
-                    )}
-                </div>
+                {formik.errors.other_violent_behav &&
+                  formik.touched.other_violent_behav && (
+                    <div className="text-red-500 text-xs mt-2">
+                      {formik.errors.other_violent_behav}
+                    </div>
+                  )}
               </div>
             </div>
           </div>
