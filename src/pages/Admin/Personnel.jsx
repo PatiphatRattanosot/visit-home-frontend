@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import Userservice from "../../services/users/users.service";
+import { useEffect, useState } from "react";
 import { BiSolidEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
 import SearchPersonnel from "../../components/SearchPersonnel";
@@ -9,6 +8,7 @@ import ModalAddPersonnel from "../../components/modals/AddPersonnel";
 import ModalEditPersonnel from "../../components/modals/EditPersonnel";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import { usePersonnelStore } from "../../stores/admin.store"; // ใช้ store ที่สร้างขึ้นมา
+
 const Personnel = () => {
   // ใช้ Zustand store เพื่อจัดการข้อมูลบุคลากร
   const { data: personnel, fetchData, deletePersonnel } = usePersonnelStore();
@@ -104,7 +104,7 @@ const Personnel = () => {
 
   const showStatus = (status) => {
     switch (status) {
-      case "รับราชการ":
+      case "ทำงาน":
         return (
           <div className="inline-block px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">
             ทำงาน
@@ -137,38 +137,53 @@ const Personnel = () => {
   return (
     <div className="section-container w-full">
       <div className="flex flex-row space-x-4">
-        <Breadcrumbs />
+        <Breadcrumbs options={[{ label: "หน้าหลัก", link: "/admin" }]} />
       </div>
 
       <h1 className="text-center">รายชื่อบุคลากร</h1>
 
-      <div className="flex flex-col md:flex-row justify-between items-center mb-4 mt-4 gap-2">
-        {/* Dropdown สำหรับการกรองข้อมูล */}
-        <FilterDropdown
-          selectedOption={selectedOption}
-          setSelectedOption={setSelectedOption}
-          options={optionsForPersonnel}
-        />
+      {/* Toolbar centered */}
+      <div className="w-full flex justify-center mt-4 mb-4">
+        <div className="w-full max-w-8xl grid grid-cols-1 md:grid-cols-[auto_1fr_auto] items-center gap-3 px-2">
+          {/* ซ้าย: Dropdown */}
+          <div>
+            <FilterDropdown
+              selectedOption={selectedOption}
+              setSelectedOption={setSelectedOption}
+              options={optionsForPersonnel}
+            />
+          </div>
 
-        {/* ช่องค้นหา */}
-        <SearchPersonnel
-          setSearchKeyword={setSearchKeyword}
-          setCurrentPage={setCurrentPage}
-        />
+          {/* กลาง: Search ขยายกินที่ */}
+          <div className="md:justify-self-center">
+            <SearchPersonnel
+              setSearchKeyword={setSearchKeyword}
+              setCurrentPage={setCurrentPage}
+              placeholder="ค้นหาบุคลากร..."
+              className="w-72 md:w-[28rem]" // ปรับความกว้างที่นี่
+            />
+          </div>
 
-        {/* ปุ่มเพิ่มบุคลากร */}
-        <button
-          onClick={() => document.getElementById("add_personnel").showModal()}
-          className="btn-green"
-        >
-          เพิ่มบุคลากร
-        </button>
-        {/* Modal เพิ่มบุคลากร */}
-        <ModalAddPersonnel />
+          {/* ขวา: ปุ่มเพิ่ม */}
+          <div className="md:justify-self-end">
+            <button
+              onClick={() =>
+                document.getElementById("add_personnel").showModal()
+              }
+              className="btn-green"
+            >
+              เพิ่มบุคลากร
+            </button>
+          </div>
+
+          {/* Modal */}
+          <ModalAddPersonnel />
+        </div>
       </div>
+
       {/* ตารางแสดงข้อมูลบุคลากร */}
-      <div className="overflow-x-auto">
-        <table className="table table-zebra w-full">
+      <div className="overflow-x-auto flex justify-center">
+        <table className="table table-zebra w-full max-w-7xl">
           <thead>
             <tr>
               <th>
@@ -176,10 +191,8 @@ const Personnel = () => {
                   <input type="checkbox" className="checkbox" />
                 </label>
               </th>
-              <th>เลขที่ประจำตัว</th>
-              <th>คำนำหน้า</th>
-              <th>ชื่อ</th>
-              <th>นามสกุล</th>
+              <th className="">เลขที่ประจำตัว</th>
+              <th>ชื่อ - นามสกุล</th>
               <th>ตำแหน่ง</th>
               <th>เบอร์โทรศัพท์</th>
               <th>สถานะ</th>
@@ -194,12 +207,15 @@ const Personnel = () => {
                     <input type="checkbox" className="checkbox" />
                   </label>
                 </td>
-                <td>{person.user_id}</td>
-                <td>{person.prefix}</td>
-                <td>{person.first_name}</td>
-                <td>{person.last_name}</td>
-                <td>{getRoleDisplay(person.role)}</td>
-                <td>{person.phone}</td>
+                <td className="">{person.user_id}</td>
+                <td className="">
+                  <span>{person.prefix}</span>
+                  <span className="mr-2 ml-1">{person.first_name}</span>
+                  <span>{person.last_name}</span>
+                </td>
+
+                <td className="">{getRoleDisplay(person.role)}</td>
+                <td className="">{person.phone}</td>
                 <td>{showStatus(person.status)}</td>
                 <td className="flex gap-2">
                   <button

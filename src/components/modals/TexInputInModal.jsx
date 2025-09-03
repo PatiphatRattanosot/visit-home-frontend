@@ -15,7 +15,7 @@ const TextInputInModal = ({
 }) => {
   return (
     <div className={`flex flex-col ${className}`}>
-      <label htmlFor={name} className="mb-1 text-sm font-medium text-gray-700">
+      <label htmlFor={name} className="mb-1 text-sm font-medium text-gray-700 text-start">
         {label} : <span className="text-red-600">*</span>
       </label>
       <input

@@ -23,7 +23,7 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
     { value: "นางสาว", label: "นางสาว" },
   ];
   const statusOptions = [
-    { value: "รับราชการ", label: "รับราชการ" },
+    { value: "ทำงาน", label: "ทำงาน" },
     { value: "เกษียณ", label: "เกษียณอายุ" },
     { value: "ลาออก", label: "ลาออก" },
   ];
@@ -111,6 +111,7 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
 
               <TextInputInModal
                 name="phone"
+                maxLength={10}
                 placeholder="เบอร์โทรศัพท์"
                 disabled={false}
                 value={formik.values.phone}

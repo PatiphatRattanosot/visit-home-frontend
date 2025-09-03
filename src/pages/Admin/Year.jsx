@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import YearServices from "../../services/years/years.service";
 import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa";
 import ModalAddYear from "../../components/modals/AddYear";
@@ -7,25 +6,27 @@ import ModalEditYear from "../../components/modals/EditYear";
 import { useNavigate } from "react-router";
 import { FaPencilAlt } from "react-icons/fa";
 import { MdDeleteForever } from "react-icons/md";
-import Breadcrumbs from "../../components/Breadcrumbs";
+import BreadcrumbsLoop from "../../components/Breadcrumbs";
 import { useClassroomStore } from "../../stores/classroom.store";
 import useYearSelectStore from "../../stores/year_select.store";
 const YearManagement = () => {
   // ใช้ Zustand store เพื่อจัดการข้อมูลปีการศึกษา
-  const { years, fetchData, deleteYear } = useYearSelectStore();
+  const { years, fetchYears, deleteYear, setSelectedYear } =
+    useYearSelectStore();
   const { setClassrooms } = useClassroomStore();
   const navigate = useNavigate();
 
   // เรียกข้อมูลปีการศึกษา
   useEffect(() => {
-    fetchData();
+    fetchYears();
     setClassrooms([]); // เคลียร์ข้อมูลชั้นเรียนเมื่อเปลี่ยนปีการศึกษา
-  }, [years, fetchData, setClassrooms]);
+  }, [years, fetchYears, setClassrooms]);
 
   // เลือกปีแล้วมันจะเกิดแอ็คชั่น
   const handleSelectYear = async (year) => {
     toast.success(`คุณเลือกปีการศึกษา ${year.year} แล้ว`);
     // setYear(year) แล้ว redirect ไปหน้าอื่น
+    setSelectedYear(year);
     navigate(`/admin/year/classroom/${year._id}/${year.year}`);
   };
 
@@ -38,8 +39,14 @@ const YearManagement = () => {
     <>
       <div className="section-container">
         <div className="flex flex-row space-x-4">
-          <Breadcrumbs />
+          <BreadcrumbsLoop
+            options={[
+              { label: "หน้าหลัก", link: "/" },
+              { label: "จัดการปีการศึกษา" },
+            ]}
+          />
         </div>
+        {/* หัวข้อ */}
         <h1 className="text-center text-2xl font-bold mt-4 mb-6">
           จัดการปีการศึกษา
         </h1>
@@ -98,7 +105,7 @@ const YearManagement = () => {
                     </div>
                   </div>
                   {/* Modal แก้ไขปีการศึกษา ย้ายออกมาอยู่ส่วนของ div ที่มี key*/}
-                  <ModalEditYear onUpdateSuccess={fetchData} year={year} />
+                  <ModalEditYear onUpdateSuccess={fetchYears} year={year} />
                 </div>
               ))}
 
@@ -113,7 +120,7 @@ const YearManagement = () => {
         </div>
       </div>
 
-      <ModalAddYear addDataSuccess={fetchData} />
+      <ModalAddYear addDataSuccess={fetchYears} />
     </>
   );
 };

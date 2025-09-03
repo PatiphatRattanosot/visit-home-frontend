@@ -1,7 +1,7 @@
 import * as yup from "yup";
 
 const onlyThaiLang = /^[\u0E00-\u0E7F]+$/;
-const phoneRule = /^\d+$/;
+const phoneRule = /^0[1-9]\d{8}$/;
 
 export const PersonnelSchema = yup.object().shape({
   prefix: yup
@@ -9,24 +9,24 @@ export const PersonnelSchema = yup.object().shape({
     .matches(onlyThaiLang, "จำเป็นต้องเป็นภาษาไทย")
     .required("กรุณาเลือกคำนำหน้า"),
   first_name: yup
-    .string()
+    .string().transform((value) => value.trim())
     .matches(onlyThaiLang, "จำเป็นต้องเป็นภาษาไทย")
     .required("กรุณากรอกชื่อ"),
   last_name: yup
-    .string()
+    .string().transform((value) => value.trim())
     .matches(onlyThaiLang, "จำเป็นต้องเป็นภาษาไทย")
     .required("กรุณากรอกนามสกุล"),
 
   phone: yup
-    .string()
+    .string().transform((value) => value.trim())
     .matches(phoneRule, "กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง")
     .min(10, "กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง")
     .max(10, "กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง")
     .required("กรุณากรอกเบอร์โทรศัพท์"),
 
    status: yup
-    .string()
-    .oneOf(["ลาออก", "เกษียณ", "รับราชการ"], "กรุณาเลือกสถานะที่ถูกต้อง")
+    .string().transform((value) => value.trim())
+    .oneOf(["ลาออก", "เกษียณ", "ทำงาน"], "กรุณาเลือกสถานะที่ถูกต้อง")
     .required("กรุณาเลือกสถานะ"),
 
 

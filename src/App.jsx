@@ -16,6 +16,9 @@ import UpdateFormPages from "./pages/students/UpdateVisitData/Index";
 import ViewVisitData from "./pages/students/ViewVisitData/Index";
 import SDQFormStudent from "./pages/students/SDQFormStudent";
 import SDQFormParent from "./pages/students/SDQFormParent";
+import ClassroomDetail from "./pages/Admin/ClassroomDetail";
+import StudentList from "./pages/teacher/StudentList";
+import VisitInfo from "./pages/teacher/VisitInfo";
 
 function App() {
   const { user, userInfo, isLoading, signInSystem, signOutSystem } =
@@ -58,11 +61,15 @@ function App() {
             path="admin"
             element={!userInfo?.role.includes("Admin") && <Navigate to={"/"} />}
           >
-            <Route path="" element={<AdminPage />} />
-            <Route path="personnel" element={<Personnel />} />
+            <Route path="" element={<Personnel />} />
+            <Route path="dashboard" element={<AdminPage />} />
             <Route path="manage-admin" element={<ManageAdminRoles />} />
             <Route path="year" element={<YearManagement />} />
-            <Route path="year/classroom" element={<Classroom />} />
+            <Route path="year/classroom">
+              <Route path="" element={<Classroom />} />
+              <Route path=":classroomId" element={<ClassroomDetail />} />
+              <Route path=":yearId/:year" element={<Classroom />} /> 
+            </Route>
           </Route>
 
           {/* Student */}
@@ -95,8 +102,8 @@ function App() {
               path=""
               element={<div className="text-xl">Teacher Page</div>}
             />
-            {/* <Route path="visit-info" element={<VisitInfo />} />
-            <Route path="student-list" element={<StudentList />} /> */}
+            <Route path="students" element={<StudentList />} />
+            <Route path="visit-info" element={<VisitInfo />} />
           </Route>
         </Routes>
       </div>
