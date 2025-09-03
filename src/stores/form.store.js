@@ -26,17 +26,44 @@ export const useStudentFormStore = create(
       set({ formData: {} });
       localStorage.removeItem(`student_data_${yearId}`);
     },
-    submitForm: async (stdId, yearId, data) => {
+    submitForm: async (userInfo, yearId, data, image) => {
       try {
         const reqData = {
           ...data,
-          student_id: stdId,
+          student_id: userInfo?._id,
           year_id: yearId,
         };
-        const res = await StudentService.yearlyData(reqData);
-        console.log(res);
 
-        if (res.status === 200) {
+        const res = await StudentService.yearlyData(reqData);
+        const resUpdateUser = await StudentService.updateStudent(
+          userInfo?._id,
+          {
+            first_name: userInfo?.first_name,
+            last_name: userInfo?.last_name,
+            prefix: userInfo?.prefix,
+            user_id: userInfo?.user_id,
+            class_id: userInfo?.class_id,
+            phone: reqData?.phone,
+          }
+        );
+
+        if (image && typeof image !== "string") {
+          const updateImageData = new FormData();
+          updateImageData.append("file_image", image);
+          updateImageData.append("student_id", userInfo?._id);
+          try {
+            const resUpdateImage = await StudentService.updateProfile(
+              updateImageData
+            );
+            if (resUpdateImage.status === 200) {
+              return;
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        }
+
+        if (res.status === 200 && resUpdateUser.status === 200) {
           Swal.fire({
             icon: "success",
             title: "สำเร็จ",

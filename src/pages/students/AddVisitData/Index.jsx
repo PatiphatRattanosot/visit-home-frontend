@@ -37,7 +37,6 @@ const Index = () => {
     onSubmit: (values) => {
       console.log(values);
       const personal_info = {
-        phone: values.phone,
         father_prefix: values.father_prefix,
         father_name: values.father_name,
         father_last_name: values.father_last_name,
@@ -109,14 +108,20 @@ const Index = () => {
         support_from_school: values.support_from_school,
         parent_concern: values.parent_concern,
       };
-      submitForm(userInfo?._id, yearId, {
-        personal_info,
-        relationship_info,
-        family_info,
-        behavior_info,
-        risk_info,
-        additional_info,
-      });
+      submitForm(
+        userInfo,
+        yearId,
+        {
+          phone: values?.phone,
+          personal_info,
+          relationship_info,
+          family_info,
+          behavior_info,
+          risk_info,
+          additional_info,
+        },
+        image
+      );
     },
   });
 
