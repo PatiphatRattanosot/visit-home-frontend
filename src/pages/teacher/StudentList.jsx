@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import { useClassroomStore } from "../../stores/classroom.store";
 import { useAuthStore } from "../../stores/auth.store";
+import ManageStudent from "../../components/modals/ManageStudent";
 import BreadcrumbsLoop from "../../components/Breadcrumbs";
 import SearchPersonnel from "../../components/SearchPersonnel";
 import FilterDropdown from "../../components/FilterDropdown";
@@ -9,7 +11,7 @@ import Pagination from "../../components/Pagination";
 const StudentList = () => {
   const { userInfo } = useAuthStore();
   const { classroom, getClassroomByTeacherId } = useClassroomStore(); // classroom = array ของห้อง
-
+  const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredStudents, setFilteredStudents] = useState([]);
@@ -146,19 +148,32 @@ const StudentList = () => {
             </thead>
             <tbody>
               {currentItems.map((student) => (
-                <tr key={student?._id}>
+                <tr
+                  className="cursor-pointer hover:bg-gray-100"
+                  onClick={() =>
+                    document
+                      .getElementById(`manage_student_${student._id}`)
+                      .showModal()
+                  }
+                  key={student?._id}
+                >
                   <td className="hidden sm:table-cell">
                     <label>
                       <input type="checkbox" className="checkbox checkbox-sm" />
                     </label>
                   </td>
-                  <td className="text-center">{student?.user_id}</td>
+                  <td className="text-center cursor-pointer hover:underline">
+                    {student?.user_id}
+                  </td>
+
                   <td>{student?.prefix}</td>
                   <td>
                     {student?.first_name} {student?.last_name}
                   </td>
+                  <ManageStudent student={student} />
                 </tr>
               ))}
+
               {currentItems.length === 0 && (
                 <tr>
                   <td
