@@ -10,7 +10,7 @@ import {
   initialFormValues,
   formValidation,
 } from "../../../schemas/form.schema";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { useStudentFormStore } from "../../../stores/form.store";
 import { useStudentStore } from "../../../stores/student.store";
 import { useAuthStore } from "../../../stores/auth.store";
@@ -29,6 +29,7 @@ const Index = () => {
   };
 
   const { yearId } = useParams();
+  const navigate = useNavigate();
   const { setFormData, submitForm } = useStudentFormStore();
   const { getYearlyData } = useStudentStore();
   const { userInfo } = useAuthStore();
@@ -124,6 +125,7 @@ const Index = () => {
         },
         image
       );
+      navigate(`/student/visiting-info`);
     },
   });
 
