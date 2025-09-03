@@ -84,8 +84,7 @@ export const formValidation = object().shape({
     .required("กรุณาตอบคำถาม"),
   father_prefix: string()
     .transform((value) => value?.trim())
-    .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย")
-    .required("กรุณาตอบคำถาม"),
+    .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย"),
   father_name: string()
     .transform((value) => value?.trim())
     .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย")
@@ -106,8 +105,7 @@ export const formValidation = object().shape({
     .required("กรุณาตอบคำถาม"),
   mother_prefix: string()
     .transform((value) => value?.trim())
-    .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย")
-    .required("กรุณาตอบคำถาม"),
+    .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย"),
   mother_name: string()
     .transform((value) => value?.trim())
     .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย")
@@ -128,8 +126,7 @@ export const formValidation = object().shape({
     .required("กรุณาตอบคำถาม"),
   parent_prefix: string()
     .transform((value) => value?.trim())
-    .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย")
-    .required("กรุณาตอบคำถาม"),
+    .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย"),
   parent_name: string()
     .transform((value) => value?.trim())
     .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย")
@@ -315,6 +312,5 @@ export const formValidation = object().shape({
   ),
   parent_concern: string()
     .transform((value) => value?.trim())
-    .matches(onlyThaiLang, "กรุณากรอกเป็นภาษาไทย")
-    .required("กรุณาตอบคำถาม"),
+    .matches(onlyThaiLang, "กรุณากรอกเป็นภาษาไทย"),
 });
