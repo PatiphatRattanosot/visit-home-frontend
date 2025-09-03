@@ -1,13 +1,15 @@
 import { useState } from "react";
 import AddPicture from "../../components/teacher/AddPicture";
+import BreadcrumbsLoop from "../../components/Breadcrumbs";
 import TextInput from "../../components/modals/TexInputInModal";
 import Textarea from "../../components/Textarea";
 import TeacherService from "../../services/teacher/teacher.service";
 import toast from "react-hot-toast";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 const VisitResult = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const student = location.state?.student;
   if (!student) return null;
   const [addVisitInfo, setAddVisitInfo] = useState({
@@ -39,10 +41,10 @@ const VisitResult = () => {
       formData.append("file", addVisitInfo.homePicture);
       const res = await TeacherService.addVisitInfo(formData);
       // const response = await TeacherService.addVisitInfo({
-      //   homePicture: addVisitInfo.homePicture,
-      //   familyPicture: addVisitInfo.familyPicture,
-      //   des_home: addVisitInfo.des_home,
-      //   des_family: addVisitInfo.des_family,
+      //   home_Picture: addVisitInfo.homePicture,
+      //   family_Picture: addVisitInfo.familyPicture,
+      //   desc_home: addVisitInfo.des_home,
+      //   desc_family: addVisitInfo.des_family,
       //   teacher_comment: addVisitInfo.teacher_comment,
       // });
       toast.success("เพิ่มข้อมูลการเยี่ยมบ้านเรียบร้อยแล้ว");
@@ -53,8 +55,17 @@ const VisitResult = () => {
   };
 
   return (
-    <div className="section-c">
+    <div className="section-container">
+      <div>
+          <BreadcrumbsLoop
+            options={[
+              { label: "หน้าหลัก", link: "/" },
+              { label: "ข้อมูลการเยี่ยมบ้าน", link: "/admin/year/classroom" },
+            ]}
+          />
+        </div>
       <div className="flex justify-center items-center mt-4">
+        
         <h5 className="font-semibold">
           ข้อมูลของ <span>{student.prefix}</span>{" "}
           <span>{student.first_name}</span> <span>{student.last_name}</span>
@@ -111,8 +122,8 @@ const VisitResult = () => {
           />
         </div>
 
-        <div className="flex justify-center md:justify-end mr-6 my-4">
-          <button className="btn-red mr-8">ยกเลิก</button>
+        <div className="flex justify-center md:justify-end ml-6 md:mx-50">
+          <button type="button" onClick={() => navigate(-1)} className="btn-red mr-8">ยกเลิก</button>
           <button type="submit" className="btn-green">
             บันทึก
           </button>
