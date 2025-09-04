@@ -14,8 +14,8 @@ import Status from "./pages/students/Status";
 import AddFormPages from "./pages/students/AddVisitData/Index";
 import UpdateFormPages from "./pages/students/UpdateVisitData/Index";
 import ViewVisitData from "./pages/students/ViewVisitData/Index";
-import SDQFormStudent from "./pages/students/SDQFormStudent";
-import SDQFormParent from "./pages/students/SDQFormParent";
+import SDQFormStudent from "./pages/students/SDQ/student/Index";
+import SDQFormParent from "./pages/students/SDQ/parent/Index";
 import ClassroomDetail from "./pages/Admin/ClassroomDetail";
 import StudentList from "./pages/teacher/StudentList";
 import VisitInfo from "./pages/teacher/VisitInfo";
@@ -68,7 +68,7 @@ function App() {
             <Route path="year/classroom">
               <Route path="" element={<Classroom />} />
               <Route path=":classroomId" element={<ClassroomDetail />} />
-              <Route path=":yearId/:year" element={<Classroom />} /> 
+              <Route path=":yearId/:year" element={<Classroom />} />
             </Route>
           </Route>
 

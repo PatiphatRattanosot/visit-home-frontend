@@ -14,7 +14,7 @@ const SDQRadio = ({
       <label htmlFor={name} className="mb-1 text-sm font-medium text-gray-700">
         {label} <span className="text-red-600">*</span>
       </label>
-      <div className={`grid grid-cols-1 md:grid-cols-3 gap-3 mt-2`} id={name}>
+      <div className={`grid grid-cols-1 gap-3 mt-2`} id={name}>
         {/* Choice 1 */}
         <div className="flex items-center text-sm space-x-2">
           <input
