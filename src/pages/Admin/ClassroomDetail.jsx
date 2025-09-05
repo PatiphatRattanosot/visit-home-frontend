@@ -90,9 +90,9 @@ const ClassroomDetail = () => {
   }, [classroomId, getClassroomById]);
 
   const handleDeleteStudent = async (email) => {
-    const ok = await deleteStudent(email); // ← รอผลลบ (true/false) จาก Swal flow
+    const ok = await deleteStudent(email); //  รอผลลบ (true/false) จาก Swal
     if (ok) {
-      await getClassroomById(classroomId); // ← ค่อยรีเฟรชห้องเรียน
+      await getClassroomById(classroomId); // รีเฟรชห้องเรียน
     }
   };
 
@@ -222,6 +222,7 @@ const ClassroomDetail = () => {
 
                   <td className="text-center">{student?.user_id}</td>
                   <td>{student?.prefix}</td>
+
                   <td>
                     {student?.first_name} {student?.last_name}
                   </td>

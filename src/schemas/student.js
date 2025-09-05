@@ -21,4 +21,5 @@ export const studentSchema = yup.object().shape({
     .matches(numberRule, "กรุณากรอกเลขที่ประจำตัวบุคลากรให้ถูกต้อง")
     .required("กรุณากรอกเลขที่ประจำตัวบุคลากร"),
   class_id: yup.string(),
+  phone: yup.string()
 });

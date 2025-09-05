@@ -1,7 +1,6 @@
 import { useStudentStore } from "../../stores/student.store";
 import TextInputInModal from "./TexInputInModal";
 import SelectInputInModal from "./SelectInputInModal";
-import toast from "react-hot-toast";
 import { useFormik } from "formik";
 import { studentSchema } from "../../schemas/student";
 import { useEffect, useState } from "react";
@@ -21,20 +20,25 @@ const EditStudent = ({ id, onUpdateStudent, classId }) => {
       last_name: "",
       prefix: "",
       user_id: "",
+      phone: "",
       class_id: classId,
     },
     validationSchema: studentSchema,
     onSubmit: async (values) => {
-      const submitValues = { ...values, class_id: classId };
+      const submitValues = {
+        ...values,
+        class_id: classId,
+        phone: values.phone,
+      };
       console.log("Submitting form with values:", submitValues);
       await updateStudent(id, submitValues);
       await onUpdateStudent();
+      document.getElementById(`edit_student_${id}`).close();
     },
   });
 
   useEffect(() => {
     getStudentById(id).then((data) => {
-      console.log("student data:", data);
 
       setStudent(data); //data stroe มันเป็น array เลยต้องมา set เพิ่มเพืมเติมทำให้เป้น object ดึงทีละคน
       formik.setValues({
@@ -42,6 +46,7 @@ const EditStudent = ({ id, onUpdateStudent, classId }) => {
         last_name: data.last_name || "",
         prefix: data.prefix || "",
         user_id: data.user_id || "",
+        phone: data.phone || "",
       });
     });
   }, [id]);
