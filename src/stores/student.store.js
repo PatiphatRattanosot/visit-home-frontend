@@ -81,7 +81,6 @@ export const useStudentStore = create((set, get) => ({
     try {
       const response = await StudentService.updateStudent(id, studentData);
       console.log("Updated student:", response.data);
-      document.getElementById(`edit_student_${id}`).close();
       toast.success(response.data.message || "แก้ไขข้อมูลนักเรียนเรียบร้อยแล้ว", {
         duration: 3500,
       });
@@ -142,7 +141,7 @@ export const useStudentStore = create((set, get) => ({
         await Swal.fire({
           icon: "error",
           title: "เกิดข้อผิดพลาด",
-          text: "ไม่สามารถลบข้อมูลนักเรียนได้",
+          text: error.response?.data?.message || "ไม่สามารถลบข้อมูลนักเรียนได้",
         });
         return false;
       }

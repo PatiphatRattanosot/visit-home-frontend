@@ -28,6 +28,7 @@ import SDQFormParent from "./pages/students/SDQFormParent";
 import ClassroomDetail from "./pages/Admin/ClassroomDetail";
 import StudentList from "./pages/teacher/StudentList";
 import VisitInfo from "./pages/teacher/VisitInfo";
+import AddVisitInfo from "./pages/teacher/AddVisitInfo";
 
 function App() {
   const { user, userInfo, isLoading, signInSystem, signOutSystem } =
@@ -131,6 +132,7 @@ function App() {
             />
             <Route path="students" element={<StudentList />} />
             <Route path="visit-info" element={<VisitInfo />} />
+            <Route path="visit-info/add/:studentId" element={<AddVisitInfo />} />
           </Route>
         </Routes>
       </div>
