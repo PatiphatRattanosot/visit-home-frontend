@@ -5,8 +5,11 @@ import Stepper from "../../../components/Stepper";
 import LabelCheck from "../../../components/LabelCheck";
 import StudentPicture from "../../../components/students/StudentPicture";
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
+import { useNavigate } from "react-router";
 
 const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
+  const navigate = useNavigate();
+
   const prefixOptions = [
     { value: "นาย", label: "นาย" },
     { value: "นาง", label: "นาง" },
@@ -301,7 +304,10 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
             <button
               className="btn btn-error w-1/2"
               type="button"
-              onClick={() => setPage(0)}
+              onClick={() => {
+                setPage(1);
+                navigate("/student/visiting-info");
+              }}
             >
               ยกเลิก
             </button>
