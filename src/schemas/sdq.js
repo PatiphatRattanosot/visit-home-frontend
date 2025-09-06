@@ -1,6 +1,7 @@
 import * as yup from "yup";
 
 const choiceOptions = /^[0-2]$/;
+const onlyThaiLang = /^[\u0E00-\u0E7F\s]+$/;
 
 export const SDQInitValues = {
   // Group 1: ด้านอารมณ์ Emotional
@@ -144,4 +145,10 @@ export const SDQValidations = yup.object().shape({
     .string()
     .matches(choiceOptions, "กรุณาเลือกคำตอบ")
     .required("กรุณาเลือกคำตอบ"),
+  additional: yup.string().matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย"),
+  overall_problem: yup.string().required("กรุณาเลือกคำตอบ"),
+  problem_time: yup.string(),
+  is_uneasy_student: yup.string(),
+  is_annoy_student: yup.string(),
+  is_difficult_student: yup.string(),
 });

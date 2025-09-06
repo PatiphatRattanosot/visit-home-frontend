@@ -1,12 +1,15 @@
 import React from "react";
 import BreadcrumbsLoop from "../../../../components/Breadcrumbs";
+import SDQRadio from "../../../../components/SDQRadio";
 
-const Friendship = ({ page, setPage }) => {
+const Friendship = ({ page, setPage, formik }) => {
   const breadcrumbsOptions = [
     { label: "แบบประเมิน SDQ", link: "/student/sdq-student" },
     { label: "แบบประเมินตนเอง", link: "/student/sdq-student" },
     { label: "หน้า 4" },
   ];
+  const choiceOptions = ["0", "1", "2"]; // 0 = ไม่, 1 = ค่อนข้างจริง, 2 = จริง
+  const reverseChoiceOptions = ["2", "1", "0"]; // 0 = ไม่, 1 = ค่อนข้างจริง, 2 = จริง
   return (
     <div className="flex items-center justify-center py-9">
       <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
@@ -21,7 +24,58 @@ const Friendship = ({ page, setPage }) => {
             <span>4/6</span>
           </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6"></div>
+          <div className="grid grid-cols-1 gap-6 mt-6">
+            <SDQRadio
+              name="question_6"
+              label="ฉันชอบอยู่กับตัวเอง ฉันชอบเล่นคนเดียวหรืออยู่ตามลำพัง"
+              options={choiceOptions}
+              value={formik.values.question_6}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.errors.question_6}
+              touched={formik.touched.question_6}
+            />
+            <SDQRadio
+              name="question_11"
+              label="ฉันมีเพื่อนสนิท"
+              options={reverseChoiceOptions}
+              value={formik.values.question_11}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.errors.question_11}
+              touched={formik.touched.question_11}
+            />
+            <SDQRadio
+              name="question_14"
+              label="เพื่อนๆ ส่วนมากชอบฉัน"
+              options={reverseChoiceOptions}
+              value={formik.values.question_14}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.errors.question_14}
+              touched={formik.touched.question_14}
+            />
+            <SDQRadio
+              name="question_19"
+              label="เด็กๆ คนอื่น ล้อเลียนหรือรังแกฉัน"
+              options={choiceOptions}
+              value={formik.values.question_19}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.errors.question_19}
+              touched={formik.touched.question_19}
+            />
+            <SDQRadio
+              name="question_23"
+              label="ฉันเข้ากับผู้ใหญ่ได้ดีกว่าเด็กวัยเดียวกัน"
+              options={choiceOptions}
+              value={formik.values.question_23}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.errors.question_23}
+              touched={formik.touched.question_23}
+            />
+          </div>
           <div className="flex justify-between mt-10 space-x-2">
             <button
               className="btn btn-soft w-1/2"
