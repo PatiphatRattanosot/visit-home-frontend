@@ -54,6 +54,7 @@ export const useStudentFormStore = create(
 
 export const useStudentStore = create((set, get) => ({
   data: [],
+  student: {},
   setData: (newData) => set({ data: newData }),
   fetchData: async () => {
     try {
@@ -97,6 +98,7 @@ export const useStudentStore = create((set, get) => ({
     try {
       const response = await StudentService.getStudentById(id);
       if (response.status === 200) {
+        set({ student: response.data.student });
         return response.data.student;
       }
     } catch (error) {

@@ -12,8 +12,12 @@ const getClassroomsByYear = async (year_id) => {
   return await api.get(`class/by_year/${year_id}`);
 };
 
-const getClassesByTeacherId = async (teacher_id) => {
-  return await api.get(`class/by_teacher/${teacher_id}`);
+//เรียกข้อมูลผ่าน body
+const getClassesByTeacherId = async (teacherId, yearId ) => {
+  return await api.post(`class/by_teacher`, {
+    teacher_id: teacherId,
+    year_id: yearId
+  });
 };
 
 const getClassById = async (id) => {

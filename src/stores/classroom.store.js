@@ -53,6 +53,10 @@ export const useClassroomStore = create((set, get) => ({
     try {
       const response = await ClassroomService.getClassById(id);
       if (response.status === 200) {
+        if (!response.data.class) {
+          set({ classroom: null });
+          return null;
+        }
         set({ classroom: response.data.class }); // ส่งคืนข้อมูลชั้นเรียนที่ได้
         return response.data.class; // ส่งคืนข้อมูลชั้นเรียนที่ได้
       }
@@ -60,17 +64,12 @@ export const useClassroomStore = create((set, get) => ({
       console.error("Error in getClassroomById:", error);
     }
   },
- getClassroomByTeacherId: async (teacherId) => {
+getClassroomByTeacherId: async (teacherId, yearId) => {
   try {
-    const response = await ClassroomService.getClassesByTeacherId(teacherId);
-    if (response.status === 200) {
-      const classes = Array.isArray(response?.data?.classes)
-        ? response.data.classes
-        : [];
-      set({ classroom: classes }); // set classroom เป็น array ห้องเรียน
-      return classes; // return array ห้องเรียน
-    }
-    return [];
+    const response = await ClassroomService.getClassesByTeacherId(teacherId, yearId);
+    // response.data.classes คือ array ห้องเรียน
+    set({ classroom: response.data.classes || [] });
+    return response.data.classes || [];
   } catch (error) {
     console.error("Error in getClassroomByTeacherId:", error);
     toast.error(
