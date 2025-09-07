@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useClassroomStore } from "../../stores/classroom.store";
 import { useAuthStore } from "../../stores/auth.store";
@@ -7,21 +7,24 @@ import BreadcrumbsLoop from "../../components/Breadcrumbs";
 import SearchPersonnel from "../../components/SearchPersonnel";
 import FilterDropdown from "../../components/FilterDropdown";
 import Pagination from "../../components/Pagination";
+import useYearSelectStore from "../../stores/year_select.store";
+import YearSelector from "../../components/YearSelector";
 
 const StudentList = () => {
   const { userInfo } = useAuthStore();
   const { classroom, getClassroomByTeacherId } = useClassroomStore(); // classroom = array ของห้อง
-  const navigate = useNavigate();
+  const { years, selectedYear, setSelectedYear } = useYearSelectStore();
+
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // โหลดห้องของครู (คาดว่ามีห้องเดียว)
   useEffect(() => {
-    getClassroomByTeacherId(userInfo?._id);
-  }, [userInfo?._id]);
+    getClassroomByTeacherId(userInfo._id, selectedYear);
+    console.log("ไหนดูซิกูส่งไรไปบ้างให้บ้านวะ:", userInfo._id, selectedYear);
+  }, [userInfo?._id, selectedYear]);
 
   const currentClass =
     Array.isArray(classroom) && classroom.length ? classroom[0] : null;
@@ -129,6 +132,10 @@ const StudentList = () => {
           setSelectedOption={setSelectedOption}
           className="select select-bordered w-42"
         />
+        <YearSelector
+          selectedYear={selectedYear}
+          setSelectedYear={setSelectedYear}
+        />
       </div>
 
       <div className="rounded-xl border border-base-300 overflow-hidden">
@@ -170,7 +177,12 @@ const StudentList = () => {
                   <td>
                     {student?.first_name} {student?.last_name}
                   </td>
-                  <ManageStudent student={student} />
+                  <td>
+                    <ManageStudent
+                      id={`manage_student_${student._id}`}
+                      student={student}
+                    />
+                  </td>
                 </tr>
               ))}
 

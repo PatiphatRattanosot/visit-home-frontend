@@ -1,15 +1,15 @@
 import { MdUpload } from "react-icons/md";
 
-const AddPicture = ({ get, id, onChange }) => {
+const AddPicture = ({ pictureFile, id, onChange }) => {
   return (
     <>
       <div
         className="flex flex-col items-center justify-center w-78 h-60 border-2 border-gray-300 rounded-md bg-white hover:bg-gray-50 hover:border-gray-400 cursor-pointer transition border-dashed"
         onClick={() => document.getElementById(id)?.click()}
       >
-        {get ? (
+        {pictureFile ? (
           <img
-            src={URL.createObjectURL(get)}
+            src={pictureFile}
             className="w-full h-full rounded-md object-cover"
             alt="preview"
           />
@@ -28,6 +28,7 @@ const AddPicture = ({ get, id, onChange }) => {
         id={id}
         accept="image/jpeg, image/png"
         onChange={onChange}
+        name={id}
       />
     </>
   );

@@ -1,22 +1,38 @@
 import { useFormik } from "formik";
-import { visitStoreSchema } from "../../schemas/visitInfo";
+import { VisitInfoSchema } from "../../schemas/visitInfo";
 import AddPicture from "../../components/teacher/AddPicture";
 import BreadcrumbsLoop from "../../components/Breadcrumbs";
 import TextInput from "../../components/modals/TexInputInModal";
 import TextArea from "../../components/TextArea";
 import useYearSelectStore from "../../stores/year_select.store";
-import useAuthStore from "../../stores/auth.store";
-import useTeacherStroe from "../../stores/teacher.store";
-import useVisitInfoStore from "../../stores/visit.store";
+import { useAuthStore } from "../../stores/auth.store";
+
+import { useVisitInfoStore } from "../../stores/visit.store";
+import { useStudentStore } from "../../stores/student.store";
 import { useParams } from "react-router";
+import { useEffect, useState } from "react";
 
 const AddVisitInfo = () => {
   const { studentId } = useParams();
   const { userInfo } = useAuthStore();
-  const { years: year } = useYearSelectStore();
-  const { student } = useStudentStore();
+  const { years: year, selectedYear, getYearById } = useYearSelectStore();
+  const { student, getStudentById } = useStudentStore();
   const { addVisitInfo } = useVisitInfoStore();
-  
+  const { pictureFile, setPictureFile } = useState(null);
+
+  useEffect(() => {
+    getStudentById(studentId);
+  }, [studentId]);
+
+  const handleChangePicture = (e) => {
+    const { id, files } = e.target;
+    if (files && files.length > 0) {
+      const file = files[0];
+      formik.setFieldValue(id, file);
+      setPictureFile(URL.createObjectURL(file));
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       home_img: null,
@@ -24,11 +40,12 @@ const AddVisitInfo = () => {
       home_description: "",
       family_description: "",
       comment: "",
-      student_id: student._id,
+      student_id: studentId,
       teacher_id: userInfo._id,
-      year_id: year._id,
+      year_id: selectedYear,
     },
-    validationSchema: visitStoreSchema,
+    validationSchema: VisitInfoSchema,
+    enableReinitialize: true,
     onSubmit: async (values, actions) => {
       await addVisitInfo(values);
       actions.resetForm();
@@ -88,9 +105,9 @@ const AddVisitInfo = () => {
           <div className="flex flex-col justify-center items-center mt-4 space-y-4">
             <h3 className="mb-2">รูปถ่ายสภาพบ้าน</h3>
             <AddPicture
-              id="addhomepic"
-              onChange={handleChangeHomePicture}
-              get={addVisitInfo.homePicture}
+              id="home_img"
+              onChange={handleChangePicture}
+              pictureFile={formik.values.home_img}
             />
 
             <TextInput
@@ -109,9 +126,9 @@ const AddVisitInfo = () => {
           <div className="flex flex-col justify-center items-center mt-4 space-y-4">
             <h3 className="mb-2">รูปถ่ายกับครอบครัว</h3>
             <AddPicture
-              id="addfamilypic"
-              onChange={handleChangeFamilyPicture}
-              get={addVisitInfo.familyPicture}
+              id="family_img"
+              onChange={handleChangePicture}
+              pictureFile={formik.values.family_img}
             />
             <TextInput
               name="family_description"
@@ -133,12 +150,12 @@ const AddVisitInfo = () => {
           <TextArea
             label="ความคิดเห็นของอาจารย์"
             placeholder="กรอกความคิดเห็นของอาจารย์"
-            name="teacher_comment"
+            name="comment"
             className="w-full md:w-8/12"
             onChange={formik.handleChange}
-            value={formik.values.teacher_comment}
-            error={formik.errors.teacher_comment}
-            touched={formik.touched.teacher_comment}
+            value={formik.values.comment}
+            error={formik.errors.comment}
+            touched={formik.touched.comment}
             onBlur={formik.handleBlur}
             id="teacher-comment"
           />
