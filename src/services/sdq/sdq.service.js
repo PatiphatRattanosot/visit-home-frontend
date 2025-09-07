@@ -10,14 +10,14 @@ const deleteSDQ = async (data) => {
   return await api.delete(`${baseUrl}`, data);
 };
 
-const getSDQByYear = async (data) => {
+const getSDQByYearAndAssessor = async (data) => {
   return await api.post(`${baseUrl}/by-student-year`, data);
 };
 
 const SDQServices = {
   createSDQ,
   deleteSDQ,
-  getSDQByYear,
+  getSDQByYearAndAssessor,
 };
 
 export default SDQServices;

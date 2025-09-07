@@ -7,21 +7,21 @@ import Friendship from "./Friendship";
 import Social from "./Social";
 import Additional from "./Additional";
 import { useAuthStore } from "../../../../stores/auth.store";
-import useYearSelectStore from "../../../../stores/year_select.store";
 import { SDQInitValues, SDQValidations } from "../../../../schemas/sdq";
 import SDQServices from "../../../../services/sdq/sdq.service";
 import Swal from "sweetalert2";
+import { useParams, useNavigate } from "react-router";
 
 const Index = () => {
   const [page, setPage] = React.useState(1);
   const { userInfo } = useAuthStore();
-  const { selectedYear } = useYearSelectStore();
+  const { yearId } = useParams();
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: SDQInitValues,
     validationSchema: SDQValidations,
     onSubmit: async (values) => {
-      console.log(values);
       try {
         const emotional = {
           question_3: Number(values.question_3),
@@ -74,21 +74,28 @@ const Index = () => {
           social,
           other,
           student_id: userInfo._id,
-          year_id: selectedYear,
+          year_id: yearId,
           assessor: "Parent",
         };
         const res = await SDQServices.createSDQ(data);
-        console.log(res);
-        
+
         if (res.status === 201) {
           Swal.fire({
             icon: "success",
-            title: "สำเร็จ",
+            title: "SDQ",
             text: res.data.message || "บันทึกข้อมูลสำเร็จ",
+            showConfirmButton: false,
+            timer: 1500,
           });
+          navigate(`/student/sdq-parent`);
         }
       } catch (error) {
         console.log(error);
+        Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+          text: error.message || "ไม่สามารถบันทึกข้อมูลได้",
+        });
       }
     },
   });

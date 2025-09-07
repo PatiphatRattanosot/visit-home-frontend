@@ -16,6 +16,8 @@ import UpdateFormPages from "./pages/students/UpdateVisitData/Index";
 import ViewVisitData from "./pages/students/ViewVisitData/Index";
 import SDQFormStudent from "./pages/students/SDQ/student/Index";
 import SDQFormParent from "./pages/students/SDQ/parent/Index";
+import StudentViewSDQ from "./pages/students/SDQ/view/StudentViewSDQ";
+import ParentViewSDQ from "./pages/students/SDQ/view/ParentViewSDQ";
 import ClassroomDetail from "./pages/Admin/ClassroomDetail";
 import StudentList from "./pages/teacher/StudentList";
 import VisitInfo from "./pages/teacher/VisitInfo";
@@ -87,8 +89,14 @@ function App() {
               <Route path="update/:yearId" element={<UpdateFormPages />} />
             </Route>
             {/* ข้อมูล SDQ */}
-            <Route path="sdq-student" element={<SDQFormStudent />} />
-            <Route path="sdq-parent" element={<SDQFormParent />} />
+            <Route path="sdq-student">
+              <Route path="" element={<StudentViewSDQ />} />
+              <Route path=":yearId" element={<SDQFormStudent />} />
+            </Route>
+            <Route path="sdq-parent">
+              <Route path="" element={<ParentViewSDQ />} />
+              <Route path=":yearId" element={<SDQFormParent />} />
+            </Route>
           </Route>
 
           {/* Teacher */}
