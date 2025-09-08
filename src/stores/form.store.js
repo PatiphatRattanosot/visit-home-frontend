@@ -9,23 +9,21 @@ export const useStudentFormStore = create(
 
     // To update/merge form data
     setFormData: (data, yearId) => {
-      // Update formData
       set({
         formData: {
           ...get().formData,
           ...data,
         },
       });
-      // Update localStorage key with yearId
       const storeName = `student_data_${yearId}`;
       localStorage.setItem(storeName, JSON.stringify(get().formData));
     },
 
-    // Optional: clear the form data, e.g., on submit
     clearFormData: (yearId) => {
       set({ formData: {} });
       localStorage.removeItem(`student_data_${yearId}`);
     },
+
     submitForm: async (userInfo, yearId, data, image) => {
       try {
         const reqData = {
@@ -47,6 +45,7 @@ export const useStudentFormStore = create(
           }
         );
 
+        let imageSuccess = true;
         if (image && typeof image !== "string") {
           const updateImageData = new FormData();
           updateImageData.append("file_image", image);
@@ -55,23 +54,29 @@ export const useStudentFormStore = create(
             const resUpdateImage = await StudentService.updateProfile(
               updateImageData
             );
-            if (resUpdateImage.status === 200) {
-              return;
-            }
+            imageSuccess = resUpdateImage.status === 200;
           } catch (error) {
+            imageSuccess = false;
             console.log(error);
           }
         }
 
-        if (res.status === 200 && resUpdateUser.status === 200) {
-          Swal.fire({
+        if (
+          res.status === 200 &&
+          resUpdateUser.status === 200 &&
+          imageSuccess
+        ) {
+          // Ensure SweetAlert is called after all async operations
+          await Swal.fire({
             icon: "success",
             title: "สำเร็จ",
             text: "เพิ่มข้อมูลประจำปีเรียบร้อยแล้ว!",
+            showConfirmButton: false,
+            timer: 1500,
           });
-          get().clearFormData(yearId); // Clear form data after successful submission
+          get().clearFormData(yearId);
         } else {
-          Swal.fire({
+          await Swal.fire({
             icon: "error",
             title: "ข้อผิดพลาด",
             text: "ไม่สามารถเพิ่มข้อมูลประจำปีได้.",

@@ -122,8 +122,7 @@ const Index = () => {
           additional_info,
         },
         image
-      );
-      navigate(`/student/visiting-info`);
+      ).then(() => navigate(`/student/visiting-info`));
     },
   });
 
