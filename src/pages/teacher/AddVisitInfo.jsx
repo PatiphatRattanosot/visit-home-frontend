@@ -17,19 +17,41 @@ const AddVisitInfo = () => {
   const { userInfo } = useAuthStore();
   const { years: year, selectedYear, getYearById } = useYearSelectStore();
   const { student, getStudentById } = useStudentStore();
-  const { addVisitInfo } = useVisitInfoStore();
-  const { pictureFile, setPictureFile } = useState(null);
 
-  useEffect(() => {
-    getStudentById(studentId);
-  }, [studentId]);
+  const {
+    visitInfo,
+    addVisitInfo,
+    getVisitInfoById,
+    getVisitInfoByStudentId,
+    updateVisitInfo,
+  } = useVisitInfoStore();
+  const [pictureFile, setPictureFile] = useState({
+    home_img: null,
+    family_img: null,
+  });
+
+  
 
   const handleChangePicture = (e) => {
-    const { id, files } = e.target;
-    if (files && files.length > 0) {
-      const file = files[0];
-      formik.setFieldValue(id, file);
-      setPictureFile(URL.createObjectURL(file));
+    const file = e.target.files[0];
+    const field = e.target.id; // ใช้ id เพื่อรู้ว่าเป็น home_img หรือ family_img
+    if (file) {
+      setPictureFile((prev) => ({
+        ...prev,
+        [field]: file,
+      }));
+      // set ค่าใน formik ด้วย
+      formik.setFieldValue(field, file);
+    } else {
+      setPictureFile((prev) => ({
+        ...prev,
+        [field]: null,
+      }));
+      formik.setFieldValue(field, null);
+    }
+    if (file && file.size > 5 * 1024 * 1024) {
+      alert("ไฟล์เกิน 5MB");
+      return;
     }
   };
 
@@ -37,9 +59,9 @@ const AddVisitInfo = () => {
     initialValues: {
       home_img: null,
       family_img: null,
-      home_description: "",
-      family_description: "",
-      comment: "",
+      home_description: visitInfo?.home_description || "",
+      family_description: visitInfo?.family_description || "",
+      comment: visitInfo?.comment || "",
       student_id: studentId,
       teacher_id: userInfo._id,
       year_id: selectedYear,
@@ -47,40 +69,51 @@ const AddVisitInfo = () => {
     validationSchema: VisitInfoSchema,
     enableReinitialize: true,
     onSubmit: async (values, actions) => {
-      await addVisitInfo(values);
+      const formData = new FormData();
+      formData.append("home_img", values.home_img); // ไฟล์
+      formData.append("family_img", values.family_img); // ไฟล์
+      formData.append("home_description", values.home_description);
+      formData.append("family_description", values.family_description);
+      formData.append("comment", values.comment);
+      formData.append("student_id", values.student_id);
+      formData.append("teacher_id", values.teacher_id);
+      formData.append("year_id", values.year_id);
+
+      if (visitInfo) {
+        // ถ้ามีข้อมูลเดิม ให้แก้ไข
+        await updateVisitInfo(visitInfo._id, formData);
+      } else {
+        // ถ้าไม่มีข้อมูลเดิม ให้เพิ่มใหม่
+        await addVisitInfo(formData);
+      }
+
       actions.resetForm();
     },
   });
-  //     e.preventDefault();
 
-  //     try {
-  //       const formData = new FormData();
+  useEffect(() => {
+    formik.setValues(
+      formik.initialValues
+    );
+    const fetchData = async () => {
+      const res = await getVisitInfoByStudentId(studentId, selectedYear);
+      if (res) {
+        formik.setValues({
+          home_img: res.home_img || null,
+          family_img: res.family_img || null,
+          home_description: res.home_description || "",
+          family_description: res.family_description || "",
+          comment: res.comment || "",
+          student_id: studentId,
+          teacher_id: userInfo._id,
+          year_id: selectedYear,
+        });
+      }
+      getStudentById(studentId);
+    };
 
-  //       // แนบไฟล์
-  //       if (addVisitInfo.homePicture) {
-  //         formData.append("home_picture", addVisitInfo.homePicture);
-  //       }
-  //       if (addVisitInfo.familyPicture) {
-  //         formData.append("family_picture", addVisitInfo.familyPicture);
-  //       }
-
-  //       formData.append("desc_home", addVisitInfo.des_home || "");
-  //       formData.append("desc_family", addVisitInfo.des_family || "");
-  //       formData.append("teacher_comment", addVisitInfo.teacher_comment || "");
-
-  //       formData.append("student_id", student._id);
-  //       formData.append("teacher_id", userInfo._id);
-  //       formData.append("year_id", year._id);
-
-  //       const response = await TeacherService.addVisitInfo(formData);
-  //       if (response.status === 200) {
-  //         toast.success("เพิ่มข้อมูลการเยี่ยมบ้านเรียบร้อยแล้ว");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error add visit info:", error);
-  //       toast.error("เกิดข้อผิดพลาดในการเพิ่มข้อมูลการเยี่ยมบ้าน");
-  //     }
-  //   };
+    fetchData();
+  }, [studentId, selectedYear]);
 
   return (
     <div className="section-container">
@@ -107,7 +140,9 @@ const AddVisitInfo = () => {
             <AddPicture
               id="home_img"
               onChange={handleChangePicture}
-              pictureFile={formik.values.home_img}
+              pictureFile={pictureFile.home_img || visitInfo?.home_img}
+              file={pictureFile.home_img}
+              setPictureFile={setPictureFile}
             />
 
             <TextInput
@@ -128,7 +163,9 @@ const AddVisitInfo = () => {
             <AddPicture
               id="family_img"
               onChange={handleChangePicture}
-              pictureFile={formik.values.family_img}
+              pictureFile={pictureFile.family_img || visitInfo?.family_img}
+              setPictureFile={setPictureFile}
+              file={pictureFile.family_img}
             />
             <TextInput
               name="family_description"
@@ -168,9 +205,10 @@ const AddVisitInfo = () => {
           <button
             id="submit-visithome-button"
             type="submit"
-            className="btn-green"
+           
+            className={visitInfo ? "btn-yellow" : "btn-green"}
           >
-            บันทึก
+            {visitInfo ? "แก้ไขข้อมูล" : "บันทึกข้อมูล"}
           </button>
         </div>
       </form>

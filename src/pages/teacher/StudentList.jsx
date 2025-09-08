@@ -1,5 +1,4 @@
-import { use, useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
 import { useClassroomStore } from "../../stores/classroom.store";
 import { useAuthStore } from "../../stores/auth.store";
 import ManageStudent from "../../components/modals/ManageStudent";
@@ -22,7 +21,7 @@ const StudentList = () => {
   const itemsPerPage = 10;
 
   useEffect(() => {
-    getClassroomByTeacherId(userInfo._id, selectedYear);
+    getClassroomByTeacherId(String(userInfo._id), String(selectedYear));
     console.log("ไหนดูซิกูส่งไรไปบ้างให้บ้านวะ:", userInfo._id, selectedYear);
   }, [userInfo?._id, selectedYear]);
 
