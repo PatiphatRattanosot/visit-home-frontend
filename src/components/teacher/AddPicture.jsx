@@ -9,7 +9,12 @@ const AddPicture = ({ pictureFile, id, onChange }) => {
       >
         {pictureFile ? (
           <img
-            src={pictureFile}
+            src={
+              //เช็คถ้าเป็น string หรือเปล่า ถ้าใช่ให้ใช้เลย ถ้าไม่ใช่ให้สร้างอัพโหลด object URL
+              typeof pictureFile === "string"
+                ? pictureFile
+                : URL.createObjectURL(pictureFile)
+            }
             className="w-full h-full rounded-md object-cover"
             alt="preview"
           />
