@@ -30,8 +30,6 @@ const AddVisitInfo = () => {
     family_img: null,
   });
 
-  
-
   const handleChangePicture = (e) => {
     const file = e.target.files[0];
     const field = e.target.id; // ใช้ id เพื่อรู้ว่าเป็น home_img หรือ family_img
@@ -80,21 +78,15 @@ const AddVisitInfo = () => {
       formData.append("year_id", values.year_id);
 
       if (visitInfo) {
-        // ถ้ามีข้อมูลเดิม ให้แก้ไข
-        await updateVisitInfo(visitInfo._id, formData);
+        await updateVisitInfo();
       } else {
-        // ถ้าไม่มีข้อมูลเดิม ให้เพิ่มใหม่
         await addVisitInfo(formData);
       }
-
-      actions.resetForm();
     },
   });
 
   useEffect(() => {
-    formik.setValues(
-      formik.initialValues
-    );
+    formik.setValues(formik.initialValues);
     const fetchData = async () => {
       const res = await getVisitInfoByStudentId(studentId, selectedYear);
       if (res) {
@@ -205,7 +197,6 @@ const AddVisitInfo = () => {
           <button
             id="submit-visithome-button"
             type="submit"
-           
             className={visitInfo ? "btn-yellow" : "btn-green"}
           >
             {visitInfo ? "แก้ไขข้อมูล" : "บันทึกข้อมูล"}
