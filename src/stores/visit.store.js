@@ -10,12 +10,14 @@ export const useVisitInfoStore = create((set, get) => ({
   addVisitInfo: async (data) => {
     try {
       const response = await VisitInfoService.addVisitInfo(data);
-      if (response.status === 200) {
+      if (response.status === 201) {
         toast.success(
           response.data.message || "เพิ่มข้อมูลการเยี่ยมบ้านเรียบร้อยแล้ว"
         );
-        set({ visitInfos: [...get().visitInfos, response.data.visitInfo] });
-        return response.data.visitInfo;
+        set({ visitInfos: response.data.data });
+        
+
+        return response.data.data;
       }
     } catch (error) {
       toast.error(
@@ -31,8 +33,8 @@ export const useVisitInfoStore = create((set, get) => ({
     try {
       const response = await VisitInfoService.getVisitInfoById(id);
       if (response.status === 200) {
-        set({ visitInfo: response.data.visitInfo });
-        return response.data.visitInfo;
+        set({ visitInfo: response.data.data });
+        return response.data.data;
       }
     } catch (error) {
       console.error("Error fetching visit info by ID:", error);
@@ -61,8 +63,8 @@ export const useVisitInfoStore = create((set, get) => ({
         toast.success(
           response.data.message || "แก้ไขข้อมูลการเยี่ยมบ้านเรียบร้อยแล้ว"
         );
-        set({ visitInfo: response.data.visitInfo });
-        return response.data.visitInfo;
+        set({ visitInfo: response.data.data });
+        return response.data.data;
       }
     } catch (error) {
       console.error("Error updating visit info:", error);

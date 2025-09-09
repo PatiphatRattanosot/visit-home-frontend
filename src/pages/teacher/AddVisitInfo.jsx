@@ -6,13 +6,14 @@ import TextInput from "../../components/modals/TexInputInModal";
 import TextArea from "../../components/TextArea";
 import useYearSelectStore from "../../stores/year_select.store";
 import { useAuthStore } from "../../stores/auth.store";
-
+import { useNavigate } from "react-router";
 import { useVisitInfoStore } from "../../stores/visit.store";
 import { useStudentStore } from "../../stores/student.store";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 
 const AddVisitInfo = () => {
+  const navigate = useNavigate();
   const { studentId } = useParams();
   const { userInfo } = useAuthStore();
   const { years: year, selectedYear, getYearById } = useYearSelectStore();
@@ -80,7 +81,11 @@ const AddVisitInfo = () => {
       if (visitInfo) {
         await updateVisitInfo();
       } else {
-        await addVisitInfo(formData);
+        await addVisitInfo(formData).then(()=>{
+            setTimeout(() => {
+            window.location.reload();
+            }, 2600); 
+        })
       }
     },
   });
@@ -191,7 +196,7 @@ const AddVisitInfo = () => {
         </div>
 
         <div className="flex justify-center md:justify-end ml-6 md:mx-50">
-          <button type="button" className="btn-red mr-8">
+          <button type="button" onClick={() => navigate("/teacher/students")} className={visitInfo ? "hidden" : "btn-red mr-4"}>
             ยกเลิก
           </button>
           <button
