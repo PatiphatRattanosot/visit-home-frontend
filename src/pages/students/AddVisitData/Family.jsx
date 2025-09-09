@@ -14,6 +14,50 @@ const Family = ({ page, setPage, formik }) => {
   const [rentedLand, setRentedLand] = React.useState(false);
   const [haveVehicles, setHaveVehicles] = React.useState(false);
 
+  React.useEffect(() => {
+    if (formik.values.student_part_time !== "") {
+      setStudentWork(true);
+    } else {
+      setStudentWork(false);
+    }
+    if (formik.values.owned_land > 0) {
+      setHaveLand(true);
+    } else {
+      setHaveLand(false);
+    }
+    if (formik.values.rented_land > 0) {
+      setRentedLand(true);
+    } else {
+      setRentedLand(false);
+    }
+  }, []);
+
+  // React.useEffect(() => {
+  //   if (!haveHouseholdBurdens) {
+  //     formik.setFieldValue("household_burdens", []);
+  //   }
+  //   if (!haveLand) {
+  //     formik.setFieldValue("owned_land", 0);
+  //   }
+  //   if (!rentedLand) {
+  //     formik.setFieldValue("rented_land", 0);
+  //   }
+  //   if (!haveVehicles) {
+  //     formik.setFieldValue("family_vehicles", []);
+  //   }
+  //   if (!studentWork) {
+  //     formik.setFieldValue("student_part_time", "");
+  //     formik.setFieldValue("student_income", 0);
+  //   }
+  // }, [
+  //   haveHouseholdBurdens,
+  //   haveLand,
+  //   rentedLand,
+  //   haveVehicles,
+  //   studentWork,
+  //   formik?.values,
+  // ]);
+
   const breadcrumbsOptions = [
     { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
     { label: "เพิ่มข้อมูลสถานะครัวเรือน" },

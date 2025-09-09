@@ -298,11 +298,19 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
             {/* lat */}
             {/* lng */}
             {/* Map Component */}
-            <div className="md:col-span-2 flex flex-col items-center justify-center"></div>
+            <div className="md:col-span-2 flex flex-col items-center justify-center">
+              <button
+                type="button"
+                className="btn btn-blue"
+                onClick={() => document.getElementById("map_modal").showModal()}
+              >
+                เลือกตำแหน่งบ้าน
+              </button>
+            </div>
           </div>
           <div className="flex justify-between mt-10 space-x-2">
             <button
-              className="btn btn-error w-1/2"
+              className="btn btn-error w-1/2 text-white"
               type="button"
               onClick={() => {
                 setPage(1);

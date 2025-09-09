@@ -105,7 +105,7 @@ const Other = ({ page, setPage, formik }) => {
             >
               ย้อนกลับ{` (${page - 1})`}
             </button>
-            <button type="submit" className="btn btn-success w-1/2">
+            <button type="submit" className="btn btn-success w-1/2 text-white">
               บันทึกข้อมูล
             </button>
           </div>

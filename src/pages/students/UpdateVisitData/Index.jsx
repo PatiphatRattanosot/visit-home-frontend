@@ -14,6 +14,7 @@ import { useParams, useNavigate } from "react-router";
 import { useStudentFormStore } from "../../../stores/form.store";
 import { useStudentStore } from "../../../stores/student.store";
 import { useAuthStore } from "../../../stores/auth.store";
+import MapComponent from "../../../components/students/MapComponent";
 
 const Index = () => {
   const [page, setPage] = React.useState(1);
@@ -30,7 +31,7 @@ const Index = () => {
 
   const { yearId } = useParams();
   const navigate = useNavigate();
-  const { setFormData, submitForm } = useStudentFormStore();
+  const { submitForm } = useStudentFormStore();
   const { getYearlyData } = useStudentStore();
   const { userInfo } = useAuthStore();
 
@@ -149,10 +150,6 @@ const Index = () => {
     }
   }, [yearId]);
 
-  React.useEffect(() => {
-    setFormData(formik?.values, yearId);
-  }, [formik?.values, yearId]);
-
   return (
     <div className="w-full max-w-screen h-full min-h-screen flex justify-center flex-col bg-gray-50">
       <form onSubmit={formik.handleSubmit} className="space-y-8">
@@ -176,6 +173,11 @@ const Index = () => {
           <Other page={page} setPage={setPage} formik={formik} />
         )}
       </form>
+      <MapComponent
+        setFieldValue={formik.setFieldValue}
+        latValue={formik.values.lat}
+        lngValue={formik.values.lng}
+      />
     </div>
   );
 };
