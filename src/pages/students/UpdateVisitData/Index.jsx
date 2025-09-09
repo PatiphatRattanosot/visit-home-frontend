@@ -56,8 +56,8 @@ const Index = () => {
         parent_last_name: values.parent_last_name,
         parent_phone: values.parent_phone,
         parent_job: values.parent_job,
-        lat: values.lat,
-        lng: values.lng,
+        lat: Number(values.lat),
+        lng: Number(values.lng),
       };
       const relationship_info = {
         family_relation_status: values.family_relation_status,
@@ -124,7 +124,8 @@ const Index = () => {
           risk_info,
           additional_info,
         },
-        image
+        image,
+        "update"
       ).then(() => navigate(`/student/visiting-info`));
     },
   });

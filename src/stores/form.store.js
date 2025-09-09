@@ -24,7 +24,7 @@ export const useStudentFormStore = create(
       localStorage.removeItem(`student_data_${yearId}`);
     },
 
-    submitForm: async (userInfo, yearId, data, image) => {
+    submitForm: async (userInfo, yearId, data, image, operation) => {
       try {
         const reqData = {
           ...data,
@@ -70,7 +70,10 @@ export const useStudentFormStore = create(
           await Swal.fire({
             icon: "success",
             title: "สำเร็จ",
-            text: "เพิ่มข้อมูลประจำปีเรียบร้อยแล้ว!",
+            text:
+              operation === "add"
+                ? "เพิ่มข้อมูลรายปีสำเร็จ!"
+                : "แก้ไขข้อมูลรายปีสำเร็จ!",
             showConfirmButton: false,
             timer: 1500,
           });

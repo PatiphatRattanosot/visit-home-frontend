@@ -122,7 +122,8 @@ const Index = () => {
           risk_info,
           additional_info,
         },
-        image
+        image,
+        "add"
       ).then(() => navigate(`/student/visiting-info`));
     },
   });
