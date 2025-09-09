@@ -296,7 +296,27 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               disabled={checkParent === true}
             />
             {/* lat */}
+            <Text
+              name="lat"
+              label="ละติจูด"
+              onChange={formik.handleChange}
+              value={formik.values.lat}
+              placeholder="ละติจูด"
+              onBlur={formik.handleBlur}
+              error={formik.errors.lat}
+              touched={formik.touched.lat}
+            />
             {/* lng */}
+            <Text
+              name="lng"
+              label="ลองจิจูด"
+              onChange={formik.handleChange}
+              value={formik.values.lng}
+              placeholder="ลองจิจูด"
+              onBlur={formik.handleBlur}
+              error={formik.errors.lng}
+              touched={formik.touched.lng}
+            />
             {/* Map Component */}
             <div className="md:col-span-2 flex flex-col items-center justify-center">
               <button

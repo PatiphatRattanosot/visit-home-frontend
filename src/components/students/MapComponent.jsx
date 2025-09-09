@@ -1,8 +1,8 @@
 import {
   APIProvider,
   Map,
-  AdvancedMarker,
-  Pin,
+  Marker,
+  useMarkerRef,
 } from "@vis.gl/react-google-maps";
 
 const MapComponent = ({ setFieldValue, latValue, lngValue }) => {
@@ -27,29 +27,16 @@ const MapComponent = ({ setFieldValue, latValue, lngValue }) => {
             <Map
               style={{ width: "100%", height: "100%" }}
               defaultCenter={schoolLocation}
-              defaultZoom={6}
+              defaultZoom={17}
               gestureHandling="greedy"
               disableDefaultUI={true}
               onClick={handleMapClick}
             >
-              {/* School Marker */}
-              <AdvancedMarker position={schoolLocation}>
-                <Pin
-                  background="#3b82f6" // Blue
-                  glyphColor="white"
-                  borderColor="white"
-                />
-              </AdvancedMarker>
-
-              {/* Student-selected Marker */}
               {latValue && lngValue && (
-                <AdvancedMarker position={{ lat: latValue, lng: lngValue }}>
-                  <Pin
-                    background="#16a34a" // Green
-                    glyphColor="white"
-                    borderColor="white"
-                  />
-                </AdvancedMarker>
+                <Marker
+                  position={{ lat: latValue, lng: lngValue }}
+                  ref={useMarkerRef()}
+                />
               )}
             </Map>
           </APIProvider>
@@ -57,7 +44,17 @@ const MapComponent = ({ setFieldValue, latValue, lngValue }) => {
 
         <div className="modal-action">
           <form method="dialog" className="flex gap-2">
-            <button className="btn-red">ยกเลิก</button>
+            <button
+              className="btn-red"
+              type="button"
+              onClick={() => {
+                setFieldValue("lat", "");
+                setFieldValue("lng", "");
+                document.getElementById("map_modal").close();
+              }}
+            >
+              ยกเลิก
+            </button>
             <button
               type="button"
               className="btn-green"

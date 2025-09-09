@@ -22,8 +22,8 @@ export const initialFormValues = {
   parent_last_name: "",
   parent_phone: "",
   parent_job: "",
-  lat: 0,
-  lng: 0,
+  lat: "",
+  lng: "",
   // Page 2 Relationship Information
   family_relation_status: "",
   family_member: 1,
