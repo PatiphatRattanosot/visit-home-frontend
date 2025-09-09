@@ -17,11 +17,9 @@ const getVisitInfoByStudentId = async (studentId, yearId) => {
   });
 };
 
-const updateVisitInfo = async (id, data) => {
-  return await api.put(`/visit-info/update/${id}`, data, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
-}
+const updateVisitInfo = async (data) => {
+  return await api.put(`/visit-info/update`, data);
+};
 
 const VisitInfoService = {
   updateVisitInfo,
