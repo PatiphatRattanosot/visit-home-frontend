@@ -14,6 +14,7 @@ const Status = () => {
   const [sdqParentData, setSdqParentData] = useState(null);
 
   useEffect(() => {
+    setHomeVisitData(null);
     const fetchData = async () => {
       try {
         const homeVisitResponse = await StudentService.getYearlyData(
@@ -30,6 +31,7 @@ const Status = () => {
   }, [selectedYear]);
 
   useEffect(() => {
+    setSdqParentData(null);
     const fetchData = async () => {
       try {
         const sdqParentResponse = await SDQServices.getSDQByYearAndAssessor({
@@ -48,6 +50,7 @@ const Status = () => {
   }, [selectedYear, userInfo?._id]);
 
   useEffect(() => {
+    setSdqStudentData(null);
     const fetchData = async () => {
       try {
         const sdqStudentResponse = await SDQServices.getSDQByYearAndAssessor({
@@ -67,6 +70,7 @@ const Status = () => {
   }, [selectedYear, userInfo?._id]);
 
   useEffect(() => {
+    setSdqTeacherData(null);
     const fetchData = async () => {
       try {
         const sdqTeacherResponse = await SDQServices.getSDQByYearAndAssessor({
@@ -103,7 +107,7 @@ const Status = () => {
               ข้อมูลการเยี่ยมบ้าน
             </span>
             <span
-              className={`text-2xl font-bold ${
+              className={`text-xl font-bold ${
                 homeVisitData ? "text-green-600" : "text-red-600"
               }`}
             >
@@ -116,7 +120,7 @@ const Status = () => {
               แบบประเมิน SDQ
             </span>
             <span
-              className={`text-2xl font-bold ${
+              className={`text-xl font-bold ${
                 sdqStudentData && sdqParentData && sdqTeacherData
                   ? "text-green-600"
                   : "text-red-600"
