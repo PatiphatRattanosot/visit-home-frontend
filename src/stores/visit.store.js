@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import VisitInfoService from "../services/visit-info/visitInfo.service";
 import toast from "react-hot-toast";
+import { data } from "react-router";
 
 export const useVisitInfoStore = create((set, get) => ({
   visitInfos: [],
@@ -15,7 +16,6 @@ export const useVisitInfoStore = create((set, get) => ({
           response.data.message || "เพิ่มข้อมูลการเยี่ยมบ้านเรียบร้อยแล้ว"
         );
         set({ visitInfos: response.data.data });
-        
 
         return response.data.data;
       }
@@ -56,9 +56,9 @@ export const useVisitInfoStore = create((set, get) => ({
     }
   },
 
-  updateVisitInfo: async (id, data) => {
+  updateVisitInfo: async (data) => {
     try {
-      const response = await VisitInfoService.updateVisitInfo(id, data);
+      const response = await VisitInfoService.updateVisitInfo(data);
       if (response.status === 200) {
         toast.success(
           response.data.message || "แก้ไขข้อมูลการเยี่ยมบ้านเรียบร้อยแล้ว"
