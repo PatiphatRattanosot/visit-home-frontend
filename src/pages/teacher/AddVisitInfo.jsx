@@ -1,5 +1,6 @@
 import { useFormik } from "formik";
 import { VisitInfoSchema } from "../../schemas/visitInfo";
+import Swal from "sweetalert2";
 import AddPicture from "../../components/teacher/AddPicture";
 import BreadcrumbsLoop from "../../components/Breadcrumbs";
 import TextInput from "../../components/modals/TexInputInModal";
@@ -79,13 +80,26 @@ const AddVisitInfo = () => {
       formData.append("year_id", values.year_id);
 
       if (visitInfo) {
-        await updateVisitInfo();
+        if (
+          !values.home_img ||
+          typeof values.home_img !== "object" ||
+          !values.family_img ||
+          typeof values.family_img !== "object"
+        ) {
+          Swal.fire({
+            icon: "warning",
+            title: "เลือกไฟล์รูปภาพใหม่ทุกครั้งที่แก้ไขข้อมูล",
+          });
+          return;
+        }
+        formData.append("visit_info_id", visitInfo._id);
+        await updateVisitInfo(formData);
       } else {
-        await addVisitInfo(formData).then(()=>{
-            setTimeout(() => {
+        await addVisitInfo(formData).then(() => {
+          setTimeout(() => {
             window.location.reload();
-            }, 2600); 
-        })
+          }, 2600);
+        });
       }
     },
   });
@@ -196,7 +210,11 @@ const AddVisitInfo = () => {
         </div>
 
         <div className="flex justify-center md:justify-end ml-6 md:mx-50">
-          <button type="button" onClick={() => navigate("/teacher/students")} className={visitInfo ? "hidden" : "btn-red mr-4"}>
+          <button
+            type="button"
+            onClick={() => navigate("/teacher/students")}
+            className={visitInfo ? "hidden" : "btn-red mr-4"}
+          >
             ยกเลิก
           </button>
           <button
