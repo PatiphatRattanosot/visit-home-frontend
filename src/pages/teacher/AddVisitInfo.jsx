@@ -70,8 +70,12 @@ const AddVisitInfo = () => {
     enableReinitialize: true,
     onSubmit: async (values, actions) => {
       const formData = new FormData();
-      formData.append("home_img", values.home_img); // ไฟล์
-      formData.append("family_img", values.family_img); // ไฟล์
+      if (pictureFile.home_img) {
+        formData.append("home_img", pictureFile.home_img); // ไฟล์
+      }
+      if (pictureFile.family_img) {
+        formData.append("family_img", pictureFile.family_img); // ไฟล์
+      }
       formData.append("home_description", values.home_description);
       formData.append("family_description", values.family_description);
       formData.append("comment", values.comment);
@@ -80,18 +84,6 @@ const AddVisitInfo = () => {
       formData.append("year_id", values.year_id);
 
       if (visitInfo) {
-        if (
-          !values.home_img ||
-          typeof values.home_img !== "object" ||
-          !values.family_img ||
-          typeof values.family_img !== "object"
-        ) {
-          Swal.fire({
-            icon: "warning",
-            title: "เลือกไฟล์รูปภาพใหม่ทุกครั้งที่แก้ไขข้อมูล",
-          });
-          return;
-        }
         formData.append("visit_info_id", visitInfo._id);
         await updateVisitInfo(formData);
       } else {
