@@ -112,75 +112,81 @@ const Risk = ({ page, setPage, riskInfo }) => {
           </div>
 
           {/* Risk info grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-            {/* เมื่ออยู่ลำพัง */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                เมื่อนักเรียนอยู่ลำพัง
-              </label>
-              <p className="w-full p-2 rounded-md text-gray-900">
-                {getWhenAlone(riskInfo.when_student_alone) || "-"}
-              </p>
+          {!riskInfo ? (
+            <div className="mt-6 text-center text-red-600 flex items-center justify-center text-lg h-[35vh]">
+              ยังไม่มีการกรอกข้อมูลในปีนี้
             </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              {/* เมื่ออยู่ลำพัง */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  เมื่อนักเรียนอยู่ลำพัง
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {getWhenAlone(riskInfo?.when_student_alone) || "-"}
+                </p>
+              </div>
 
-            {/* ความเสี่ยงด้านสุขภาพ */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                ความเสี่ยงด้านสุขภาพ
-              </label>
-              <p className="w-full p-2 rounded-md text-gray-900">
-                {riskInfo.health_risk?.length
-                  ? riskInfo.health_risk
-                      .map((r) => healthRiskMap[r] || "-")
-                      .join(", ")
-                  : "-"}
-              </p>
-            </div>
+              {/* ความเสี่ยงด้านสุขภาพ */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  ความเสี่ยงด้านสุขภาพ
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {riskInfo?.health_risk?.length
+                    ? riskInfo?.health_risk
+                        .map((r) => healthRiskMap[r] || "-")
+                        .join(", ")
+                    : "-"}
+                </p>
+              </div>
 
-            {/* สวัสดิการและความปลอดภัย */}
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                สวัสดิการและความปลอดภัย
-              </label>
-              <p className="w-full p-2 rounded-md text-gray-900">
-                {riskInfo.welfare_and_safety?.length
-                  ? riskInfo.welfare_and_safety
-                      .map((w) => welfareSafetyMap[w] || "-")
-                      .join(", ")
-                  : "-"}
-              </p>
-            </div>
+              {/* สวัสดิการและความปลอดภัย */}
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  สวัสดิการและความปลอดภัย
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {riskInfo?.welfare_and_safety?.length
+                    ? riskInfo?.welfare_and_safety
+                        .map((w) => welfareSafetyMap[w] || "-")
+                        .join(", ")
+                    : "-"}
+                </p>
+              </div>
 
-            {/* ระยะทางไปโรงเรียน */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                ระยะทางจากบ้านไปโรงเรียน
-              </label>
-              <p className="w-full p-2 rounded-md text-gray-900">
-                {riskInfo.distance_to_school || "-"} กม.
-              </p>
-            </div>
+              {/* ระยะทางไปโรงเรียน */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  ระยะทางจากบ้านไปโรงเรียน
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {riskInfo?.distance_to_school || "-"} กม.
+                </p>
+              </div>
 
-            {/* เวลาในการเดินทาง */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                เวลาเดินทางไปโรงเรียน
-              </label>
-              <p className="w-full p-2 rounded-md text-gray-900">
-                {riskInfo.time_used || "-"} นาที
-              </p>
-            </div>
+              {/* เวลาในการเดินทาง */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  เวลาเดินทางไปโรงเรียน
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {riskInfo?.time_used || "-"} นาที
+                </p>
+              </div>
 
-            {/* วิธีเดินทางไปโรงเรียน */}
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                วิธีการเดินทางไปโรงเรียน
-              </label>
-              <p className="w-full p-2 rounded-md text-gray-900">
-                {getHowToGoToSchool(riskInfo.school_transport) || "-"}
-              </p>
+              {/* วิธีเดินทางไปโรงเรียน */}
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  วิธีการเดินทางไปโรงเรียน
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {getHowToGoToSchool(riskInfo?.school_transport) || "-"}
+                </p>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Navigation buttons */}
           <div className="flex justify-between mt-10 space-x-2">

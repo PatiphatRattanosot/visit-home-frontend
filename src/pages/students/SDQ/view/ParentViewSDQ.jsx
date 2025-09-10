@@ -11,11 +11,11 @@ const ParentViewSDQ = () => {
   const { userInfo } = useAuthStore();
 
   const overallScore = sdq
-    ? sdq.emotional.total_score +
-      sdq.behavioral.total_score +
-      sdq.hyperactivity.total_score +
-      sdq.friendship.total_score +
-      sdq.social.total_score
+    ? sdq?.emotional?.total_score +
+      sdq?.behavioral?.total_score +
+      sdq?.hyperactivity?.total_score +
+      sdq?.friendship?.total_score +
+      sdq?.social?.total_score
     : 0;
 
   React.useEffect(() => {
@@ -76,28 +76,28 @@ const ParentViewSDQ = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                   <SDQScoreCard
                     title="ด้านอารมณ์"
-                    score={sdq.emotional.total_score}
-                    operator={sdq.emotional.total_score > 5}
+                    score={sdq?.emotional?.total_score}
+                    operator={sdq?.emotional?.total_score > 5}
                   />
                   <SDQScoreCard
                     title="ด้านความประพฤติ/เกเร"
-                    score={sdq.behavioral.total_score}
-                    operator={sdq.behavioral.total_score > 4}
+                    score={sdq?.behavioral?.total_score}
+                    operator={sdq?.behavioral?.total_score > 4}
                   />
                   <SDQScoreCard
                     title="ด้านพฤติกรรมอยู่ไม่นิ่ง/สมาธิสั้น"
-                    score={sdq.hyperactivity.total_score}
-                    operator={sdq.hyperactivity.total_score > 5}
+                    score={sdq?.hyperactivity?.total_score}
+                    operator={sdq?.hyperactivity?.total_score > 5}
                   />
                   <SDQScoreCard
                     title="ด้านความสัมพันธ์กับเพื่อน"
-                    score={sdq.friendship.total_score}
-                    operator={sdq.friendship.total_score > 3}
+                    score={sdq?.friendship?.total_score}
+                    operator={sdq?.friendship?.total_score > 3}
                   />
                   <SDQScoreCard
                     title="ด้านสัมพันธภาพทางสังคม"
-                    score={sdq.social.total_score}
-                    operator={sdq.social.total_score < 4}
+                    score={sdq?.social?.total_score}
+                    operator={sdq?.social?.total_score < 4}
                   />
                   <SDQScoreCard
                     title="ผลรวม"
