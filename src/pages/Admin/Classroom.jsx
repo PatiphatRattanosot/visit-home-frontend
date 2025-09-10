@@ -140,8 +140,10 @@ const Classroom = () => {
               เพิ่มชั้นเรียน
             </button>
             <ModalAddClassroom
-              yearId={selectedYear._id}
-              addClassroomSuccess={() => fetchClassrooms(selectedYear._id)}
+              yearId={selectedYear?._id ?? ""}
+              addClassroomSuccess={() => {
+                if (selectedYear?._id) fetchClassrooms(selectedYear._id);
+              }}
             />
           </div>
         </div>
@@ -203,7 +205,9 @@ const Classroom = () => {
                   </button>
                   <ModalEditClassroom
                     id={classroom._id}
-                    onUpdateSuccess={() => fetchClassrooms(selectedYear._id)}
+                    onUpdateSuccess={() => {
+                      if (selectedYear?._id) fetchClassrooms(selectedYear._id);
+                    }}
                   />
                 </td>
               </tr>
