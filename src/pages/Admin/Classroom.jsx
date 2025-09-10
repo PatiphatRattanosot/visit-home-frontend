@@ -11,13 +11,13 @@ import ModalEditClassroom from "../../components/modals/EditClassroom";
 import BreadcrumbsLoop from "../../components/Breadcrumbs";
 import { useClassroomStore } from "../../stores/classroom.store";
 import useYearSelectStore from "../../stores/year_select.store";
+import YearSelector from "../../components/YearSelector";
 
 const Classroom = () => {
+  const { yearId } = useParams();
   const { classrooms, fetchClassrooms, deleteClassroom } = useClassroomStore();
-  const { years, fetchYears, getYearsByYear, selectedYear, setSelectedYear } =
-    useYearSelectStore();
+  const { years, selectedYear, setSelectedYear } = useYearSelectStore();
   const navigate = useNavigate();
-  const { yearId, year } = useParams();
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   // สร้าง state สำหรับเก็บข้อมูลชั้นเรียนที่กรองแล้ว
   // เพื่อใช้ในการแสดงผลในตาราง
@@ -38,24 +38,22 @@ const Classroom = () => {
     : [];
 
   useEffect(() => {
-    if (selectedYear?._id) {
-      fetchClassrooms(selectedYear._id);
-
-      getYearsByYear(selectedYear.year);
-    }
-  }, [selectedYear]);
-
-  useEffect(() => {
     setFilteredClassroom(Array.isArray(classrooms) ? classrooms : []);
   }, [classrooms]);
 
+  // หากมี yearId ใน URL ให้ตั้งค่าเป็นปีที่ถูกเลือก
   useEffect(() => {
-    fetchYears(); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลปีการศึกษา
-  }, []);
+    if (yearId && selectedYear !== yearId) {
+      setSelectedYear(String(yearId));
+    }
+  }, [yearId]);
 
+  // ดึงชั้นเรียนเมื่อปีที่เลือกเปลี่ยนแปลง
   useEffect(() => {
-    getYearsByYear(selectedYear?.year);
-  }, [selectedYear?.year]);
+    if (selectedYear) {
+      fetchClassrooms(String(selectedYear));
+    }
+  }, [selectedYear]);
 
   useEffect(() => {
     // กรองข้อมูลชั้นเรียนตามตัวเลือกที่เลือก
@@ -83,26 +81,10 @@ const Classroom = () => {
       </div>
       <div>
         <h1 className="text-lg md:text-xl text-center">
-          เพิ่มชั้นเรียนของปีการศึกษา {selectedYear?.year}
+          เพิ่มชั้นเรียนของปีการศึกษา {years.find((y) => y._id === selectedYear)?.year ?? ""}
         </h1>
         <div className="flex flex-row justify-end items-center m-2">
-          <select
-            name="select-year"
-            id="select-year"
-            className="select w-32"
-            value={selectedYear?._id ?? ""}
-            onChange={(e) => {
-              const id = e.target.value;
-              const found = years.find((y) => y._id === id);
-              if (found) setSelectedYear(found);
-            }}
-          >
-            {years.map((year) => (
-              <option key={year._id} value={year._id}>
-                {year.year}
-              </option>
-            ))}
-          </select>
+          <YearSelector />
         </div>
 
         {/* กล่องสำหรับกำหนดช่วงเวลานัดเยี่ยมบ้าน */}
@@ -140,9 +122,9 @@ const Classroom = () => {
               เพิ่มชั้นเรียน
             </button>
             <ModalAddClassroom
-              yearId={selectedYear?._id ?? ""}
+              yearId={selectedYear ?? ""}
               addClassroomSuccess={() => {
-                if (selectedYear?._id) fetchClassrooms(selectedYear._id);
+                if (selectedYear) fetchClassrooms(selectedYear);
               }}
             />
           </div>
@@ -206,7 +188,7 @@ const Classroom = () => {
                   <ModalEditClassroom
                     id={classroom._id}
                     onUpdateSuccess={() => {
-                      if (selectedYear?._id) fetchClassrooms(selectedYear._id);
+                      if (selectedYear) fetchClassrooms(selectedYear);
                     }}
                   />
                 </td>
