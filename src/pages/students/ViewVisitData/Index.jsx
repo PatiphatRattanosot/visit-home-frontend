@@ -25,6 +25,15 @@ const Index = () => {
   const { getYearlyData } = useStudentStore();
 
   React.useEffect(() => {
+    setPersonalInfo(null);
+    setRelationshipInfo(null);
+    setFamilyInfo(null);
+    setBehaviorInfo(null);
+    setRiskInfo(null);
+    setOtherInfo(null);
+    setImage(null);
+    setPhone(null);
+    // Fetch existing data for the selected year
     if (selectedYear && userInfo?._id) {
       getYearlyData(selectedYear).then((res) => {
         const yearlyData = res?.students?.[0]?.yearly_data?.[0];

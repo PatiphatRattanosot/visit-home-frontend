@@ -14,9 +14,34 @@ const Relation = ({ page, setPage, formik }) => {
   const [grandparentCheck, setGrandparentCheck] = React.useState(false);
   const [relativeCheck, setRelativeCheck] = React.useState(false);
 
+  React.useEffect(() => {
+    formik.setFieldValue("big_brother_relation", bigBrotherCheck ? "0" : "");
+    formik.setFieldValue("lil_brother_relation", lilBrotherCheck ? "0" : "");
+    formik.setFieldValue("big_sister_relation", bigSisterCheck ? "0" : "");
+    formik.setFieldValue("lil_sister_relation", lilSisterCheck ? "0" : "");
+    formik.setFieldValue("grandparent_relation", grandparentCheck ? "0" : "");
+    formik.setFieldValue("relative_relation", relativeCheck ? "0" : "");
+  }, [
+    bigBrotherCheck,
+    lilBrotherCheck,
+    bigSisterCheck,
+    lilSisterCheck,
+    grandparentCheck,
+    relativeCheck,
+  ]);
+
+  React.useEffect(() => {
+    if (formik.values.big_brother_relation !== "") setBigBrotherCheck(true);
+    if (formik.values.lil_brother_relation !== "") setLilBrotherCheck(true);
+    if (formik.values.big_sister_relation !== "") setBigSisterCheck(true);
+    if (formik.values.lil_sister_relation !== "") setLilSisterCheck(true);
+    if (formik.values.grandparent_relation !== "") setGrandparentCheck(true);
+    if (formik.values.relative_relation !== "") setRelativeCheck(true);
+  }, []);
+
   const breadcrumbsOptions = [
     { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
-    { label: "แก้ไขข้อมูลความสัมพันธ์" },
+    { label: "เพิ่มข้อมูลความสัมพันธ์" },
   ];
 
   const family_relation_status_options = [

@@ -5,6 +5,7 @@ import ShowPicture from "../../../components/students/ShowPicture";
 import YearSelector from "../../../components/YearSelector";
 import useYearSelectStore from "../../../stores/year_select.store";
 import { useAuthStore } from "../../../stores/auth.store";
+import ViewMap from "../../../components/students/ViewMap";
 
 const Personal = ({ page, setPage, personalInfo, image, phone }) => {
   const breadcrumbsOptions = [
@@ -197,22 +198,30 @@ const Personal = ({ page, setPage, personalInfo, image, phone }) => {
               </div>
 
               {/* Location Information */}
-              {/* <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                ละติจูด (Latitude)
-              </label>
-              <p className="w-full p-2 rounded-md text-gray-900">
-                {personalInfo?.lat || "-"}
-              </p>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  ละติจูด (Latitude)
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {personalInfo?.lat || "-"}
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  ลองจิจูด (Longitude)
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {personalInfo?.lng || "-"}
+                </p>
+              </div>
             </div>
-            <div>
+          )}
+          {personalInfo && personalInfo.lat && personalInfo.lng && (
+            <div className="mt-6">
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                ลองจิจูด (Longitude)
+                ตำแหน่งบ้านนักเรียน
               </label>
-              <p className="w-full p-2 rounded-md text-gray-900">
-                {personalInfo?.lng || "-"}
-              </p>
-            </div> */}
+              <ViewMap lat={personalInfo.lat} lng={personalInfo.lng} />
             </div>
           )}
           <div className="flex justify-end mt-10 space-x-2">

@@ -125,7 +125,7 @@ const Family = ({ page, setPage, familyInfo }) => {
                   รายได้รวมครัวเรือน
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
-                  {familyInfo.total_household_income || 0} บาท
+                  {familyInfo?.total_household_income || 0} บาท
                 </p>
               </div>
 
@@ -135,7 +135,7 @@ const Family = ({ page, setPage, familyInfo }) => {
                   ได้รับค่าใช้จ่ายรายวันจาก
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
-                  {getDailyGiver(familyInfo.received_daily_from) || "-"}
+                  {getDailyGiver(familyInfo?.received_daily_from) || "-"}
                 </p>
               </div>
 
@@ -145,7 +145,7 @@ const Family = ({ page, setPage, familyInfo }) => {
                   ค่าใช้จ่ายไปโรงเรียนต่อวัน
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
-                  {familyInfo.daily_total_to_school || 0} บาท
+                  {familyInfo?.daily_total_to_school || 0} บาท
                 </p>
               </div>
 
@@ -155,7 +155,7 @@ const Family = ({ page, setPage, familyInfo }) => {
                   งานพิเศษของนักเรียน
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
-                  {familyInfo.student_part_time || "-"}
+                  {familyInfo?.student_part_time || "-"}
                 </p>
               </div>
 
@@ -164,9 +164,9 @@ const Family = ({ page, setPage, familyInfo }) => {
                   รายได้จากการทำงานพิเศษ
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
-                  {familyInfo.student_part_time === ""
+                  {familyInfo?.student_part_time === ""
                     ? "-"
-                    : familyInfo.student_income + " บาท" || 0 + " บาท"}
+                    : familyInfo?.student_income + " บาท" || 0 + " บาท"}
                 </p>
               </div>
 
@@ -176,8 +176,8 @@ const Family = ({ page, setPage, familyInfo }) => {
                   ภาระพึ่งพิงของครัวเรือน
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
-                  {familyInfo.household_burdens?.length
-                    ? familyInfo.household_burdens.map((item, index) => {
+                  {familyInfo?.household_burdens?.length
+                    ? familyInfo?.household_burdens.map((item, index) => {
                         let text = "";
                         switch (item) {
                           case "0":
@@ -199,7 +199,7 @@ const Family = ({ page, setPage, familyInfo }) => {
                         return (
                           <span key={index}>
                             {text}
-                            {index < familyInfo.household_burdens.length - 1
+                            {index < familyInfo?.household_burdens.length - 1
                               ? ", "
                               : ""}
                           </span>
@@ -215,7 +215,7 @@ const Family = ({ page, setPage, familyInfo }) => {
                   ประเภทบ้าน
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
-                  {getHouseType(familyInfo.housing_type) || "-"}
+                  {getHouseType(familyInfo?.housing_type) || "-"}
                 </p>
               </div>
 
@@ -225,7 +225,7 @@ const Family = ({ page, setPage, familyInfo }) => {
                   สภาพบ้าน
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
-                  {getHousingCondition(familyInfo.housing_condition) || "-"}
+                  {getHousingCondition(familyInfo?.housing_condition) || "-"}
                 </p>
               </div>
 
@@ -235,8 +235,8 @@ const Family = ({ page, setPage, familyInfo }) => {
                   ยานพาหนะที่ครอบครัวมี
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
-                  {familyInfo.family_vehicles?.length
-                    ? familyInfo.family_vehicles.map((item, index) => {
+                  {familyInfo?.family_vehicles?.length
+                    ? familyInfo?.family_vehicles.map((item, index) => {
                         let text = "";
                         switch (item) {
                           case "0":
@@ -258,7 +258,7 @@ const Family = ({ page, setPage, familyInfo }) => {
                         return (
                           <span key={index}>
                             {text}
-                            {index < familyInfo.family_vehicles.length - 1
+                            {index < familyInfo?.family_vehicles.length - 1
                               ? ", "
                               : ""}
                           </span>
@@ -274,7 +274,7 @@ const Family = ({ page, setPage, familyInfo }) => {
                   ที่ดินที่ครอบครัวเป็นเจ้าของ
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
-                  {familyInfo.owned_land || 0} ไร่
+                  {familyInfo?.owned_land || 0} ไร่
                 </p>
               </div>
               <div>
@@ -282,7 +282,7 @@ const Family = ({ page, setPage, familyInfo }) => {
                   ที่ดินที่เช่า
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
-                  {familyInfo.rented_land || 0} ไร่
+                  {familyInfo?.rented_land || 0} ไร่
                 </p>
               </div>
             </div>

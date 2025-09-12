@@ -65,45 +65,51 @@ const Other = ({ page, setPage, otherInfo }) => {
           </div>
 
           {/* Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-            {/* ความช่วยเหลือจากหน่วยงาน */}
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                ความช่วยเหลือที่ต้องการจากหน่วยงาน
-              </label>
-              <p className="w-full p-2 rounded-md text-gray-900">
-                {otherInfo?.support_from_organize?.length
-                  ? otherInfo.support_from_organize
-                      .map((o) => organizeSupportMap[o] || "-")
-                      .join(", ")
-                  : "-"}
-              </p>
+          {!otherInfo ? (
+            <div className="mt-6 text-center text-red-600 flex items-center justify-center text-lg h-[35vh]">
+              ยังไม่มีการกรอกข้อมูลในปีนี้
             </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              {/* ความช่วยเหลือจากหน่วยงาน */}
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  ความช่วยเหลือที่ต้องการจากหน่วยงาน
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {otherInfo?.support_from_organize?.length
+                    ? otherInfo?.support_from_organize
+                        .map((o) => organizeSupportMap[o] || "-")
+                        .join(", ")
+                    : "-"}
+                </p>
+              </div>
 
-            {/* ความช่วยเหลือจากโรงเรียน */}
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                ความช่วยเหลือที่ต้องการจากโรงเรียน
-              </label>
-              <p className="w-full p-2 rounded-md text-gray-900">
-                {otherInfo?.support_from_school?.length
-                  ? otherInfo.support_from_school
-                      .map((s) => schoolSupportMap[s] || "-")
-                      .join(", ")
-                  : "-"}
-              </p>
-            </div>
+              {/* ความช่วยเหลือจากโรงเรียน */}
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  ความช่วยเหลือที่ต้องการจากโรงเรียน
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {otherInfo?.support_from_school?.length
+                    ? otherInfo?.support_from_school
+                        .map((s) => schoolSupportMap[s] || "-")
+                        .join(", ")
+                    : "-"}
+                </p>
+              </div>
 
-            {/* ข้อกังวลของผู้ปกครอง */}
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                ข้อกังวล / ความห่วงใยของผู้ปกครอง
-              </label>
-              <p className="w-full p-2 rounded-md text-gray-900">
-                {otherInfo?.parent_concern || "-"}
-              </p>
+              {/* ข้อกังวลของผู้ปกครอง */}
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  ข้อกังวล / ความห่วงใยของผู้ปกครอง
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {otherInfo?.parent_concern || "-"}
+                </p>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Navigation buttons */}
           <div className="flex justify-start mt-10 space-x-2">

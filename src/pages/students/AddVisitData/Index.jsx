@@ -13,6 +13,7 @@ import {
 import { useParams, useNavigate } from "react-router";
 import { useStudentFormStore } from "../../../stores/form.store";
 import { useAuthStore } from "../../../stores/auth.store";
+import MapComponent from "../../../components/students/MapComponent";
 
 const Index = () => {
   const [page, setPage] = React.useState(1);
@@ -53,8 +54,8 @@ const Index = () => {
         parent_last_name: values.parent_last_name,
         parent_phone: values.parent_phone,
         parent_job: values.parent_job,
-        lat: values.lat,
-        lng: values.lng,
+        lat: Number(values.lat),
+        lng: Number(values.lng),
       };
       const relationship_info = {
         family_relation_status: values.family_relation_status,
@@ -121,15 +122,28 @@ const Index = () => {
           risk_info,
           additional_info,
         },
-        image
-      );
-      navigate(`/student/visiting-info`);
+        image,
+        "add"
+      ).then(() => navigate(`/student/visiting-info`));
     },
   });
 
   React.useEffect(() => {
-    setFormData(formik?.values, yearId);
-  }, [formik?.values, yearId]);
+    if (JSON.stringify(formik.values) !== JSON.stringify(initialFormValues)) {
+      setFormData(formik.values, yearId);
+    }
+  }, [formik.values, yearId]);
+
+  React.useEffect(() => {
+    const savedData = JSON.parse(
+      localStorage.getItem(`student_data_${yearId}`)
+    );
+    if (savedData) {
+      console.log("Loaded saved data:", savedData);
+
+      formik.setValues(savedData);
+    }
+  }, [yearId]);
 
   return (
     <div className="w-full max-w-screen h-full min-h-screen flex justify-center flex-col bg-gray-50">
@@ -154,6 +168,11 @@ const Index = () => {
           <Other page={page} setPage={setPage} formik={formik} />
         )}
       </form>
+      <MapComponent
+        setFieldValue={formik.setFieldValue}
+        latValue={formik.values.lat}
+        lngValue={formik.values.lng}
+      />
     </div>
   );
 };

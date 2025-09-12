@@ -5,8 +5,11 @@ import Stepper from "../../../components/Stepper";
 import LabelCheck from "../../../components/LabelCheck";
 import StudentPicture from "../../../components/students/StudentPicture";
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
+import { useNavigate } from "react-router";
 
 const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
+  const navigate = useNavigate();
+
   const prefixOptions = [
     { value: "นาย", label: "นาย" },
     { value: "นาง", label: "นาง" },
@@ -293,15 +296,46 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               disabled={checkParent === true}
             />
             {/* lat */}
+            <Text
+              name="lat"
+              label="ละติจูด"
+              onChange={formik.handleChange}
+              value={formik.values.lat}
+              placeholder="ละติจูด"
+              onBlur={formik.handleBlur}
+              error={formik.errors.lat}
+              touched={formik.touched.lat}
+            />
             {/* lng */}
+            <Text
+              name="lng"
+              label="ลองจิจูด"
+              onChange={formik.handleChange}
+              value={formik.values.lng}
+              placeholder="ลองจิจูด"
+              onBlur={formik.handleBlur}
+              error={formik.errors.lng}
+              touched={formik.touched.lng}
+            />
             {/* Map Component */}
-            <div className="md:col-span-2 flex flex-col items-center justify-center"></div>
+            <div className="md:col-span-2 flex flex-col items-center justify-center">
+              <button
+                type="button"
+                className="btn btn-blue"
+                onClick={() => document.getElementById("map_modal").showModal()}
+              >
+                เลือกตำแหน่งบ้าน
+              </button>
+            </div>
           </div>
           <div className="flex justify-between mt-10 space-x-2">
             <button
-              className="btn btn-error w-1/2"
+              className="btn btn-error w-1/2 text-white"
               type="button"
-              onClick={() => setPage(0)}
+              onClick={() => {
+                setPage(1);
+                navigate("/student/visiting-info");
+              }}
             >
               ยกเลิก
             </button>

@@ -157,7 +157,7 @@ const Behavior = ({ page, setPage, behaviorInfo }) => {
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
                   {mapValuesToLabels(
-                    behaviorInfo.student_resp,
+                    behaviorInfo?.student_resp,
                     student_resp
                   ).join(", ")}
                 </p>
@@ -170,7 +170,7 @@ const Behavior = ({ page, setPage, behaviorInfo }) => {
                     ความรับผิดชอบอื่น ๆ
                   </label>
                   <p className="w-full p-2 rounded-md text-gray-900">
-                    {behaviorInfo.other_student_resp}
+                    {behaviorInfo?.other_student_resp}
                   </p>
                 </div>
               )}
@@ -181,17 +181,17 @@ const Behavior = ({ page, setPage, behaviorInfo }) => {
                   งานอดิเรก
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
-                  {mapValuesToLabels(behaviorInfo.hobbies, hobbies).join(", ")}
+                  {mapValuesToLabels(behaviorInfo?.hobbies, hobbies).join(", ")}
                 </p>
               </div>
 
-              {behaviorInfo.other_hobbies && (
+              {behaviorInfo?.other_hobbies && (
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     งานอดิเรกอื่น ๆ
                   </label>
                   <p className="w-full p-2 rounded-md text-gray-900">
-                    {behaviorInfo.other_hobbies}
+                    {behaviorInfo?.other_hobbies}
                   </p>
                 </div>
               )}
@@ -203,7 +203,7 @@ const Behavior = ({ page, setPage, behaviorInfo }) => {
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
                   {mapValuesToLabels(
-                    behaviorInfo.drugs_behav,
+                    behaviorInfo?.drugs_behav,
                     drugs_behavior
                   ).join(", ")}
                 </p>
@@ -216,7 +216,7 @@ const Behavior = ({ page, setPage, behaviorInfo }) => {
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
                   {mapValuesToLabels(
-                    behaviorInfo.violent_behav,
+                    behaviorInfo?.violent_behav,
                     violence_behavior
                   ).join(", ")}
                 </p>
@@ -228,7 +228,7 @@ const Behavior = ({ page, setPage, behaviorInfo }) => {
                     พฤติกรรมก้าวร้าวอื่น ๆ
                   </label>
                   <p className="w-full p-2 rounded-md text-gray-900">
-                    {behaviorInfo.other_violent_behav}
+                    {behaviorInfo?.other_violent_behav}
                   </p>
                 </div>
               )}
@@ -240,7 +240,7 @@ const Behavior = ({ page, setPage, behaviorInfo }) => {
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
                   {mapValuesToLabels(
-                    behaviorInfo.sexual_behav,
+                    behaviorInfo?.sexual_behav,
                     sexual_behavior
                   ).join(", ")}
                 </p>
@@ -253,7 +253,7 @@ const Behavior = ({ page, setPage, behaviorInfo }) => {
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
                   {mapValuesToLabels(
-                    [behaviorInfo.computer_internet_access],
+                    [behaviorInfo?.computer_internet_access],
                     internet_access_options
                   ).join(", ")}
                 </p>
@@ -266,7 +266,7 @@ const Behavior = ({ page, setPage, behaviorInfo }) => {
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
                   {mapValuesToLabels(
-                    [behaviorInfo.tech_use_behav],
+                    [behaviorInfo?.tech_use_behav],
                     tech_use_behav_options
                   ).join(", ")}
                 </p>
@@ -279,7 +279,7 @@ const Behavior = ({ page, setPage, behaviorInfo }) => {
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
                   {mapValuesToLabels(
-                    behaviorInfo.gaming_behav,
+                    behaviorInfo?.gaming_behav,
                     gaming_behav
                   ).join(", ")}
                 </p>
@@ -291,7 +291,7 @@ const Behavior = ({ page, setPage, behaviorInfo }) => {
                     พฤติกรรมการเล่นเกมอื่น ๆ
                   </label>
                   <p className="w-full p-2 rounded-md text-gray-900">
-                    {behaviorInfo.other_gaming_behav}
+                    {behaviorInfo?.other_gaming_behav}
                   </p>
                 </div>
               )}

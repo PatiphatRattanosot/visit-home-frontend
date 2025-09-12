@@ -8,6 +8,14 @@ import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 const Other = ({ page, setPage, formik }) => {
   const [parentConcern, setParentConcern] = React.useState(false);
 
+  React.useEffect(() => {
+    if (formik.values.parent_concern !== "") {
+      setParentConcern(true);
+    } else {
+      setParentConcern(false);
+    }
+  }, [formik.values.parent_concern]);
+
   const breadcrumbsOptions = [
     { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
     { label: "เพิ่มความต้องการจากผู้ปกครอง" },
@@ -105,7 +113,7 @@ const Other = ({ page, setPage, formik }) => {
             >
               ย้อนกลับ{` (${page - 1})`}
             </button>
-            <button type="submit" className="btn btn-success w-1/2">
+            <button type="submit" className="btn btn-success w-1/2 text-white">
               บันทึกข้อมูล
             </button>
           </div>
