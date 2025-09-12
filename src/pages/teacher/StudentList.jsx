@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import { useClassroomStore } from "../../stores/classroom.store";
 import { useAuthStore } from "../../stores/auth.store";
+import ManageStudent from "../../components/modals/ManageStudent";
 import BreadcrumbsLoop from "../../components/Breadcrumbs";
 import SearchPersonnel from "../../components/SearchPersonnel";
 import FilterDropdown from "../../components/FilterDropdown";
 import Pagination from "../../components/Pagination";
+import useYearSelectStore from "../../stores/year_select.store";
+import YearSelector from "../../components/YearSelector";
 
 const StudentList = () => {
   const { userInfo } = useAuthStore();
   const { classroom, getClassroomByTeacherId } = useClassroomStore(); // classroom = array ของห้อง
+  const { years, selectedYear, setSelectedYear } = useYearSelectStore();
 
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -16,10 +20,10 @@ const StudentList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // โหลดห้องของครู (คาดว่ามีห้องเดียว)
   useEffect(() => {
-    getClassroomByTeacherId(userInfo?._id);
-  }, [userInfo?._id]);
+    getClassroomByTeacherId(String(userInfo._id), String(selectedYear));
+    console.log("ไหนดูซิกูส่งไรไปบ้างให้บ้านวะ:", userInfo._id, selectedYear);
+  }, [userInfo?._id, selectedYear]);
 
   const currentClass =
     Array.isArray(classroom) && classroom.length ? classroom[0] : null;
@@ -127,6 +131,10 @@ const StudentList = () => {
           setSelectedOption={setSelectedOption}
           className="select select-bordered w-42"
         />
+        <YearSelector
+          selectedYear={selectedYear}
+          setSelectedYear={setSelectedYear}
+        />
       </div>
 
       <div className="rounded-xl border border-base-300 overflow-hidden">
@@ -146,19 +154,37 @@ const StudentList = () => {
             </thead>
             <tbody>
               {currentItems.map((student) => (
-                <tr key={student?._id}>
+                <tr
+                  className="cursor-pointer hover:bg-gray-100"
+                  onClick={() =>
+                    document
+                      .getElementById(`manage_student_${student._id}`)
+                      .showModal()
+                  }
+                  key={student?._id}
+                >
                   <td className="hidden sm:table-cell">
                     <label>
                       <input type="checkbox" className="checkbox checkbox-sm" />
                     </label>
                   </td>
-                  <td className="text-center">{student?.user_id}</td>
+                  <td className="text-center cursor-pointer hover:underline">
+                    {student?.user_id}
+                  </td>
+
                   <td>{student?.prefix}</td>
                   <td>
                     {student?.first_name} {student?.last_name}
                   </td>
+                  <td>
+                    <ManageStudent
+                      id={`manage_student_${student._id}`}
+                      student={student}
+                    />
+                  </td>
                 </tr>
               ))}
+
               {currentItems.length === 0 && (
                 <tr>
                   <td

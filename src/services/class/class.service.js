@@ -12,8 +12,12 @@ const getClassroomsByYear = async (year_id) => {
   return await api.get(`class/by_year/${year_id}`);
 };
 
-const getClassesByTeacherId = async (teacher_id) => {
-  return await api.get(`class/by_teacher/${teacher_id}`);
+// class.service.js
+const getClassesByTeacherId = (teacherId, yearId) => {
+  return api.post('/class/by_teacher', {
+    teacher_id: String(teacherId),
+    year_id: String(yearId),
+  });
 };
 
 const getClassById = async (id) => {
@@ -30,7 +34,7 @@ const classService = {
   getClassroomsByYear,
   getClassById,
   deleteClass,
-  getClassesByTeacherId
+  getClassesByTeacherId,
 };
 
 export default classService;
