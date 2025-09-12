@@ -1,10 +1,9 @@
 import { useFormik } from "formik";
 import { VisitInfoSchema } from "../../schemas/visitInfo";
-import Swal from "sweetalert2";
 import AddPicture from "../../components/teacher/AddPicture";
 import BreadcrumbsLoop from "../../components/Breadcrumbs";
 import TextInput from "../../components/modals/TexInputInModal";
-import TextArea from "../../components/TextArea";
+import TextArea from "../../components/Textarea";
 import useYearSelectStore from "../../stores/year_select.store";
 import { useAuthStore } from "../../stores/auth.store";
 import { useNavigate } from "react-router";
@@ -17,16 +16,11 @@ const AddVisitInfo = () => {
   const navigate = useNavigate();
   const { studentId } = useParams();
   const { userInfo } = useAuthStore();
-  const { years: year, selectedYear, getYearById } = useYearSelectStore();
+  const { selectedYear } = useYearSelectStore();
   const { student, getStudentById } = useStudentStore();
 
-  const {
-    visitInfo,
-    addVisitInfo,
-    getVisitInfoById,
-    getVisitInfoByStudentId,
-    updateVisitInfo,
-  } = useVisitInfoStore();
+  const { visitInfo, addVisitInfo, getVisitInfoByStudentId, updateVisitInfo } =
+    useVisitInfoStore();
   const [pictureFile, setPictureFile] = useState({
     home_img: null,
     family_img: null,
