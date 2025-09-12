@@ -60,7 +60,7 @@ export const useStudentStore = create((set, get) => ({
     try {
       const response = await StudentService.getAllStudents();
       console.log(response);
-      
+
       set({ data: response.data });
     } catch (error) {
       console.error("Failed to fetch students:", error);
@@ -82,9 +82,12 @@ export const useStudentStore = create((set, get) => ({
     try {
       const response = await StudentService.updateStudent(id, studentData);
       console.log("Updated student:", response.data);
-      toast.success(response.data.message || "แก้ไขข้อมูลนักเรียนเรียบร้อยแล้ว", {
-        duration: 3500,
-      });
+      toast.success(
+        response.data.message || "แก้ไขข้อมูลนักเรียนเรียบร้อยแล้ว",
+        {
+          duration: 3500,
+        }
+      );
       set({
         data: get().data.map((student) =>
           student._id === id ? response.data.student : student
@@ -117,44 +120,45 @@ export const useStudentStore = create((set, get) => ({
   },
 
   deleteStudent: async (email) => {
-  return Swal.fire({
-    title: "ยืนยันการลบ",
-    text: "คุณต้องการลบข้อมูลนักเรียนนี้ใช่หรือไม่?",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "ยืนยัน",
-    cancelButtonText: "ยกเลิก",
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      try {
-        const response = await UserService.deleteUser(email);
+    return Swal.fire({
+      title: "ยืนยันการลบ",
+      text: "คุณต้องการลบข้อมูลนักเรียนนี้ใช่หรือไม่?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "ยืนยัน",
+      cancelButtonText: "ยกเลิก",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await UserService.deleteUser(email);
+          await Swal.fire({
+            icon: "success",
+            title: response.data.message || "ลบข้อมูลนักเรียนเรียบร้อยแล้ว",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          const updatedStudents = get().data.filter(
+            (student) => student.email !== email
+          );
+          set({ data: updatedStudents });
+          return true;
+        } catch (error) {
+          await Swal.fire({
+            icon: "error",
+            title: "เกิดข้อผิดพลาด",
+            text:
+              error.response?.data?.message || "ไม่สามารถลบข้อมูลนักเรียนได้",
+          });
+          return false;
+        }
+      } else {
         await Swal.fire({
-          icon: "success",
-          title: response.data.message || "ลบข้อมูลนักเรียนเรียบร้อยแล้ว",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        const updatedStudents = get().data.filter(
-          (student) => student.email !== email
-        );
-        set({ data: updatedStudents });
-        return true;
-      } catch (error) {
-        await Swal.fire({
-          icon: "error",
-          title: "เกิดข้อผิดพลาด",
-          text: error.response?.data?.message || "ไม่สามารถลบข้อมูลนักเรียนได้",
+          icon: "info",
+          title: "ยกเลิกการลบ",
+          text: "คุณได้ยกเลิกการลบข้อมูลนักเรียน",
         });
         return false;
       }
-    } else {
-      await Swal.fire({
-        icon: "info",
-        title: "ยกเลิกการลบ",
-        text: "คุณได้ยกเลิกการลบข้อมูลนักเรียน",
-      });
-      return false;
-    }
-  });
-},
+    });
+  },
 }));

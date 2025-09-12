@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import BreadcrumbsLoop from "../../components/Breadcrumbs";
-import {useStudentStore} from "../../stores/student.store";
+import { useStudentStore } from "../../stores/student.store";
 import useYearSelectStore from "../../stores/year_select.store";
-import {useVisitInfoStore} from "../../stores/visit.store";
+import { useVisitInfoStore } from "../../stores/visit.store";
 
 const VisitInfo = () => {
   const { visitInfo, getVisitInfoByStudentId } = useVisitInfoStore();
@@ -25,7 +25,8 @@ const VisitInfo = () => {
         <h2 className="font-bold text-xl mb-4">ข้อมูลการเยี่ยมบ้าน</h2>
         <div className="mb-4">
           <span className="font-semibold">นักเรียน:</span>{" "}
-          {visitInfo.student?.prefix} {visitInfo.student?.first_name} {visitInfo.student?.last_name}
+          {visitInfo.student?.prefix} {visitInfo.student?.first_name}{" "}
+          {visitInfo.student?.last_name}
         </div>
         <div className="flex flex-col md:flex-row gap-8 mb-6">
           <div>
@@ -53,7 +54,9 @@ const VisitInfo = () => {
         </div>
         <div className="w-full md:w-8/12 mb-4">
           <h3 className="font-semibold mb-2">ความคิดเห็นของอาจารย์</h3>
-          <div className="bg-gray-100 p-4 rounded">{visitInfo.teacher_comment}</div>
+          <div className="bg-gray-100 p-4 rounded">
+            {visitInfo.teacher_comment}
+          </div>
         </div>
       </div>
     </div>
