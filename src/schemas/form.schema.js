@@ -7,12 +7,12 @@ const choiceOptions = /^[0-4]$/;
 export const initialFormValues = {
   // Page 1 Personal Information
   phone: "",
-  father_prefix: "",
+  father_prefix: "นาย",
   father_name: "",
   father_last_name: "",
   father_phone: "",
   father_job: "",
-  mother_prefix: "",
+  mother_prefix: "นาง",
   mother_name: "",
   mother_last_name: "",
   mother_phone: "",
@@ -84,7 +84,8 @@ export const formValidation = object().shape({
     .required("กรุณาตอบคำถาม"),
   father_prefix: string()
     .transform((value) => value?.trim())
-    .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย"),
+    .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย")
+    .required("กรุณาตอบคำถาม"),
   father_name: string()
     .transform((value) => value?.trim())
     .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย")
@@ -105,7 +106,8 @@ export const formValidation = object().shape({
     .required("กรุณาตอบคำถาม"),
   mother_prefix: string()
     .transform((value) => value?.trim())
-    .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย"),
+    .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย")
+    .required("กรุณาตอบคำถาม"),
   mother_name: string()
     .transform((value) => value?.trim())
     .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย")
@@ -126,7 +128,8 @@ export const formValidation = object().shape({
     .required("กรุณาตอบคำถาม"),
   parent_prefix: string()
     .transform((value) => value?.trim())
-    .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย"),
+    .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย")
+    .required("กรุณาตอบคำถาม"),
   parent_name: string()
     .transform((value) => value?.trim())
     .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย")

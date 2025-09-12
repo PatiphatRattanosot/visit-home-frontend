@@ -4,6 +4,7 @@ import {
   Marker,
   useMarkerRef,
 } from "@vis.gl/react-google-maps";
+import { getUserLocation } from "../../utils/map";
 
 const MapComponent = ({ setFieldValue, latValue, lngValue }) => {
   const schoolLocation = { lat: 13.69703951249812, lng: 99.92571777851592 };
@@ -32,6 +33,18 @@ const MapComponent = ({ setFieldValue, latValue, lngValue }) => {
               disableDefaultUI={true}
               onClick={handleMapClick}
             >
+              {/* Controls */}
+              <div className="absolute top-2 right-2 flex flex-col gap-2 z-10">
+                <button
+                  type="button"
+                  onClick={() => {
+                    getUserLocation(setFieldValue);
+                  }}
+                  className="btn btn-sm btn-primary"
+                >
+                  ใช้ตำแหน่งปัจจุบัน
+                </button>
+              </div>
               {latValue && lngValue && (
                 <Marker
                   position={{ lat: latValue, lng: lngValue }}

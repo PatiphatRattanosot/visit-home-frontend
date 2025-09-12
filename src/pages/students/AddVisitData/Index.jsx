@@ -121,6 +121,7 @@ const Index = () => {
           behavior_info,
           risk_info,
           additional_info,
+          isCompleted: "Completed",
         },
         image,
         "add"
