@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import VisitInfoService from "../services/visit-info/visitInfo.service";
 import toast from "react-hot-toast";
-import { data } from "react-router";
+
 
 export const useVisitInfoStore = create((set, get) => ({
   visitInfos: [],

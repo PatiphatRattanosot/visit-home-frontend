@@ -97,6 +97,7 @@ const AddVisitInfo = () => {
   });
 
   useEffect(() => {
+    // รีเซ็ตค่า formik ทุกครั้งเพราะว่า ต้องการโหลดข้อมูลใหม่ เพราะ state มันยังไม่เปลี่ยน ตามปีที่เราเลือก
     formik.setValues(formik.initialValues);
     const fetchData = async () => {
       const res = await getVisitInfoByStudentId(studentId, selectedYear);
