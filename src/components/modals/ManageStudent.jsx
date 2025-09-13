@@ -1,5 +1,8 @@
 import { useNavigate } from "react-router";
+import useYearSelectStore from "../../stores/year_select.store";
+
 const ManageStudent = ({ student }) => {
+  const { selectedYear } = useYearSelectStore();
   if (!student) return null; // Ensure student is defined before rendering
   const navigate = useNavigate();
   const goToVisitInfo = () => {
@@ -18,7 +21,12 @@ const ManageStudent = ({ student }) => {
             {`จัดการนักเรียน ${student.first_name} ${student.last_name}`}
           </h3>
           <div className="flex flex-wrap justify-center gap-4">
-            <button className="btn">ประเมิน SDQ</button>
+            <a
+              href={`/teacher/sdq/${student._id}/${selectedYear}`}
+              className="btn"
+            >
+              ประเมิน SDQ
+            </a>
             <button className="btn">ดูเส้นทาง</button>
             <button onClick={goToVisitInfo} className="btn">
               ผลการเยี่ยมบ้าน
