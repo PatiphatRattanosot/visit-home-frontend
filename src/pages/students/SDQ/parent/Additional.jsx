@@ -53,7 +53,7 @@ const Additional = ({ page, setPage, formik }) => {
           {/* Heading */}
           <h3 className="text-xl font-bold text-center w-full flex flex-col md:flex-row md:space-x-2 md:justify-center">
             <span>แบบประเมิน SDQ ผู้ปกครองประเมิน</span>
-            <span>6/6</span>
+            <span>หน้า 6/6</span>
           </h3>
 
           <div className="grid grid-cols-1 gap-6 mt-6">
