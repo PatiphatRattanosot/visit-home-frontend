@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router";
 import useYearSelectStore from "../../stores/year_select.store";
+import SDQServices from "../../services/sdq/sdq.service";
+import { useState, useEffect } from "react";
 
 const ManageStudent = ({ student }) => {
   const { selectedYear } = useYearSelectStore();
@@ -8,6 +10,29 @@ const ManageStudent = ({ student }) => {
   const goToVisitInfo = () => {
     navigate(`/teacher/visit-info/add/${student._id}`);
   };
+
+  const [sdqTeacher, setSdqTeacher] = useState(null);
+
+  useEffect(() => {
+    const fetchSDQData = async () => {
+      try {
+        const res = await SDQServices.getSDQByYearAndAssessor({
+          year_id: selectedYear,
+          student_id: student._id,
+          assessor: "Teacher",
+        });
+        if (res.status === 200) {
+          setSdqTeacher(res.data);
+        } else {
+          setSdqTeacher(null);
+        }
+      } catch (err) {
+        setSdqTeacher(null);
+        console.error("Failed to fetch SDQ data:", err);
+      }
+    };
+    fetchSDQData();
+  }, [student._id, selectedYear]);
 
   return (
     <div>
@@ -22,18 +47,21 @@ const ManageStudent = ({ student }) => {
             {`จัดการนักเรียน ${student.first_name} ${student.last_name}`}
           </h3>
           <div className="flex flex-wrap justify-center gap-4">
-            <a
-              href={`/teacher/sdq/${student._id}/${selectedYear}/estimate`}
-              className="btn"
-            >
-              ประเมิน SDQ
-            </a>
-            <a
-              href={`/teacher/sdq/${student._id}/${selectedYear}`}
-              className="btn"
-            >
-              ผลประเมิน SDQ
-            </a>
+            {sdqTeacher ? (
+              <a
+                href={`/teacher/sdq/${student._id}/${selectedYear}`}
+                className="btn"
+              >
+                ผลประเมิน SDQ
+              </a>
+            ) : (
+              <a
+                href={`/teacher/sdq/${student._id}/${selectedYear}/estimate`}
+                className="btn"
+              >
+                ประเมิน SDQ
+              </a>
+            )}
             <button className="btn">ดูเส้นทาง</button>
             <button onClick={goToVisitInfo} className="btn">
               ผลการเยี่ยมบ้าน
