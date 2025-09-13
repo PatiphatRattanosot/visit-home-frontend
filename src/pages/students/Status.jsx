@@ -21,7 +21,9 @@ const Status = () => {
           selectedYear
         );
         if (homeVisitResponse.status === 200) {
-          setHomeVisitData(homeVisitResponse.data);
+          setHomeVisitData(
+            homeVisitResponse.data?.students[0]?.yearly_data[0]?.isCompleted
+          );
         }
       } catch (error) {
         console.log(error);
@@ -108,11 +110,32 @@ const Status = () => {
             </span>
             <span
               className={`text-xl font-bold ${
-                homeVisitData ? "text-green-600" : "text-red-600"
+                homeVisitData === "Completed"
+                  ? "text-green-600"
+                  : "text-red-600"
               }`}
             >
-              {homeVisitData ? "กรอกข้อมูลเรียบร้อย" : "ยังไม่ได้กรอกข้อมูล"}
+              {homeVisitData === "Completed"
+                ? "กรอกข้อมูลเรียบร้อย"
+                : "ยังไม่ได้กรอกข้อมูล"}
             </span>
+            {homeVisitData !== "Completed" ? (
+              <a
+                href={`/student/visiting-info/add/${selectedYear}`}
+                className="btn btn-green mt-6"
+              >
+                เพิ่มข้อมูลการเยี่ยมบ้าน
+              </a>
+            ) : (
+              homeVisitData === "Edit" && (
+                <a
+                  href={`/student/visiting-info/edit/${selectedYear}`}
+                  className="btn btn-yellow mt-6"
+                >
+                  แก้ไขข้อมูลการเยี่ยมบ้าน
+                </a>
+              )
+            )}
           </div>
           {/* การ์ดสถานะ */}
           <div className="rounded-lg border border-gray-100 px-6 flex flex-col items-center bg-gray-50 min-h-[200px] py-12">
@@ -144,6 +167,17 @@ const Status = () => {
                 ? "รอผู้ปกครองและครูทำแบบประเมิน"
                 : "สถานะไม่ชัดเจน"}
             </span>
+            {!sdqStudentData ? (
+              <a href="/student/sdq" className="btn btn-green mt-6">
+                ทำแบบประเมิน SDQ (นักเรียน)
+              </a>
+            ) : (
+              !sdqParentData && (
+                <a href="/student/sdq" className="btn btn-green mt-6">
+                  ทำแบบประเมิน SDQ (ผู้ปกครอง)
+                </a>
+              )
+            )}
           </div>
         </div>
       </div>
