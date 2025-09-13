@@ -97,6 +97,7 @@ const Relation = ({ page, setPage, formik }) => {
                 value={formik.values.family_relation_status}
                 error={formik.errors.family_relation_status}
                 touched={formik.touched.family_relation_status}
+                required
               />
             </div>
             {/* จำนวนสมาชิกในครอบครัว */}
@@ -111,6 +112,7 @@ const Relation = ({ page, setPage, formik }) => {
               type="number"
               maxLength={20}
               minLength={1}
+              required
             />
             {/* เวลาร่วมกัน */}
             <Text
@@ -124,6 +126,8 @@ const Relation = ({ page, setPage, formik }) => {
               touched={formik.touched.family_time}
               type="number"
               maxLength={24}
+              minLength={0}
+              required
             />
             {/* ความสัมพันธ์ */}
             <Select
@@ -135,6 +139,7 @@ const Relation = ({ page, setPage, formik }) => {
               value={formik.values.father_relation}
               error={formik.errors.father_relation}
               touched={formik.touched.father_relation}
+              required
             />
             <Select
               name="mother_relation"
@@ -145,6 +150,7 @@ const Relation = ({ page, setPage, formik }) => {
               value={formik.values.mother_relation}
               error={formik.errors.mother_relation}
               touched={formik.touched.mother_relation}
+              required
             />
             <div className="flex flex-col">
               <LabelCheck

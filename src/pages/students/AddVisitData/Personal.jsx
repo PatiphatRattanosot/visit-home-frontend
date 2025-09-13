@@ -78,6 +78,9 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
                 error={formik.errors.phone}
                 touched={formik.touched.phone}
                 type="tel"
+                maxLength={10}
+                minLength={10}
+                required
               />
             </div>
             {/* ชื่อและคำนำหน้า */}
@@ -93,6 +96,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
                 error={formik.errors.father_prefix}
                 touched={formik.touched.father_prefix}
                 className="w-1/4"
+                required
               />
               {/* ชื่อ บิดา */}
               <Text
@@ -105,6 +109,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
                 error={formik.errors.father_name}
                 touched={formik.touched.father_name}
                 className="w-3/4"
+                required
               />
             </div>
             {/* นามสกุลบิดา */}
@@ -117,6 +122,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               onBlur={formik.handleBlur}
               error={formik.errors.father_last_name}
               touched={formik.touched.father_last_name}
+              required
             />
             {/* อาชีพบิดา */}
             <Text
@@ -128,6 +134,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               onBlur={formik.handleBlur}
               error={formik.errors.father_job}
               touched={formik.touched.father_job}
+              required
             />
             {/* เบอร์โทรศัพท์ */}
             <Text
@@ -140,6 +147,9 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               error={formik.errors.father_phone}
               touched={formik.touched.father_phone}
               type="tel"
+              maxLength={10}
+              minLength={10}
+              required
             />
             {/* ชื่อและคำนำหน้า */}
             <div className="flex space-x-2">
@@ -154,6 +164,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
                 error={formik.errors.mother_prefix}
                 touched={formik.touched.mother_prefix}
                 className="w-1/4"
+                required
               />
               {/* ชื่อ มารดา */}
               <Text
@@ -166,6 +177,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
                 error={formik.errors.mother_name}
                 touched={formik.touched.mother_name}
                 className="w-3/4"
+                required
               />
             </div>
             {/* นามสกุลมารดา */}
@@ -178,6 +190,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               onBlur={formik.handleBlur}
               error={formik.errors.mother_last_name}
               touched={formik.touched.mother_last_name}
+              required
             />
             {/* อาชีพมารดา */}
             <Text
@@ -189,6 +202,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               onBlur={formik.handleBlur}
               error={formik.errors.mother_job}
               touched={formik.touched.mother_job}
+              required
             />
             {/* เบอร์โทรศัพท์ */}
             <Text
@@ -201,6 +215,9 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               error={formik.errors.mother_phone}
               touched={formik.touched.mother_phone}
               type="tel"
+              maxLength={10}
+              minLength={10}
+              required
             />
             {/* ดึงข้อมูลจากบิดาหรือมารดา */}
             <div
@@ -243,6 +260,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
                 touched={formik.touched.parent_prefix}
                 className="w-1/4"
                 disabled={checkParent === true}
+                required
               />
               {/* ชื่อ ผู้ปกครอง */}
               <Text
@@ -256,6 +274,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
                 touched={formik.touched.parent_name}
                 className="w-3/4"
                 disabled={checkParent === true}
+                required
               />
             </div>
             {/* นามสกุลผู้ปกครอง */}
@@ -269,6 +288,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               error={formik.errors.parent_last_name}
               touched={formik.touched.parent_last_name}
               disabled={checkParent === true}
+              required
             />
             {/* อาชีพผู้ปกครอง */}
             <Text
@@ -281,6 +301,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               error={formik.errors.parent_job}
               touched={formik.touched.parent_job}
               disabled={checkParent === true}
+              required
             />
             {/* เบอร์โทรศัพท์ */}
             <Text
@@ -294,6 +315,9 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               touched={formik.touched.parent_phone}
               type="tel"
               disabled={checkParent === true}
+              maxLength={10}
+              minLength={10}
+              required
             />
             {/* lat */}
             <Text
@@ -305,6 +329,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               onBlur={formik.handleBlur}
               error={formik.errors.lat}
               touched={formik.touched.lat}
+              required
             />
             {/* lng */}
             <Text
@@ -316,6 +341,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               onBlur={formik.handleBlur}
               error={formik.errors.lng}
               touched={formik.touched.lng}
+              required
             />
             {/* Map Component */}
             <div className="md:col-span-2 flex flex-col items-center justify-center">

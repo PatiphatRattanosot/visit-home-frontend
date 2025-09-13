@@ -142,6 +142,7 @@ const Family = ({ page, setPage, formik }) => {
                 maxLength={1000000}
                 step={1000}
                 className="md:w-1/2 md:pr-3"
+                required
               />
             </div>
             {/* นักเรียนได้เงินมาโรงเรียน */}
@@ -154,6 +155,7 @@ const Family = ({ page, setPage, formik }) => {
               value={formik.values.received_daily_from}
               error={formik.errors.received_daily_from}
               touched={formik.touched.received_daily_from}
+              required
             />
             <Text
               label="นักเรียนได้เงินมาโรงเรียนวันละ (บาท)"
@@ -166,6 +168,7 @@ const Family = ({ page, setPage, formik }) => {
               error={formik.errors.daily_total_to_school}
               touched={formik.touched.daily_total_to_school}
               step={5}
+              required
             />
             {/* งานพิเศษ */}
             <div className="md:col-span-2 flex flex-col">
@@ -244,6 +247,7 @@ const Family = ({ page, setPage, formik }) => {
                 onBlur={formik.handleBlur}
                 error={formik.errors.housing_type}
                 touched={formik.touched.housing_type}
+                required
               />
             </div>
             {/* สภาพที่อยู่อาศัย */}
@@ -257,6 +261,7 @@ const Family = ({ page, setPage, formik }) => {
                 onBlur={formik.handleBlur}
                 error={formik.errors.housing_condition}
                 touched={formik.touched.housing_condition}
+                required
               />
             </div>
             {/* ยานพาหนะในครอบครัว */}
