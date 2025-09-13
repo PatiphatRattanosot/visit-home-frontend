@@ -168,12 +168,18 @@ const Status = () => {
                 : "สถานะไม่ชัดเจน"}
             </span>
             {!sdqStudentData ? (
-              <a href="/student/sdq" className="btn btn-green mt-6">
+              <a
+                href={`/student/sdq-student/${selectedYear}`}
+                className="btn btn-green mt-6"
+              >
                 ทำแบบประเมิน SDQ (นักเรียน)
               </a>
             ) : (
               !sdqParentData && (
-                <a href="/student/sdq" className="btn btn-green mt-6">
+                <a
+                  href={`/student/sdq-parent/${selectedYear}`}
+                  className="btn btn-green mt-6"
+                >
                   ทำแบบประเมิน SDQ (ผู้ปกครอง)
                 </a>
               )
