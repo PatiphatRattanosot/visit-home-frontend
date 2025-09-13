@@ -28,6 +28,12 @@ const ManageStudent = ({ student }) => {
             >
               ประเมิน SDQ
             </a>
+            <a
+              href={`/teacher/sdq/${student._id}/${selectedYear}`}
+              className="btn"
+            >
+              ผลประเมิน SDQ
+            </a>
             <button className="btn">ดูเส้นทาง</button>
             <button onClick={goToVisitInfo} className="btn">
               ผลการเยี่ยมบ้าน
