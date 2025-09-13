@@ -25,7 +25,7 @@ const Index = () => {
           assessor: "Teacher",
         });
         if (res.status === 200) {
-          navigate(`/teacher/sdq/`);
+          navigate(`/teacher/sdq/${studentId}/${yearId}`);
         }
       } catch (error) {
         console.log(error);

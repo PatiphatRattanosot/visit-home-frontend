@@ -115,8 +115,10 @@ function App() {
               path="visit-info/add/:studentId"
               element={<AddVisitInfo />}
             />
-            <Route path="sdq" element={<SDQResult />} />
-            <Route path="sdq/:studentId/:yearId" element={<SDQFormTeacher />} />
+            <Route path="sdq/:studentId/:yearId">
+              <Route path="" element={<SDQResult />} />
+              <Route path="estimate" element={<SDQFormTeacher />} />
+            </Route>
           </Route>
         </Routes>
       </div>

@@ -1,9 +1,126 @@
-import React from 'react'
+import React from "react";
+import SDQScoreCard from "../../../components/SDQScoreCard";
+import SDQServices from "../../../services/sdq/sdq.service";
+import { useParams } from "react-router";
+import { useStudentStore } from "../../../stores/student.store";
 
 const SDQResult = () => {
-  return (
-    <div>SDQResult</div>
-  )
-}
+  const { yearId, studentId } = useParams();
+  const [sdq, setSdq] = React.useState(null);
+  const [student, setStudent] = React.useState(null);
+  const { getStudentById } = useStudentStore();
 
-export default SDQResult
+  React.useEffect(() => {
+    const fetchStudent = async () => {
+      const studentData = await getStudentById(studentId);
+      setStudent(studentData);
+      console.log(studentData);
+    };
+    fetchStudent();
+  }, [studentId, getStudentById]);
+
+  const overallScore = sdq
+    ? sdq?.emotional?.total_score +
+      sdq?.behavioral?.total_score +
+      sdq?.hyperactivity?.total_score +
+      sdq?.friendship?.total_score +
+      sdq?.social?.total_score
+    : 0;
+
+  React.useEffect(() => {
+    setSdq(null); // Reset state when selectedYear changes
+    const fetchData = async () => {
+      try {
+        const res = await SDQServices.getSDQByYearAndAssessor({
+          year_id: yearId,
+          student_id: studentId,
+          assessor: "Teacher",
+        });
+        if (res.status === 200) {
+          const sdqData = res.data?.sdq;
+          if (sdqData) {
+            setSdq(sdqData);
+          } else {
+            setSdq(null);
+          }
+        } else {
+          setSdq(null);
+        }
+      } catch (err) {
+        setSdq(null);
+        console.error("Failed to fetch SDQ data:", err);
+      }
+    };
+    fetchData();
+  }, [studentId, yearId]);
+  return (
+    <div className="w-full max-w-screen h-full min-h-screen flex justify-center flex-col bg-gray-50">
+      <div className="space-y-8">
+        <div className="flex items-center justify-center py-9">
+          <div className="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
+            <div>
+              {/* Heading */}
+              <h3 className="text-xl font-bold text-center w-full flex flex-col md:flex-row justify-center items-center">
+                ผลการประเมิน SDQ{" "}
+                <span>
+                  ของ {student?.prefix} {student?.first_name}{" "}
+                  {student?.last_name}
+                </span>
+              </h3>
+
+              {sdq ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                  <SDQScoreCard
+                    title="ด้านอารมณ์"
+                    score={sdq?.emotional?.total_score}
+                    operator={sdq?.emotional?.total_score > 5}
+                  />
+                  <SDQScoreCard
+                    title="ด้านความประพฤติ/เกเร"
+                    score={sdq?.behavioral?.total_score}
+                    operator={sdq?.behavioral?.total_score > 4}
+                  />
+                  <SDQScoreCard
+                    title="ด้านพฤติกรรมอยู่ไม่นิ่ง/สมาธิสั้น"
+                    score={sdq?.hyperactivity?.total_score}
+                    operator={sdq?.hyperactivity?.total_score > 5}
+                  />
+                  <SDQScoreCard
+                    title="ด้านความสัมพันธ์กับเพื่อน"
+                    score={sdq?.friendship?.total_score}
+                    operator={sdq?.friendship?.total_score > 3}
+                  />
+                  <SDQScoreCard
+                    title="ด้านสัมพันธภาพทางสังคม"
+                    score={sdq?.social?.total_score}
+                    operator={sdq?.social?.total_score < 4}
+                  />
+                  <SDQScoreCard
+                    title="ผลรวม"
+                    score={overallScore}
+                    operator={overallScore > 16}
+                  />
+                </div>
+              ) : (
+                <div className="mt-6 h-[65vh] flex items-center justify-center">
+                  <p className="text-center text-red-600">
+                    ยังไม่มีการประเมินในปีนี้
+                  </p>
+                </div>
+              )}
+
+              {/* Navigation buttons */}
+              {/* <div className="flex justify-start mt-10 space-x-2">
+            <button className="btn btn-soft w-1/2" type="button">
+              ย้อนกลับ
+            </button>
+          </div> */}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SDQResult;

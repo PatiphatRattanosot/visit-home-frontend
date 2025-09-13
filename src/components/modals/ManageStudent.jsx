@@ -8,6 +8,7 @@ const ManageStudent = ({ student }) => {
   const goToVisitInfo = () => {
     navigate(`/teacher/visit-info/add/${student._id}`);
   };
+
   return (
     <div>
       <dialog id={`manage_student_${student._id}`} className="modal">
@@ -22,7 +23,7 @@ const ManageStudent = ({ student }) => {
           </h3>
           <div className="flex flex-wrap justify-center gap-4">
             <a
-              href={`/teacher/sdq/${student._id}/${selectedYear}`}
+              href={`/teacher/sdq/${student._id}/${selectedYear}/estimate`}
               className="btn"
             >
               ประเมิน SDQ
