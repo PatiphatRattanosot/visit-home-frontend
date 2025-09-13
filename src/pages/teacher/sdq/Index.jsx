@@ -16,6 +16,24 @@ const Index = () => {
   const { yearId, studentId } = useParams();
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await SDQServices.getSDQByYearAndAssessor({
+          year_id: yearId,
+          student_id: studentId,
+          assessor: "Teacher",
+        });
+        if (res.status === 200) {
+          navigate(`/teacher/sdq/`);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [yearId, studentId]);
+
   const formik = useFormik({
     initialValues: SDQInitValues,
     validationSchema: SDQValidations,

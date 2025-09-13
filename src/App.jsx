@@ -109,11 +109,7 @@ function App() {
               !userInfo?.role.includes("Teacher") && <Navigate to={"/"} />
             }
           >
-            <Route
-              path=""
-              element={<div className="text-xl">Teacher Page</div>}
-            />
-            <Route path="students" element={<StudentList />} />
+            <Route path="" element={<StudentList />} />
             <Route path="visit-info" element={<VisitInfo />} />
             <Route
               path="visit-info/add/:studentId"
