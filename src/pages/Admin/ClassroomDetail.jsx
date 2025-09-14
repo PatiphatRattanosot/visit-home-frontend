@@ -10,6 +10,7 @@ import ModalEditStudent from "../../components/modals/EditStudent";
 import FilterDropdown from "../../components/FilterDropdown";
 import Pagination from "../../components/Pagination";
 import SearchPersonnel from "../../components/SearchPersonnel";
+import ImportStudentBtn from "../../components/ImportStudentBtn";
 
 const ClassroomDetail = () => {
   const { classroomId } = useParams();
@@ -127,21 +128,9 @@ const ClassroomDetail = () => {
         </div>
 
         {/* ปุ่มเพิ่มนักเรียน */}
+
         <div className="space-x-2">
-          <input
-            type="file"
-            accept=".xlsx"
-            className="hidden"
-            id="upload_excel"
-          />
-          <button
-            className="btn-blue"
-            onClick={() => {
-              document.getElementById("upload_excel").click();
-            }}
-          >
-            เพิ่มนักเรียนจากไฟล์ Excel...
-          </button>
+          <ImportStudentBtn classId={classroomId} />
           <button
             className="btn-green"
             onClick={() =>
