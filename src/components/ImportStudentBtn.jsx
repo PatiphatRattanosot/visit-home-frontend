@@ -1,68 +1,81 @@
 import * as XLSX from "xlsx";
 import toast from "react-hot-toast";
 import StudentService from "../services/student/student.service";
-import { useRef, useState } from "react";
-
-const REQUIRED_COLS = ["prefix", "first_name", "last_name", "user_id"];
+import { useState, useRef } from "react";
+import { useClassroomStore } from "../stores/classroom.store";
 
 const ImportStudentBtn = ({ classId, onImported }) => {
-  const inputRef = useRef(null);
+  const { getClassroomById } = useClassroomStore();
   const [loading, setLoading] = useState(false);
+  const inputRef = useRef(null);
+  const REQUIRED_COLS = ["prefix", "first_name", "last_name", "user_id", "class_id"];
 
-  const resetInput = () => {
-    if (inputRef.current) inputRef.current.value = "";
+  const importStudents = async (students) => {
+    try {
+      const response = await StudentService.uploadStudentsByExcel(students);
+      getClassroomById(classId);
+      if (response.status === 201) {
+        toast.success("นำเข้าข้อมูลนักเรียนสำเร็จ");
+        onImported && onImported();
+       
+      } else if (response.status === 200){
+        toast.success("นำเข้าข้อมูลนักเรียนบางคนในระบบแล้วสำเร็จ");
+        onImported && onImported();
+      } else if (response.status === 400) {
+        const { existing_students, added_students } = response.data;
+        if (existing_students.length > 0) {
+          toast.error(
+            `มีข้อมูลนักเรียนบางคนในระบบแล้ว`
+          );
+        }
+        if (added_students.length > 0) {
+          toast.success(`นำเข้าข้อมูลนักเรียนสำเร็จ`);
+          onImported && onImported();
+        }
+      } 
+    } catch (error) {
+      console.error(error);
+      toast.error("เกิดข้อผิดพลาดในการนำเข้าข้อมูลนักเรียน");
+    }
   };
 
-  const readExcelFile = async (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: "array" });
-        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-        resolve(jsonData);
-      };
-      reader.onerror = (err) => reject(err);
-      reader.readAsArrayBuffer(file);
-    });
-  };
 
-  const handleFileChange = async (event) => {
+  const handleFileChange = (event) => {
     try {
       setLoading(true);
-      const file = event.target.files?.[0];
-      if (!file) return;
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: "array" });
+          const sheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[sheetName];
+          const jsonStudents = XLSX.utils.sheet_to_json(worksheet);
 
-      const rows = await readExcelFile(file);
+          const students = jsonStudents.map((student) => ({
+            ...student,
+            class_id: classId,
+            user_id: student.user_id.toString(),
+          }))
 
-      // ตรวจสอบว่ามีคอลัมน์ที่ต้องการครบไหม
-      const missingCols = REQUIRED_COLS.filter(
-        (col) => !Object.keys(rows[0] || {}).includes(col)
-      );
-      if (missingCols.length) {
-        toast.error(`ไฟล์ Excel ขาดคอลัมน์: ${missingCols.join(", ")}`);
-        resetInput();
-        return;
+          const hasAllRequiredCols = REQUIRED_COLS.every((col) =>
+            Object.keys(students[0]).includes(col)
+          );
+          if (!hasAllRequiredCols) {
+            toast.error("ไฟล์ Excel ต้องมีข้อมูลในคอลัมน์ที่จำเป็นทั้งหมด");
+            setLoading(false);
+            return;
+          }
+          importStudents(students);
+        };
+        reader.readAsArrayBuffer(file);
       }
-
-      // เพิ่ม class_id ให้ทุก row
-      const data = rows.map((row) => ({
-        ...row,
-        class_id: classId,
-      }));
-
-      const response = await StudentService.uploadStudentsByExcel(data);
-
-      toast.success(response.data.message || "อัปโหลดไฟล์สำเร็จ");
-      if (onImported) onImported();
-
-    } catch (err) {
-      console.error(err);
-      toast.error(err?.response?.data?.message || "เกิดข้อผิดพลาดในการอัปโหลดไฟล์");
+    } catch (error) {
+      toast.error("เกิดข้อผิดพลาดในการอ่านไฟล์ Excel");
+      setLoading(false);
     } finally {
       setLoading(false);
-      resetInput();
     }
   };
 
@@ -72,7 +85,7 @@ const ImportStudentBtn = ({ classId, onImported }) => {
         ref={inputRef}
         id="upload_excel"
         type="file"
-        accept=".xlsx,.xls"
+        accept=".xlsx,.xls,.csv"
         style={{ display: "none" }}
         onChange={handleFileChange}
       />
