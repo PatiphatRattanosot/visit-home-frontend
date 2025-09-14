@@ -103,7 +103,7 @@ const Index = () => {
             showConfirmButton: false,
             timer: 1500,
           });
-          navigate(`/teacher/sdq`);
+          navigate(`/teacher/sdq/${studentId}/${yearId}`);
         }
       } catch (error) {
         console.log(error);
