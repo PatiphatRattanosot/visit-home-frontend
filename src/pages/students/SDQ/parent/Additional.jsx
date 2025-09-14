@@ -109,7 +109,7 @@ const Additional = ({ page, setPage, formik }) => {
             )}
             {additionalQuestions && (
               <Radio
-                label="ปัญหาของเด็กทำให้คุณหรือชั้นเรียนเกิดความยุ่งยากหรือไม่"
+                label="ปัญหานี้ทำให้คุณหรือครอบครัวเกิดความยุ่งยากหรือไม่"
                 name="is_difficult_student"
                 value={formik.values.is_difficult_student}
                 onChange={formik.handleChange}

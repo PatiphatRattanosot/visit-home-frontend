@@ -22,7 +22,7 @@ const ManageStudent = ({ student }) => {
           assessor: "Teacher",
         });
         if (res.status === 200) {
-          setSdqTeacher(res.data);
+          setSdqTeacher(res.data?.sdq?.isEstimate);
         } else {
           setSdqTeacher(null);
         }
@@ -47,14 +47,7 @@ const ManageStudent = ({ student }) => {
             {`จัดการนักเรียน ${student.first_name} ${student.last_name}`}
           </h3>
           <div className="flex flex-wrap justify-center gap-4">
-            {sdqTeacher ? (
-              <a
-                href={`/teacher/sdq/${student._id}/${selectedYear}`}
-                className="btn"
-              >
-                ผลประเมิน SDQ
-              </a>
-            ) : (
+            {!sdqTeacher && (
               <a
                 href={`/teacher/sdq/${student._id}/${selectedYear}/estimate`}
                 className="btn"
@@ -62,6 +55,12 @@ const ManageStudent = ({ student }) => {
                 ประเมิน SDQ
               </a>
             )}
+            <a
+              href={`/teacher/sdq/${student._id}/${selectedYear}`}
+              className="btn"
+            >
+              ผลประเมิน SDQ
+            </a>
             <button className="btn">ดูเส้นทาง</button>
             <button onClick={goToVisitInfo} className="btn">
               ผลการเยี่ยมบ้าน

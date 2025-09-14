@@ -13,6 +13,8 @@ import {
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
 import Breadcrumbs from "../../../components/Breadcrumbs";
+import SDQScoreCard from "../../../components/SDQScoreCard";
+import { caseMapping } from "../../../utils/sdq2ndPageMapping";
 
 ChartJS.register(
   ArcElement,
@@ -30,6 +32,7 @@ const SDQResult = () => {
   const [sdqTeacher, setSdqTeacher] = React.useState(null);
   const [sdqParent, setSdqParent] = React.useState(null);
   const [sdqStudent, setSdqStudent] = React.useState(null);
+  const [selectedSDQ, setSelectedSDQ] = React.useState("Teacher");
 
   React.useEffect(() => {
     const fetchStudent = async () => {
@@ -160,6 +163,27 @@ const SDQResult = () => {
     borderWidth: 1,
   };
 
+  const overallScoreStudent =
+    sdqStudent?.emotional?.total_score +
+    sdqStudent?.behavioral?.total_score +
+    sdqStudent?.hyperactivity?.total_score +
+    sdqStudent?.friendship?.total_score +
+    sdqStudent?.social?.total_score;
+
+  const overallScoreParent =
+    sdqParent?.emotional?.total_score +
+    sdqParent?.behavioral?.total_score +
+    sdqParent?.hyperactivity?.total_score +
+    sdqParent?.friendship?.total_score +
+    sdqParent?.social?.total_score;
+
+  const overallScoreTeacher =
+    sdqTeacher?.emotional?.total_score +
+    sdqTeacher?.behavioral?.total_score +
+    sdqTeacher?.hyperactivity?.total_score +
+    sdqTeacher?.friendship?.total_score +
+    sdqTeacher?.social?.total_score;
+
   return (
     <div className="w-full max-w-screen h-full min-h-screen flex justify-center flex-col bg-gray-50 px-4 py-6">
       <div className="flex items-center justify-center">
@@ -224,6 +248,372 @@ const SDQResult = () => {
               />
             </div>
           </div>
+          {/* Score Cards & Assessor Selector */}
+          <div className="mt-6 w-full flex justify-center md:justify-start space-x-2 items-center">
+            <button
+              className={`btn ${
+                selectedSDQ === "Teacher" ? "btn-neutral" : ""
+              }`}
+              onClick={() => setSelectedSDQ("Teacher")}
+            >
+              ครูที่ปรึกษา
+            </button>
+            <button
+              className={`btn ${selectedSDQ === "Parent" ? "btn-neutral" : ""}`}
+              onClick={() => setSelectedSDQ("Parent")}
+            >
+              ผู้ปกครอง
+            </button>
+            <button
+              className={`btn ${
+                selectedSDQ === "Student" ? "btn-neutral" : ""
+              }`}
+              onClick={() => setSelectedSDQ("Student")}
+            >
+              นักเรียน
+            </button>
+          </div>
+
+          {sdqTeacher && selectedSDQ === "Teacher" ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              <SDQScoreCard
+                title="ด้านอารมณ์"
+                score={sdqTeacher?.emotional?.total_score}
+                operator={sdqTeacher?.emotional?.total_score > 5}
+              />
+              <SDQScoreCard
+                title="ด้านความประพฤติ/เกเร"
+                score={sdqTeacher?.behavioral?.total_score}
+                operator={sdqTeacher?.behavioral?.total_score > 4}
+              />
+              <SDQScoreCard
+                title="ด้านพฤติกรรมอยู่ไม่นิ่ง/สมาธิสั้น"
+                score={sdqTeacher?.hyperactivity?.total_score}
+                operator={sdqTeacher?.hyperactivity?.total_score > 5}
+              />
+              <SDQScoreCard
+                title="ด้านความสัมพันธ์กับเพื่อน"
+                score={sdqTeacher?.friendship?.total_score}
+                operator={sdqTeacher?.friendship?.total_score > 3}
+              />
+              <SDQScoreCard
+                title="ด้านสัมพันธภาพทางสังคม"
+                score={sdqTeacher?.social?.total_score}
+                operator={sdqTeacher?.social?.total_score < 4}
+              />
+              <SDQScoreCard
+                title="ผลรวม"
+                score={overallScoreTeacher}
+                operator={overallScoreTeacher > 16}
+              />
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  เด็กมีปัญหาในด้านใดด้านหนึ่งต่อไปนี้หรือไม่ : ด้านอารมณ์
+                  ด้านสมาธิ ด้านพฤติกรรม หรือความสามารถเข้ากับผู้อื่น
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {"- "}
+                  {caseMapping(
+                    "overall_problem",
+                    sdqTeacher?.other?.overall_problem
+                  )}
+                </p>
+              </div>
+              {sdqTeacher?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้เกิดขึ้นมานานเท่าไหร่แล้ว
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "problem_time",
+                      sdqTeacher?.other?.problem_time
+                    )}
+                  </p>
+                </div>
+              )}
+              {sdqTeacher?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้ทำให้เด็กรู้สึกไม่สบายใจหรือไม่
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "student_uneasy",
+                      sdqTeacher?.other?.student_uneasy
+                    )}
+                  </p>
+                </div>
+              )}
+              {sdqTeacher?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้รบกวนชีวิตประจำวันของเด็กในด้านต่าง ๆ
+                    ต่อไปนี้หรือไม่ : การคบเพื่อน การเรียนในห้องเรียน
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "is_annoy_student",
+                      sdqTeacher?.other?.is_annoy_student
+                    )}
+                  </p>
+                </div>
+              )}
+              {sdqTeacher?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้ทำให้เกิดความยุ่งยากหรือไม่
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "is_difficult_student",
+                      sdqTeacher?.other?.is_difficult_student
+                    )}
+                  </p>
+                </div>
+              )}
+            </div>
+          ) : sdqParent && selectedSDQ === "Parent" ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              <SDQScoreCard
+                title="ด้านอารมณ์"
+                score={sdqParent?.emotional?.total_score}
+                operator={sdqParent?.emotional?.total_score > 5}
+              />
+              <SDQScoreCard
+                title="ด้านความประพฤติ/เกเร"
+                score={sdqParent?.behavioral?.total_score}
+                operator={sdqParent?.behavioral?.total_score > 4}
+              />
+              <SDQScoreCard
+                title="ด้านพฤติกรรมอยู่ไม่นิ่ง/สมาธิสั้น"
+                score={sdqParent?.hyperactivity?.total_score}
+                operator={sdqParent?.hyperactivity?.total_score > 5}
+              />
+              <SDQScoreCard
+                title="ด้านความสัมพันธ์กับเพื่อน"
+                score={sdqParent?.friendship?.total_score}
+                operator={sdqParent?.friendship?.total_score > 3}
+              />
+              <SDQScoreCard
+                title="ด้านสัมพันธภาพทางสังคม"
+                score={sdqParent?.social?.total_score}
+                operator={sdqParent?.social?.total_score < 4}
+              />
+              <SDQScoreCard
+                title="ผลรวม"
+                score={overallScoreParent}
+                operator={overallScoreParent > 16}
+              />
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  ความเห็นหรือความกังวลอื่น
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {"- "}
+                  {sdqParent?.other?.additional === ""
+                    ? "ไม่ระบุ"
+                    : sdqParent?.other?.additional}
+                </p>
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  โดยรวมเด็กมีปัญหาในด้านใดด้านหนึ่งต่อไปนี้หรือไม่ : ด้านอารมณ์
+                  ด้านสมาธิ ด้านพฤติกรรม หรือความสามารถเข้ากับผู้อื่น
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {"- "}
+                  {caseMapping(
+                    "overall_problem",
+                    sdqParent?.other?.overall_problem
+                  )}
+                </p>
+              </div>
+              {sdqParent?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้เกิดขึ้นมานานเท่าไหร่แล้ว
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "problem_time",
+                      sdqParent?.other?.problem_time
+                    )}
+                  </p>
+                </div>
+              )}
+              {sdqParent?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้ทำให้เด็กรู้สึกไม่สบายใจหรือไม่
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "student_uneasy",
+                      sdqParent?.other?.student_uneasy
+                    )}
+                  </p>
+                </div>
+              )}
+              {sdqParent?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้รบกวนชีวิตประจำวันของเด็กในด้านต่าง ๆ
+                    ต่อไปนี้หรือไม่ : ความเป็นอยู่ที่บ้าน การคบเพื่อน
+                    การเรียนในห้องเรียน กิจกรรมยามว่าง
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "is_annoy_student",
+                      sdqParent?.other?.is_annoy_student
+                    )}
+                  </p>
+                </div>
+              )}
+              {sdqParent?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้ทำให้ผู้ปกครองหรือครอบครัวเกิดความยุ่งยากหรือไม่
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "is_difficult_student",
+                      sdqParent?.other?.is_difficult_student
+                    )}
+                  </p>
+                </div>
+              )}
+            </div>
+          ) : sdqStudent && selectedSDQ === "Student" ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              <SDQScoreCard
+                title="ด้านอารมณ์"
+                score={sdqStudent?.emotional?.total_score}
+                operator={sdqStudent?.emotional?.total_score > 5}
+              />
+              <SDQScoreCard
+                title="ด้านความประพฤติ/เกเร"
+                score={sdqStudent?.behavioral?.total_score}
+                operator={sdqStudent?.behavioral?.total_score > 4}
+              />
+              <SDQScoreCard
+                title="ด้านพฤติกรรมอยู่ไม่นิ่ง/สมาธิสั้น"
+                score={sdqStudent?.hyperactivity?.total_score}
+                operator={sdqStudent?.hyperactivity?.total_score > 5}
+              />
+              <SDQScoreCard
+                title="ด้านความสัมพันธ์กับเพื่อน"
+                score={sdqStudent?.friendship?.total_score}
+                operator={sdqStudent?.friendship?.total_score > 3}
+              />
+              <SDQScoreCard
+                title="ด้านสัมพันธภาพทางสังคม"
+                score={sdqStudent?.social?.total_score}
+                operator={sdqStudent?.social?.total_score < 4}
+              />
+              <SDQScoreCard
+                title="ผลรวม"
+                score={overallScoreStudent}
+                operator={overallScoreStudent > 16}
+              />
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  สิ่งอื่นที่จะบอก
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {"- "}
+                  {sdqStudent?.other?.additional === ""
+                    ? "ไม่ระบุ"
+                    : sdqStudent?.other?.additional}
+                </p>
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  โดยรวมเด็กมีปัญหาในด้านใดด้านหนึ่งต่อไปนี้หรือไม่ : ด้านอารมณ์
+                  ด้านสมาธิ ด้านพฤติกรรม หรือความสามารถเข้ากับผู้อื่น
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {"- "}
+                  {caseMapping(
+                    "overall_problem",
+                    sdqStudent?.other?.overall_problem
+                  )}
+                </p>
+              </div>
+              {sdqStudent?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้เกิดขึ้นมานานเท่าไหร่แล้ว
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "problem_time",
+                      sdqStudent?.other?.problem_time
+                    )}
+                  </p>
+                </div>
+              )}
+              {sdqStudent?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้ทำให้เด็กรู้สึกไม่สบายใจหรือไม่
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "student_uneasy",
+                      sdqStudent?.other?.student_uneasy
+                    )}
+                  </p>
+                </div>
+              )}
+              {sdqStudent?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้รบกวนชีวิตประจำวันของเด็กในด้านต่าง ๆ
+                    ต่อไปนี้หรือไม่ : ความเป็นอยู่ที่บ้าน การคบเพื่อน
+                    การเรียนในห้องเรียน กิจกรรมยามว่าง
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "is_annoy_student",
+                      sdqStudent?.other?.is_annoy_student
+                    )}
+                  </p>
+                </div>
+              )}
+              {sdqStudent?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหาของเด็กทำให้ชั้นเรียนเกิดความยุ่งยากหรือไม่
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "is_difficult_student",
+                      sdqStudent?.other?.is_difficult_student
+                    )}
+                  </p>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="mt-6 h-[65vh] flex items-center justify-center">
+              <p className="text-center text-red-600">
+                ยังไม่มีการประเมินในปีนี้
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
