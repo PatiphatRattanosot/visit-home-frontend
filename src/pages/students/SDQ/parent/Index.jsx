@@ -100,6 +100,24 @@ const Index = () => {
     },
   });
 
+  React.useEffect(() => {
+    const redirectPath = async () => {
+      try {
+        const res = await SDQServices.getSDQByYearAndAssessor({
+          year_id: selectedYear,
+          student_id: userInfo?._id,
+          assessor: "Parent",
+        });
+        if (res.status === 200) {
+          navigate(`/student/sdq-parent`);
+        }
+      } catch (err) {
+        console.error("Failed to fetch SDQ data:", err);
+      }
+    };
+    redirectPath();
+  }, [yearId, userInfo?._id]);
+
   return (
     <div className="w-full max-w-screen h-full min-h-screen flex justify-center flex-col bg-gray-50">
       <form onSubmit={formik.handleSubmit} className="space-y-8">

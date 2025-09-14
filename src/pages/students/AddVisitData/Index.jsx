@@ -12,6 +12,7 @@ import {
 } from "../../../schemas/form.schema";
 import { useParams, useNavigate } from "react-router";
 import { useStudentFormStore } from "../../../stores/form.store";
+import { useStudentStore } from "../../../stores/student.store";
 import { useAuthStore } from "../../../stores/auth.store";
 import MapComponent from "../../../components/students/MapComponent";
 
@@ -31,6 +32,7 @@ const Index = () => {
   const { yearId } = useParams();
   const navigate = useNavigate();
   const { setFormData, submitForm } = useStudentFormStore();
+  const { getYearlyData } = useStudentStore();
   const { userInfo } = useAuthStore();
 
   const formik = useFormik({
@@ -128,6 +130,17 @@ const Index = () => {
       ).then(() => navigate(`/student/visiting-info`));
     },
   });
+
+  React.useEffect(() => {
+    if (yearId) {
+      getYearlyData(yearId).then((res) => {
+        const yearlyData = res?.students?.[0]?.yearly_data?.[0];
+        if (yearlyData) {
+          navigate(`/student/visiting-info/update/${yearId}`);
+        }
+      });
+    }
+  }, [yearId]);
 
   React.useEffect(() => {
     if (JSON.stringify(formik.values) !== JSON.stringify(initialFormValues)) {
