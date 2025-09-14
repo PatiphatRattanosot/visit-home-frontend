@@ -11,11 +11,11 @@ const StudentViewSDQ = () => {
   const { userInfo } = useAuthStore();
 
   const overallScore = sdq
-    ? sdq?.emotional?.total_score +
-      sdq?.behavioral?.total_score +
-      sdq?.hyperactivity?.total_score +
-      sdq?.friendship?.total_score +
-      sdq?.social?.total_score
+    ? (sdq?.emotional?.total_score || 0) +
+      (sdq?.behavioral?.total_score || 0) +
+      (sdq?.hyperactivity?.total_score || 0) +
+      (sdq?.friendship?.total_score || 0) +
+      (sdq?.social?.total_score || 0)
     : 0;
 
   React.useEffect(() => {

@@ -164,25 +164,25 @@ const SDQResult = () => {
   };
 
   const overallScoreStudent =
-    sdqStudent?.emotional?.total_score +
-    sdqStudent?.behavioral?.total_score +
-    sdqStudent?.hyperactivity?.total_score +
-    sdqStudent?.friendship?.total_score +
-    sdqStudent?.social?.total_score;
+    (sdqStudent?.emotional?.total_score || 0) +
+    (sdqStudent?.behavioral?.total_score || 0) +
+    (sdqStudent?.hyperactivity?.total_score || 0) +
+    (sdqStudent?.friendship?.total_score || 0) +
+    (sdqStudent?.social?.total_score || 0);
 
   const overallScoreParent =
-    sdqParent?.emotional?.total_score +
-    sdqParent?.behavioral?.total_score +
-    sdqParent?.hyperactivity?.total_score +
-    sdqParent?.friendship?.total_score +
-    sdqParent?.social?.total_score;
+    (sdqParent?.emotional?.total_score || 0) +
+    (sdqParent?.behavioral?.total_score || 0) +
+    (sdqParent?.hyperactivity?.total_score || 0) +
+    (sdqParent?.friendship?.total_score || 0) +
+    (sdqParent?.social?.total_score || 0);
 
   const overallScoreTeacher =
-    sdqTeacher?.emotional?.total_score +
-    sdqTeacher?.behavioral?.total_score +
-    sdqTeacher?.hyperactivity?.total_score +
-    sdqTeacher?.friendship?.total_score +
-    sdqTeacher?.social?.total_score;
+    (sdqTeacher?.emotional?.total_score || 0) +
+    (sdqTeacher?.behavioral?.total_score || 0) +
+    (sdqTeacher?.hyperactivity?.total_score || 0) +
+    (sdqTeacher?.friendship?.total_score || 0) +
+    (sdqTeacher?.social?.total_score || 0);
 
   return (
     <div className="w-full max-w-screen h-full min-h-screen flex justify-center flex-col bg-gray-50 px-4 py-6">
