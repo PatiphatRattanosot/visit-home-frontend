@@ -130,7 +130,7 @@ const ClassroomDetail = () => {
         {/* ปุ่มเพิ่มนักเรียน */}
 
         <div className="space-x-2">
-          <ImportStudentBtn classId={classroomId} />
+          <ImportStudentBtn classId={classroomId} onImported={() => getClassroomById(classroomId)} />
           <button
             className="btn-green"
             onClick={() =>
