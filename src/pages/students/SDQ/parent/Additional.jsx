@@ -53,7 +53,7 @@ const Additional = ({ page, setPage, formik }) => {
           {/* Heading */}
           <h3 className="text-xl font-bold text-center w-full flex flex-col md:flex-row md:space-x-2 md:justify-center">
             <span>แบบประเมิน SDQ ผู้ปกครองประเมิน</span>
-            <span>6/6</span>
+            <span>หน้า 6/6</span>
           </h3>
 
           <div className="grid grid-cols-1 gap-6 mt-6">
@@ -109,7 +109,7 @@ const Additional = ({ page, setPage, formik }) => {
             )}
             {additionalQuestions && (
               <Radio
-                label="ปัญหาของเด็กทำให้คุณหรือชั้นเรียนเกิดความยุ่งยากหรือไม่"
+                label="ปัญหานี้ทำให้คุณหรือครอบครัวเกิดความยุ่งยากหรือไม่"
                 name="is_difficult_student"
                 value={formik.values.is_difficult_student}
                 onChange={formik.handleChange}

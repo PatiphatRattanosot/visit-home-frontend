@@ -6,17 +6,33 @@ import Hyperactivity from "./Hyperactivity";
 import Friendship from "./Friendship";
 import Social from "./Social";
 import Additional from "./Additional";
-import { useAuthStore } from "../../../../stores/auth.store";
-import { SDQInitValues, SDQValidations } from "../../../../schemas/sdq";
-import SDQServices from "../../../../services/sdq/sdq.service";
+import { SDQInitValues, SDQValidations } from "../../../schemas/sdq";
+import SDQServices from "../../../services/sdq/sdq.service";
 import Swal from "sweetalert2";
 import { useParams, useNavigate } from "react-router";
 
 const Index = () => {
   const [page, setPage] = React.useState(1);
-  const { userInfo } = useAuthStore();
-  const { yearId } = useParams();
+  const { yearId, studentId } = useParams();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await SDQServices.getSDQByYearAndAssessor({
+          year_id: yearId,
+          student_id: studentId,
+          assessor: "Teacher",
+        });
+        if (res.status === 200) {
+          navigate(`/teacher/sdq/${studentId}/${yearId}`);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, [yearId, studentId]);
 
   const formik = useFormik({
     initialValues: SDQInitValues,
@@ -73,11 +89,12 @@ const Index = () => {
           friendship,
           social,
           other,
-          student_id: userInfo._id,
+          student_id: studentId,
           year_id: yearId,
-          assessor: "Student",
+          assessor: "Teacher",
         };
         const res = await SDQServices.createSDQ(data);
+
         if (res.status === 201) {
           Swal.fire({
             icon: "success",
@@ -86,7 +103,7 @@ const Index = () => {
             showConfirmButton: false,
             timer: 1500,
           });
-          navigate(`/student/sdq-student`);
+          navigate(`/teacher/sdq/${studentId}/${yearId}`);
         }
       } catch (error) {
         console.log(error);
@@ -98,24 +115,6 @@ const Index = () => {
       }
     },
   });
-
-  React.useEffect(() => {
-    const redirectPath = async () => {
-      try {
-        const res = await SDQServices.getSDQByYearAndAssessor({
-          year_id: selectedYear,
-          student_id: userInfo?._id,
-          assessor: "Student",
-        });
-        if (res.status === 200) {
-          navigate(`/student/sdq-student`);
-        }
-      } catch (err) {
-        console.error("Failed to fetch SDQ data:", err);
-      }
-    };
-    redirectPath();
-  }, [yearId, userInfo?._id]);
 
   return (
     <div className="w-full max-w-screen h-full min-h-screen flex justify-center flex-col bg-gray-50">

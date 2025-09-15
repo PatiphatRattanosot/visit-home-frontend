@@ -291,6 +291,7 @@ const Behavior = ({ page, setPage, formik }) => {
                 touched={formik.touched.computer_internet_access}
                 options={internet_access_options}
                 setFieldValue={formik.setFieldValue}
+                required
               />
             </div>
             {/* การใช้งานเครื่องมือสื่อสารอิเล็กทรอนิกส์ */}
@@ -304,6 +305,7 @@ const Behavior = ({ page, setPage, formik }) => {
                 error={formik.errors.tech_use_behav}
                 touched={formik.touched.tech_use_behav}
                 options={tech_use_behav_options}
+                required
               />
             </div>
             {/* พฤติกรรมการเล่นเกม */}

@@ -103,6 +103,7 @@ const Risk = ({ page, setPage, formik }) => {
                 onBlur={formik.handleBlur}
                 error={formik.errors.when_student_alone}
                 touched={formik.touched.when_student_alone}
+                required
               />
             </div>
             {/* ด้านสุขภาพ */}
@@ -161,6 +162,7 @@ const Risk = ({ page, setPage, formik }) => {
               type="number"
               minLength={0}
               maxLength={200}
+              required
             />
             {/* เวลาที่ใช้ */}
             <Text
@@ -175,6 +177,7 @@ const Risk = ({ page, setPage, formik }) => {
               minLength={0}
               maxLength={60}
               step={5}
+              required
             />
             {/* วิธีการเดินทางของนักเรียนไปโรงเรียน */}
             <div className="md:col-span-2">
@@ -187,6 +190,7 @@ const Risk = ({ page, setPage, formik }) => {
                 onBlur={formik.handleBlur}
                 error={formik.errors.school_transport}
                 touched={formik.touched.school_transport}
+                required
               />
             </div>
           </div>

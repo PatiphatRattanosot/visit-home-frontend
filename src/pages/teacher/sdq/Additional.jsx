@@ -1,7 +1,6 @@
 import React from "react";
-import BreadcrumbsLoop from "../../../../components/Breadcrumbs";
-import Textarea from "../../../../components/Textarea";
-import Radio from "../../../../components/Radio";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
+import Radio from "../../../components/Radio";
 
 const Additional = ({ page, setPage, formik }) => {
   const [additionalQuestions, setAdditionalQuestions] = React.useState(false);
@@ -52,7 +51,7 @@ const Additional = ({ page, setPage, formik }) => {
         <div>
           {/* Heading */}
           <h3 className="text-xl font-bold text-center w-full flex flex-col md:flex-row md:space-x-2 md:justify-center">
-            <span>แบบประเมิน SDQ ประเมินตนเอง</span>
+            <span>แบบประเมิน SDQ ครูประเมิน</span>
             <span>หน้า 6/6</span>
           </h3>
 
@@ -96,7 +95,7 @@ const Additional = ({ page, setPage, formik }) => {
             )}
             {additionalQuestions && (
               <Radio
-                label="ปัญหานี้รบกวนชีวิตประจำวันของเด็กในด้านต่าง ๆ ต่อไปนี้หรือไม่ : ความเป็นอยู่ที่บ้าน การคบเพื่อน การเรียนในห้องเรียน หรือกิจกรรมยามว่าง"
+                label="ปัญหานี้รบกวนชีวิตประจำวันของเด็กในด้านต่าง ๆ ต่อไปนี้หรือไม่ : การคบเพื่อน การเรียนในห้องเรียน"
                 name="is_annoy_student"
                 value={formik.values.is_annoy_student}
                 onChange={formik.handleChange}
@@ -109,7 +108,7 @@ const Additional = ({ page, setPage, formik }) => {
             )}
             {additionalQuestions && (
               <Radio
-                label="ปัญหาของเด็กทำให้คุณหรือชั้นเรียนเกิดความยุ่งยากหรือไม่"
+                label="ปัญหานี้ทำให้คุณหรือครอบครัวเกิดความยุ่งยากหรือไม่"
                 name="is_difficult_student"
                 value={formik.values.is_difficult_student}
                 onChange={formik.handleChange}
@@ -120,15 +119,6 @@ const Additional = ({ page, setPage, formik }) => {
                 required
               />
             )}
-            <Textarea
-              label="มีอย่างอื่นที่จะบอกอีกหรือไม่"
-              name="additional"
-              value={formik.values.additional}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.errors.additional}
-              touched={formik.touched.additional}
-            />
           </div>
           <div className="flex justify-between mt-10 space-x-2">
             <button

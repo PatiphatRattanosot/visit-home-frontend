@@ -18,9 +18,11 @@ const Personnel = () => {
   // เพื่อใช้ในการแสดงผลในตาราง
   const optionsForPersonnel = [
     { value: "SortToMost", label: "เรียงจากน้อยไปมาก" },
-    { value: "MostToSort", label: "เรียงจากมากไปน้อย" },
+    { value: "SortToLess", label: "เรียงจากมากไปน้อย" },
     { value: "AlphaSortToMost", label: "เรียงตามลำดับตัวอักษร ก-ฮ" },
-    { value: "AlphaMostToSort", label: "เรียงตามลำดับตัวอักษร ฮ-ก" },
+    { value: "AlphaSortToLess", label: "เรียงตามลำดับตัวอักษร ฮ-ก" },
+    { value: "PrefixMr", label: "คำนำหน้า นาย-นาง" },
+    { value: "PrefixMrs", label: "คำนำหน้า นาง-นาย" },
   ];
   const [searchKeyword, setSearchKeyword] = useState("");
   // สร้าง state สำหรับเก็บข้อมูลบุคลากรที่กรองแล้ว
@@ -77,23 +79,35 @@ const Personnel = () => {
       case "SortToMost":
         sorted.sort((a, b) => a.user_id - b.user_id);
         break;
-      case "MostToSort":
+      case "SortToLess":
         sorted.sort((a, b) => b.user_id - a.user_id);
         break;
       case "AlphaSortToMost":
         sorted.sort((a, b) => {
-          const nameA = `${a.prefix}${a.first_name}${a.last_name}`;
-          const nameB = `${b.prefix}${b.first_name}${b.last_name}`;
+          const nameA = `${a.first_name}${a.last_name}`;
+          const nameB = `${b.first_name}${b.last_name}`;
+          return nameA.localeCompare(nameB, "th", { sensitivity: "base" });
+        });
+        break;
+      case "AlphaSortToLess":
+        sorted.sort((a, b) => {
+          const nameA = `${a.first_name}${a.last_name}`;
+          const nameB = `${b.first_name}${b.last_name}`;
+          // { sensitivity: "base" } คือการเปรียบเทียบแบบไม่สนใจตัวพิมพ์ใหญ่-เล็ก
+          // localeCompare() ใช้สำหรับเปรียบเทียบสตริงตามภาษาที่กำหนด
           return nameB.localeCompare(nameA, "th", { sensitivity: "base" });
         });
         break;
-      case "AlphaMostToSort":
+      case "PrefixMr":
         sorted.sort((a, b) => {
-          const nameA = `${a.prefix}${a.first_name}${a.last_name}`;
-          const nameB = `${b.prefix}${b.first_name}${b.last_name}`;
-          // { sensitivity: "base" } คือการเปรียบเทียบแบบไม่สนใจตัวพิมพ์ใหญ่-เล็ก
-          // localeCompare() ใช้สำหรับเปรียบเทียบสตริงตามภาษาที่กำหนด
-          return nameA.localeCompare(nameB, "th", { sensitivity: "base" });
+          const prefixOrder = { นาย: 1, นางสาว: 2, นาง: 3 };
+          return (prefixOrder[a.prefix] || 99) - (prefixOrder[b.prefix] || 99);
+        });
+        break;
+      case "PrefixMrs":
+        sorted.sort((a, b) => {
+          const prefixOrder = { นาย: 1, นางสาว: 2, นาง: 3 };
+          return (prefixOrder[b.prefix] || 99) - (prefixOrder[a.prefix] || 99);
         });
         break;
     }

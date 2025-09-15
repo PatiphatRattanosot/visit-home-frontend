@@ -22,6 +22,8 @@ import ClassroomDetail from "./pages/Admin/ClassroomDetail";
 import StudentList from "./pages/teacher/StudentList";
 import VisitInfo from "./pages/teacher/VisitInfo";
 import AddVisitInfo from "./pages/teacher/AddVisitInfo";
+import SDQFormTeacher from "./pages/teacher/sdq/Index";
+import SDQResult from "./pages/teacher/sdq/SDQResult";
 
 function App() {
   const { user, userInfo, isLoading, signInSystem, signOutSystem } =
@@ -107,13 +109,16 @@ function App() {
               !userInfo?.role.includes("Teacher") && <Navigate to={"/"} />
             }
           >
-            <Route
-              path=""
-              element={<div className="text-xl">Teacher Page</div>}
-            />
-            <Route path="students" element={<StudentList />} />
+            <Route path="" element={<StudentList />} />
             <Route path="visit-info" element={<VisitInfo />} />
-            <Route path="visit-info/add/:studentId" element={<AddVisitInfo />} />
+            <Route
+              path="visit-info/add/:studentId"
+              element={<AddVisitInfo />}
+            />
+            <Route path="sdq/:studentId/:yearId">
+              <Route path="" element={<SDQResult />} />
+              <Route path="estimate" element={<SDQFormTeacher />} />
+            </Route>
           </Route>
         </Routes>
       </div>

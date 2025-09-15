@@ -1,0 +1,623 @@
+import React from "react";
+import SDQServices from "../../../services/sdq/sdq.service";
+import { useParams } from "react-router";
+import { useStudentStore } from "../../../stores/student.store";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+} from "chart.js";
+import { Radar } from "react-chartjs-2";
+import Breadcrumbs from "../../../components/Breadcrumbs";
+import SDQScoreCard from "../../../components/SDQScoreCard";
+import { caseMapping } from "../../../utils/sdq2ndPageMapping";
+
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  RadialLinearScale,
+  PointElement,
+  LineElement
+);
+
+const SDQResult = () => {
+  const { yearId, studentId } = useParams();
+  const [student, setStudent] = React.useState(null);
+  const { getStudentById } = useStudentStore();
+  const [sdqTeacher, setSdqTeacher] = React.useState(null);
+  const [sdqParent, setSdqParent] = React.useState(null);
+  const [sdqStudent, setSdqStudent] = React.useState(null);
+  const [selectedSDQ, setSelectedSDQ] = React.useState("Teacher");
+
+  React.useEffect(() => {
+    const fetchStudent = async () => {
+      const studentData = await getStudentById(studentId);
+      setStudent(studentData);
+      console.log(studentData);
+    };
+    fetchStudent();
+  }, [studentId, getStudentById]);
+
+  // Fetch SDQ data for Teacher assessor
+  React.useEffect(() => {
+    setSdqTeacher(null); // Reset state when selectedYear changes
+    const fetchData = async () => {
+      try {
+        const res = await SDQServices.getSDQByYearAndAssessor({
+          year_id: yearId,
+          student_id: studentId,
+          assessor: "Teacher",
+        });
+        if (res.status === 200) {
+          const sdqData = res.data?.sdq;
+          setSdqTeacher(sdqData);
+          console.log(sdqData);
+        } else {
+          setSdqTeacher(null);
+        }
+      } catch (err) {
+        setSdqTeacher(null);
+        console.error("Failed to fetch SDQ data:", err);
+      }
+    };
+    fetchData();
+  }, [studentId, yearId]);
+
+  // Fetch SDQ data for Parent assessor
+  React.useEffect(() => {
+    setSdqParent(null); // Reset state when selectedYear changes
+    const fetchData = async () => {
+      try {
+        const res = await SDQServices.getSDQByYearAndAssessor({
+          year_id: yearId,
+          student_id: studentId,
+          assessor: "Parent",
+        });
+        if (res.status === 200) {
+          const sdqData = res.data?.sdq;
+          setSdqParent(sdqData);
+          console.log(sdqData);
+        } else {
+          setSdqParent(null);
+        }
+      } catch (err) {
+        setSdqParent(null);
+        console.error("Failed to fetch SDQ data:", err);
+      }
+    };
+    fetchData();
+  }, [studentId, yearId]);
+
+  // Fetch SDQ data for Student assessor
+  React.useEffect(() => {
+    setSdqStudent(null); // Reset state when selectedYear changes
+    const fetchData = async () => {
+      try {
+        const res = await SDQServices.getSDQByYearAndAssessor({
+          year_id: yearId,
+          student_id: studentId,
+          assessor: "Student",
+        });
+        if (res.status === 200) {
+          const sdqData = res.data?.sdq;
+          setSdqStudent(sdqData);
+          console.log(sdqData);
+        } else {
+          setSdqStudent(null);
+        }
+      } catch (err) {
+        setSdqStudent(null);
+        console.error("Failed to fetch SDQ data:", err);
+      }
+    };
+    fetchData();
+  }, [studentId, yearId]);
+
+  const studentDataSet = {
+    id: 1,
+    label: "นักเรียน",
+    data: [
+      sdqStudent?.emotional?.total_score || 0,
+      sdqStudent?.behavioral?.total_score || 0,
+      sdqStudent?.hyperactivity?.total_score || 0,
+      sdqStudent?.friendship?.total_score || 0,
+      sdqStudent?.social?.total_score || 0,
+    ],
+    backgroundColor: "rgba(54, 162, 235, 0.2)",
+    borderColor: "rgba(54, 162, 235, 1)",
+    borderWidth: 1,
+  };
+
+  const parentDataSet = {
+    id: 2,
+    label: "ผู้ปกครอง",
+    data: [
+      sdqParent?.emotional?.total_score || 0,
+      sdqParent?.behavioral?.total_score || 0,
+      sdqParent?.hyperactivity?.total_score || 0,
+      sdqParent?.friendship?.total_score || 0,
+      sdqParent?.social?.total_score || 0,
+    ],
+    backgroundColor: "rgba(255, 206, 86, 0.2)",
+    borderColor: "rgba(255, 206, 86, 1)",
+    borderWidth: 1,
+  };
+
+  const teacherDataSet = {
+    id: 3,
+    label: "ครูที่ปรึกษา",
+    data: [
+      sdqTeacher?.emotional?.total_score || 0,
+      sdqTeacher?.behavioral?.total_score || 0,
+      sdqTeacher?.hyperactivity?.total_score || 0,
+      sdqTeacher?.friendship?.total_score || 0,
+      sdqTeacher?.social?.total_score || 0,
+    ],
+    backgroundColor: "rgba(255, 99, 132, 0.2)",
+    borderColor: "rgba(255, 99, 132, 1)",
+    borderWidth: 1,
+  };
+
+  const overallScoreStudent =
+    (sdqStudent?.emotional?.total_score || 0) +
+    (sdqStudent?.behavioral?.total_score || 0) +
+    (sdqStudent?.hyperactivity?.total_score || 0) +
+    (sdqStudent?.friendship?.total_score || 0) +
+    (sdqStudent?.social?.total_score || 0);
+
+  const overallScoreParent =
+    (sdqParent?.emotional?.total_score || 0) +
+    (sdqParent?.behavioral?.total_score || 0) +
+    (sdqParent?.hyperactivity?.total_score || 0) +
+    (sdqParent?.friendship?.total_score || 0) +
+    (sdqParent?.social?.total_score || 0);
+
+  const overallScoreTeacher =
+    (sdqTeacher?.emotional?.total_score || 0) +
+    (sdqTeacher?.behavioral?.total_score || 0) +
+    (sdqTeacher?.hyperactivity?.total_score || 0) +
+    (sdqTeacher?.friendship?.total_score || 0) +
+    (sdqTeacher?.social?.total_score || 0);
+
+  return (
+    <div className="w-full max-w-screen h-full min-h-screen flex justify-center flex-col bg-gray-50 px-4 py-6">
+      <div className="flex items-center justify-center">
+        <div className="w-full max-w-5xl p-4 md:p-6 bg-white rounded-lg shadow-md">
+          <Breadcrumbs
+            options={[
+              { label: "รายชื่อนักเรียน", link: `/teacher` },
+              { label: "ผลการประเมิน" },
+            ]}
+          />
+          {/* Heading */}
+          <h3 className="text-xl font-bold text-center w-full flex flex-col md:flex-row justify-center items-center space-y-2 md:space-y-0 md:space-x-2">
+            ผลการประเมิน SDQ{" "}
+            <span>
+              ของ {student?.prefix} {student?.first_name} {student?.last_name}
+            </span>
+          </h3>
+
+          {/* Radar Chart */}
+          <div className="mt-6 w-full flex justify-center items-center">
+            <div className="w-full max-w-3xl aspect-square">
+              <Radar
+                data={{
+                  labels: [
+                    "ด้านอารมณ์",
+                    "ด้านความประพฤติ/เกเร",
+                    "ด้านพฤติกรรมอยู่ไม่นิ่ง/สมาธิสั้น",
+                    "ด้านความสัมพันธ์กับเพื่อน",
+                    "ด้านสัมพันธภาพทางสังคม",
+                  ],
+                  datasets: [studentDataSet, parentDataSet, teacherDataSet],
+                }}
+                options={{
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    r: {
+                      min: 0,
+                      max: 10,
+                      ticks: {
+                        stepSize: 1,
+                        backdropColor: "transparent",
+                      },
+                      pointLabels: {
+                        font: {
+                          size: 12,
+                        },
+                      },
+                    },
+                  },
+                  plugins: {
+                    legend: {
+                      position: "top",
+                      labels: {
+                        font: {
+                          size: 14,
+                        },
+                      },
+                    },
+                  },
+                }}
+              />
+            </div>
+          </div>
+          {/* Score Cards & Assessor Selector */}
+          <div className="mt-6 w-full flex justify-center md:justify-start space-x-2 items-center">
+            <button
+              className={`btn ${
+                selectedSDQ === "Teacher" ? "btn-neutral" : ""
+              }`}
+              onClick={() => setSelectedSDQ("Teacher")}
+            >
+              ครูที่ปรึกษา
+            </button>
+            <button
+              className={`btn ${selectedSDQ === "Parent" ? "btn-neutral" : ""}`}
+              onClick={() => setSelectedSDQ("Parent")}
+            >
+              ผู้ปกครอง
+            </button>
+            <button
+              className={`btn ${
+                selectedSDQ === "Student" ? "btn-neutral" : ""
+              }`}
+              onClick={() => setSelectedSDQ("Student")}
+            >
+              นักเรียน
+            </button>
+          </div>
+
+          {sdqTeacher && selectedSDQ === "Teacher" ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              <SDQScoreCard
+                title="ด้านอารมณ์"
+                score={sdqTeacher?.emotional?.total_score}
+                operator={sdqTeacher?.emotional?.total_score > 5}
+              />
+              <SDQScoreCard
+                title="ด้านความประพฤติ/เกเร"
+                score={sdqTeacher?.behavioral?.total_score}
+                operator={sdqTeacher?.behavioral?.total_score > 4}
+              />
+              <SDQScoreCard
+                title="ด้านพฤติกรรมอยู่ไม่นิ่ง/สมาธิสั้น"
+                score={sdqTeacher?.hyperactivity?.total_score}
+                operator={sdqTeacher?.hyperactivity?.total_score > 5}
+              />
+              <SDQScoreCard
+                title="ด้านความสัมพันธ์กับเพื่อน"
+                score={sdqTeacher?.friendship?.total_score}
+                operator={sdqTeacher?.friendship?.total_score > 3}
+              />
+              <SDQScoreCard
+                title="ด้านสัมพันธภาพทางสังคม"
+                score={sdqTeacher?.social?.total_score}
+                operator={sdqTeacher?.social?.total_score < 4}
+              />
+              <SDQScoreCard
+                title="ผลรวม"
+                score={overallScoreTeacher}
+                operator={overallScoreTeacher > 16}
+              />
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  เด็กมีปัญหาในด้านใดด้านหนึ่งต่อไปนี้หรือไม่ : ด้านอารมณ์
+                  ด้านสมาธิ ด้านพฤติกรรม หรือความสามารถเข้ากับผู้อื่น
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {"- "}
+                  {caseMapping(
+                    "overall_problem",
+                    sdqTeacher?.other?.overall_problem
+                  )}
+                </p>
+              </div>
+              {sdqTeacher?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้เกิดขึ้นมานานเท่าไหร่แล้ว
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "problem_time",
+                      sdqTeacher?.other?.problem_time
+                    )}
+                  </p>
+                </div>
+              )}
+              {sdqTeacher?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้ทำให้เด็กรู้สึกไม่สบายใจหรือไม่
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "student_uneasy",
+                      sdqTeacher?.other?.student_uneasy
+                    )}
+                  </p>
+                </div>
+              )}
+              {sdqTeacher?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้รบกวนชีวิตประจำวันของเด็กในด้านต่าง ๆ
+                    ต่อไปนี้หรือไม่ : การคบเพื่อน การเรียนในห้องเรียน
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "is_annoy_student",
+                      sdqTeacher?.other?.is_annoy_student
+                    )}
+                  </p>
+                </div>
+              )}
+              {sdqTeacher?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้ทำให้เกิดความยุ่งยากหรือไม่
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "is_difficult_student",
+                      sdqTeacher?.other?.is_difficult_student
+                    )}
+                  </p>
+                </div>
+              )}
+            </div>
+          ) : sdqParent && selectedSDQ === "Parent" ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              <SDQScoreCard
+                title="ด้านอารมณ์"
+                score={sdqParent?.emotional?.total_score}
+                operator={sdqParent?.emotional?.total_score > 5}
+              />
+              <SDQScoreCard
+                title="ด้านความประพฤติ/เกเร"
+                score={sdqParent?.behavioral?.total_score}
+                operator={sdqParent?.behavioral?.total_score > 4}
+              />
+              <SDQScoreCard
+                title="ด้านพฤติกรรมอยู่ไม่นิ่ง/สมาธิสั้น"
+                score={sdqParent?.hyperactivity?.total_score}
+                operator={sdqParent?.hyperactivity?.total_score > 5}
+              />
+              <SDQScoreCard
+                title="ด้านความสัมพันธ์กับเพื่อน"
+                score={sdqParent?.friendship?.total_score}
+                operator={sdqParent?.friendship?.total_score > 3}
+              />
+              <SDQScoreCard
+                title="ด้านสัมพันธภาพทางสังคม"
+                score={sdqParent?.social?.total_score}
+                operator={sdqParent?.social?.total_score < 4}
+              />
+              <SDQScoreCard
+                title="ผลรวม"
+                score={overallScoreParent}
+                operator={overallScoreParent > 16}
+              />
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  ความเห็นหรือความกังวลอื่น
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {"- "}
+                  {sdqParent?.other?.additional === ""
+                    ? "ไม่ระบุ"
+                    : sdqParent?.other?.additional}
+                </p>
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  โดยรวมเด็กมีปัญหาในด้านใดด้านหนึ่งต่อไปนี้หรือไม่ : ด้านอารมณ์
+                  ด้านสมาธิ ด้านพฤติกรรม หรือความสามารถเข้ากับผู้อื่น
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {"- "}
+                  {caseMapping(
+                    "overall_problem",
+                    sdqParent?.other?.overall_problem
+                  )}
+                </p>
+              </div>
+              {sdqParent?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้เกิดขึ้นมานานเท่าไหร่แล้ว
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "problem_time",
+                      sdqParent?.other?.problem_time
+                    )}
+                  </p>
+                </div>
+              )}
+              {sdqParent?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้ทำให้เด็กรู้สึกไม่สบายใจหรือไม่
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "student_uneasy",
+                      sdqParent?.other?.student_uneasy
+                    )}
+                  </p>
+                </div>
+              )}
+              {sdqParent?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้รบกวนชีวิตประจำวันของเด็กในด้านต่าง ๆ
+                    ต่อไปนี้หรือไม่ : ความเป็นอยู่ที่บ้าน การคบเพื่อน
+                    การเรียนในห้องเรียน กิจกรรมยามว่าง
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "is_annoy_student",
+                      sdqParent?.other?.is_annoy_student
+                    )}
+                  </p>
+                </div>
+              )}
+              {sdqParent?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้ทำให้ผู้ปกครองหรือครอบครัวเกิดความยุ่งยากหรือไม่
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "is_difficult_student",
+                      sdqParent?.other?.is_difficult_student
+                    )}
+                  </p>
+                </div>
+              )}
+            </div>
+          ) : sdqStudent && selectedSDQ === "Student" ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              <SDQScoreCard
+                title="ด้านอารมณ์"
+                score={sdqStudent?.emotional?.total_score}
+                operator={sdqStudent?.emotional?.total_score > 5}
+              />
+              <SDQScoreCard
+                title="ด้านความประพฤติ/เกเร"
+                score={sdqStudent?.behavioral?.total_score}
+                operator={sdqStudent?.behavioral?.total_score > 4}
+              />
+              <SDQScoreCard
+                title="ด้านพฤติกรรมอยู่ไม่นิ่ง/สมาธิสั้น"
+                score={sdqStudent?.hyperactivity?.total_score}
+                operator={sdqStudent?.hyperactivity?.total_score > 5}
+              />
+              <SDQScoreCard
+                title="ด้านความสัมพันธ์กับเพื่อน"
+                score={sdqStudent?.friendship?.total_score}
+                operator={sdqStudent?.friendship?.total_score > 3}
+              />
+              <SDQScoreCard
+                title="ด้านสัมพันธภาพทางสังคม"
+                score={sdqStudent?.social?.total_score}
+                operator={sdqStudent?.social?.total_score < 4}
+              />
+              <SDQScoreCard
+                title="ผลรวม"
+                score={overallScoreStudent}
+                operator={overallScoreStudent > 16}
+              />
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  สิ่งอื่นที่จะบอก
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {"- "}
+                  {sdqStudent?.other?.additional === ""
+                    ? "ไม่ระบุ"
+                    : sdqStudent?.other?.additional}
+                </p>
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  โดยรวมเด็กมีปัญหาในด้านใดด้านหนึ่งต่อไปนี้หรือไม่ : ด้านอารมณ์
+                  ด้านสมาธิ ด้านพฤติกรรม หรือความสามารถเข้ากับผู้อื่น
+                </label>
+                <p className="w-full p-2 rounded-md text-gray-900">
+                  {"- "}
+                  {caseMapping(
+                    "overall_problem",
+                    sdqStudent?.other?.overall_problem
+                  )}
+                </p>
+              </div>
+              {sdqStudent?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้เกิดขึ้นมานานเท่าไหร่แล้ว
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "problem_time",
+                      sdqStudent?.other?.problem_time
+                    )}
+                  </p>
+                </div>
+              )}
+              {sdqStudent?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้ทำให้เด็กรู้สึกไม่สบายใจหรือไม่
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "student_uneasy",
+                      sdqStudent?.other?.student_uneasy
+                    )}
+                  </p>
+                </div>
+              )}
+              {sdqStudent?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหานี้รบกวนชีวิตประจำวันของเด็กในด้านต่าง ๆ
+                    ต่อไปนี้หรือไม่ : ความเป็นอยู่ที่บ้าน การคบเพื่อน
+                    การเรียนในห้องเรียน กิจกรรมยามว่าง
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "is_annoy_student",
+                      sdqStudent?.other?.is_annoy_student
+                    )}
+                  </p>
+                </div>
+              )}
+              {sdqStudent?.other?.overall_problem !== "0" && (
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    ปัญหาของเด็กทำให้ชั้นเรียนเกิดความยุ่งยากหรือไม่
+                  </label>
+                  <p className="w-full p-2 rounded-md text-gray-900">
+                    {"- "}
+                    {caseMapping(
+                      "is_difficult_student",
+                      sdqStudent?.other?.is_difficult_student
+                    )}
+                  </p>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="mt-6 h-[65vh] flex items-center justify-center">
+              <p className="text-center text-red-600">
+                ยังไม่มีการประเมินในปีนี้
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SDQResult;

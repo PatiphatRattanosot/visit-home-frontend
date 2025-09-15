@@ -37,11 +37,11 @@ export const getNavLinks = (roles = [], activeRole = null) => {
           <a href="/teacher">หน้าแรก</a>
         </li>
         <li>
-          <a href="/teacher/students">รายชื่อนักเรียน</a>
+          <a href="/teacher/visualization">วิเคราะห์ข้อมูล</a>
         </li>
-        <li>
+        {/* <li>
           <a href="/teacher/sdq">ผลประเมิน SDQ</a>
-        </li>
+        </li> */}
       </ul>
     );
   }

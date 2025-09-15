@@ -1,6 +1,6 @@
 import React from "react";
-import BreadcrumbsLoop from "../../../../components/Breadcrumbs";
-import SDQRadio from "../../../../components/SDQRadio";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
+import SDQRadio from "../../../components/SDQRadio";
 
 const Hyperactivity = ({ page, setPage, formik }) => {
   const breadcrumbsOptions = [
@@ -20,14 +20,14 @@ const Hyperactivity = ({ page, setPage, formik }) => {
         <div>
           {/* Heading */}
           <h3 className="text-xl font-bold text-center w-full flex flex-col md:flex-row md:space-x-2 md:justify-center">
-            <span>แบบประเมิน SDQ ประเมินตนเอง</span>
+            <span>แบบประเมิน SDQ ครูประเมิน</span>
             <span>หน้า 3/6</span>
           </h3>
 
           <div className="grid grid-cols-1 gap-6 mt-6">
             <SDQRadio
               name="question_2"
-              label="ฉันอยู่ไม่นิ่ง ฉันนั่งนานๆ ไม่ได้"
+              label="อยู่ไม่นิ่ง นั่งนิ่งๆ ไม่ได้"
               options={choiceOptions}
               value={formik.values.question_2}
               onChange={formik.handleChange}
@@ -37,7 +37,7 @@ const Hyperactivity = ({ page, setPage, formik }) => {
             />
             <SDQRadio
               name="question_10"
-              label="ฉันอยู่ไม่สุข วุ่นวาย"
+              label="อยู่ไม่สุข วุ่นวายอย่างมาก"
               options={choiceOptions}
               value={formik.values.question_10}
               onChange={formik.handleChange}
@@ -47,7 +47,7 @@ const Hyperactivity = ({ page, setPage, formik }) => {
             />
             <SDQRadio
               name="question_15"
-              label="ฉันวอกแวกง่าย ฉันรู้สึกว่าไม่มีสมาธิ"
+              label="วอกแวกง่าย สมาธิสั้น"
               options={choiceOptions}
               value={formik.values.question_15}
               onChange={formik.handleChange}
@@ -57,7 +57,7 @@ const Hyperactivity = ({ page, setPage, formik }) => {
             />
             <SDQRadio
               name="question_21"
-              label="ฉันคิดก่อนทำ"
+              label="คิดก่อนทำ"
               options={reverseChoiceOptions}
               value={formik.values.question_21}
               onChange={formik.handleChange}
@@ -67,7 +67,7 @@ const Hyperactivity = ({ page, setPage, formik }) => {
             />
             <SDQRadio
               name="question_25"
-              label="ฉันทำงานได้จนเสร็จ ความตั้งใจในการทำงานของฉันดี"
+              label="ทำงานได้จนเสร็จ มีความตั้งใจในการทำงาน"
               options={reverseChoiceOptions}
               value={formik.values.question_25}
               onChange={formik.handleChange}

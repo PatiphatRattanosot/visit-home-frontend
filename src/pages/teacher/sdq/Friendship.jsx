@@ -1,12 +1,12 @@
 import React from "react";
-import BreadcrumbsLoop from "../../../../components/Breadcrumbs";
-import SDQRadio from "../../../../components/SDQRadio";
+import BreadcrumbsLoop from "../../../components/Breadcrumbs";
+import SDQRadio from "../../../components/SDQRadio";
 
-const Hyperactivity = ({ page, setPage, formik }) => {
+const Friendship = ({ page, setPage, formik }) => {
   const breadcrumbsOptions = [
     { label: "แบบประเมิน SDQ", link: "/student/sdq-student" },
     { label: "แบบประเมินตนเอง", link: "/student/sdq-student" },
-    { label: "หน้า 3" },
+    { label: "หน้า 4" },
   ];
   const choiceOptions = ["0", "1", "2"]; // 0 = ไม่, 1 = ค่อนข้างจริง, 2 = จริง
   const reverseChoiceOptions = ["2", "1", "0"]; // 0 = ไม่, 1 = ค่อนข้างจริง, 2 = จริง
@@ -20,60 +20,60 @@ const Hyperactivity = ({ page, setPage, formik }) => {
         <div>
           {/* Heading */}
           <h3 className="text-xl font-bold text-center w-full flex flex-col md:flex-row md:space-x-2 md:justify-center">
-            <span>แบบประเมิน SDQ ประเมินตนเอง</span>
-            <span>หน้า 3/6</span>
+            <span>แบบประเมิน SDQ ครูประเมิน</span>
+            <span>หน้า 4/6</span>
           </h3>
 
           <div className="grid grid-cols-1 gap-6 mt-6">
             <SDQRadio
-              name="question_2"
-              label="ฉันอยู่ไม่นิ่ง ฉันนั่งนานๆ ไม่ได้"
+              name="question_6"
+              label="ค่อนข้างแยกตัว ชอบเล่นคนเดียว"
               options={choiceOptions}
-              value={formik.values.question_2}
+              value={formik.values.question_6}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.errors.question_2}
-              touched={formik.touched.question_2}
+              error={formik.errors.question_6}
+              touched={formik.touched.question_6}
             />
             <SDQRadio
-              name="question_10"
-              label="ฉันอยู่ไม่สุข วุ่นวาย"
-              options={choiceOptions}
-              value={formik.values.question_10}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.errors.question_10}
-              touched={formik.touched.question_10}
-            />
-            <SDQRadio
-              name="question_15"
-              label="ฉันวอกแวกง่าย ฉันรู้สึกว่าไม่มีสมาธิ"
-              options={choiceOptions}
-              value={formik.values.question_15}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.errors.question_15}
-              touched={formik.touched.question_15}
-            />
-            <SDQRadio
-              name="question_21"
-              label="ฉันคิดก่อนทำ"
+              name="question_11"
+              label="มีเพื่อนสนิท"
               options={reverseChoiceOptions}
-              value={formik.values.question_21}
+              value={formik.values.question_11}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.errors.question_21}
-              touched={formik.touched.question_21}
+              error={formik.errors.question_11}
+              touched={formik.touched.question_11}
             />
             <SDQRadio
-              name="question_25"
-              label="ฉันทำงานได้จนเสร็จ ความตั้งใจในการทำงานของฉันดี"
+              name="question_14"
+              label="เป็นที่ชื่นชอบของเพื่อน"
               options={reverseChoiceOptions}
-              value={formik.values.question_25}
+              value={formik.values.question_14}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.errors.question_25}
-              touched={formik.touched.question_25}
+              error={formik.errors.question_14}
+              touched={formik.touched.question_14}
+            />
+            <SDQRadio
+              name="question_19"
+              label="ถูกเด็กคนอื่นล้อเลียนหรือรังแก"
+              options={choiceOptions}
+              value={formik.values.question_19}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.errors.question_19}
+              touched={formik.touched.question_19}
+            />
+            <SDQRadio
+              name="question_23"
+              label="เข้ากับผู้ใหญ่ได้ดีกว่าเด็กวัยเดียวกัน"
+              options={choiceOptions}
+              value={formik.values.question_23}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.errors.question_23}
+              touched={formik.touched.question_23}
             />
           </div>
           <div className="flex justify-between mt-10 space-x-2">
@@ -98,4 +98,4 @@ const Hyperactivity = ({ page, setPage, formik }) => {
   );
 };
 
-export default Hyperactivity;
+export default Friendship;
