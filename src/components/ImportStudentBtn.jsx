@@ -4,41 +4,42 @@ import StudentService from "../services/student/student.service";
 import { useState, useRef } from "react";
 import { useClassroomStore } from "../stores/classroom.store";
 
-const ImportStudentBtn = ({ classId, onImported }) => {
+const ImportStudentBtn = ({ classId }) => {
   const { getClassroomById } = useClassroomStore();
   const [loading, setLoading] = useState(false);
   const inputRef = useRef(null);
-  const REQUIRED_COLS = ["prefix", "first_name", "last_name", "user_id", "class_id"];
+  const REQUIRED_COLS = [
+    "prefix",
+    "first_name",
+    "last_name",
+    "user_id",
+    "class_id",
+  ];
 
   const importStudents = async (students) => {
     try {
       const response = await StudentService.uploadStudentsByExcel(students);
-      getClassroomById(classId);
+
       if (response.status === 201) {
         toast.success("นำเข้าข้อมูลนักเรียนสำเร็จ");
-        onImported && onImported();
-       
-      } else if (response.status === 200){
+        getClassroomById(classId);
+      } else if (response.status === 200) {
         toast.success("นำเข้าข้อมูลนักเรียนบางคนในระบบแล้วสำเร็จ");
-        onImported && onImported();
       } else if (response.status === 400) {
         const { existing_students, added_students } = response.data;
         if (existing_students.length > 0) {
-          toast.error(
-            `มีข้อมูลนักเรียนบางคนในระบบแล้ว`
-          );
+          toast.error(`มีข้อมูลนักเรียนบางคนในระบบแล้ว`);
         }
         if (added_students.length > 0) {
           toast.success(`นำเข้าข้อมูลนักเรียนสำเร็จ`);
-          onImported && onImported();
+          getClassroomById(classId);
         }
-      } 
+      }
     } catch (error) {
       console.error(error);
       toast.error("เกิดข้อผิดพลาดในการนำเข้าข้อมูลนักเรียน");
     }
   };
-
 
   const handleFileChange = (event) => {
     try {
@@ -57,7 +58,7 @@ const ImportStudentBtn = ({ classId, onImported }) => {
             ...student,
             class_id: classId,
             user_id: student.user_id.toString(),
-          }))
+          }));
 
           const hasAllRequiredCols = REQUIRED_COLS.every((col) =>
             Object.keys(students[0]).includes(col)
@@ -92,7 +93,7 @@ const ImportStudentBtn = ({ classId, onImported }) => {
       <button
         disabled={loading}
         onClick={() => document.getElementById("upload_excel").click()}
-        className="hover:pointer-coarse hover:underline"
+        className="btn-blue hover:pointer-coarse hover:underline"
       >
         {loading ? "กำลังอัปโหลด..." : "อัปโหลด Excel"}
       </button>

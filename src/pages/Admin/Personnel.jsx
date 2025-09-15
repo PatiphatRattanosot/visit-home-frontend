@@ -177,7 +177,10 @@ const Personnel = () => {
           </div>
 
           {/* Modal */}
-          <ModalAddPersonnel />
+          <ModalAddPersonnel 
+            id="add_personnel"
+            onSuccessAddPerson={fetchData}
+          />
         </div>
       </div>
 

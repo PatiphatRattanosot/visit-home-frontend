@@ -119,18 +119,18 @@ const ClassroomDetail = () => {
           {/* ชื่อคุณครูที่ปรึกษา */}
           <h2 className="text-xl font-semibold mb-2">
             คุณครูที่ปรึกษา:{" "}
-            {classroom
-              ? `${classroom.teacher_id.first_name}` +
+            {classroom && classroom?.teacher_id
+              ? `${classroom?.teacher_id?.first_name}` +
                 " " +
-                `${classroom.teacher_id.last_name}`
-              : "Loading..."}
+                `${classroom?.teacher_id?.last_name}`
+              : "ยังไม่มีครูที่ปรึกษา"}
           </h2>
         </div>
 
         {/* ปุ่มเพิ่มนักเรียน */}
 
         <div className="space-x-2">
-          <ImportStudentBtn classId={classroomId} onImported={() => getClassroomById(classroomId)} />
+          <ImportStudentBtn classId={classroomId} />
           <button
             className="btn-green"
             onClick={() =>
