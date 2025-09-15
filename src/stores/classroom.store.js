@@ -43,13 +43,13 @@ export const useClassroomStore = create((set, get) => ({
         "Error in classService.createClass:",
         error.response?.data.message
       );
-      document.getElementById("add_classroom").close(),
-        toast.error(
-          error.response?.data?.message || "เกิดข้อผิดพลาดในการเพิ่มชั้นเรียน",
-          {
-            duration: 2500,
-          }
-        );
+
+      toast.error(
+        error.response?.data?.message || "เกิดข้อผิดพลาดในการเพิ่มชั้นเรียน",
+        {
+          duration: 2500,
+        }
+      );
     }
   },
   getClassroomById: async (id) => {
