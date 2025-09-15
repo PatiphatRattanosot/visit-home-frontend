@@ -150,6 +150,7 @@ const StudentList = () => {
                 <th className="text-center">เลขที่ประจำตัวนักเรียน</th>
                 <th>คำนำหน้า</th>
                 <th>ชื่อ - นามสกุล</th>
+                <th>สถานะการเยี่ยมบ้าน</th>
               </tr>
             </thead>
             <tbody>
@@ -177,6 +178,17 @@ const StudentList = () => {
                     {student?.first_name} {student?.last_name}
                   </td>
                   <td>
+                    {student?.visit_status === "Visited" ? (
+                      <span className="badge badge-success badge-sm">
+                        เยี่ยมบ้านแล้ว
+                      </span>
+                    ) : (
+                      <span className="badge badge-warning badge-sm">
+                        ยังไม่เยี่ยมบ้าน
+                      </span>
+                    )}
+                  </td>
+                  <td>
                     <ManageStudent
                       id={`manage_student_${student._id}`}
                       student={student}
@@ -202,6 +214,7 @@ const StudentList = () => {
                 <th className="text-center">เลขที่ประจำตัวนักเรียน</th>
                 <th>คำนำหน้า</th>
                 <th>ชื่อ - นามสกุล</th>
+                <th>สถานะการเยี่ยมบ้าน</th>
               </tr>
             </tfoot>
           </table>

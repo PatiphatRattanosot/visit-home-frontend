@@ -89,7 +89,7 @@ export const usePersonnelStore = create((set, get) => ({
             text: response.data.message,
             icon: "success",
             showConfirmButton: false,
-            timer: 3500,
+            timer: 1500,
           }).then(() => {
             const updatedPersonnel = get().data.filter(
               (person) => person.email !== email

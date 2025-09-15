@@ -34,7 +34,7 @@ export const useClassroomStore = create((set, get) => ({
 
       if (response.status === 201) {
         toast.success(response.data.message || "เพิ่มชั้นเรียนสำเร็จ");
-        set({ classrooms: response.data.classes });
+        // set({ classrooms: response.data.classes });
 
         document.getElementById("add_classroom").close(); // ปิด modal
       }
@@ -43,10 +43,13 @@ export const useClassroomStore = create((set, get) => ({
         "Error in classService.createClass:",
         error.response?.data.message
       );
-
-      toast.error(
-        error.response?.data?.message || "เกิดข้อผิดพลาดในการเพิ่มชั้นเรียน"
-      );
+      document.getElementById("add_classroom").close(),
+        toast.error(
+          error.response?.data?.message || "เกิดข้อผิดพลาดในการเพิ่มชั้นเรียน",
+          {
+            duration: 2500,
+          }
+        );
     }
   },
   getClassroomById: async (id) => {
@@ -64,21 +67,21 @@ export const useClassroomStore = create((set, get) => ({
       console.error("Error in getClassroomById:", error);
     }
   },
-getClassroomByTeacherId: async (teacherId, yearId) => {
-  try {
-    const response = await ClassroomService.getClassesByTeacherId(teacherId, yearId);
-    // response.data.classes คือ array ห้องเรียน
-    set({ classroom: response.data.classes || [] });
-    return response.data.classes || [];
-  } catch (error) {
-    console.error("Error in getClassroomByTeacherId:", error);
-    toast.error(
-      error?.response?.data?.message ||
-        "เกิดข้อผิดพลาดในการดึงข้อมูลชั้นเรียน"
-    );
-    return [];
-  }
-},
+  getClassroomByTeacherId: async (teacherId, yearId) => {
+    try {
+      const response = await ClassroomService.getClassesByTeacherId(
+        teacherId,
+        yearId
+      );
+      // response.data.classes คือ array ห้องเรียน
+      set({ classroom: response.data.classes || [] });
+      return response.data.classes || [];
+    } catch (error) {
+      console.error("Error in getClassroomByTeacherId:", error);
+
+      return [];
+    }
+  },
   updateClassroom: async (id, values) => {
     try {
       const response = await ClassroomService.updateClass({
