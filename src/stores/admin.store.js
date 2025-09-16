@@ -46,6 +46,7 @@ export const usePersonnelStore = create((set, get) => ({
         set({ data: newPersonnel }); // อัปเดตข้อมูล personnel หลังจากเพิ่มสำเร็จ
       }
     } catch (error) {
+      document.getElementById("add_personnel").close();
       toast.error(error.response.data.message);
       console.log("เพิ่มผิดพลาดนะ", error.response.data.message);
     }
@@ -89,7 +90,7 @@ export const usePersonnelStore = create((set, get) => ({
             text: response.data.message,
             icon: "success",
             showConfirmButton: false,
-            timer: 3500,
+            timer: 1500,
           }).then(() => {
             const updatedPersonnel = get().data.filter(
               (person) => person.email !== email

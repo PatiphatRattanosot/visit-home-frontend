@@ -3,18 +3,20 @@ import TextInputInModal from "./TexInputInModal";
 import SelectInputInModal from "./SelectInputInModal";
 import { useFormik } from "formik";
 import { ClassroomSchema } from "../../schemas/classroom";
-import {usePersonnelStore} from "../../stores/admin.store";
+import { usePersonnelStore } from "../../stores/admin.store";
 import { useClassroomStore } from "../../stores/classroom.store";
 
-const AddClassroom = ({ yearId,addClassroomSuccess }) => {
-  
+const AddClassroom = ({ yearId, addClassroomSuccess }) => {
   const { addClassroom } = useClassroomStore();
   const { fetchData, data: personnel } = usePersonnelStore();
 
-  const selectTeacherOptions = personnel.map((teacher) => ({
-    value: teacher._id,
-    label: `${teacher.first_name} ${teacher.last_name}`,
-  }));
+  const selectTeacherOptions = personnel
+    .filter((teacher) => !teacher?.class_id)
+    .map((teacher) => ({
+      value: teacher._id,
+      label: `${teacher.first_name} ${teacher.last_name}`,
+    }));
+  
 
   const formik = useFormik({
     initialValues: {
@@ -37,6 +39,8 @@ const AddClassroom = ({ yearId,addClassroomSuccess }) => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  console.log("personnel", personnel);
 
   return (
     <div>
@@ -86,8 +90,6 @@ const AddClassroom = ({ yearId,addClassroomSuccess }) => {
                 options={selectTeacherOptions}
                 defaultOpt="เลือกครูที่ปรึกษา"
               />
-
-              
 
               <div className="flex gap-6 justify-center mt-4">
                 <button type="submit" className="btn-green">

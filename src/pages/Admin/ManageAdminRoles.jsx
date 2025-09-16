@@ -16,9 +16,11 @@ const ManageAdminRoles = () => {
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   const optionsForPersonnel = [
     { value: "SortToMost", label: "เรียงจากน้อยไปมาก" },
-    { value: "MostToSort", label: "เรียงจากมากไปน้อย" },
+    { value: "SortToLess", label: "เรียงจากมากไปน้อย" },
     { value: "AlphaSortToMost", label: "เรียงตามลำดับตัวอักษร ก-ฮ" },
-    { value: "AlphaMostToSort", label: "เรียงตามลำดับตัวอักษร ฮ-ก" },
+    { value: "AlphaSortToLess", label: "เรียงตามลำดับตัวอักษร ฮ-ก" },
+    { value: "PrefixMr", label: "คำนำหน้า นาย-นาง" },
+    { value: "PrefixMrs", label: "คำนำหน้า นาง-นาย" },
   ];
   // สร้าง satate สำหรับ Paginations
   const [currentPage, setCurrentPage] = useState(1);
@@ -62,7 +64,9 @@ const ManageAdminRoles = () => {
       ? active.filter((p) => {
           const firstName = (p?.first_name || "").toLowerCase();
           const lastName = (p?.last_name || "").toLowerCase();
-          const fullName = `${p?.first_name || ""} ${p?.last_name || ""}`.toLowerCase();
+          const fullName = `${p?.first_name || ""} ${
+            p?.last_name || ""
+          }`.toLowerCase();
           const userId = (p?.user_id ?? "").toString();
           return (
             firstName.includes(keyword) ||
@@ -77,27 +81,40 @@ const ManageAdminRoles = () => {
     const sorted = [...searched];
     switch (selectedOption) {
       case "SortToMost":
-        sorted.sort((a, b) => (a?.user_id ?? 0) - (b?.user_id ?? 0));
+        sorted.sort((a, b) => a.user_id - b.user_id);
         break;
-      case "MostToSort":
-        sorted.sort((a, b) => (b?.user_id ?? 0) - (a?.user_id ?? 0));
+      case "SortToLess":
+        sorted.sort((a, b) => b.user_id - a.user_id);
         break;
-      case "AlphaMostToSort": {
+      case "AlphaSortToMost":
         sorted.sort((a, b) => {
-          const nameA = `${a?.prefix || ""}${a?.first_name || ""}${a?.last_name || ""}`;
-          const nameB = `${b?.prefix || ""}${b?.first_name || ""}${b?.last_name || ""}`;
+          const nameA = `${a.first_name}${a.last_name}`;
+          const nameB = `${b.first_name}${b.last_name}`;
           return nameA.localeCompare(nameB, "th", { sensitivity: "base" });
         });
         break;
-      }
-      case "AlphaSortToMost": {
+      case "AlphaSortToLess":
         sorted.sort((a, b) => {
-          const nameA = `${a?.prefix || ""}${a?.first_name || ""}${a?.last_name || ""}`;
-          const nameB = `${b?.prefix || ""}${b?.first_name || ""}${b?.last_name || ""}`;
+          const nameA = `${a.first_name}${a.last_name}`;
+          const nameB = `${b.first_name}${b.last_name}`;
+          // { sensitivity: "base" } คือการเปรียบเทียบแบบไม่สนใจตัวพิมพ์ใหญ่-เล็ก
+          // localeCompare() ใช้สำหรับเปรียบเทียบสตริงตามภาษาที่กำหนด
           return nameB.localeCompare(nameA, "th", { sensitivity: "base" });
         });
         break;
-      }
+      case "PrefixMr":
+        sorted.sort((a, b) => {
+          const prefixOrder = { นาย: 1, นางสาว: 2, นาง: 3 };
+          return (prefixOrder[a.prefix] || 99) - (prefixOrder[b.prefix] || 99);
+        });
+        break;
+      case "PrefixMrs":
+        sorted.sort((a, b) => {
+          const prefixOrder = { นาย: 1, นางสาว: 2, นาง: 3 };
+          return (prefixOrder[b.prefix] || 99) - (prefixOrder[a.prefix] || 99);
+        });
+
+        break;
       default:
         break;
     }
@@ -122,7 +139,12 @@ const ManageAdminRoles = () => {
   return (
     <div className="section-container w-full">
       <div className="flex flex-row space-x-4">
-        <Breadcrumbs options={[{ label: "หน้าหลัก", link: "/admin" }, { label: "จัดการบทบาทผู้ดูแล" }]} />
+        <Breadcrumbs
+          options={[
+            { label: "หน้าหลัก", link: "/admin" },
+            { label: "จัดการบทบาทผู้ดูแล" },
+          ]}
+        />
       </div>
 
       <h1 className="text-center">จัดการบทบาทผู้ดูแล</h1>

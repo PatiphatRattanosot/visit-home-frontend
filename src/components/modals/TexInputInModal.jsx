@@ -31,7 +31,7 @@ const TextInputInModal = ({
         className="input w-64 md:w-72"
       />
       {error && touched && (
-        <div className="text-red-600 text-xs mt-1">{error}</div>
+        <div id={`${name}-error`} className="text-red-600 text-xs mt-1">{error}</div>
       )}
     </div>
   );

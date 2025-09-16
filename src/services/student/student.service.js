@@ -32,6 +32,10 @@ const updateProfile = async (data) => {
   });
 };
 
+const uploadStudentsByExcel = async (data) => {
+  return await api.post(`${baseUrl}/create_many`, data);
+}
+
 const StudentService = {
   getAllStudents,
   createStudent,
@@ -40,6 +44,7 @@ const StudentService = {
   updateStudent,
   getYearlyData,
   updateProfile,
+  uploadStudentsByExcel,
 };
 
 export default StudentService;
