@@ -17,7 +17,8 @@ const SearchClassroom = ({
     const result = classroom.filter((classroom) => {
       return (
         String(classroom.room).toLowerCase().includes(value.toLowerCase()) ||
-        String(classroom.number).toLowerCase().includes(value.toLowerCase())
+        String(classroom.number).toLowerCase().includes(value.toLowerCase()) ||
+        String(classroom.room + "/" + classroom.number).toLowerCase().includes(value.toLowerCase())
       );
     });
     setFilteredClassroom(result);
