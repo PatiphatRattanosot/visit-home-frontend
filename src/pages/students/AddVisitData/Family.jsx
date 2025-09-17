@@ -6,8 +6,23 @@ import Radio from "../../../components/Radio";
 import Checkbox from "../../../components/Checkbox";
 import LabelCheck from "../../../components/LabelCheck";
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
+import { validateCurrentPage } from "../../../utils/formNavigation";
 
 const Family = ({ page, setPage, formik }) => {
+  const familyFields = [
+    "total_household_income",
+    "received_daily_from",
+    "daily_total_to_school",
+    "student_part_time",
+    "student_income",
+    "household_burdens",
+    "housing_type",
+    "housing_condition",
+    "family_vehicle",
+    "owned_land",
+    "rented_land",
+  ];
+
   const [studentWork, setStudentWork] = React.useState(false);
   const [haveHouseholdBurdens, setHaveHouseholdBurdens] = React.useState(false);
   const [haveLand, setHaveLand] = React.useState(false);
@@ -352,7 +367,13 @@ const Family = ({ page, setPage, formik }) => {
             <button
               type="button"
               className="btn btn-soft w-1/2"
-              onClick={() => setPage(page + 1)}
+              onClick={() =>
+                validateCurrentPage({
+                  formik,
+                  fieldsToValidate: familyFields,
+                  onSuccess: () => setPage(page + 1),
+                })
+              }
             >
               ถัดไป {` (${page + 1})`}
             </button>

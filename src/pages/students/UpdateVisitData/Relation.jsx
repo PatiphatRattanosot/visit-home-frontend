@@ -5,8 +5,23 @@ import Select from "../../../components/Select";
 import Radio from "../../../components/Radio";
 import LabelCheck from "../../../components/LabelCheck";
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
+import { validateCurrentPage } from "../../../utils/formNavigation";
 
 const Relation = ({ page, setPage, formik }) => {
+  const relationFields = [
+    "family_relation_status",
+    "family_member",
+    "family_time",
+    "father_relation",
+    "mother_relation",
+    "big_brother_relation",
+    "lil_brother_relation",
+    "big_sister_relation",
+    "lil_sister_relation",
+    "grandparent_relation",
+    "relative_relation",
+  ];
+
   const [bigBrotherCheck, setBigBrotherCheck] = React.useState(false);
   const [lilBrotherCheck, setLilBrotherCheck] = React.useState(false);
   const [bigSisterCheck, setBigSisterCheck] = React.useState(false);
@@ -284,7 +299,13 @@ const Relation = ({ page, setPage, formik }) => {
             <button
               type="button"
               className="btn btn-soft w-1/2"
-              onClick={() => setPage(page + 1)}
+              onClick={() =>
+                validateCurrentPage({
+                  formik,
+                  fieldsToValidate: relationFields,
+                  onSuccess: () => setPage(page + 1),
+                })
+              }
             >
               ถัดไป {` (${page + 1})`}
             </button>

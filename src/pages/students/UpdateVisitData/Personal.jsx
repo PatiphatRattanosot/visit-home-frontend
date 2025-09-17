@@ -6,9 +6,30 @@ import LabelCheck from "../../../components/LabelCheck";
 import StudentPicture from "../../../components/students/StudentPicture";
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useNavigate } from "react-router";
+import { validateCurrentPage } from "../../../utils/formNavigation";
 
 const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
   const navigate = useNavigate();
+  const personalFields = [
+    "phone",
+    "father_prefix",
+    "father_name",
+    "father_last_name",
+    "father_job",
+    "father_phone",
+    "mother_prefix",
+    "mother_name",
+    "mother_last_name",
+    "mother_job",
+    "mother_phone",
+    "parent_prefix",
+    "parent_name",
+    "parent_last_name",
+    "parent_job",
+    "parent_phone",
+    "lat",
+    "lng",
+  ];
 
   const prefixOptions = [
     { value: "นาย", label: "นาย" },
@@ -368,7 +389,13 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
             <button
               type="button"
               className="btn btn-soft w-1/2"
-              onClick={() => setPage(page + 1)}
+              onClick={() =>
+                validateCurrentPage({
+                  formik,
+                  fieldsToValidate: personalFields,
+                  onSuccess: () => setPage(page + 1),
+                })
+              }
             >
               ถัดไป {` (${page + 1})`}
             </button>

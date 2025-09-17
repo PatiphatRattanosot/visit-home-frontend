@@ -4,8 +4,24 @@ import Checkbox from "../../../components/Checkbox";
 import Radio from "../../../components/Radio";
 import LabelCheck from "../../../components/LabelCheck";
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
+import { validateCurrentPage } from "../../../utils/formNavigation";
 
 const Behavior = ({ page, setPage, formik }) => {
+  const behaviorFields = [
+    "student_resp",
+    "other_student_resp",
+    "hobbies",
+    "other_hobbies",
+    "drugs_behav",
+    "violent_behav",
+    "other_violent_behav",
+    "sexual_behav",
+    "computer_internet_access",
+    "tech_use_behav",
+    "gaming_behav",
+    "other_gaming_behav",
+  ];
+
   const [isUseDrugs, setIsUseDrugs] = React.useState(false);
   const [isViolence, setIsViolence] = React.useState(false);
   const [haveSexualBehavior, setHaveSexualBehavior] = React.useState(false);
@@ -351,7 +367,13 @@ const Behavior = ({ page, setPage, formik }) => {
             <button
               type="button"
               className="btn btn-soft w-1/2"
-              onClick={() => setPage(page + 1)}
+              onClick={() =>
+                validateCurrentPage({
+                  formik,
+                  fieldsToValidate: behaviorFields,
+                  onSuccess: () => setPage(page + 1),
+                })
+              }
             >
               ถัดไป {` (${page + 1})`}
             </button>

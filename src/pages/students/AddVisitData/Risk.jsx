@@ -5,9 +5,18 @@ import Radio from "../../../components/Radio";
 import Checkbox from "../../../components/Checkbox";
 import LabelCheck from "../../../components/LabelCheck";
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
+import { validateCurrentPage } from "../../../utils/formNavigation";
 
 const Risk = ({ page, setPage, formik }) => {
   const [haveHealthIssues, setHaveHealthIssues] = React.useState(false);
+  const riskFields = [
+    "when_student_alone",
+    "health_risk",
+    "welfare_and_safety",
+    "distance_to_school",
+    "time_used",
+    "school_transport",
+  ];
 
   const breadcrumbsOptions = [
     { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
@@ -205,7 +214,13 @@ const Risk = ({ page, setPage, formik }) => {
             <button
               type="button"
               className="btn btn-soft w-1/2"
-              onClick={() => setPage(page + 1)}
+              onClick={() =>
+                validateCurrentPage({
+                  formik,
+                  fieldsToValidate: riskFields,
+                  onSuccess: () => setPage(page + 1),
+                })
+              }
             >
               ถัดไป {` (${page + 1})`}
             </button>
