@@ -7,49 +7,22 @@ import {
   listenToAuthChanges,
 } from "../configs/firebase.config";
 import AuthServices from "../services/auth.service";
-import { useBeforeUnload } from "react-router";
-
-const testlogin = async () => {
-  const name = "email_test";
-  const cookies = document.cookie.split(";");
-  for (let i = 0; i < cookies.length; i++) {
-    let cookie = cookies[i].trim(); // Remove leading/trailing whitespace
-    // Check if this cookie starts with the desired name followed by '='
-    if (cookie.startsWith(name + "=")) {
-      // Extract and decode the cookie value
-      console.log(
-        "email_test",
-        decodeURIComponent(cookie.substring(name.length + 1))
-      );
-
-      return decodeURIComponent(cookie.substring(name.length + 1));
-    }
-  }
-};
 
 export const useAuthStore = create(
   persist(
-    async (set) => {
-      const email_test = await testlogin();
-      if (email_test) {
-        const res = await AuthServices.sign({ email: email_test });
-        console.log(res);
+    (set) => {
+      let unsubscribeAuthListener = null; // To hold the unsubscribe function
 
-        if (res.status === 200) {
-          set({ userInfo: res.data?.user });
-          console.log();
-
-          return;
-        }
-      }
       // Listen to auth state changes
       listenToAuthChanges(async (user) => {
-        set({ user, isLoading: false });
+        if (!unsubscribeAuthListener) {
+          // Set unsubscribeAuthListener to prevent multiple triggers
+          unsubscribeAuthListener = () => {}; // Just a placeholder function initially
+        }
 
-        if (!user) {
-          set({ userInfo: null });
-        } else {
-          // Fetch userInfo when logged in
+        // Run this logic only once when the user first logs in or logs out
+        if (user) {
+          set({ user, isLoading: false });
           try {
             const res = await AuthServices.sign({ email: user.email });
             if (res.status === 200) {
@@ -68,6 +41,14 @@ export const useAuthStore = create(
               showConfirmButton: true,
             });
           }
+          // Unsubscribe from auth listener after first execution
+          if (unsubscribeAuthListener) {
+            unsubscribeAuthListener(); // Unsubscribe after handling auth change
+            unsubscribeAuthListener = null; // Reset listener
+          }
+        } else {
+          // If no user is signed in, reset userInfo
+          set({ user: null, userInfo: null, isLoading: false });
         }
       });
 
