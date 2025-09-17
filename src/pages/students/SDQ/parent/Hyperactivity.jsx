@@ -1,6 +1,7 @@
 import React from "react";
 import BreadcrumbsLoop from "../../../../components/Breadcrumbs";
 import SDQRadio from "../../../../components/SDQRadio";
+import { validateCurrentPage } from "../../../../utils/formNavigation";
 
 const Hyperactivity = ({ page, setPage, formik }) => {
   const breadcrumbsOptions = [
@@ -8,6 +9,15 @@ const Hyperactivity = ({ page, setPage, formik }) => {
     { label: "แบบประเมินตนเอง", link: "/student/sdq-student" },
     { label: "หน้า 3" },
   ];
+
+  const page_3 = [
+    "question_2",
+    "question_10",
+    "question_15",
+    "question_21",
+    "question_25",
+  ];
+
   const choiceOptions = ["0", "1", "2"]; // 0 = ไม่, 1 = ค่อนข้างจริง, 2 = จริง
   const reverseChoiceOptions = ["2", "1", "0"]; // 0 = ไม่, 1 = ค่อนข้างจริง, 2 = จริง
   return (
@@ -87,7 +97,13 @@ const Hyperactivity = ({ page, setPage, formik }) => {
             <button
               type="button"
               className="btn btn-soft w-1/2"
-              onClick={() => setPage(page + 1)}
+              onClick={() =>
+                validateCurrentPage({
+                  formik,
+                  fieldsToValidate: page_3,
+                  onSuccess: () => setPage(page + 1),
+                })
+              }
             >
               ถัดไป {` (${page + 1})`}
             </button>

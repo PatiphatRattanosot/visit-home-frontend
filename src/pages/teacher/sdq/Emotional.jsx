@@ -1,12 +1,21 @@
 import React from "react";
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import SDQRadio from "../../../components/SDQRadio";
+import { validateCurrentPage } from "../../../utils/formNavigation";
 
 const Emotional = ({ page, setPage, formik }) => {
   const breadcrumbsOptions = [
     { label: "แบบประเมิน SDQ", link: "/student/sdq-student" },
     { label: "แบบประเมินตนเอง", link: "/student/sdq-student" },
     { label: "หน้า 1" },
+  ];
+
+  const page_1 = [
+    "question_3",
+    "question_8",
+    "question_13",
+    "question_16",
+    "question_24",
   ];
 
   const choiceOptions = ["0", "1", "2"]; // 0 = ไม่, 1 = ค่อนข้างจริง, 2 = จริง
@@ -89,7 +98,13 @@ const Emotional = ({ page, setPage, formik }) => {
             <button
               type="button"
               className="btn btn-soft w-1/2"
-              onClick={() => setPage(page + 1)}
+              onClick={() =>
+                validateCurrentPage({
+                  formik,
+                  fieldsToValidate: page_1,
+                  onSuccess: () => setPage(page + 1),
+                })
+              }
             >
               ถัดไป {` (${page + 1})`}
             </button>
