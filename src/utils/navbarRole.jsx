@@ -6,8 +6,6 @@ export const getNavLinks = (roles = [], activeRole = null) => {
   // ถ้าไม่มี ให้ใช้บทบาทแรกในอาร์เรย์ roles แทน (เช่น roles[0])
   // ถ้า roles ไม่ใช่อาร์เรย์ จะ fallback เป็น string ว่าง ""  เพื่
 
-  console.log(role);
-
   if (role === "Admin") {
     return (
       <ul className="menu menu-vertical md:menu-horizontal px-1 ">

@@ -11,13 +11,18 @@ import AuthServices from "../services/auth.service";
 export const useAuthStore = create(
   persist(
     (set) => {
+      let unsubscribeAuthListener = null; // To hold the unsubscribe function
+
       // Listen to auth state changes
       listenToAuthChanges(async (user) => {
-        set({ user, isLoading: false });
-        if (!user) {
-          set({ userInfo: null });
-        } else {
-          // Fetch userInfo when logged in
+        if (!unsubscribeAuthListener) {
+          // Set unsubscribeAuthListener to prevent multiple triggers
+          unsubscribeAuthListener = () => {}; // Just a placeholder function initially
+        }
+
+        // Run this logic only once when the user first logs in or logs out
+        if (user) {
+          set({ user, isLoading: false });
           try {
             const res = await AuthServices.sign({ email: user.email });
             if (res.status === 200) {
@@ -36,6 +41,14 @@ export const useAuthStore = create(
               showConfirmButton: true,
             });
           }
+          // Unsubscribe from auth listener after first execution
+          if (unsubscribeAuthListener) {
+            unsubscribeAuthListener(); // Unsubscribe after handling auth change
+            unsubscribeAuthListener = null; // Reset listener
+          }
+        } else {
+          // If no user is signed in, reset userInfo
+          set({ user: null, userInfo: null, isLoading: false });
         }
       });
 

@@ -5,7 +5,6 @@ import { useNavigate } from "react-router";
 
 const Navbar = ({ user, userInfo, googleSignIn, logout }) => {
   const navigate = useNavigate();
-  console.log(userInfo?.role);
   const [switchNavbar, setSwitchNavbar] = useState(() => {
     // localStorage.getItem() หมายถึงการดึงค่าจาก localStorage
     // ถ้าไม่มีค่าใน localStorage จะใช้ค่าเริ่มต้นเป็น null
