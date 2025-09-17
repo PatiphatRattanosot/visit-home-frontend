@@ -36,6 +36,9 @@ const googleSignIn = async () => {
   return result;
 };
 const logout = () => signOut(auth);
-const listenToAuthChanges = (callback) => onAuthStateChanged(auth, callback);
+const listenToAuthChanges = (callback) => {
+  const unsubscribe = onAuthStateChanged(auth, callback);
+  return unsubscribe; // This will allow you to unsubscribe later if needed
+};
 
 export { auth, googleSignIn, logout, listenToAuthChanges };
