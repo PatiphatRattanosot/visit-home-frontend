@@ -22,7 +22,6 @@ const StudentList = () => {
 
   useEffect(() => {
     getClassroomByTeacherId(String(userInfo._id), String(selectedYear));
-    console.log("ไหนดูซิกูส่งไรไปบ้างให้บ้านวะ:", userInfo._id, selectedYear);
   }, [userInfo?._id, selectedYear]);
 
   const currentClass =
@@ -88,6 +87,17 @@ const StudentList = () => {
     indexOfLastItem
   );
 
+  const VisitStatusBadge = ({ value }) => {
+  if (value === true) {
+    return <span className="badge badge-success badge-sm">เยี่ยมบ้านแล้ว</span>;
+  }
+  if (value === false) {
+    return <span className="badge badge-warning badge-sm">ยังไม่เยี่ยมบ้าน</span>;
+  }
+  return <span className="badge badge-ghost badge-sm">ไม่มีข้อมูลปีนี้</span>;
+};
+
+
   return (
     <div className="section-container">
       <BreadcrumbsLoop
@@ -142,11 +152,6 @@ const StudentList = () => {
           <table className="table table-zebra w-full text-xs sm:text-sm">
             <thead>
               <tr>
-                <th className="hidden sm:table-cell w-10">
-                  <label>
-                    <input type="checkbox" className="checkbox checkbox-sm" />
-                  </label>
-                </th>
                 <th className="text-center">เลขที่ประจำตัวนักเรียน</th>
                 <th>คำนำหน้า</th>
                 <th>ชื่อ - นามสกุล</th>
@@ -156,51 +161,43 @@ const StudentList = () => {
             <tbody>
               {currentItems.map((student) => (
                 <tr
-                  className="cursor-pointer hover:bg-gray-100"
-                  onClick={() =>
-                    document
-                      .getElementById(`manage_student_${student._id}`)
-                      .showModal()
-                  }
                   key={student?._id}
+                  className="cursor-pointer hover:bg-gray-100"
                 >
-                  <td className="hidden sm:table-cell">
-                    <label>
-                      <input type="checkbox" className="checkbox checkbox-sm" />
-                    </label>
-                  </td>
-                  <td className="text-center cursor-pointer hover:underline">
+                  <td
+                    className="text-center hover:underline"
+                    onClick={() =>
+                      document
+                        .getElementById(`manage_student_${student._id}`)
+                        .showModal()
+                    }
+                  >
                     {student?.user_id}
                   </td>
-
                   <td>{student?.prefix}</td>
-                  <td>
+                  <td
+                    onClick={() =>
+                      document
+                        .getElementById(`manage_student_${student._id}`)
+                        .showModal()
+                    }
+                  >
                     {student?.first_name} {student?.last_name}
                   </td>
                   <td>
-                    {student?.visit_status === "Visited" ? (
-                      <span className="badge badge-success badge-sm">
-                        เยี่ยมบ้านแล้ว
-                      </span>
-                    ) : (
-                      <span className="badge badge-warning badge-sm">
-                        ยังไม่เยี่ยมบ้าน
-                      </span>
-                    )}
+                    <VisitStatusBadge value={student?.isCompleted} />
                   </td>
-                  <td>
-                    <ManageStudent
-                      id={`manage_student_${student._id}`}
-                      student={student}
-                    />
-                  </td>
+
+                  <ManageStudent
+                    id={`manage_student_${student._id}`}
+                    student={student}
+                  />
                 </tr>
               ))}
-
               {currentItems.length === 0 && (
                 <tr>
                   <td
-                    colSpan={4}
+                    colSpan={6}
                     className="text-center text-base text-gray-500 py-6"
                   >
                     ไม่พบข้อมูลนักเรียน
@@ -210,7 +207,6 @@ const StudentList = () => {
             </tbody>
             <tfoot>
               <tr>
-                <th className="hidden sm:table-cell"></th>
                 <th className="text-center">เลขที่ประจำตัวนักเรียน</th>
                 <th>คำนำหน้า</th>
                 <th>ชื่อ - นามสกุล</th>

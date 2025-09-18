@@ -2,7 +2,6 @@ import { useFormik } from "formik";
 import { VisitInfoSchema } from "../../schemas/visitInfo";
 import AddPicture from "../../components/teacher/AddPicture";
 import BreadcrumbsLoop from "../../components/Breadcrumbs";
-import TextInput from "../../components/modals/TexInputInModal";
 import TextArea from "../../components/Textarea";
 import useYearSelectStore from "../../stores/year_select.store";
 import { useAuthStore } from "../../stores/auth.store";
@@ -143,7 +142,7 @@ const AddVisitInfo = () => {
               setPictureFile={setPictureFile}
             />
 
-            <TextInput
+            <TextArea
               name="home_description"
               placeholder="คำอธิบายภาพ"
               label="คำอธิบายภาพ"
@@ -152,6 +151,7 @@ const AddVisitInfo = () => {
               value={formik.values.home_description}
               error={formik.errors.home_description}
               touched={formik.touched.home_description}
+              className="w-full"
               onBlur={formik.handleBlur}
               id="add-home-pic-desc"
             />
@@ -165,11 +165,12 @@ const AddVisitInfo = () => {
               setPictureFile={setPictureFile}
               file={pictureFile.family_img}
             />
-            <TextInput
+            <TextArea
               name="family_description"
               placeholder="คำอธิบายภาพ"
               label="คำอธิบายภาพ"
               type="text"
+              className="w-full"
               onChange={formik.handleChange}
               value={formik.values.family_description}
               error={formik.errors.family_description}
