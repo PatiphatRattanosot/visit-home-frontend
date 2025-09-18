@@ -39,6 +39,7 @@ export const useClassroomStore = create((set, get) => ({
         document.getElementById("add_classroom").close(); // ปิด modal
       }
     } catch (error) {
+      document.getElementById("add_classroom").close(); // ปิด modal
       console.error(
         "Error in classService.createClass:",
         error.response?.data.message
@@ -100,6 +101,7 @@ export const useClassroomStore = create((set, get) => ({
         document.getElementById(`edit_classroom_${id}`).close(); // ปิด modal
       }
     } catch (error) {
+      document.getElementById(`edit_classroom_${id}`).close();
       console.error("Error in updateClassroom:", error);
       toast.error(
         error.response?.data?.message || "เกิดข้อผิดพลาดในการแก้ไขชั้นเรียน"

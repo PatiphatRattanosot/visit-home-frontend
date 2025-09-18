@@ -41,7 +41,7 @@ const ManageStudent = ({ student }) => {
   const [studentData, setStudentData] = useState(null);
 
   useEffect(() => {
-    const fetchStudentData = async () => {
+    const getStudentData = async () => {
       try {
         
       } catch (error) {
@@ -49,7 +49,7 @@ const ManageStudent = ({ student }) => {
         console.error("Failed to fetch student data:", error);
       }
     };
-    fetchStudentData();
+    getStudentData();
   }, [student._id, selectedYear]);
 
   return (
