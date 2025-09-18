@@ -115,6 +115,9 @@ function App() {
               path="visit-info/add/:studentId"
               element={<AddVisitInfo />}
             />
+            <Route path="student-data/:studentId/:yearId">
+              <Route path="" element={<หน้าดูข้อมูลของนักเรียน />} />
+            </Route>
             <Route path="sdq/:studentId/:yearId">
               <Route path="" element={<SDQResult />} />
               <Route path="estimate" element={<SDQFormTeacher />} />

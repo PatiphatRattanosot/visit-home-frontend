@@ -11,6 +11,10 @@ const ManageStudent = ({ student }) => {
     navigate(`/teacher/visit-info/add/${student._id}`);
   };
 
+  const goToStudentDetail = () => {
+    navigate(`/teacher/student-data/${student._id}/${selectedYear}`);
+  };
+
   const [sdqTeacher, setSdqTeacher] = useState(null);
 
   useEffect(() => {
@@ -32,6 +36,20 @@ const ManageStudent = ({ student }) => {
       }
     };
     fetchSDQData();
+  }, [student._id, selectedYear]);
+
+  const [studentData, setStudentData] = useState(null);
+
+  useEffect(() => {
+    const fetchStudentData = async () => {
+      try {
+        
+      } catch (error) {
+        setStudentData(null);
+        console.error("Failed to fetch student data:", error);
+      }
+    };
+    fetchStudentData();
   }, [student._id, selectedYear]);
 
   return (
@@ -62,6 +80,9 @@ const ManageStudent = ({ student }) => {
               ผลประเมิน SDQ
             </a>
             <button className="btn">ดูเส้นทาง</button>
+            <button onClick={goToStudentDetail} className="btn">
+              ข้อมูลนักเรียน
+            </button>
             <button onClick={goToVisitInfo} className="btn">
               ผลการเยี่ยมบ้าน
             </button>
