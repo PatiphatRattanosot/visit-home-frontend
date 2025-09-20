@@ -12,7 +12,7 @@ import YearSelector from "../../components/YearSelector";
 const StudentList = () => {
   const { userInfo } = useAuthStore();
   const { classroom, getClassroomByTeacherId } = useClassroomStore(); // classroom = array ของห้อง
-  const { years, selectedYear, setSelectedYear } = useYearSelectStore();
+  const { selectedYear, setSelectedYear } = useYearSelectStore();
 
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -162,11 +162,8 @@ const StudentList = () => {
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((student) => (
-                <tr
-                  key={student?._id}
-                  className="cursor-pointer hover:bg-gray-100"
-                >
+              {currentItems.map((student, index) => (
+                <tr key={index} className="cursor-pointer hover:bg-gray-100">
                   <td
                     className="text-center hover:underline"
                     onClick={() =>

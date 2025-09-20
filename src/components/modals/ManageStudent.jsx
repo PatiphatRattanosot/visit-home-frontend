@@ -24,7 +24,7 @@ const ManageStudent = ({ student }) => {
         }
       } catch (err) {
         setSdqTeacher(null);
-        console.error("Failed to fetch SDQ data:", err);
+        // console.error("Failed to fetch SDQ data:", err);
       }
     };
     fetchSDQData();
