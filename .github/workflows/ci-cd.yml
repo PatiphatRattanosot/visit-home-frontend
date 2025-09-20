@@ -1,8 +1,6 @@
 name: "build and deploy docker image"
 on:
   push:
-    # tags:
-    #   - "*" # Trigger เมื่อ push tag ใด ๆ
     branches:
       - test-prod
 
@@ -13,14 +11,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
 
-      # - name: Set TAG_NAME from Git tag
-      #   run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-
       - name: Login to GitHub Container Registry
         run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Build Docker Image
-        run: docker build -t ghcr.io/patiphatrattanosot/visit-home-frontend:latest -f ./Dockerfile.prod .
+      - name: Build Docker Image with Build Args
+        run: |
+          docker build \
+            --build-arg VITE_BASEURL="${{ secrets.VITE_BASEURL }}" \
+            --build-arg VITE_APIKEY="${{ secrets.VITE_APIKEY }}" \
+            --build-arg VITE_AUTHDOMAIN="${{ secrets.VITE_AUTHDOMAIN }}" \
+            --build-arg VITE_PROJECTID="${{ secrets.VITE_PROJECTID }}" \
+            --build-arg VITE_STORAGEBUCKET="${{ secrets.VITE_STORAGEBUCKET }}" \
+            --build-arg VITE_MESSAGINGSENDERID="${{ secrets.VITE_MESSAGINGSENDERID }}" \
+            --build-arg VITE_APPID="${{ secrets.VITE_APPID }}" \
+            --build-arg VITE_GOOGLE_MAPS_API_KEY="${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}" \
+            -t ghcr.io/patiphatrattanosot/visit-home-frontend:latest \
+            -f ./Dockerfile.prod .
 
       - name: Push Docker images to GHCR
         run: |
@@ -30,9 +36,6 @@ jobs:
     needs: release-docker-image-job
     runs-on: ubuntu-latest
     steps:
-      - name: Extract tag name again (ensure env variable is set)
-        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-
       - name: Install sshpass
         run: sudo apt-get update && sudo apt-get install -y sshpass
 
@@ -45,35 +48,17 @@ jobs:
             # ลบ container เก่า
             docker rm -f visit-home-frontend || true
 
-            # สร้าง network 
-            # docker network create visit-home-network || true
-
-            # เอา image ไปที่ server
+            # เอา image ใหม่
             docker pull ghcr.io/patiphatrattanosot/visit-home-frontend:latest
-             #  log 
-            echo "Deploy visit-home-backend with env variables"
-            echo "VITE_BASEURL=${{secrets.VITE_BASEURL}}"
-            echo "VITE_APIKEY=${{secrets.VITE_APIKEY}}"
-            echo "VITE_AUTHDOMAIN=${{secrets.VITE_AUTHDOMAIN}}"
-            echo "VITE_PROJECTID=${{secrets.VITE_PROJECTID}}"
-            echo "VITE_STORAGEBUCKET=${{secrets.VITE_STORAGEBUCKET}}"
-            echo "VITE_MESSAGINGSENDERID=${{secrets.VITE_MESSAGINGSENDERID}}"
-            echo "VITE_APPID=${{secrets.VITE_APPID}}"
-            echo "VITE_GOOGLE_MAPS_API_KEY=${{secrets.VITE_GOOGLE_MAPS_API_KEY}}"
-            #  log end
 
-            # สั่งให้รัน container ใหม่ และ map environment 
-            docker run --restart=always -d --pull always \
-            -e VITE_BASEURL=${{secrets.VITE_BASEURL}} \
-            -e VITE_APIKEY="${{secrets.VITE_APIKEY}}" \
-            -e VITE_AUTHDOMAIN=${{secrets.VITE_AUTHDOMAIN}} \
-            -e VITE_PROJECTID=${{secrets.VITE_PROJECTID}} \
-            -e VITE_STORAGEBUCKET=${{secrets.VITE_STORAGEBUCKET}} \
-            -e VITE_MESSAGINGSENDERID=${{secrets.VITE_MESSAGINGSENDERID}} \
-            -e VITE_APPID=${{secrets.VITE_APPID}} \
-            -e VITE_GOOGLE_MAPS_API_KEY=${{secrets.VITE_GOOGLE_MAPS_API_KEY}} \
+            echo "Deploying visit-home-frontend..."
+
+            # รัน container ใหม่ (ไม่ต้องใส่ -e เพราะ env vars ฝังใน image แล้ว)
+            docker run --restart=always -d \
             --name visit-home-frontend \
             -p 80:80 \
             --network visit-home-network \
             ghcr.io/patiphatrattanosot/visit-home-frontend:latest
+
+            echo "Frontend deployed successfully!"
           EOF
