@@ -81,7 +81,8 @@ const Classroom = () => {
       </div>
       <div>
         <h1 className="text-lg md:text-xl text-center">
-          เพิ่มชั้นเรียนของปีการศึกษา {years.find((y) => y._id === selectedYear)?.year ?? ""}
+          เพิ่มชั้นเรียนของปีการศึกษา{" "}
+          {years.find((y) => y._id === selectedYear)?.year ?? ""}
         </h1>
         <div className="flex flex-row justify-end items-center m-2">
           <YearSelector />
@@ -92,7 +93,11 @@ const Classroom = () => {
           <div className="card w-xl md:w-2xl p-4 shadow-sm flex flex-col items-center justify-center">
             <h2 className="text-lg">กำหนดช่วงเวลานัดเยี่ยมบ้าน</h2>
             <div className="flex gap-2">
-              <DateInput />
+              <DateInput
+                yearNumber={
+                  years.find((y) => y._id === selectedYear)?.year ?? ""
+                }
+              />
             </div>
           </div>
         </div>

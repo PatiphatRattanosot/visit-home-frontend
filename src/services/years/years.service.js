@@ -26,6 +26,10 @@ const deleteYear = async (id) => {
   return await api.delete("/year", { data: { year_id: id } });
 };
 
+const addSchedulesToYear = async (data) => {
+  return await api.patch("/year/add-schedule", data);
+};
+
 const YearServices = {
   createYear,
   createYearAuto,
@@ -33,6 +37,7 @@ const YearServices = {
   updateYear,
   deleteYear,
   getYearsByYear,
+  addSchedulesToYear,
 };
 
 export default YearServices;
