@@ -7,9 +7,11 @@ import Risk from "./Risk";
 import Other from "./Other";
 import { useParams } from "react-router";
 import { useStudentStore } from "../../../stores/student.store";
+import useYearSelectStore from "../../../stores/year_select.store";
 
 const Index = () => {
-  const { studentId, yearId } = useParams();
+  const { studentId } = useParams();
+  const { selectedYear } = useYearSelectStore();
   const [page, setPage] = React.useState(1);
   const [image, setImage] = React.useState("");
   const [phone, setPhone] = React.useState("");

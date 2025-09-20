@@ -3,10 +3,16 @@ import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import ShowPicture from "../../../components/students/ShowPicture";
 import YearSelector from "../../../components/YearSelector";
 import ViewMap from "../../../components/students/ViewMap";
+import { useParams } from "react-router";
 
 const Personal = ({ page, setPage, personalInfo, image, phone }) => {
+  const { studentId } = useParams();
+
   const breadcrumbsOptions = [
-    { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
+    {
+      link: `/teacher/student-data/${studentId}`,
+      label: "ข้อมูลการเยี่ยมบ้าน",
+    },
     { label: "ข้อมูลส่วนตัว" },
   ];
 

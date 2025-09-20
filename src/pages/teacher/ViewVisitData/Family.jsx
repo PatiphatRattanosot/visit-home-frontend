@@ -1,15 +1,17 @@
-
 import Stepper from "../../../components/Stepper";
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
-
+import { useParams } from "react-router";
+import YearSelector from "../../../components/YearSelector";
 
 const Family = ({ page, setPage, familyInfo }) => {
+  const { studentId } = useParams();
   const breadcrumbsOptions = [
-    { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
+    {
+      link: `/teacher/student-data/${studentId}`,
+      label: "ข้อมูลการเยี่ยมบ้าน",
+    },
     { label: "สถานะครัวเรือน" },
   ];
-
-
 
   const getDailyGiver = (giver) => {
     switch (giver) {
@@ -91,7 +93,6 @@ const Family = ({ page, setPage, familyInfo }) => {
           <div className="flex justify-center md:justify-end mt-6">
             <YearSelector />
           </div>
-
 
           {/* Family Info Section */}
           {!familyInfo ? (

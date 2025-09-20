@@ -116,7 +116,7 @@ function App() {
               path="visit-info/add/:studentId"
               element={<AddVisitInfo />}
             />
-            <Route path="student-data/:studentId/:yearId">
+            <Route path="student-data/:studentId">
               <Route path="" element={<ViewVisitDataForTeacher />} />
             </Route>
             <Route path="sdq/:studentId/:yearId">

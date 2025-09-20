@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router";
 import useYearSelectStore from "../../stores/year_select.store";
 import SDQServices from "../../services/sdq/sdq.service";
 import { useState, useEffect } from "react";
@@ -6,14 +5,6 @@ import { useState, useEffect } from "react";
 const ManageStudent = ({ student }) => {
   const { selectedYear } = useYearSelectStore();
   if (!student) return null; // Ensure student is defined before rendering
-  const navigate = useNavigate();
-  const goToVisitInfo = () => {
-    navigate(`/teacher/visit-info/add/${student._id}`);
-  };
-
-  const goToStudentDetail = () => {
-    navigate(`/teacher/student-data/${student._id}/${selectedYear}`);
-  };
 
   const [sdqTeacher, setSdqTeacher] = useState(null);
 
@@ -43,7 +34,6 @@ const ManageStudent = ({ student }) => {
   useEffect(() => {
     const getStudentData = async () => {
       try {
-        
       } catch (error) {
         setStudentData(null);
         console.error("Failed to fetch student data:", error);
@@ -80,12 +70,15 @@ const ManageStudent = ({ student }) => {
               ผลประเมิน SDQ
             </a>
             <button className="btn">ดูเส้นทาง</button>
-            <button onClick={goToStudentDetail} className="btn">
+            <a
+              href={`/teacher/student-data/${student._id}/${selectedYear}`}
+              className="btn"
+            >
               ข้อมูลนักเรียน
-            </button>
-            <button onClick={goToVisitInfo} className="btn">
+            </a>
+            <a href={`/teacher/visit-info/${student._id}`} className="btn">
               ผลการเยี่ยมบ้าน
-            </button>
+            </a>
 
             <button className="btn">พิมพ์เอกสาร</button>
           </div>

@@ -1,15 +1,16 @@
-
 import Stepper from "../../../components/Stepper";
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
-
+import { useParams } from "react-router";
 
 const Other = ({ page, setPage, otherInfo }) => {
+  const { studentId } = useParams();
   const breadcrumbsOptions = [
-    { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
+    {
+      link: `/teacher/student-data/${studentId}`,
+      label: "ข้อมูลการเยี่ยมบ้าน",
+    },
     { label: "จากผู้ปกครอง" },
   ];
-
-
 
   // Mapping ความช่วยเหลือจากหน่วยงาน
   const organizeSupportMap = {
@@ -43,8 +44,6 @@ const Other = ({ page, setPage, otherInfo }) => {
           <div className="flex justify-center md:justify-end mt-6">
             <YearSelector />
           </div>
-
-         
 
           {/* Grid */}
           {!otherInfo ? (
