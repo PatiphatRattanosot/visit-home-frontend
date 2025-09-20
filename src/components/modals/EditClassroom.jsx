@@ -21,8 +21,8 @@ const EditClassroom = ({ id, onUpdateSuccess }) => {
 
   const formik = useFormik({
     initialValues: {
-      room: "",
-      number: "",
+      room: 1,
+      number: 1,
       teacherId: "",
     },
     enableReinitialize: true, // ให้ Formik อัปเดตค่าเมื่อ initialValues เปลี่ยน
@@ -71,6 +71,8 @@ const EditClassroom = ({ id, onUpdateSuccess }) => {
                   type="number"
                   name="room"
                   placeholder="เลขชั้น"
+                  maxLength={6}
+                  minLength={1}
                   disabled={false}
                   value={formik.values.room}
                   onChange={formik.handleChange}
@@ -85,6 +87,8 @@ const EditClassroom = ({ id, onUpdateSuccess }) => {
                   className="w-64 md:w-72"
                   label="ห้อง"
                   placeholder="เลขห้อง"
+                  maxLength={6}
+                  minLength={1}
                   disabled={false}
                   value={formik.values.number}
                   onChange={formik.handleChange}

@@ -16,12 +16,11 @@ const AddClassroom = ({ yearId, addClassroomSuccess }) => {
       value: teacher._id,
       label: `${teacher.first_name} ${teacher.last_name}`,
     }));
-  
 
   const formik = useFormik({
     initialValues: {
-      room: 0,
-      number: 0,
+      room: 1,
+      number: 1,
       teacherId: "",
     },
     validationSchema: ClassroomSchema,
@@ -54,7 +53,8 @@ const AddClassroom = ({ yearId, addClassroomSuccess }) => {
                 type="number"
                 name="room"
                 placeholder="เลขชั้น"
-                maxLength={3}
+                maxLength={6}
+                minLength={1}
                 disabled={false}
                 value={formik.values.room}
                 onChange={formik.handleChange}
@@ -69,7 +69,8 @@ const AddClassroom = ({ yearId, addClassroomSuccess }) => {
                 className="w-64 md:w-72"
                 label="ห้อง"
                 placeholder="เลขห้อง"
-                maxLength={3}
+                maxLength={6}
+                minLength={1}
                 disabled={false}
                 value={formik.values.number}
                 onChange={formik.handleChange}
