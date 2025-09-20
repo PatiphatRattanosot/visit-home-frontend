@@ -44,7 +44,7 @@ const useYearSelectStore = create(
       try {
         const response = await YearServices.getYearsByYear(year);
         if (response.status === 200) {
-          const year = response.data.year;
+          const year = response.data[0];
           set({ yearData: year }); // บันทึกลงใน Store
           return year; // คืนค่าเพื่อให้ใช้ใน Component หรือ Formik ได้
         }
@@ -128,6 +128,20 @@ const useYearSelectStore = create(
           });
         }
       });
+    },
+    addSchedule: async (data) => {
+      try {
+        const res = await YearServices.addSchedulesToYear(data);
+        if (res.status === 200) {
+          toast.success(res.data.message);
+          get().fetchYears(); // เรียกใช้ fetchData เพื่ออัปเดตข้อมูล
+        }
+      } catch (err) {
+        // console.log(err);
+        toast.error(
+          err.response?.data?.message || "เกิดข้อผิดพลาดในการเพิ่มปีการศึกษา"
+        );
+      }
     },
   }))
 );
