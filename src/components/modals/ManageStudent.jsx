@@ -31,7 +31,7 @@ const ManageStudent = ({ student }) => {
   }, [student._id, selectedYear]);
 
   const openMapNavigation = () => {
-    if (student?.lat === null || student?.lng === null) {
+    if (student?.lat == null || student?.lng == null) {
       Swal.fire({
         icon: "error",
         title: "ไม่สามารถเปิดแผนที่ได้",
