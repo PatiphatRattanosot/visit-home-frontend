@@ -12,7 +12,7 @@ import YearSelector from "../../components/YearSelector";
 const StudentList = () => {
   const { userInfo } = useAuthStore();
   const { classroom, getClassroomByTeacherId } = useClassroomStore(); // classroom = array ของห้อง
-  const { years, selectedYear, setSelectedYear } = useYearSelectStore();
+  const { selectedYear, setSelectedYear } = useYearSelectStore();
 
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -88,15 +88,18 @@ const StudentList = () => {
   );
 
   const VisitStatusBadge = ({ value }) => {
-  if (value === true) {
-    return <span className="badge badge-success badge-sm">เยี่ยมบ้านแล้ว</span>;
-  }
-  if (value === false) {
-    return <span className="badge badge-warning badge-sm">ยังไม่เยี่ยมบ้าน</span>;
-  }
-  return <span className="badge badge-ghost badge-sm">ไม่มีข้อมูลปีนี้</span>;
-};
-
+    if (value === true) {
+      return (
+        <span className="badge badge-success badge-sm">เยี่ยมบ้านแล้ว</span>
+      );
+    }
+    if (value === false) {
+      return (
+        <span className="badge badge-warning badge-sm">ยังไม่เยี่ยมบ้าน</span>
+      );
+    }
+    return <span className="badge badge-ghost badge-sm">ไม่มีข้อมูลปีนี้</span>;
+  };
 
   return (
     <div className="section-container">
@@ -159,11 +162,8 @@ const StudentList = () => {
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((student) => (
-                <tr
-                  key={student?._id}
-                  className="cursor-pointer hover:bg-gray-100"
-                >
+              {currentItems.map((student, index) => (
+                <tr key={index} className="cursor-pointer hover:bg-gray-100">
                   <td
                     className="text-center hover:underline"
                     onClick={() =>

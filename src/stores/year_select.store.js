@@ -20,7 +20,7 @@ const useYearSelectStore = create(
           set({ years: sorted });
         }
       } catch (error) {
-        console.log("error fetching years:", error);
+        // console.log("error fetching years:", error);
       }
     },
     addYear: async (values) => {
@@ -34,7 +34,7 @@ const useYearSelectStore = create(
           document.getElementById("add_year").close(); // ปิด modal
         }
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         toast.error(
           err.response?.data?.message || "เกิดข้อผิดพลาดในการเพิ่มปีการศึกษา"
         );
@@ -48,9 +48,9 @@ const useYearSelectStore = create(
           set({ yearData: year }); // บันทึกลงใน Store
           return year; // คืนค่าเพื่อให้ใช้ใน Component หรือ Formik ได้
         }
-        console.log(year);
+        // console.log(year);
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         toast.error(
           err.response?.data?.message || "เกิดข้อผิดพลาดในการโหลดปีการศึกษา"
         );
@@ -117,7 +117,7 @@ const useYearSelectStore = create(
               icon: "error",
               confirmButtonText: "ตกลง",
             });
-            console.log(err);
+            // console.log(err);
           }
         } else if (result.isDismissed) {
           Swal.fire({
