@@ -8,6 +8,7 @@ import FilterDropdown from "../../components/FilterDropdown";
 import Pagination from "../../components/Pagination";
 import useYearSelectStore from "../../stores/year_select.store";
 import YearSelector from "../../components/YearSelector";
+import Appointment from "../../components/teacher/Appointment";
 
 const StudentList = () => {
   const { userInfo } = useAuthStore();
@@ -22,7 +23,6 @@ const StudentList = () => {
 
   useEffect(() => {
     getClassroomByTeacherId(String(userInfo._id), String(selectedYear));
-    console.log("ไหนดูซิกูส่งไรไปบ้างให้บ้านวะ:", userInfo._id, selectedYear);
   }, [userInfo?._id, selectedYear]);
 
   const currentClass =
@@ -151,17 +151,13 @@ const StudentList = () => {
                 <th>คำนำหน้า</th>
                 <th>ชื่อ - นามสกุล</th>
                 <th>สถานะการเยี่ยมบ้าน</th>
+                <th>นัดวันเยี่ยมบ้าน</th>
               </tr>
             </thead>
             <tbody>
               {currentItems.map((student) => (
                 <tr
                   className="cursor-pointer hover:bg-gray-100"
-                  onClick={() =>
-                    document
-                      .getElementById(`manage_student_${student._id}`)
-                      .showModal()
-                  }
                   key={student?._id}
                 >
                   <td className="hidden sm:table-cell">
@@ -169,12 +165,25 @@ const StudentList = () => {
                       <input type="checkbox" className="checkbox checkbox-sm" />
                     </label>
                   </td>
-                  <td className="text-center cursor-pointer hover:underline">
+                  <td
+                    className="text-center cursor-pointer hover:underline"
+                    onClick={() =>
+                      document
+                        .getElementById(`manage_student_${student._id}`)
+                        .showModal()
+                    }
+                  >
                     {student?.user_id}
                   </td>
 
                   <td>{student?.prefix}</td>
-                  <td>
+                  <td
+                    onClick={() =>
+                      document
+                        .getElementById(`manage_student_${student._id}`)
+                        .showModal()
+                    }
+                  >
                     {student?.first_name} {student?.last_name}
                   </td>
                   <td>
@@ -189,11 +198,29 @@ const StudentList = () => {
                     )}
                   </td>
                   <td>
+                    <button
+                      onClick={() =>
+                        document
+                          .getElementById(
+                            `add_appointment_schedule_${student._id}`
+                          )
+                          .showModal()
+                      }
+                    >
+                      นัดวันเยี่ยมบ้าน
+                    </button>
+                  </td>
+                  <td>
                     <ManageStudent
                       id={`manage_student_${student._id}`}
                       student={student}
                     />
                   </td>
+                  <Appointment
+                    studentId={student._id}
+                    student={student}
+                    id={`add_appointment_schedule_${student._id}`}
+                  />
                 </tr>
               ))}
 
@@ -215,6 +242,7 @@ const StudentList = () => {
                 <th>คำนำหน้า</th>
                 <th>ชื่อ - นามสกุล</th>
                 <th>สถานะการเยี่ยมบ้าน</th>
+                <th>นัดวันเยี่ยมบ้าน</th>
               </tr>
             </tfoot>
           </table>

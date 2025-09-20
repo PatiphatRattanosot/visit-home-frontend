@@ -1,0 +1,70 @@
+import { create } from "zustand";
+import Swal from "sweetalert2";
+import toast from "react-hot-toast";
+import ScheduleServices from "../services/schedule/schedule.service";
+
+export const useScheduleStore = create((set, get) => ({
+  schedule: [],
+  setSchedule: (newData) => set({ schedule: newData }),
+  fetchSchedule: async (teacherId, yearId, studentId) => {
+    try {
+      const response = await ScheduleServices.getSchedule(
+        teacherId,
+        yearId,
+        studentId
+      );
+      if (response.status === 200) {
+        set({ schedule: response.data.data });
+        return response.data.data;
+      }
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  },
+  createSchedule: async (data) => {
+    try {
+      const response = await ScheduleServices.createSchedule(data);
+      if (response.status === 201) {
+        // คำสั่ง concat เอา data ใหม่ ไปต่อท้าย array เดิม (หมายถึง Schedule ตัวเดิมที่มีอยู่)
+
+        set({ schedule: get().schedule.concat(response.data.data) });
+
+        toast.success(
+          response.data.message || "สร้างเวลานัดหมายเรียบร้อยแล้ว",
+          { duration: 3600 }
+        );
+        return response.data.data;
+      }
+    } catch (error) {
+      console.error(error);
+   
+      toast.error(
+        error.response?.data?.message || "เกิดข้อผิดพลาดในการสร้างตารางนัดหมาย",
+        { duration: 3600 }
+      );
+      return null;
+    }
+  },
+  updateSchedule: async (data) => {
+    try {
+      const response = await ScheduleServices.updateSchedule(data);
+      if (response.status === 200) {
+       
+        set({ schedule: response.data.data.get().schedule.concat(response.data.data) });
+        toast.success(
+          response.data.message || "อัปเดตเวลานัดหมายเรียบร้อยแล้ว",
+          { duration: 3600 }
+        );
+        return response.data.data;
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        error.response?.data?.message || "เกิดข้อผิดพลาดในการอัปเดตตารางนัดหมาย",
+        { duration: 3600 }
+      );
+      return null;
+    }
+  },
+}));
