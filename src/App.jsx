@@ -14,6 +14,7 @@ import Status from "./pages/students/Status";
 import AddFormPages from "./pages/students/AddVisitData/Index";
 import UpdateFormPages from "./pages/students/UpdateVisitData/Index";
 import ViewVisitData from "./pages/students/ViewVisitData/Index";
+import ViewVisitDataForTeacher from "./pages/teacher/ViewVisitData/Index";
 import SDQFormStudent from "./pages/students/SDQ/student/Index";
 import SDQFormParent from "./pages/students/SDQ/parent/Index";
 import StudentViewSDQ from "./pages/students/SDQ/view/StudentViewSDQ";
@@ -115,6 +116,9 @@ function App() {
               path="visit-info/add/:studentId"
               element={<AddVisitInfo />}
             />
+            <Route path="student-data/:studentId">
+              <Route path="" element={<ViewVisitDataForTeacher />} />
+            </Route>
             <Route path="sdq/:studentId/:yearId">
               <Route path="" element={<SDQResult />} />
               <Route path="estimate" element={<SDQFormTeacher />} />

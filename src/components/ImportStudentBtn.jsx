@@ -45,6 +45,16 @@ const ImportStudentBtn = ({ classId }) => {
     try {
       setLoading(true);
       const file = event.target.files[0];
+
+      //.endsWith() ใช้ตรวจสอบนามสกุลไฟล์
+      if (!file.name.endsWith(".xlsx") && !file.name.endsWith(".xls")) {
+        toast.error(
+          "ระบบไม่รองรับไฟล์ประเภทนี้ กรุณาเลือกไฟล์ Excel (.xlsx หรือ .xls)"
+        );
+        setLoading(false);
+        return;
+      }
+
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
