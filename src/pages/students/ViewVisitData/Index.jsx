@@ -35,28 +35,30 @@ const Index = () => {
     setPhone(null);
     // Fetch existing data for the selected year
     if (selectedYear && userInfo?._id) {
-      getYearlyData(selectedYear).then((res) => {
-        const yearlyData = res?.students?.[0]?.yearly_data?.[0];
-        if (yearlyData) {
-          setPersonalInfo(yearlyData.personal_info || null);
-          setRelationshipInfo(yearlyData.relationship_info || null);
-          setFamilyInfo(yearlyData.family_info || null);
-          setBehaviorInfo(yearlyData.behavior_info || null);
-          setRiskInfo(yearlyData.risk_info || null);
-          setOtherInfo(yearlyData.additional_info || null);
-          setImage(res?.students?.[0]?.image_url || null);
-          setPhone(res?.students?.[0]?.phone || null);
-        } else {
-          setPersonalInfo(null);
-          setRelationshipInfo(null);
-          setFamilyInfo(null);
-          setBehaviorInfo(null);
-          setRiskInfo(null);
-          setOtherInfo(null);
-          setImage(null);
-          setPhone(null);
+      getYearlyData({ student_id: userInfo._id, year_id: selectedYear }).then(
+        (res) => {
+          const yearlyData = res?.students?.[0]?.yearly_data?.[0];
+          if (yearlyData) {
+            setPersonalInfo(yearlyData.personal_info || null);
+            setRelationshipInfo(yearlyData.relationship_info || null);
+            setFamilyInfo(yearlyData.family_info || null);
+            setBehaviorInfo(yearlyData.behavior_info || null);
+            setRiskInfo(yearlyData.risk_info || null);
+            setOtherInfo(yearlyData.additional_info || null);
+            setImage(res?.students?.[0]?.image_url || null);
+            setPhone(res?.students?.[0]?.phone || null);
+          } else {
+            setPersonalInfo(null);
+            setRelationshipInfo(null);
+            setFamilyInfo(null);
+            setBehaviorInfo(null);
+            setRiskInfo(null);
+            setOtherInfo(null);
+            setImage(null);
+            setPhone(null);
+          }
         }
-      });
+      );
     }
   }, [selectedYear, userInfo?._id]);
   return (
