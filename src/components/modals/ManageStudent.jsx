@@ -70,13 +70,10 @@ const ManageStudent = ({ student }) => {
               ผลประเมิน SDQ
             </a>
             <button className="btn">ดูเส้นทาง</button>
-            <a
-              href={`/teacher/student-data/${student._id}/${selectedYear}`}
-              className="btn"
-            >
+            <a href={`/teacher/student-data/${student._id}`} className="btn">
               ข้อมูลนักเรียน
             </a>
-            <a href={`/teacher/visit-info/${student._id}`} className="btn">
+            <a href={`/teacher/visit-info/add/${student._id}`} className="btn">
               ผลการเยี่ยมบ้าน
             </a>
 

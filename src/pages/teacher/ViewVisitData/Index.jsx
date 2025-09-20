@@ -13,8 +13,7 @@ const Index = () => {
   const { studentId } = useParams();
   const { selectedYear } = useYearSelectStore();
   const [page, setPage] = React.useState(1);
-  const [image, setImage] = React.useState("");
-  const [phone, setPhone] = React.useState("");
+  const [studentInfo, setStudentInfo] = React.useState(null);
   const [personalInfo, setPersonalInfo] = React.useState(null);
   const [relationshipInfo, setRelationshipInfo] = React.useState(null);
   const [familyInfo, setFamilyInfo] = React.useState(null);
@@ -30,34 +29,40 @@ const Index = () => {
     setBehaviorInfo(null);
     setRiskInfo(null);
     setOtherInfo(null);
-    setImage(null);
-    setPhone(null);
+    setStudentInfo(null);
     // Fetch existing data for the selected year
-    if (selectedYear && userInfo?._id) {
-      getYearlyData(selectedYear).then((res) => {
-        const yearlyData = res?.students?.[0]?.yearly_data?.[0];
-        if (yearlyData) {
-          setPersonalInfo(yearlyData.personal_info || null);
-          setRelationshipInfo(yearlyData.relationship_info || null);
-          setFamilyInfo(yearlyData.family_info || null);
-          setBehaviorInfo(yearlyData.behavior_info || null);
-          setRiskInfo(yearlyData.risk_info || null);
-          setOtherInfo(yearlyData.additional_info || null);
-          setImage(res?.students?.[0]?.image_url || null);
-          setPhone(res?.students?.[0]?.phone || null);
-        } else {
-          setPersonalInfo(null);
-          setRelationshipInfo(null);
-          setFamilyInfo(null);
-          setBehaviorInfo(null);
-          setRiskInfo(null);
-          setOtherInfo(null);
-          setImage(null);
-          setPhone(null);
+    if (selectedYear && studentId) {
+      getYearlyData({ student_id: studentId, year_id: selectedYear }).then(
+        (res) => {
+          const yearlyData = res?.students?.[0]?.yearly_data?.[0];
+          const studentData = res?.students?.[0];
+          if (yearlyData) {
+            setPersonalInfo(yearlyData.personal_info || null);
+            setRelationshipInfo(yearlyData.relationship_info || null);
+            setFamilyInfo(yearlyData.family_info || null);
+            setBehaviorInfo(yearlyData.behavior_info || null);
+            setRiskInfo(yearlyData.risk_info || null);
+            setOtherInfo(yearlyData.additional_info || null);
+            setStudentInfo({
+              image: studentData?.image_url || null,
+              phone: studentData?.phone || null,
+              first_name: studentData?.first_name || null,
+              last_name: studentData?.last_name || null,
+              prefix: studentData?.prefix || null,
+            });
+          } else {
+            setPersonalInfo(null);
+            setRelationshipInfo(null);
+            setFamilyInfo(null);
+            setBehaviorInfo(null);
+            setRiskInfo(null);
+            setOtherInfo(null);
+            setStudentInfo(null);
+          }
         }
-      });
+      );
     }
-  }, [selectedYear, userInfo?._id]);
+  }, [selectedYear, studentId]);
   return (
     <div className="w-full max-w-screen h-full min-h-screen flex justify-center flex-col bg-gray-50">
       <div className="space-y-8">
@@ -66,8 +71,7 @@ const Index = () => {
             page={page}
             setPage={setPage}
             personalInfo={personalInfo}
-            image={image}
-            phone={phone}
+            studentInfo={studentInfo}
           />
         )}
         {page === 2 && (

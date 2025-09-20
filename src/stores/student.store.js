@@ -61,10 +61,13 @@ export const useStudentStore = create((set, get) => ({
       return null;
     }
   },
-  getYearlyData: async (yearId) => {
+  getYearlyData: async (data) => {
     try {
-      const response = await StudentService.getYearlyData(yearId);
-      return response.data;
+      const response = await StudentService.getYearlyData(data);
+      if (response.status === 200) {
+        return response.data;
+      }
+      return null;
     } catch (error) {
       console.error("Failed to fetch yearly data:", error);
       return null;

@@ -22,8 +22,8 @@ const yearlyData = async (data) => {
   return await api.put(`${baseUrl}/yearly`, data);
 };
 
-const getYearlyData = async (yearId) => {
-  return await api.get(`${baseUrl}/by_year/${yearId}`);
+const getYearlyData = async (data) => {
+  return await api.post(`${baseUrl}/by_year`, data);
 };
 
 const updateProfile = async (data) => {
@@ -34,7 +34,7 @@ const updateProfile = async (data) => {
 
 const uploadStudentsByExcel = async (data) => {
   return await api.post(`${baseUrl}/create_many`, data);
-}
+};
 
 const StudentService = {
   getAllStudents,

@@ -5,7 +5,7 @@ import YearSelector from "../../../components/YearSelector";
 import ViewMap from "../../../components/students/ViewMap";
 import { useParams } from "react-router";
 
-const Personal = ({ page, setPage, personalInfo, image, phone }) => {
+const Personal = ({ page, setPage, personalInfo, studentInfo }) => {
   const { studentId } = useParams();
 
   const breadcrumbsOptions = [
@@ -36,7 +36,7 @@ const Personal = ({ page, setPage, personalInfo, image, phone }) => {
           </div>
 
           <div className="flex justify-center mt-6">
-            <ShowPicture studentPic={image} />
+            <ShowPicture studentPic={studentInfo?.image} />
           </div>
 
           {/* ดึงชื่อนักเรียนจาก index */}
@@ -52,7 +52,7 @@ const Personal = ({ page, setPage, personalInfo, image, phone }) => {
                   ชื่อนักเรียน
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
-                  {userInfo?.prefix + " " + userInfo?.first_name || "-"}
+                  {studentInfo?.prefix + " " + studentInfo?.first_name || "-"}
                 </p>
               </div>
               <div>
@@ -60,7 +60,7 @@ const Personal = ({ page, setPage, personalInfo, image, phone }) => {
                   นามสกุล
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
-                  {userInfo?.last_name || "-"}
+                  {studentInfo?.last_name || "-"}
                 </p>
               </div>
               <div className="md:col-span-2">
@@ -68,7 +68,7 @@ const Personal = ({ page, setPage, personalInfo, image, phone }) => {
                   เบอร์โทรศัพท์นักเรียน
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
-                  {phone || "-"}
+                  {studentInfo?.phone || "-"}
                 </p>
               </div>
 

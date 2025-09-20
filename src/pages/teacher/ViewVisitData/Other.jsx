@@ -1,6 +1,7 @@
 import Stepper from "../../../components/Stepper";
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useParams } from "react-router";
+import YearSelector from "../../../components/YearSelector";
 
 const Other = ({ page, setPage, otherInfo }) => {
   const { studentId } = useParams();
