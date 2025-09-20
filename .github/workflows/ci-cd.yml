@@ -50,7 +50,18 @@ jobs:
 
             # เอา image ไปที่ server
             docker pull ghcr.io/patiphatrattanosot/visit-home-frontend:latest
-            
+             #  log 
+            echo "Deploy visit-home-backend with env variables"
+            echo "VITE_BASEURL=${{secrets.VITE_BASEURL}}"
+            echo "VITE_APIKEY=${{secrets.VITE_APIKEY}}"
+            echo "VITE_AUTHDOMAIN=${{secrets.VITE_AUTHDOMAIN}}"
+            echo "VITE_PROJECTID=${{secrets.VITE_PROJECTID}}"
+            echo "VITE_STORAGEBUCKET=${{secrets.VITE_STORAGEBUCKET}}"
+            echo "VITE_MESSAGINGSENDERID=${{secrets.VITE_MESSAGINGSENDERID}}"
+            echo "VITE_APPID=${{secrets.VITE_APPID}}"
+            echo "VITE_GOOGLE_MAPS_API_KEY=${{secrets.VITE_GOOGLE_MAPS_API_KEY}}"
+            #  log end
+
             # สั่งให้รัน container ใหม่ และ map environment 
             docker run --restart=always -d --pull always \
             -e VITE_BASEURL=${{secrets.VITE_BASEURL}} \
