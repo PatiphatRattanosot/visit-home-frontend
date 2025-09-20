@@ -8,6 +8,7 @@ import FilterDropdown from "../../components/FilterDropdown";
 import Pagination from "../../components/Pagination";
 import useYearSelectStore from "../../stores/year_select.store";
 import YearSelector from "../../components/YearSelector";
+import Appointment from "../../components/teacher/Appointment";
 
 const StudentList = () => {
   const { userInfo } = useAuthStore();
@@ -159,6 +160,7 @@ const StudentList = () => {
                 <th>คำนำหน้า</th>
                 <th>ชื่อ - นามสกุล</th>
                 <th>สถานะการเยี่ยมบ้าน</th>
+                <th>นัดวันเยี่ยมบ้าน</th>
               </tr>
             </thead>
             <tbody>
@@ -211,6 +213,7 @@ const StudentList = () => {
                 <th>คำนำหน้า</th>
                 <th>ชื่อ - นามสกุล</th>
                 <th>สถานะการเยี่ยมบ้าน</th>
+                <th>นัดวันเยี่ยมบ้าน</th>
               </tr>
             </tfoot>
           </table>

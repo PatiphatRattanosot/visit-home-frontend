@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
-
 import { PersonnelSchema } from "../../schemas/personnelUpdate";
-
 import { usePersonnelStore } from "../../stores/admin.store";
 import TextInputInModal from "./TexInputInModal";
 import SelectInputInModal from "./SelectInputInModal";
