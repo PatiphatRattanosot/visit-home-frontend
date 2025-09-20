@@ -88,15 +88,18 @@ const StudentList = () => {
   );
 
   const VisitStatusBadge = ({ value }) => {
-  if (value === true) {
-    return <span className="badge badge-success badge-sm">เยี่ยมบ้านแล้ว</span>;
-  }
-  if (value === false) {
-    return <span className="badge badge-warning badge-sm">ยังไม่เยี่ยมบ้าน</span>;
-  }
-  return <span className="badge badge-ghost badge-sm">ไม่มีข้อมูลปีนี้</span>;
-};
-
+    if (value === true) {
+      return (
+        <span className="badge badge-success badge-sm">เยี่ยมบ้านแล้ว</span>
+      );
+    }
+    if (value === false) {
+      return (
+        <span className="badge badge-warning badge-sm">ยังไม่เยี่ยมบ้าน</span>
+      );
+    }
+    return <span className="badge badge-ghost badge-sm">ไม่มีข้อมูลปีนี้</span>;
+  };
 
   return (
     <div className="section-container">

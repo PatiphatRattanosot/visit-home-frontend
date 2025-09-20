@@ -1,6 +1,7 @@
 import useYearSelectStore from "../../stores/year_select.store";
 import SDQServices from "../../services/sdq/sdq.service";
 import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 
 const ManageStudent = ({ student }) => {
   const { selectedYear } = useYearSelectStore();
@@ -29,18 +30,21 @@ const ManageStudent = ({ student }) => {
     fetchSDQData();
   }, [student._id, selectedYear]);
 
-  const [studentData, setStudentData] = useState(null);
-
-  useEffect(() => {
-    const getStudentData = async () => {
-      try {
-      } catch (error) {
-        setStudentData(null);
-        console.error("Failed to fetch student data:", error);
-      }
-    };
-    getStudentData();
-  }, [student._id, selectedYear]);
+  const openMapNavigation = () => {
+    if (student?.lat === null || student?.lng === null) {
+      Swal.fire({
+        icon: "error",
+        title: "ไม่สามารถเปิดแผนที่ได้",
+        text: "นักเรียนไม่มีข้อมูลพิกัดที่อยู่",
+      });
+    }
+    window.open(
+      `https://www.google.com/maps?q=${encodeURIComponent(
+        student.lat
+      )},${encodeURIComponent(student.lng)}`,
+      "_blank"
+    );
+  };
 
   return (
     <div>
@@ -69,7 +73,9 @@ const ManageStudent = ({ student }) => {
             >
               ผลประเมิน SDQ
             </a>
-            <button className="btn">ดูเส้นทาง</button>
+            <button onClick={openMapNavigation} className="btn">
+              ดูเส้นทาง
+            </button>
             <a href={`/teacher/student-data/${student._id}`} className="btn">
               ข้อมูลนักเรียน
             </a>
