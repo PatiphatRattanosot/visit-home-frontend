@@ -79,19 +79,40 @@ const Index = () => {
             page={page}
             setPage={setPage}
             relationshipInfo={relationshipInfo}
+            studentInfo={studentInfo}
           />
         )}
         {page === 3 && (
-          <Family page={page} setPage={setPage} familyInfo={familyInfo} />
+          <Family
+            page={page}
+            setPage={setPage}
+            familyInfo={familyInfo}
+            studentInfo={studentInfo}
+          />
         )}
         {page === 4 && (
-          <Behavior page={page} setPage={setPage} behaviorInfo={behaviorInfo} />
+          <Behavior
+            page={page}
+            setPage={setPage}
+            behaviorInfo={behaviorInfo}
+            studentInfo={studentInfo}
+          />
         )}
         {page === 5 && (
-          <Risk page={page} setPage={setPage} riskInfo={riskInfo} />
+          <Risk
+            page={page}
+            setPage={setPage}
+            riskInfo={riskInfo}
+            studentInfo={studentInfo}
+          />
         )}
         {page === 6 && (
-          <Other page={page} setPage={setPage} otherInfo={otherInfo} />
+          <Other
+            page={page}
+            setPage={setPage}
+            otherInfo={otherInfo}
+            studentInfo={studentInfo}
+          />
         )}
       </div>
     </div>

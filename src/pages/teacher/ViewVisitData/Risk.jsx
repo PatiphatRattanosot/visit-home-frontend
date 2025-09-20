@@ -3,7 +3,7 @@ import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useParams } from "react-router";
 import YearSelector from "../../../components/YearSelector";
 
-const Risk = ({ page, setPage, riskInfo }) => {
+const Risk = ({ page, setPage, riskInfo, studentInfo }) => {
   const { studentId } = useParams();
 
   const breadcrumbsOptions = [
@@ -87,6 +87,10 @@ const Risk = ({ page, setPage, riskInfo }) => {
           {/* Heading */}
           <h3 className="text-xl font-bold text-center w-full">
             ความเสี่ยงต่าง ๆ
+            <span className="ml-2">
+              {studentInfo?.prefix} {studentInfo?.first_name}{" "}
+              {studentInfo?.last_name}
+            </span>
           </h3>
 
           {/* Year Selector */}

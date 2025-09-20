@@ -29,6 +29,10 @@ const Personal = ({ page, setPage, personalInfo, studentInfo }) => {
           {/* Heading */}
           <h3 className="text-xl font-bold text-center w-full">
             ข้อมูลส่วนตัว
+            <span className="ml-2">
+              {studentInfo?.prefix} {studentInfo?.first_name}{" "}
+              {studentInfo?.last_name}
+            </span>
           </h3>
 
           <div className="flex justify-center md:justify-end mt-6">
