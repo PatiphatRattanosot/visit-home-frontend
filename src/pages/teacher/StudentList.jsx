@@ -143,11 +143,7 @@ const StudentList = () => {
           <table className="table table-zebra w-full text-xs sm:text-sm">
             <thead>
               <tr>
-                <th className="hidden sm:table-cell w-10">
-                  <label>
-                    <input type="checkbox" className="checkbox checkbox-sm" />
-                  </label>
-                </th>
+                
                 <th className="text-center">เลขที่ประจำตัวนักเรียน</th>
                 <th>คำนำหน้า</th>
                 <th>ชื่อ - นามสกุล</th>
@@ -161,11 +157,7 @@ const StudentList = () => {
                   className="cursor-pointer hover:bg-gray-100"
                   key={student?._id}
                 >
-                  <td className="hidden sm:table-cell">
-                    <label>
-                      <input type="checkbox" className="checkbox checkbox-sm" />
-                    </label>
-                  </td>
+                 
                   <td
                     className="text-center cursor-pointer hover:underline"
                     onClick={() =>
@@ -240,7 +232,7 @@ const StudentList = () => {
             </tbody>
             <tfoot>
               <tr>
-                <th className="hidden sm:table-cell"></th>
+           
                 <th className="text-center">เลขที่ประจำตัวนักเรียน</th>
                 <th>คำนำหน้า</th>
                 <th>ชื่อ - นามสกุล</th>
