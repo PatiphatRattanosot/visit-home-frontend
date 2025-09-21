@@ -1,48 +1,54 @@
 import { useEffect } from "react";
 import { useFormik } from "formik";
+
 import { AppointmentSchema } from "../../schemas/appointment";
 import { useScheduleStore } from "../../stores/schedule.store";
 import { useAuthStore } from "../../stores/auth.store";
 import useYearSelectStore from "../../stores/year_select.store";
 import DateField from "../DateField";
 import Textarea from "../Textarea";
-const EditAppointment = () => {
+const EditAppointment = ({ student, studentId }) => {
   const { userInfo } = useAuthStore();
   const { updateSchedule, fetchSchedule, schedule } = useScheduleStore();
   const { selectedYear } = useYearSelectStore();
 
+  const currentSchedule = Array.isArray(schedule)
+    ? schedule.find(
+        (item) =>
+          item.student_id === studentId &&
+          item.teacher_id === userInfo._id &&
+          item.year_id === selectedYear
+      )
+    : null;
+
   const formik = useFormik({
     initialValues: {
-      appointment_date: "",
-      comment: "",
+      appointment_date: currentSchedule?.appointment_date || "",
+      comment: currentSchedule?.comment || "",
       teacher_id: userInfo._id,
       year_id: selectedYear,
+      student_id: studentId,
     },
+    enableReinitialize: true,
     validationSchema: AppointmentSchema,
     onSubmit: async (values, actions) => {
       await updateSchedule({
+        schedule_id: currentSchedule._id,
         appointment_date: new Date(values.appointment_date),
         comment: values.comment,
         teacher_id: userInfo._id,
         year_id: selectedYear,
+        student_id: studentId,
       });
       actions.resetForm();
+      document
+        .getElementById(`edit_appointment_schedule_${student._id}`)
+        ?.close();
     },
   });
 
-useEffect(() => {
-  fetchSchedule(userInfo._id, selectedYear, studentId);
-}, [studentId, userInfo?._id, selectedYear]);
-
-const currentSchedule = schedule?.find(
-  (item) =>
-    item.student_id === studentId &&
-    item.teacher_id === userInfo._id &&
-    item.year_id === selectedYear
-);
-
   return (
-    <dialog id={`add_appointment_schedule_${student._id}`} className="modal">
+    <dialog id={`edit_appointment_schedule_${student._id}`} className="modal">
       <div className="modal-box max-w-lg">
         <form method="dialog">
           {/* ปุ่มปิด */}
@@ -108,6 +114,6 @@ const currentSchedule = schedule?.find(
       </div>
     </dialog>
   );
-}
+};
 
-export default EditAppointment
+export default EditAppointment;
