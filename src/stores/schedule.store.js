@@ -28,7 +28,7 @@ export const useScheduleStore = create((set, get) => ({
       if (response.status === 201) {
         // คำสั่ง concat เอา data ใหม่ ไปต่อท้าย array เดิม (หมายถึง Schedule ตัวเดิมที่มีอยู่)
 
-        set({ schedule: (get().schedule ?? []).concat(response.data.data) });
+        set({ schedule: response.data.schedule || null });
 
         toast.success(
           response.data.message || "สร้างเวลานัดหมายเรียบร้อยแล้ว",
@@ -73,10 +73,6 @@ export const useScheduleStore = create((set, get) => ({
       const response = await ScheduleServices.deleteSchedule(id);
 
       if (response.status === 200) {
-        const updatedSchedules = get().schedule.filter(
-          (schedule) => schedule._id !== id
-        );
-        set({ schedule: updatedSchedules });
         toast.success(response.data.message || "ลบเวลานัดหมายเรียบร้อยแล้ว", {
           duration: 3600,
         });
