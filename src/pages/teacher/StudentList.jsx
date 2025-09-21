@@ -9,6 +9,7 @@ import Pagination from "../../components/Pagination";
 import useYearSelectStore from "../../stores/year_select.store";
 import YearSelector from "../../components/YearSelector";
 import Appointment from "../../components/teacher/Appointment";
+import EditAppointment from "../../components/teacher/EditAppointment";
 
 const StudentList = () => {
   const { userInfo } = useAuthStore();
@@ -206,6 +207,7 @@ const StudentList = () => {
                           )
                           .showModal()
                       }
+                      className="btn-blue btn-sm hover:btn-blue/80"
                     >
                       นัดวันเยี่ยมบ้าน
                     </button>
@@ -221,6 +223,7 @@ const StudentList = () => {
                     student={student}
                     id={`add_appointment_schedule_${student._id}`}
                   />
+                
                 </tr>
               ))}
 

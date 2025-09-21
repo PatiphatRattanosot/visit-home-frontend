@@ -1,3 +1,4 @@
+﻿import { useEffect } from "react";
 import { useFormik } from "formik";
 import { AppointmentSchema } from "../../schemas/appointment";
 import { useScheduleStore } from "../../stores/schedule.store";
@@ -5,40 +6,59 @@ import { useAuthStore } from "../../stores/auth.store";
 import useYearSelectStore from "../../stores/year_select.store";
 import DateField from "../DateField";
 import Textarea from "../Textarea";
+
 const Appointment = ({ student, studentId }) => {
   const { userInfo } = useAuthStore();
-  const { createSchedule } = useScheduleStore();
+  const { createSchedule, updateSchedule, fetchSchedule, schedule } = useScheduleStore();
   const { selectedYear } = useYearSelectStore();
+
+  useEffect(() => {
+    fetchSchedule(userInfo._id, selectedYear, studentId);
+    formik.setValues({ student_id: studentId, teacher_id: userInfo._id, year_id: selectedYear });
+  }, [userInfo._id, selectedYear, studentId]);
+
+
+
+ 
 
   const formik = useFormik({
     initialValues: {
-      appointment_date: "",
-      comment: "",
+      appointment_date: appointment_date || "",
+      comment: comment ,
       teacher_id: userInfo._id,
       year_id: selectedYear,
       student_id: studentId,
-    },
+    }, 
+    enableReinitialize: true,
     validationSchema: AppointmentSchema,
     onSubmit: async (values, actions) => {
-      await createSchedule({
-        appointment_date: new Date(values.appointment_date),
-        comment: values.comment,
-        teacher_id: userInfo._id,
-        year_id: selectedYear,
-        student_id: studentId,
-      });
-      await document
+      if (currentSchedule) {
+        await updateSchedule({
+          schedule_id: currentSchedule._id,
+          appointment_date: new Date(values.appointment_date),       
+          comment: values.comment,
+        });
+      } else {
+        await createSchedule({
+          teacher_id: userInfo._id,
+          year_id: selectedYear,
+          student_id: studentId,
+          appointment_date: new Date(values.appointment_date),
+          comment: values.comment,
+        });
+      }
+      document
         .getElementById(`add_appointment_schedule_${student._id}`)
         ?.close();
       actions.resetForm();
     },
   });
 
+
   return (
     <dialog id={`add_appointment_schedule_${student._id}`} className="modal">
       <div className="modal-box max-w-lg">
         <form method="dialog">
-          {/* ปุ่มปิด */}
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
             ✕
           </button>
@@ -47,11 +67,8 @@ const Appointment = ({ student, studentId }) => {
         <p className="text-lg text-center">
           {student.first_name} {student.last_name}
         </p>
-        {/* ฟอร์มเพิ่มข้อมูล */}
         <form onSubmit={formik.handleSubmit}>
           <div className="space-y-4">
-            {/* วันที่นัดเยี่ยม */}
-
             <DateField
               label="เลือกวันที่นัดเยี่ยมบ้าน"
               name="appointment_date"
@@ -64,8 +81,6 @@ const Appointment = ({ student, studentId }) => {
               className="w-full"
               id="appointment-date-input"
             />
-
-            {/* หมายเหตุ */}
             <label className="form-control w-full">
               <Textarea
                 name="comment"
@@ -80,11 +95,10 @@ const Appointment = ({ student, studentId }) => {
               />
             </label>
           </div>
-
-          {/* ปุ่ม Action */}
           <div className="modal-action flex justify-between">
             <button
               className="btn-red"
+              type="button"
               onClick={() =>
                 document
                   .getElementById(`add_appointment_schedule_${student._id}`)
@@ -93,8 +107,8 @@ const Appointment = ({ student, studentId }) => {
             >
               ยกเลิก
             </button>
-            <button type="submit" className="btn-green">
-              บันทึก
+            <button type="submit" className={currentSchedule ? "btn-yellow" : "btn-green"}>
+              {currentSchedule ? "แก้ไขนัดหมาย" : "บันทึก"}
             </button>
           </div>
         </form>

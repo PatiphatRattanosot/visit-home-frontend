@@ -28,7 +28,7 @@ export const useScheduleStore = create((set, get) => ({
       if (response.status === 201) {
         // คำสั่ง concat เอา data ใหม่ ไปต่อท้าย array เดิม (หมายถึง Schedule ตัวเดิมที่มีอยู่)
 
-        set({ schedule: get().schedule.concat(response.data.data) });
+        set({ schedule: (get().schedule ?? []).concat(response.data.data) });
 
         toast.success(
           response.data.message || "สร้างเวลานัดหมายเรียบร้อยแล้ว",
