@@ -10,9 +10,8 @@ const deleteSchedule = async (id) => {
   return await api.delete(`${baseUrl}/delete/${id}`);
 };
 
-const getSchedule = async (teacherId, yearId, studentId) => {
+const getSchedule = async ( yearId, studentId) => {
   return await api.post(`${baseUrl}/get_schedule`, {
-    teacher_id: teacherId,
     year_id: yearId,
     student_id: studentId,
   });

@@ -16,13 +16,13 @@ const Appointment = ({ student, studentId }) => {
   const [scheduleId, setScheduleId] = useState(null);
 
   useEffect(() => {
-    fetchSchedule(userInfo._id, selectedYear, studentId);
-    formik.setValues({ student_id: studentId, teacher_id: userInfo._id, year_id: selectedYear });
-  }, [userInfo._id, selectedYear, studentId]);
-
-
-
- 
+    fetchSchedule(selectedYear, studentId);
+    formik.setValues({
+      student_id: studentId,
+      teacher_id: userInfo._id,
+      year_id: selectedYear,
+    });
+  }, [selectedYear, studentId]);
 
   const formik = useFormik({
     initialValues: {
@@ -62,9 +62,8 @@ const Appointment = ({ student, studentId }) => {
     setHasSchedule(false);
     setScheduleId(null);
     formik.setValues(formik.initialValues);
-    if (studentId && userInfo?._id && selectedYear) {
+    if (studentId && selectedYear) {
       const schedules = await ScheduleServices.getSchedule(
-        userInfo._id,
         selectedYear,
         studentId
       );
@@ -91,7 +90,7 @@ const Appointment = ({ student, studentId }) => {
 
   useEffect(() => {
     fetchSchedule();
-  }, [studentId, userInfo?._id, selectedYear, formik.handleSubmit]);
+  }, [studentId, selectedYear, formik.handleSubmit]);
 
   return (
     <dialog id={`add_appointment_schedule_${student._id}`} className="modal">
