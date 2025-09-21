@@ -11,8 +11,11 @@ import ScheduleServices from "../../services/schedule/schedule.service";
 const Appointment = ({ student, studentId }) => {
   const [hasSchedule, setHasSchedule] = useState(false);
   const { userInfo } = useAuthStore();
-  const { createSchedule, updateSchedule } = useScheduleStore();
+  const { createSchedule, updateSchedule, deleteSchedule } = useScheduleStore();
   const { selectedYear } = useYearSelectStore();
+  const [scheduleId, setScheduleId] = useState(null);
+
+
 
   useEffect(() => {
     const fetchSchedule = async () => {
@@ -35,6 +38,7 @@ const Appointment = ({ student, studentId }) => {
             student_id: studentId,
           });
           setHasSchedule(true);
+          setScheduleId(schedule._id);
         } else {
           formik.resetForm();
           setHasSchedule(false);
@@ -60,6 +64,7 @@ const Appointment = ({ student, studentId }) => {
           schedule_id: values?._id,
           appointment_date: new Date(values.appointment_date),
           comment: values.comment,
+          status: "Been-set", // หรือใช้ค่าจาก schedule เดิม ถ้ามี
         });
       } else {
         await createSchedule({
@@ -94,7 +99,7 @@ const Appointment = ({ student, studentId }) => {
             <DateField
               label="เลือกวันที่นัดเยี่ยมบ้าน"
               name="appointment_date"
-              value={formik.values.appointment_date}
+              value={formik.values.appointment_date || ""}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               touched={formik.touched.appointment_date}
@@ -107,7 +112,7 @@ const Appointment = ({ student, studentId }) => {
               <Textarea
                 name="comment"
                 label="หมายเหตุ (ถ้ามี)"
-                value={formik.values.comment}
+                value={formik.values.comment || ""}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 touched={formik.touched.comment}
@@ -118,17 +123,21 @@ const Appointment = ({ student, studentId }) => {
             </label>
           </div>
           <div className="modal-action flex justify-between">
-            <button
-              className="btn-red"
-              type="button"
-              onClick={() =>
-                document
-                  .getElementById(`add_appointment_schedule_${student._id}`)
-                  .close()
-              }
-            >
-              ยกเลิก
-            </button>
+            {hasSchedule && (
+              <button
+                className="btn-red"
+                type="button"
+                onClick={() =>
+                  deleteSchedule(scheduleId).then(() => {
+                    document
+                      .getElementById(`add_appointment_schedule_${student._id}`)
+                      ?.close();
+                  })
+                }
+              >
+                ยกเลิกวันนัดเยี่ยมบ้าน
+              </button>
+            )}
             <button
               type="submit"
               className={hasSchedule ? "btn-yellow" : "btn-green"}

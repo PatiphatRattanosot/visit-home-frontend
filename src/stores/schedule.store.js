@@ -46,29 +46,47 @@ export const useScheduleStore = create((set, get) => ({
       return null;
     }
   },
-  updateSchedule: async (data) => {
-    try {
-      const response = await ScheduleServices.updateSchedule(data);
-      if (response.status === 200) {
-        set({
-          schedule: response.data.data
-            .get()
-            .schedule.concat(response.data.data),
-        });
-        toast.success(
-          response.data.message || "อัปเดตเวลานัดหมายเรียบร้อยแล้ว",
-          { duration: 3600 }
-        );
-        return response.data.data;
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error(
-        error.response?.data?.message ||
-          "เกิดข้อผิดพลาดในการอัปเดตตารางนัดหมาย",
+updateSchedule: async (data) => {
+  try {
+    const response = await ScheduleServices.updateSchedule(data);
+    if (response.status === 200) {
+      set({
+        schedule: response.data.schedules || [],
+      });
+      toast.success(
+        response.data.message || "อัปเดตเวลานัดหมายเรียบร้อยแล้ว",
         { duration: 3600 }
       );
-      return null;
     }
-  },
+  } catch (error) {
+    console.error(error);
+    toast.error(
+      error.response?.data?.message ||
+        "เกิดข้อผิดพลาดในการอัปเดตตารางนัดหมาย",
+      { duration: 3600 }
+    );
+    return null;
+  }
+},
+  deleteSchedule: async (id) => {
+  try {
+    const response = await ScheduleServices.deleteSchedule({ schedule_id: id });
+    if (response.status === 200) {
+      const updatedSchedules = get().schedule.filter(
+        (schedule) => schedule._id !== id
+      );
+      set({ schedule: updatedSchedules });
+      toast.success(
+        response.data.message || "ลบเวลานัดหมายเรียบร้อยแล้ว",
+        { duration: 3600 }
+      );
+    }
+  } catch (error) {
+    console.error("Error in deleteSchedule:", error);
+    toast.error(
+      error.response?.data?.message || "เกิดข้อผิดพลาดในการลบเวลานัดหมาย",
+      { duration: 3600 }
+    );
+  }
+},
 }));
