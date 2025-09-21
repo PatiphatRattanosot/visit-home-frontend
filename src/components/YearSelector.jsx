@@ -4,8 +4,6 @@ import useYearSelectStore from "../stores/year_select.store";
 const YearSelector = () => {
   const { selectedYear, setSelectedYear, years, fetchYears } =
     useYearSelectStore();
-  console.log(years);
-  console.log(selectedYear);
 
   useEffect(() => {
     fetchYears();
