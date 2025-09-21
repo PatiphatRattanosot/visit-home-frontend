@@ -14,12 +14,12 @@ export const useScheduleStore = create((set, get) => ({
         studentId
       );
       if (response.status === 200) {
-        set({ schedule: response.data.data });
-        return response.data.data;
+        set({ schedule: response.data.schedules[0] });
+        return response.data.schedules[0];
       }
     } catch (error) {
       console.error(error);
-      return [];
+      return null;
     }
   },
   createSchedule: async (data) => {
@@ -38,7 +38,7 @@ export const useScheduleStore = create((set, get) => ({
       }
     } catch (error) {
       console.error(error);
-   
+
       toast.error(
         error.response?.data?.message || "เกิดข้อผิดพลาดในการสร้างตารางนัดหมาย",
         { duration: 3600 }
@@ -50,8 +50,11 @@ export const useScheduleStore = create((set, get) => ({
     try {
       const response = await ScheduleServices.updateSchedule(data);
       if (response.status === 200) {
-       
-        set({ schedule: response.data.data.get().schedule.concat(response.data.data) });
+        set({
+          schedule: response.data.data
+            .get()
+            .schedule.concat(response.data.data),
+        });
         toast.success(
           response.data.message || "อัปเดตเวลานัดหมายเรียบร้อยแล้ว",
           { duration: 3600 }
@@ -61,7 +64,8 @@ export const useScheduleStore = create((set, get) => ({
     } catch (error) {
       console.error(error);
       toast.error(
-        error.response?.data?.message || "เกิดข้อผิดพลาดในการอัปเดตตารางนัดหมาย",
+        error.response?.data?.message ||
+          "เกิดข้อผิดพลาดในการอัปเดตตารางนัดหมาย",
         { duration: 3600 }
       );
       return null;

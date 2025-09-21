@@ -7,7 +7,6 @@ const DateField = ({
   label,
   placeholder,
   name,
-  
   className = "",
   disabled = false,
   required = false,
@@ -25,12 +24,14 @@ const DateField = ({
         value={value}
         onChange={onChange}
         onBlur={onBlur}
-        className={`input ${className} ${error && touched ? "input-error" : ""}`}
+        className={`input ${className} ${
+          error && touched ? "input-error" : ""
+        }`}
         placeholder={placeholder}
         disabled={disabled}
         required={required}
       />
-      
+
       {error && touched && (
         <div className="text-red-500 text-xs mt-2" id={`${name}-error`}>
           {error}
