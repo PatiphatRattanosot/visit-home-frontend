@@ -133,22 +133,24 @@ const Index = () => {
 
   React.useEffect(() => {
     if (yearId) {
-      getYearlyData(yearId).then((res) => {
-        const yearlyData = res?.students?.[0]?.yearly_data?.[0];
-        if (yearlyData) {
-          formik.setValues({
-            ...formik.initialValues,
-            ...yearlyData.personal_info,
-            ...yearlyData.relationship_info,
-            ...yearlyData.family_info,
-            ...yearlyData.behavior_info,
-            ...yearlyData.risk_info,
-            ...yearlyData.additional_info,
-            phone: res?.students?.[0]?.phone || "",
-          });
-          setImage(res?.students?.[0]?.image_url || null);
+      getYearlyData({ student_id: userInfo._id, year_id: yearId }).then(
+        (res) => {
+          const yearlyData = res?.students?.[0]?.yearly_data?.[0];
+          if (yearlyData) {
+            formik.setValues({
+              ...formik.initialValues,
+              ...yearlyData.personal_info,
+              ...yearlyData.relationship_info,
+              ...yearlyData.family_info,
+              ...yearlyData.behavior_info,
+              ...yearlyData.risk_info,
+              ...yearlyData.additional_info,
+              phone: res?.students?.[0]?.phone || "",
+            });
+            setImage(res?.students?.[0]?.image_url || null);
+          }
         }
-      });
+      );
     }
   }, [yearId]);
 
