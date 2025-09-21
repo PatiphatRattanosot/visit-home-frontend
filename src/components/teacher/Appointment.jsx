@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ﻿import { useEffect, useState } from "react";
+=======
+﻿import { useEffect } from "react";
+>>>>>>> d0d9972 (feat: enhance appointment management with scheduling and editing capabilities)
 import { useFormik } from "formik";
 import { AppointmentSchema } from "../../schemas/appointment";
 import { useScheduleStore } from "../../stores/schedule.store";
@@ -6,17 +10,34 @@ import { useAuthStore } from "../../stores/auth.store";
 import useYearSelectStore from "../../stores/year_select.store";
 import DateField from "../DateField";
 import Textarea from "../Textarea";
+<<<<<<< HEAD
 import ScheduleServices from "../../services/schedule/schedule.service";
+=======
+>>>>>>> d0d9972 (feat: enhance appointment management with scheduling and editing capabilities)
 
 const Appointment = ({ student, studentId }) => {
   const [hasSchedule, setHasSchedule] = useState(false);
   const { userInfo } = useAuthStore();
+<<<<<<< HEAD
   const { createSchedule, updateSchedule, deleteSchedule } = useScheduleStore();
+=======
+  const { createSchedule, updateSchedule, fetchSchedule, schedule } = useScheduleStore();
+>>>>>>> d0d9972 (feat: enhance appointment management with scheduling and editing capabilities)
   const { selectedYear } = useYearSelectStore();
   const [scheduleId, setScheduleId] = useState(null);
 
+  useEffect(() => {
+    fetchSchedule(userInfo._id, selectedYear, studentId);
+    formik.setValues({ student_id: studentId, teacher_id: userInfo._id, year_id: selectedYear });
+  }, [userInfo._id, selectedYear, studentId]);
+
+
+
+ 
+
   const formik = useFormik({
     initialValues: {
+<<<<<<< HEAD
       appointment_date: null,
       comment: "",
       teacher_id: userInfo._id,
@@ -32,6 +53,22 @@ const Appointment = ({ student, studentId }) => {
           appointment_date: new Date(values.appointment_date),
           comment: values.comment,
           status: "Been-set", // หรือใช้ค่าจาก schedule เดิม ถ้ามี
+=======
+      appointment_date: appointment_date || "",
+      comment: comment ,
+      teacher_id: userInfo._id,
+      year_id: selectedYear,
+      student_id: studentId,
+    }, 
+    enableReinitialize: true,
+    validationSchema: AppointmentSchema,
+    onSubmit: async (values, actions) => {
+      if (currentSchedule) {
+        await updateSchedule({
+          schedule_id: currentSchedule._id,
+          appointment_date: new Date(values.appointment_date),       
+          comment: values.comment,
+>>>>>>> d0d9972 (feat: enhance appointment management with scheduling and editing capabilities)
         });
       } else {
         await createSchedule({
@@ -41,7 +78,10 @@ const Appointment = ({ student, studentId }) => {
           appointment_date: new Date(values.appointment_date),
           comment: values.comment,
         });
+<<<<<<< HEAD
         fetchSchedule();
+=======
+>>>>>>> d0d9972 (feat: enhance appointment management with scheduling and editing capabilities)
       }
       document
         .getElementById(`add_appointment_schedule_${student._id}`)
@@ -49,6 +89,7 @@ const Appointment = ({ student, studentId }) => {
     },
   });
 
+<<<<<<< HEAD
   const fetchSchedule = async () => {
     setHasSchedule(false);
     setScheduleId(null);
@@ -83,6 +124,8 @@ const Appointment = ({ student, studentId }) => {
   useEffect(() => {
     fetchSchedule();
   }, [studentId, userInfo?._id, selectedYear, formik.handleSubmit]);
+=======
+>>>>>>> d0d9972 (feat: enhance appointment management with scheduling and editing capabilities)
 
   return (
     <dialog id={`add_appointment_schedule_${student._id}`} className="modal">
@@ -162,10 +205,25 @@ const Appointment = ({ student, studentId }) => {
               </button>
             )}
             <button
+<<<<<<< HEAD
               type="submit"
               className={hasSchedule ? "btn-yellow" : "btn-green"}
             >
               {hasSchedule ? "แก้ไขนัดหมาย" : "บันทึก"}
+=======
+              className="btn-red"
+              type="button"
+              onClick={() =>
+                document
+                  .getElementById(`add_appointment_schedule_${student._id}`)
+                  .close()
+              }
+            >
+              ยกเลิก
+            </button>
+            <button type="submit" className={currentSchedule ? "btn-yellow" : "btn-green"}>
+              {currentSchedule ? "แก้ไขนัดหมาย" : "บันทึก"}
+>>>>>>> d0d9972 (feat: enhance appointment management with scheduling and editing capabilities)
             </button>
           </div>
         </form>

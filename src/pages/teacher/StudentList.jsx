@@ -179,7 +179,7 @@ const StudentList = () => {
                   </td>
 
                   <td>{student?.prefix}</td>
-                   <td
+                  <td
                     onClick={() =>
                       document
                         .getElementById(`manage_student_${student._id}`)
@@ -189,15 +189,7 @@ const StudentList = () => {
                     {student?.first_name} {student?.last_name}
                   </td>
                   <td>
-                    {student?.visit_status === "Visited" ? (
-                      <span className="badge badge-success badge-sm">
-                        เยี่ยมบ้านแล้ว
-                      </span>
-                    ) : (
-                      <span className="badge badge-warning badge-sm">
-                        ยังไม่เยี่ยมบ้าน
-                      </span>
-                    )}
+                    <VisitStatusBadge value={student?.isCompleted} />
                   </td>
                   <td>
                     <button
