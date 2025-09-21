@@ -120,6 +120,13 @@ const Appointment = ({ student, studentId }) => {
             </label>
           </div>
           <div className="modal-action flex justify-between">
+            {!hasSchedule && (<button type="button" className="btn-red" onClick={() => {
+              document.getElementById(`add_appointment_schedule_${student._id}`)?.close();
+              formik.resetForm();
+            }}>
+              ยกเลิก
+            </button>
+            )}
             {hasSchedule && (
               <button
                 className="btn-red"
