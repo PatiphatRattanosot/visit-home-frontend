@@ -8,6 +8,7 @@ import FilterDropdown from "../../components/FilterDropdown";
 import Pagination from "../../components/Pagination";
 import useYearSelectStore from "../../stores/year_select.store";
 import YearSelector from "../../components/YearSelector";
+import Appointment from "../../components/teacher/Appointment";
 
 const StudentList = () => {
   const { userInfo } = useAuthStore();
@@ -86,7 +87,6 @@ const StudentList = () => {
     indexOfFirstItem,
     indexOfLastItem
   );
-
   const VisitStatusBadge = ({ value }) => {
     if (value === true) {
       return (
@@ -100,7 +100,6 @@ const StudentList = () => {
     }
     return <span className="badge badge-ghost badge-sm">ไม่มีข้อมูลปีนี้</span>;
   };
-
   return (
     <div className="section-container">
       <BreadcrumbsLoop
@@ -159,13 +158,17 @@ const StudentList = () => {
                 <th>คำนำหน้า</th>
                 <th>ชื่อ - นามสกุล</th>
                 <th>สถานะการเยี่ยมบ้าน</th>
+                <th>นัดวันเยี่ยมบ้าน</th>
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((student, index) => (
-                <tr key={index} className="cursor-pointer hover:bg-gray-100">
+              {currentItems.map((student) => (
+                <tr
+                  className="cursor-pointer hover:bg-gray-100"
+                  key={student?._id}
+                >
                   <td
-                    className="text-center hover:underline"
+                    className="text-center cursor-pointer hover:underline"
                     onClick={() =>
                       document
                         .getElementById(`manage_student_${student._id}`)
@@ -174,6 +177,7 @@ const StudentList = () => {
                   >
                     {student?.user_id}
                   </td>
+
                   <td>{student?.prefix}</td>
                   <td
                     onClick={() =>
@@ -187,17 +191,38 @@ const StudentList = () => {
                   <td>
                     <VisitStatusBadge value={student?.isCompleted} />
                   </td>
-
-                  <ManageStudent
-                    id={`manage_student_${student._id}`}
+                  <td>
+                    <button
+                      onClick={() =>
+                        document
+                          .getElementById(
+                            `add_appointment_schedule_${student._id}`
+                          )
+                          .showModal()
+                      }
+                      className="btn-blue btn-sm hover:btn-blue/80"
+                    >
+                      นัดวันเยี่ยมบ้าน
+                    </button>
+                  </td>
+                  <td>
+                    <ManageStudent
+                      id={`manage_student_${student._id}`}
+                      student={student}
+                    />
+                  </td>
+                  <Appointment
+                    studentId={student._id}
                     student={student}
+                    id={`add_appointment_schedule_${student._id}`}
                   />
                 </tr>
               ))}
+
               {currentItems.length === 0 && (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={4}
                     className="text-center text-base text-gray-500 py-6"
                   >
                     ไม่พบข้อมูลนักเรียน
@@ -211,6 +236,7 @@ const StudentList = () => {
                 <th>คำนำหน้า</th>
                 <th>ชื่อ - นามสกุล</th>
                 <th>สถานะการเยี่ยมบ้าน</th>
+                <th>นัดวันเยี่ยมบ้าน</th>
               </tr>
             </tfoot>
           </table>
