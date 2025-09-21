@@ -17,9 +17,10 @@ const Status = () => {
     setHomeVisitData(null);
     const fetchData = async () => {
       try {
-        const homeVisitResponse = await StudentService.getYearlyData(
-          selectedYear
-        );
+        const homeVisitResponse = await StudentService.getYearlyData({
+          student_id: userInfo?._id,
+          year_id: selectedYear,
+        });
         if (homeVisitResponse.status === 200) {
           setHomeVisitData(
             homeVisitResponse.data?.students[0]?.yearly_data[0]?.isCompleted
@@ -101,6 +102,7 @@ const Status = () => {
           <YearSelector />
         </div>
 
+        <div className="flex justify-center md:justify-end mb-10"></div>
         {/* Status Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* การ์ดสถานะ */}

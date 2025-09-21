@@ -35,7 +35,7 @@ const Index = () => {
     setPhone(null);
     // Fetch existing data for the selected year
     if (selectedYear && userInfo?._id) {
-      getYearlyData({ student_id: userInfo._id, year_id: selectedYear }).then(
+      getYearlyData({ student_id: userInfo?._id, year_id: selectedYear }).then(
         (res) => {
           const yearlyData = res?.students?.[0]?.yearly_data?.[0];
           if (yearlyData) {
