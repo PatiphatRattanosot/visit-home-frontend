@@ -25,6 +25,7 @@ import VisitInfo from "./pages/teacher/VisitInfo";
 import AddVisitInfo from "./pages/teacher/AddVisitInfo";
 import SDQFormTeacher from "./pages/teacher/sdq/Index";
 import SDQResult from "./pages/teacher/sdq/SDQResult";
+import PrivacyPage from "./pages/PrivacyPage";
 
 function App() {
   const { user, userInfo, isLoading, signInSystem, signOutSystem } =
@@ -39,95 +40,126 @@ function App() {
 
   return (
     <>
-      <Navbar
-        user={user}
-        userInfo={userInfo}
-        googleSignIn={signInSystem}
-        logout={signOutSystem}
-      />
-      <div className="min-h-screen">
-        <Routes>
-          <Route
-            path="/"
-            element={
-              userInfo?.role.includes("Admin") ? (
-                <Navigate to={"/admin"} />
-              ) : userInfo?.role.includes("Student") ? (
-                <Navigate to={"/student"} />
-              ) : userInfo?.role.includes("Teacher") &&
-                userInfo?.role.length === 1 ? (
-                <Navigate to={"/teacher"} />
-              ) : (
-                <Landing />
-              )
-            }
-          />
-          {/* Admin */}
-          <Route
-            path="admin"
-            element={!userInfo?.role.includes("Admin") && <Navigate to={"/"} />}
-          >
-            <Route path="" element={<Personnel />} />
-            <Route path="dashboard" element={<AdminPage />} />
-            <Route path="manage-admin" element={<ManageAdminRoles />} />
-            <Route path="year" element={<YearManagement />} />
-            <Route path="year/classroom">
-              <Route path="" element={<Classroom />} />
-              <Route path=":classroomId" element={<ClassroomDetail />} />
-              <Route path=":yearId/:year" element={<Classroom />} />
-            </Route>
-          </Route>
+      <Routes>
+        <Route
+          path="/privacy-policy"
+          element={
+            <>
+              <PrivacyPage />
+              <Toaster />
+            </>
+          }
+        />
 
-          {/* Student */}
-          <Route
-            path="student"
-            element={
-              !userInfo?.role.includes("Student") && <Navigate to={"/"} />
-            }
-          >
-            <Route path="" element={<Status />} />
-            {/* Visit Data */}
-            <Route path="visiting-info">
-              <Route path="" element={<ViewVisitData />} />
-              <Route path="add/:yearId" element={<AddFormPages />} />
-              <Route path="update/:yearId" element={<UpdateFormPages />} />
-            </Route>
-            {/* ข้อมูล SDQ */}
-            <Route path="sdq-student">
-              <Route path="" element={<StudentViewSDQ />} />
-              <Route path=":yearId" element={<SDQFormStudent />} />
-            </Route>
-            <Route path="sdq-parent">
-              <Route path="" element={<ParentViewSDQ />} />
-              <Route path=":yearId" element={<SDQFormParent />} />
-            </Route>
-          </Route>
+        <Route
+          path="*"
+          element={
+            <>
+              <Navbar
+                user={user}
+                userInfo={userInfo}
+                googleSignIn={signInSystem}
+                logout={signOutSystem}
+              />
+              <div className="min-h-screen">
+                <Routes>
+                  <Route
+                    path="/"
+                    element={
+                      userInfo?.role.includes("Admin") ? (
+                        <Navigate to={"/admin"} />
+                      ) : userInfo?.role.includes("Student") ? (
+                        <Navigate to={"/student"} />
+                      ) : userInfo?.role.includes("Teacher") &&
+                        userInfo?.role.length === 1 ? (
+                        <Navigate to={"/teacher"} />
+                      ) : (
+                        <Landing />
+                      )
+                    }
+                  />
+                  {/* Admin */}
+                  <Route
+                    path="admin"
+                    element={
+                      !userInfo?.role.includes("Admin") && <Navigate to={"/"} />
+                    }
+                  >
+                    <Route path="" element={<Personnel />} />
+                    <Route path="dashboard" element={<AdminPage />} />
+                    <Route path="manage-admin" element={<ManageAdminRoles />} />
+                    <Route path="year" element={<YearManagement />} />
+                    <Route path="year/classroom">
+                      <Route path="" element={<Classroom />} />
+                      <Route
+                        path=":classroomId"
+                        element={<ClassroomDetail />}
+                      />
+                      <Route path=":yearId/:year" element={<Classroom />} />
+                    </Route>
+                  </Route>
 
-          {/* Teacher */}
-          <Route
-            path="teacher"
-            element={
-              !userInfo?.role.includes("Teacher") && <Navigate to={"/"} />
-            }
-          >
-            <Route path="" element={<StudentList />} />
-            <Route path="visit-info" element={<VisitInfo />} />
-            <Route
-              path="visit-info/add/:studentId"
-              element={<AddVisitInfo />}
-            />
-            <Route path="student-data/:studentId">
-              <Route path="" element={<ViewVisitDataForTeacher />} />
-            </Route>
-            <Route path="sdq/:studentId/:yearId">
-              <Route path="" element={<SDQResult />} />
-              <Route path="estimate" element={<SDQFormTeacher />} />
-            </Route>
-          </Route>
-        </Routes>
-      </div>
-      <Footer />
-      <Toaster />
+                  {/* Student */}
+                  <Route
+                    path="student"
+                    element={
+                      !userInfo?.role.includes("Student") && (
+                        <Navigate to={"/"} />
+                      )
+                    }
+                  >
+                    <Route path="" element={<Status />} />
+                    {/* Visit Data */}
+                    <Route path="visiting-info">
+                      <Route path="" element={<ViewVisitData />} />
+                      <Route path="add/:yearId" element={<AddFormPages />} />
+                      <Route
+                        path="update/:yearId"
+                        element={<UpdateFormPages />}
+                      />
+                    </Route>
+                    {/* ข้อมูล SDQ */}
+                    <Route path="sdq-student">
+                      <Route path="" element={<StudentViewSDQ />} />
+                      <Route path=":yearId" element={<SDQFormStudent />} />
+                    </Route>
+                    <Route path="sdq-parent">
+                      <Route path="" element={<ParentViewSDQ />} />
+                      <Route path=":yearId" element={<SDQFormParent />} />
+                    </Route>
+                  </Route>
+
+                  {/* Teacher */}
+                  <Route
+                    path="teacher"
+                    element={
+                      !userInfo?.role.includes("Teacher") && (
+                        <Navigate to={"/"} />
+                      )
+                    }
+                  >
+                    <Route path="" element={<StudentList />} />
+                    <Route path="visit-info" element={<VisitInfo />} />
+                    <Route
+                      path="visit-info/add/:studentId"
+                      element={<AddVisitInfo />}
+                    />
+                    <Route path="student-data/:studentId">
+                      <Route path="" element={<ViewVisitDataForTeacher />} />
+                    </Route>
+                    <Route path="sdq/:studentId/:yearId">
+                      <Route path="" element={<SDQResult />} />
+                      <Route path="estimate" element={<SDQFormTeacher />} />
+                    </Route>
+                  </Route>
+                </Routes>
+              </div>
+              <Footer />
+              <Toaster />
+            </>
+          }
+        />
+      </Routes>
     </>
   );
 }

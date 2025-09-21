@@ -1,4 +1,21 @@
+import { useEffect } from "react";
+import PrivacyModal from "../components/modals/PrivacyModal";
+
 const Landing = () => {
+  useEffect(() => {
+    const privacyModal = document.getElementById("privacy_modal");
+    const hasAcceptedPrivacy = localStorage.getItem("hasAcceptedPrivacy");
+    if (!hasAcceptedPrivacy) {
+      privacyModal.showModal();
+      const handleClose = () => {
+        localStorage.setItem("hasAcceptedPrivacy", "true");
+      };
+      privacyModal.addEventListener("close", handleClose);
+      return () => {
+        privacyModal.removeEventListener("close", handleClose);
+      };
+    }
+  }, []);
   return (
     <>
       <div
@@ -16,6 +33,7 @@ const Landing = () => {
           </div>
         </div>
       </div>
+      <PrivacyModal />
     </>
   );
 };
