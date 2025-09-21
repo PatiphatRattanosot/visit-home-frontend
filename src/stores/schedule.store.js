@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import ScheduleServices from "../services/schedule/schedule.service";
 
 export const useScheduleStore = create((set, get) => ({
-  schedule: [],
+  schedule: null,
   setSchedule: (newData) => set({ schedule: newData }),
   fetchSchedule: async (teacherId, yearId, studentId) => {
     try {
@@ -46,47 +46,47 @@ export const useScheduleStore = create((set, get) => ({
       return null;
     }
   },
-updateSchedule: async (data) => {
-  try {
-    const response = await ScheduleServices.updateSchedule(data);
-    if (response.status === 200) {
-      set({
-        schedule: response.data.schedules || [],
-      });
-      toast.success(
-        response.data.message || "อัปเดตเวลานัดหมายเรียบร้อยแล้ว",
+  updateSchedule: async (data) => {
+    try {
+      const response = await ScheduleServices.updateSchedule(data);
+      if (response.status === 200) {
+        set({
+          schedule: response.data.schedules || [],
+        });
+        toast.success(
+          response.data.message || "อัปเดตเวลานัดหมายเรียบร้อยแล้ว",
+          { duration: 3600 }
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        error.response?.data?.message ||
+          "เกิดข้อผิดพลาดในการอัปเดตตารางนัดหมาย",
         { duration: 3600 }
       );
+      return null;
     }
-  } catch (error) {
-    console.error(error);
-    toast.error(
-      error.response?.data?.message ||
-        "เกิดข้อผิดพลาดในการอัปเดตตารางนัดหมาย",
-      { duration: 3600 }
-    );
-    return null;
-  }
-},
+  },
   deleteSchedule: async (id) => {
-  try {
-    const response = await ScheduleServices.deleteSchedule({ schedule_id: id });
-    if (response.status === 200) {
-      const updatedSchedules = get().schedule.filter(
-        (schedule) => schedule._id !== id
-      );
-      set({ schedule: updatedSchedules });
-      toast.success(
-        response.data.message || "ลบเวลานัดหมายเรียบร้อยแล้ว",
+    try {
+      const response = await ScheduleServices.deleteSchedule(id);
+
+      if (response.status === 200) {
+        const updatedSchedules = get().schedule.filter(
+          (schedule) => schedule._id !== id
+        );
+        set({ schedule: updatedSchedules });
+        toast.success(response.data.message || "ลบเวลานัดหมายเรียบร้อยแล้ว", {
+          duration: 3600,
+        });
+      }
+    } catch (error) {
+      console.error("Error in deleteSchedule:", error);
+      toast.error(
+        error.response?.data?.message || "เกิดข้อผิดพลาดในการลบเวลานัดหมาย",
         { duration: 3600 }
       );
     }
-  } catch (error) {
-    console.error("Error in deleteSchedule:", error);
-    toast.error(
-      error.response?.data?.message || "เกิดข้อผิดพลาดในการลบเวลานัดหมาย",
-      { duration: 3600 }
-    );
-  }
-},
+  },
 }));

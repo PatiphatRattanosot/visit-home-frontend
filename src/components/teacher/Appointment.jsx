@@ -15,39 +15,6 @@ const Appointment = ({ student, studentId }) => {
   const { selectedYear } = useYearSelectStore();
   const [scheduleId, setScheduleId] = useState(null);
 
-
-
-  useEffect(() => {
-    const fetchSchedule = async () => {
-      if (studentId && userInfo?._id && selectedYear) {
-        const schedules = await ScheduleServices.getSchedule(
-          userInfo._id,
-          selectedYear,
-          studentId
-        );
-        if (schedules.status === 200 && schedules.data.schedules.length > 0) {
-          const schedule = schedules.data.schedules[0];
-          formik.setValues({
-            _id: schedule._id,
-            appointment_date: schedule.appointment_date
-              ? new Date(schedule.appointment_date).toISOString().split("T")[0]
-              : "",
-            comment: schedule.comment || "",
-            teacher_id: userInfo._id,
-            year_id: selectedYear,
-            student_id: studentId,
-          });
-          setHasSchedule(true);
-          setScheduleId(schedule._id);
-        } else {
-          formik.resetForm();
-          setHasSchedule(false);
-        }
-      }
-    };
-    fetchSchedule();
-  }, [studentId, userInfo?._id, selectedYear]);
-
   const formik = useFormik({
     initialValues: {
       appointment_date: null,
@@ -78,9 +45,39 @@ const Appointment = ({ student, studentId }) => {
       document
         .getElementById(`add_appointment_schedule_${student._id}`)
         ?.close();
-      actions.resetForm();
     },
   });
+
+  useEffect(() => {
+    const fetchSchedule = async () => {
+      if (studentId && userInfo?._id && selectedYear) {
+        const schedules = await ScheduleServices.getSchedule(
+          userInfo._id,
+          selectedYear,
+          studentId
+        );
+        if (schedules.status === 200 && schedules.data.schedules.length > 0) {
+          const schedule = schedules.data.schedules[0];
+          formik.setValues({
+            _id: schedule._id,
+            appointment_date: schedule.appointment_date
+              ? new Date(schedule.appointment_date).toISOString().split("T")[0]
+              : "",
+            comment: schedule.comment || "",
+            teacher_id: userInfo._id,
+            year_id: selectedYear,
+            student_id: studentId,
+          });
+          setHasSchedule(true);
+          setScheduleId(schedule._id);
+        } else {
+          formik.resetForm();
+          setHasSchedule(false);
+        }
+      }
+    };
+    fetchSchedule();
+  }, [studentId, userInfo?._id, selectedYear, formik.handleSubmit]);
 
   return (
     <dialog id={`add_appointment_schedule_${student._id}`} className="modal">
