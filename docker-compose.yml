@@ -1,11 +1,13 @@
 services:
   frontend:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: visit-home-frontend
     ports:
-      - "5173:5173"
+      - "80:80"
     volumes:
       - .:/app
-      - /app/node_modules
     environment:
       - VITE_BASEURL=${VITE_BASEURL}
       - VITE_APIKEY=${VITE_APIKEY}
@@ -15,5 +17,3 @@ services:
       - VITE_MESSAGINGSENDERID=${VITE_MESSAGINGSENDERID}
       - VITE_APPID=${VITE_APPID}
       - VITE_GOOGLE_MAPS_API_KEY=${VITE_GOOGLE_MAPS_API_KEY}
-
-    # restart: unless-stopped

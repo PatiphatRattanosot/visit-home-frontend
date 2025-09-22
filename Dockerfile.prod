@@ -1,0 +1,32 @@
+FROM oven/bun:1-alpine AS build-stage
+ 
+# set working directory
+WORKDIR /app
+
+# copy package.json and bun.lockb to workdir
+COPY package.json bun.lockb* ./
+
+# install app dependencies
+RUN bun install --frozen-lockfile
+
+# copy everything (sourcecode) to docker env (workdir)
+COPY . ./
+
+# build production
+RUN bun run build
+
+#Stage 2
+FROM nginx:1.25.0-alpine AS production-stage
+
+WORKDIR /usr/share/nginx/html
+
+#remove all default files nginx 
+RUN rm -rf ./*
+
+#copy nginx.conf
+COPY nginx.conf /etc/nginx/nginx.conf
+
+#copy all files and folder (dist) to workdir
+COPY --from=build-stage /app/dist ./
+
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
