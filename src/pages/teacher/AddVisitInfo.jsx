@@ -62,6 +62,8 @@ const AddVisitInfo = () => {
     validationSchema: VisitInfoSchema,
     enableReinitialize: true,
     onSubmit: async (values, actions) => {
+      console.log("values:", values);
+      
       const formData = new FormData();
       if (pictureFile.home_img) {
         formData.append("home_img", pictureFile.home_img); // ไฟล์
@@ -79,10 +81,12 @@ const AddVisitInfo = () => {
       if (visitInfo) {
         formData.append("visit_info_id", visitInfo._id);
         await updateVisitInfo(formData);
-      } else {
+   } else {
+    console.log(formData);
+    
         await addVisitInfo(formData).then(() => {
           setTimeout(() => {
-            window.location.reload();
+            // window.location.reload();
           }, 2600);
         });
       }
