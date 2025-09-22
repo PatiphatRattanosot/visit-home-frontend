@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import ScheduleServices from "../services/schedule/schedule.service";
 
@@ -10,6 +9,7 @@ export const useScheduleStore = create((set, get) => ({
     set({ schedule: null });
     try {
       const response = await ScheduleServices.getSchedule(yearId, studentId);
+
       if (response.status === 200) {
         set({ schedule: response.data.schedules || null });
         return response.data.schedules || null;

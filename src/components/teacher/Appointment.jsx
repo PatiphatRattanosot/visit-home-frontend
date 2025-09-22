@@ -6,23 +6,54 @@ import { useAuthStore } from "../../stores/auth.store";
 import useYearSelectStore from "../../stores/year_select.store";
 import DateField from "../DateField";
 import Textarea from "../Textarea";
-import ScheduleServices from "../../services/schedule/schedule.service";
 
 const Appointment = ({ student, studentId }) => {
   const [hasSchedule, setHasSchedule] = useState(false);
   const { userInfo } = useAuthStore();
-  const { createSchedule, updateSchedule, deleteSchedule } = useScheduleStore();
+  const {
+    createSchedule,
+    updateSchedule,
+    deleteSchedule,
+    fetchSchedule,
+    schedule,
+  } = useScheduleStore();
   const { selectedYear } = useYearSelectStore();
   const [scheduleId, setScheduleId] = useState(null);
 
+  const fetchAndSet = async () => {
+    if (studentId && selectedYear) {
+      const schedules = await fetchSchedule(selectedYear, studentId);
+      if (schedules) {
+        const s = schedules;
+        formik.setValues({
+          appointment_date: s.appointment_date
+            ? new Date(s.appointment_date).toISOString().split("T")[0]
+            : "",
+          comment: s.comment || "",
+          teacher_id: userInfo._id,
+          year_id: selectedYear,
+          student_id: studentId,
+          schedule_id: s._id,
+        });
+        setHasSchedule(true);
+        setScheduleId(s._id);
+      } else {
+        formik.resetForm();
+        setHasSchedule(false);
+        setScheduleId(null);
+      }
+    } else {
+      formik.resetForm();
+      setHasSchedule(false);
+      setScheduleId(null);
+    }
+  };
+
+  // Fetch schedule when studentId or selectedYear changes
   useEffect(() => {
-    fetchSchedule(selectedYear, studentId);
-    formik.setValues({
-      student_id: studentId,
-      teacher_id: userInfo._id,
-      year_id: selectedYear,
-    });
-  }, [userInfo._id, selectedYear, studentId]);
+    fetchAndSet();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [studentId, selectedYear]);
 
   const formik = useFormik({
     initialValues: {
@@ -31,8 +62,9 @@ const Appointment = ({ student, studentId }) => {
       teacher_id: userInfo._id,
       year_id: selectedYear,
       student_id: studentId,
+      schedule_id: null,
     },
-    enableReinitialize: true,
+    // enableReinitialize: true,
     validationSchema: AppointmentSchema,
     onSubmit: async (values) => {
       if (hasSchedule) {
@@ -40,7 +72,7 @@ const Appointment = ({ student, studentId }) => {
           schedule_id: values.schedule_id || scheduleId,
           appointment_date: new Date(values.appointment_date),
           comment: values.comment,
-          status: "Been-set", // หรือใช้ค่าจาก schedule เดิม ถ้ามี
+          status: "Been-set",
         });
       } else {
         await createSchedule({
@@ -50,48 +82,16 @@ const Appointment = ({ student, studentId }) => {
           appointment_date: new Date(values.appointment_date),
           comment: values.comment,
         });
-        fetchSchedule();
       }
+      // Refetch after submit
+      await fetchAndSet();
       document
         .getElementById(`add_appointment_schedule_${student._id}`)
         ?.close();
     },
   });
 
-  const fetchSchedule = async () => {
-    setHasSchedule(false);
-    setScheduleId(null);
-    formik.setValues(formik.initialValues);
-    if (studentId && userInfo?._id && selectedYear) {
-      const schedules = await ScheduleServices.getSchedule(
-        userInfo._id,
-        selectedYear,
-        studentId
-      );
-      if (schedules.status === 200 && schedules.data.schedules.length > 0) {
-        const schedule = schedules.data.schedules[0];
-        formik.setValues({
-          appointment_date: schedule.appointment_date
-            ? new Date(schedule.appointment_date).toISOString().split("T")[0]
-            : "",
-          comment: schedule.comment || "",
-          teacher_id: userInfo._id,
-          year_id: selectedYear,
-          student_id: studentId,
-        });
-        setHasSchedule(true);
-        setScheduleId(schedule._id);
-      } else {
-        formik.resetForm();
-        setHasSchedule(false);
-        setScheduleId(null);
-      }
-    }
-  };
-
-  useEffect(() => {
-    fetchSchedule();
-  }, [studentId, userInfo?._id, selectedYear, formik.handleSubmit]);
+  // fetchSchedule function is now handled by the store and useEffect above
 
   return (
     <dialog id={`add_appointment_schedule_${student._id}`} className="modal">
@@ -152,20 +152,16 @@ const Appointment = ({ student, studentId }) => {
               <button
                 className="btn-red"
                 type="button"
-                onClick={() =>
-                  deleteSchedule(formik.values.schedule_id || scheduleId).then(
-                    () => {
-                      formik.setValues(formik.initialValues);
-                      setHasSchedule(false);
-                      setScheduleId(null);
-                      document
-                        .getElementById(
-                          `add_appointment_schedule_${student._id}`
-                        )
-                        ?.close();
-                    }
-                  )
-                }
+                onClick={async () => {
+                  await deleteSchedule(formik.values.schedule_id || scheduleId);
+                  formik.resetForm();
+                  setHasSchedule(false);
+                  setScheduleId(null);
+                  await fetchSchedule(selectedYear, studentId);
+                  document
+                    .getElementById(`add_appointment_schedule_${student._id}`)
+                    ?.close();
+                }}
               >
                 ยกเลิกวันนัดเยี่ยมบ้าน
               </button>
