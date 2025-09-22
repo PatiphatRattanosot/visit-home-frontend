@@ -146,39 +146,50 @@ const Home = () => {
   }, [selectedYear, allVisitorData]);
 
   return (
-    <>
-      <div className="section-container flex flex-col items-center justify-center space-y-10">
-        <div className="w-[400px] h-[400px] text-center">
+  <>
+    <div className="section-container flex flex-col items-center justify-center space-y-10">
+      <h1 className="text-center">รายงานสถานะบุคลากรและการเยี่ยมบ้าน</h1>
+      {/*  grid บน md: จอใหญ่  โชว์ 2 คอลัมน์, บนมือถือ 1 คอลัมน์ */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full justify-items-center">
+        {/* Doughnut 1 */}
+        <div className="w-[300px] md:w-[400px] h-[300px] md:h-[400px] text-center">
           <h1>จำนวนผู้ใช้แต่ละบทบาท</h1>
           {chartDataRole && <Doughnut data={chartDataRole} />}
         </div>
-        <div className="w-[400px] h-[400px] text-center">
+
+        {/* Doughnut 2 */}
+        <div className="w-[300px] md:w-[400px] h-[300px] md:h-[400px] text-center">
           <h1>สถานะอาจารย์</h1>
           {chartDataStatus && <Doughnut data={chartDataStatus} />}
         </div>
-        <div className="w-[400px] h-[400px] text-center">
-          <h1>จำนวนสถานะเยี่ยมบ้าน</h1>
-
-          <div className="flex justify-end items-center">
-            <Select
-              name="year"
-              label="เลือกปีการศึกษา"
-              value={selectedYear ?? ""}
-              onChange={(e) =>
-                setSelectedYear(
-                  e.target.value === "" ? null : Number(e.target.value)
-                )
-              }
-              options={yearsOptions}
-              className="mb-4 w-28 flex justify-center items-center"
-            />
-          </div>
-
-          {chartDataVisitor && <Bar data={chartDataVisitor} />}
-        </div>
       </div>
-    </>
-  );
+
+      {/* Bar chart อยู่ตรงกลางเสมอ */}
+      <div className="w-[300px] md:w-[600px] h-[300px] md:h-[400px] text-center">
+        <h1>จำนวนสถานะเยี่ยมบ้าน</h1>
+
+        
+        <div className="flex justify-end items-center">
+          <Select
+            name="year"
+            label="เลือกปีการศึกษา"
+            value={selectedYear ?? ""}
+            onChange={(e) =>
+              setSelectedYear(
+                e.target.value === "" ? null : Number(e.target.value)
+              )
+            }
+            options={yearsOptions}
+            className="mb-4 w-32"
+          />
+        </div>
+
+        {chartDataVisitor && <Bar data={chartDataVisitor} />}
+      </div>
+    </div>
+  </>
+);
+
 };
 
 export default Home;
