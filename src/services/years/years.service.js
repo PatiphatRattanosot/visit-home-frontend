@@ -13,8 +13,8 @@ const getYears = async () => {
 };
 
 //params
-const getYearById = async (year_id) => {
-  return await api.get(`/year/${year_id}`);
+const getYearsByYear = async (year) => {
+  return await api.get(`/year/${year}`);
 };
 
 const updateYear = async (data) => {
@@ -26,13 +26,18 @@ const deleteYear = async (id) => {
   return await api.delete("/year", { data: { year_id: id } });
 };
 
+const addSchedulesToYear = async (data) => {
+  return await api.patch("/year/add-schedule", data);
+};
+
 const YearServices = {
   createYear,
   createYearAuto,
   getYears,
   updateYear,
   deleteYear,
-  getYearById,
+  getYearsByYear,
+  addSchedulesToYear,
 };
 
 export default YearServices;

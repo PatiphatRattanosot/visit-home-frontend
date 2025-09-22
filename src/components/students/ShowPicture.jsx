@@ -1,6 +1,6 @@
 const ShowPicture = ({ studentPic }) => {
   return (
-    <div className="border-1 border-gray-100 bg-white w-[13.875rem] h-[18.5rem] rounded-md flex justify-center items-center">
+    <div className="border-1 border-gray-100 bg-white w-[13.875rem] h-[18.5rem] rounded-sm flex justify-center items-center">
       {studentPic ? (
         <img
           src={studentPic}

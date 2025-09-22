@@ -3,23 +3,24 @@ import TextInputInModal from "./TexInputInModal";
 import SelectInputInModal from "./SelectInputInModal";
 import { useFormik } from "formik";
 import { ClassroomSchema } from "../../schemas/classroom";
-import { useParams } from "react-router";
-import { useClassroomStore, usePersonnelStore } from "../../stores/admin.store";
+import { usePersonnelStore } from "../../stores/admin.store";
+import { useClassroomStore } from "../../stores/classroom.store";
 
-const AddClassroom = ({ addClassroomSuccess }) => {
-  const { yearId } = useParams();
+const AddClassroom = ({ yearId, addClassroomSuccess }) => {
   const { addClassroom } = useClassroomStore();
   const { fetchData, data: personnel } = usePersonnelStore();
 
-  const selectTeacherOptions = personnel.map((teacher) => ({
-    value: teacher._id,
-    label: `${teacher.first_name} ${teacher.last_name}`,
-  }));
+  const selectTeacherOptions = personnel
+    .filter((teacher) => !teacher?.class_id)
+    .map((teacher) => ({
+      value: teacher._id,
+      label: `${teacher.first_name} ${teacher.last_name}`,
+    }));
 
   const formik = useFormik({
     initialValues: {
-      room: 0,
-      number: 0,
+      room: 1,
+      number: 1,
       teacherId: "",
     },
     validationSchema: ClassroomSchema,
@@ -38,6 +39,8 @@ const AddClassroom = ({ addClassroomSuccess }) => {
     fetchData();
   }, []);
 
+  console.log("personnel", personnel);
+
   return (
     <div>
       <dialog id="add_classroom" className="modal">
@@ -50,6 +53,8 @@ const AddClassroom = ({ addClassroomSuccess }) => {
                 type="number"
                 name="room"
                 placeholder="เลขชั้น"
+                maxLength={6}
+                minLength={1}
                 disabled={false}
                 value={formik.values.room}
                 onChange={formik.handleChange}
@@ -64,6 +69,8 @@ const AddClassroom = ({ addClassroomSuccess }) => {
                 className="w-64 md:w-72"
                 label="ห้อง"
                 placeholder="เลขห้อง"
+                maxLength={6}
+                minLength={1}
                 disabled={false}
                 value={formik.values.number}
                 onChange={formik.handleChange}

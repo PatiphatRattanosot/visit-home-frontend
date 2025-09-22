@@ -1,23 +1,42 @@
 import React from "react";
 import { CiSearch } from "react-icons/ci";
 
-const SearchPersonnel = ({ searchKeyword, setSearchKeyword }) => {
+const SearchPersonnel = ({
+  searchKeyword,
+  setSearchKeyword,
+  placeholder,
+  className,
+}) => {
   const handleChange = (e) => {
     setSearchKeyword(e.target.value);
   };
 
   return (
-    <div className="w-full max-w-md mx-auto relative">
+    <label className={`input ${className}`}>
+      <svg
+        className="h-[1em] opacity-50"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+      >
+        <g
+          strokeLinejoin="round"
+          strokeLinecap="round"
+          strokeWidth="2.5"
+          fill="none"
+          stroke="currentColor"
+        >
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </g>
+      </svg>
       <input
-        type="text"
-        placeholder="ค้นหาบุคลากร..."
+        type="search"
+        placeholder={placeholder}
         value={searchKeyword}
         onChange={handleChange}
-        className="w-full pl-12 pr-4 py-2.5 rounded-xl bg-white border border-gray-300 shadow-sm 
-                   focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition"
+       
       />
-      <CiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-    </div>
+    </label>
   );
 };
 

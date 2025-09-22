@@ -11,15 +11,20 @@ const TextInputInModal = ({
   disabled,
   className = "",
   maxLength,
-  id
+  minLength,
+  id,
 }) => {
   return (
     <div className={`flex flex-col ${className}`}>
-      <label htmlFor={name} className="mb-1 text-sm font-medium text-gray-700">
+      <label
+        htmlFor={name}
+        className="mb-1 text-sm font-medium text-gray-700 text-start"
+      >
         {label} : <span className="text-red-600">*</span>
       </label>
       <input
-        maxLength={maxLength}
+        max={maxLength}
+        min={minLength}
         type={type}
         id={id || name}
         name={name}
@@ -31,7 +36,9 @@ const TextInputInModal = ({
         className="input w-64 md:w-72"
       />
       {error && touched && (
-        <div className="text-red-600 text-xs mt-1">{error}</div>
+        <div id={`${name}-error`} className="text-red-600 text-xs mt-1">
+          {error}
+        </div>
       )}
     </div>
   );

@@ -1,12 +1,12 @@
 import { YearSchema } from "../../schemas/year";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
-import { useYearStore } from "../../stores/admin.store";
+import useYearSelectStore from "../../stores/year_select.store";
 import TextInputInModal from "./TexInputInModal";
 import toast from "react-hot-toast";
 
 const EditYear = ({ year, onUpdateSuccess }) => {
-  const { getYearsById, updateYear } = useYearStore();
+  const { getYearsByYear, updateYear } = useYearSelectStore();
   const [update, setUpdate] = useState(0);
 
   const formik = useFormik({
@@ -25,20 +25,22 @@ const EditYear = ({ year, onUpdateSuccess }) => {
   useEffect(() => {
     const fetchYear = async () => {
       try {
-        const data = await getYearsById(year._id);
+        const data = await getYearsByYear(year.year);
         // ป้องกันการ setValues ซ้ำโดยไม่จำเป็น
         // หา data ที่มันตรงกับ year ID แล้วเช็คว่าตรงกับ values formik จากนั้นถ้าไม่ตรงก็เอาไปเซ็ตไว้ใน formik
         if (data && data.year !== formik.values.year) {
           formik.setValues({ year: data.year });
         }
       } catch (err) {
+        console.log(err);
+
         toast.error(
           err.response?.data?.message || "เกิดข้อผิดพลาดในการโหลดปีการศึกษา"
         );
       }
     };
     fetchYear();
-  }, [year._id, update]); 
+  }, [year._id, update]);
 
   return (
     <div>
@@ -61,6 +63,7 @@ const EditYear = ({ year, onUpdateSuccess }) => {
               error={formik.errors.year}
               touched={formik.touched.year}
               onBlur={formik.handleBlur}
+              minLength={0}
             />
             <div className="modal-action flex justify-center gap-4">
               <button type="submit" className="btn bg-green-500 text-white">

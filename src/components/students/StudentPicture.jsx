@@ -10,7 +10,7 @@ const StudentPicture = ({ studentPic, handleChange }) => {
 
   return (
     <div
-      className="border-1 border-gray-200 bg-white w-[13.875rem] h-[18.5rem] rounded-md flex justify-center items-center hover:bg-gray-50 hover:cursor-pointer"
+      className="border-1 border-gray-200 bg-white w-[13.875rem] h-[18.5rem] rounded-sm flex justify-center items-center hover:bg-gray-50 hover:cursor-pointer"
       onClick={handleOpenInput}
     >
       {/* ใช้ typeof เช็คว่าตัวแปรที่รับมาเป็นตัวแปรที่เป็นตัวอักษรรึป่าว */}
@@ -25,7 +25,7 @@ const StudentPicture = ({ studentPic, handleChange }) => {
           className="h-full w-full bg-cover object-cover rounded-md p-1"
         />
       ) : (
-        <FiPlus className="size-[6rem] text-[#1F2937]" />
+        <FiPlus className="size-[4rem] text-[#1F2937]" />
       )}
       <input
         type="file"
@@ -33,6 +33,7 @@ const StudentPicture = ({ studentPic, handleChange }) => {
         ref={inputRef}
         onChange={handleChange}
         name="studentPic"
+        accept="image/jpeg, image/png, image/jpg, image/gif, image/bmp, image/webp"
       />
     </div>
   );

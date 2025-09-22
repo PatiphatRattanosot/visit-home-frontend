@@ -7,23 +7,25 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import AdminPage from "./pages/Admin/Home";
 import Personnel from "./pages/Admin/Personnel";
-import ManageAdminRoles from "./pages/admin/ManageAdminRoles";
+import ManageAdminRoles from "./pages/Admin/ManageAdminRoles";
 import YearManagement from "./pages/Admin/Year";
 import Classroom from "./pages/Admin/Classroom";
 import Status from "./pages/students/Status";
-import SelfInfo from "./pages/students/self-info/SelfInfo";
-import AddSelfInfoForm from "./pages/students/self-info/AddSelfInfoForm";
-import UpdateSelfInfoForm from "./pages/students/self-info/UpdateSelfInfoForm";
-import VisitInfo from "./pages/students/VisitInfo";
-import Relation from "./pages/students/relation/Relation";
-import AddRelationForm from "./pages/students/relation/AddRelationForm";
-import UpdateRelationForm from "./pages/students/relation/UpdateRelationForm";
-import FamilyStatus from "./pages/students/family-status/FamilyStatus";
-import AddFamilyStatusForm from "./pages/students/family-status/AddFamilyStatusForm";
-import UpdateFamilyStatusForm from "./pages/students/family-status/UpdateFamilyStatusForm";
-import Behavior from "./pages/students/behavior/Behavior";
-import AddBehaviorForm from "./pages/students/behavior/AddBehaviorForm";
-import UpdateBehaviorForm from "./pages/students/behavior/UpdateBehaviorForm";
+import AddFormPages from "./pages/students/AddVisitData/Index";
+import UpdateFormPages from "./pages/students/UpdateVisitData/Index";
+import ViewVisitData from "./pages/students/ViewVisitData/Index";
+import ViewVisitDataForTeacher from "./pages/teacher/ViewVisitData/Index";
+import SDQFormStudent from "./pages/students/SDQ/student/Index";
+import SDQFormParent from "./pages/students/SDQ/parent/Index";
+import StudentViewSDQ from "./pages/students/SDQ/view/StudentViewSDQ";
+import ParentViewSDQ from "./pages/students/SDQ/view/ParentViewSDQ";
+import ClassroomDetail from "./pages/Admin/ClassroomDetail";
+import StudentList from "./pages/teacher/StudentList";
+import VisitInfo from "./pages/teacher/VisitInfo";
+import AddVisitInfo from "./pages/teacher/AddVisitInfo";
+import SDQFormTeacher from "./pages/teacher/sdq/Index";
+import SDQResult from "./pages/teacher/sdq/SDQResult";
+import PrivacyPage from "./pages/PrivacyPage";
 
 function App() {
   const { user, userInfo, isLoading, signInSystem, signOutSystem } =
@@ -38,97 +40,126 @@ function App() {
 
   return (
     <>
-      <Navbar
-        user={user}
-        userInfo={userInfo}
-        googleSignIn={signInSystem}
-        logout={signOutSystem}
-      />
-      <div className="min-h-screen">
-        <Routes>
-          <Route
-            path="/"
-            element={
-              userInfo?.role.includes("Admin") ? (
-                <Navigate to={"/admin"} />
-              ) : userInfo?.role.includes("Student") ? (
-                <Navigate to={"/student"} />
-              ) : userInfo?.role.includes("Teacher") &&
-                userInfo?.role.length === 1 ? (
-                <Navigate to={"/teacher"} />
-              ) : (
-                <Landing />
-              )
-            }
-          />
-          {/* Admin */}
-          <Route
-            path="admin"
-            element={!userInfo?.role.includes("Admin") && <Navigate to={"/"} />}
-          >
-            <Route path="" element={<AdminPage />} />
-            <Route path="personnel" element={<Personnel />} />
-            <Route path="manage-admin" element={<ManageAdminRoles />} />
-            <Route path="year" element={<YearManagement />} />
-            <Route
-              path="year/classroom/:yearId/:year"
-              element={<Classroom />}
-            />
-          </Route>
+      <Routes>
+        <Route
+          path="/privacy-policy"
+          element={
+            <>
+              <PrivacyPage />
+              <Toaster />
+            </>
+          }
+        />
 
-          {/* Student */}
-          <Route
-            path="student"
-            element={
-              !userInfo?.role.includes("Student") && <Navigate to={"/"} />
-            }
-          >
-            <Route path="" element={<Status />} />
-            <Route path="visit-info">
-              <Route path="" element={<VisitInfo />} />
-              <Route path=":year">
-                {/* ข้อมูลส่วนตัว */}
-                <Route path="self-info">
-                  <Route path="" element={<SelfInfo />} />
-                  <Route path="add" element={<AddSelfInfoForm />} />
-                  <Route path="update" element={<UpdateSelfInfoForm />} />
-                </Route>
+        <Route
+          path="*"
+          element={
+            <>
+              <Navbar
+                user={user}
+                userInfo={userInfo}
+                googleSignIn={signInSystem}
+                logout={signOutSystem}
+              />
+              <div className="min-h-screen">
+                <Routes>
+                  <Route
+                    path="/"
+                    element={
+                      userInfo?.role.includes("Admin") ? (
+                        <Navigate to={"/admin"} />
+                      ) : userInfo?.role.includes("Student") ? (
+                        <Navigate to={"/student"} />
+                      ) : userInfo?.role.includes("Teacher") &&
+                        userInfo?.role.length === 1 ? (
+                        <Navigate to={"/teacher"} />
+                      ) : (
+                        <Landing />
+                      )
+                    }
+                  />
+                  {/* Admin */}
+                  <Route
+                    path="admin"
+                    element={
+                      !userInfo?.role.includes("Admin") && <Navigate to={"/"} />
+                    }
+                  >
+                    <Route path="" element={<Personnel />} />
+                    <Route path="dashboard" element={<AdminPage />} />
+                    <Route path="manage-admin" element={<ManageAdminRoles />} />
+                    <Route path="year" element={<YearManagement />} />
+                    <Route path="year/classroom">
+                      <Route path="" element={<Classroom />} />
+                      <Route
+                        path=":classroomId"
+                        element={<ClassroomDetail />}
+                      />
+                      <Route path=":yearId/:year" element={<Classroom />} />
+                    </Route>
+                  </Route>
 
-                {/* ข้อมูลความสัมพันธ์ */}
-                <Route path="relation">
-                  <Route path="" element={<Relation />} />
-                  <Route path="add" element={<AddRelationForm />} />
-                  <Route path="update" element={<UpdateRelationForm />} />
-                </Route>
-                {/* ข้อมูลสถานะครัวเรือน */}
-                <Route path="family-status">
-                  <Route path="" element={<FamilyStatus />} />
-                  <Route path="add" element={<AddFamilyStatusForm />} />
-                  <Route path="update" element={<UpdateFamilyStatusForm />} />
-                </Route>
-                {/* ข้อมูลพฤติกรรม */}
-                <Route path="behavior">
-                  <Route path="" element={<Behavior />} />
-                  <Route path="add" element={<AddBehaviorForm />} />
-                  <Route path="update" element={<UpdateBehaviorForm />} />
-                </Route>
-              </Route>
-            </Route>
-          </Route>
+                  {/* Student */}
+                  <Route
+                    path="student"
+                    element={
+                      !userInfo?.role.includes("Student") && (
+                        <Navigate to={"/"} />
+                      )
+                    }
+                  >
+                    <Route path="" element={<Status />} />
+                    {/* Visit Data */}
+                    <Route path="visiting-info">
+                      <Route path="" element={<ViewVisitData />} />
+                      <Route path="add/:yearId" element={<AddFormPages />} />
+                      <Route
+                        path="update/:yearId"
+                        element={<UpdateFormPages />}
+                      />
+                    </Route>
+                    {/* ข้อมูล SDQ */}
+                    <Route path="sdq-student">
+                      <Route path="" element={<StudentViewSDQ />} />
+                      <Route path=":yearId" element={<SDQFormStudent />} />
+                    </Route>
+                    <Route path="sdq-parent">
+                      <Route path="" element={<ParentViewSDQ />} />
+                      <Route path=":yearId" element={<SDQFormParent />} />
+                    </Route>
+                  </Route>
 
-          {/* Teacher */}
-          <Route
-            path="teacher"
-            element={
-              !userInfo?.role.includes("Teacher") && <Navigate to={"/"} />
-            }
-          >
-            <Route path="" element={<div>Hello, Teacher!!!</div>} />
-          </Route>
-        </Routes>
-      </div>
-      <Footer />
-      <Toaster />
+                  {/* Teacher */}
+                  <Route
+                    path="teacher"
+                    element={
+                      !userInfo?.role.includes("Teacher") && (
+                        <Navigate to={"/"} />
+                      )
+                    }
+                  >
+                    <Route path="" element={<StudentList />} />
+                    <Route path="visit-info" element={<VisitInfo />} />
+                    <Route
+                      path="visit-info/add/:studentId"
+                      element={<AddVisitInfo />}
+                    />
+                    <Route path="student-data/:studentId">
+                      <Route path="" element={<ViewVisitDataForTeacher />} />
+                    </Route>
+                    <Route path="sdq/:studentId/:yearId">
+                      <Route path="" element={<SDQResult />} />
+                      <Route path="estimate" element={<SDQFormTeacher />} />
+                    </Route>
+                  </Route>
+                </Routes>
+              </div>
+              <Footer />
+              <Toaster />
+            </>
+          }
+        />
+      </Routes>
     </>
   );
 }

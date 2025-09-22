@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import FilterDropdown from "../../components/FilterDropdown";
 import SearchPersonnel from "../../components/SearchPersonnel";
 import Pagination from "../../components/Pagination";
 import Breadcrumbs from "../../components/Breadcrumbs";
-import ArrowBack from "./../../components/ArrowBack";
 import { usePersonnelStore } from "../../stores/admin.store"; // ใช้ store ที่สร้างขึ้นมา
 const ManageAdminRoles = () => {
   // ใช้ Zustand store เพื่อจัดการข้อมูลบุคลากร
@@ -14,34 +13,25 @@ const ManageAdminRoles = () => {
     addAdminRole,
   } = usePersonnelStore();
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [filteredPersonnel, setFilteredPersonnel] = useState([]);
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   const optionsForPersonnel = [
     { value: "SortToMost", label: "เรียงจากน้อยไปมาก" },
-    { value: "MostToSort", label: "เรียงจากมากไปน้อย" },
+    { value: "SortToLess", label: "เรียงจากมากไปน้อย" },
     { value: "AlphaSortToMost", label: "เรียงตามลำดับตัวอักษร ก-ฮ" },
-    { value: "AlphaMostToSort", label: "เรียงตามลำดับตัวอักษร ฮ-ก" },
+    { value: "AlphaSortToLess", label: "เรียงตามลำดับตัวอักษร ฮ-ก" },
+    { value: "PrefixMr", label: "คำนำหน้า นาย-นาง" },
+    { value: "PrefixMrs", label: "คำนำหน้า นาง-นาย" },
   ];
   // สร้าง satate สำหรับ Paginations
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = Array.isArray(filteredPersonnel)
-    ? filteredPersonnel.slice(indexOfFirstItem, indexOfLastItem)
-    : [];
 
   useEffect(() => {
-    const fetchAndFilter = async () => {
-      const allPersonnel = await fetchData(); // สมมุติ return เป็น array
-      const activePersonnel = allPersonnel.filter(
-        (person) => person.status === "รับราชการ"
-      );
-      setFilteredPersonnel(activePersonnel);
-    };
-
-    fetchAndFilter();
-  }, []);
+    // โหลดข้อมูลบุคลากรครั้งแรก
+    fetchData();
+  }, [fetchData]);
 
   const getRoleDisplay = (role) => {
     const roles = Array.isArray(role) ? role : [role]; // แปลงให้เป็น array เสมอ
@@ -54,91 +44,142 @@ const ManageAdminRoles = () => {
   };
 
   const handleAddRole = async (email, roleToAdd) => {
-    await addAdminRole(email, roleToAdd); // เรียกผ่าน store
+    await addAdminRole(email, roleToAdd);
   };
 
   const handleRemoveRole = async (email, roleToRemove) => {
-    await removeAdminRole(email, roleToRemove); // เรียกผ่าน store
+    await removeAdminRole(email, roleToRemove);
   };
 
+  // คำนวณรายการหลังกรอง/เรียงลำดับ
+  const filteredPersonnel = useMemo(() => {
+    const safeArray = Array.isArray(personnel) ? personnel : [];
+
+    // สถานะทำงานเท่านั้น
+    const active = safeArray.filter((p) => (p?.status || "") === "ทำงาน");
+
+    // ค้นหา
+    const keyword = searchKeyword.trim().toLowerCase();
+    const searched = keyword
+      ? active.filter((p) => {
+          const firstName = (p?.first_name || "").toLowerCase();
+          const lastName = (p?.last_name || "").toLowerCase();
+          const fullName = `${p?.first_name || ""} ${
+            p?.last_name || ""
+          }`.toLowerCase();
+          const userId = (p?.user_id ?? "").toString();
+          return (
+            firstName.includes(keyword) ||
+            lastName.includes(keyword) ||
+            fullName.includes(keyword) ||
+            userId.includes(keyword)
+          );
+        })
+      : active;
+
+    // เรียงลำดับ
+    const sorted = [...searched];
+    switch (selectedOption) {
+      case "SortToMost":
+        sorted.sort((a, b) => a.user_id - b.user_id);
+        break;
+      case "SortToLess":
+        sorted.sort((a, b) => b.user_id - a.user_id);
+        break;
+      case "AlphaSortToMost":
+        sorted.sort((a, b) => {
+          const nameA = `${a.first_name}${a.last_name}`;
+          const nameB = `${b.first_name}${b.last_name}`;
+          return nameA.localeCompare(nameB, "th", { sensitivity: "base" });
+        });
+        break;
+      case "AlphaSortToLess":
+        sorted.sort((a, b) => {
+          const nameA = `${a.first_name}${a.last_name}`;
+          const nameB = `${b.first_name}${b.last_name}`;
+          // { sensitivity: "base" } คือการเปรียบเทียบแบบไม่สนใจตัวพิมพ์ใหญ่-เล็ก
+          // localeCompare() ใช้สำหรับเปรียบเทียบสตริงตามภาษาที่กำหนด
+          return nameB.localeCompare(nameA, "th", { sensitivity: "base" });
+        });
+        break;
+      case "PrefixMr":
+        sorted.sort((a, b) => {
+          const prefixOrder = { นาย: 1, นางสาว: 2, นาง: 3 };
+          return (prefixOrder[a.prefix] || 99) - (prefixOrder[b.prefix] || 99);
+        });
+        break;
+      case "PrefixMrs":
+        sorted.sort((a, b) => {
+          const prefixOrder = { นาย: 1, นางสาว: 2, นาง: 3 };
+          return (prefixOrder[b.prefix] || 99) - (prefixOrder[a.prefix] || 99);
+        });
+
+        break;
+      default:
+        break;
+    }
+
+    return sorted;
+  }, [personnel, searchKeyword, selectedOption]);
+
+  // รีเซ็ตหน้าปัจจุบันเมื่อค้นหาหรือเปลี่ยนตัวเลือกเรียง
   useEffect(() => {
-    // กรองข้อมูลตามคำค้นหา
-    let filtered = personnel;
-    if (searchKeyword) {
-      const keyword = searchKeyword.trim().toLowerCase();
-
-      filtered = personnel.filter((person) => {
-        const firstName = person.first_name.toLowerCase();
-        const lastName = person.last_name.toLowerCase();
-        const fullName =
-          `${person.first_name} ${person.last_name}`.toLowerCase();
-        const userId = person.user_id.toString();
-
-        return (
-          firstName.includes(keyword) ||
-          lastName.includes(keyword) ||
-          fullName.includes(keyword) ||
-          userId.includes(keyword)
-        );
-      });
-    }
-
-    // กรองข้อมูลตามสถานะ "รับราชการ"
-    filtered = filtered.filter((person) => person.status === "รับราชการ");
-
-    let sorted = [...filtered];
-    // เรียงลำดับข้อมูลตามตัวเลือกที่เลือก
-
-    if (selectedOption === "SortToMost") {
-      sorted.sort((a, b) => a.user_id - b.user_id);
-    } else if (selectedOption === "MostToSort") {
-      sorted.sort((a, b) => b.user_id - a.user_id);
-    } else if (selectedOption === "AlphaMostToSort") {
-      sorted.sort((a, b) => {
-        const nameA = `${a.prefix}${a.first_name}${a.last_name}`;
-        const nameB = `${b.prefix}${b.first_name}${b.last_name}`;
-        return nameA.localeCompare(nameB, "th", { sensitivity: "base" });
-      });
-    } else if (selectedOption === "AlphaSortToMost") {
-      sorted.sort((a, b) => {
-        const nameA = `${a.prefix}${a.first_name}${a.last_name}`;
-        const nameB = `${b.prefix}${b.first_name}${b.last_name}`;
-        return nameB.localeCompare(nameA, "th", { sensitivity: "base" });
-      });
-    }
-
     setCurrentPage(1);
-    setFilteredPersonnel(sorted);
-  }, [selectedOption, personnel, searchKeyword]);
-  return (
-    <div className="section-container">
-      <div className="overflow-x-auto">
-        <div className="flex flex-row space-x-4">
-          <ArrowBack backPath="/admin" />
-          <Breadcrumbs />
-        </div>
-        {/* หัวข้อ */}
-        <p className="text-xl text-center">หน้าจัดการบทบาทผู้ดูแล</p>
-        {/* ฟีเจอร์เสริม */}
-        <div className="flex flex-col md:flex-row justify-between mb-4 mt-4 gap-2">
-          {/* Dropdown สำหรับการกรองข้อมูล */}
-          <FilterDropdown
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
-            options={optionsForPersonnel}
-          />
+  }, [searchKeyword, selectedOption]);
 
-          {/* ช่องค้นหา */}
-          <div className="ml-auto">
-            <SearchPersonnel
-              searchKeyword={searchKeyword}
-              setSearchKeyword={setSearchKeyword}
+  const currentItems = useMemo(() => {
+    return filteredPersonnel.slice(indexOfFirstItem, indexOfLastItem);
+  }, [filteredPersonnel, indexOfFirstItem, indexOfLastItem]);
+
+  const hasAdminRole = (role) => {
+    if (Array.isArray(role)) return role.includes("Admin");
+    if (typeof role === "string") return role.includes("Admin");
+    return false;
+  };
+  return (
+    <div className="section-container w-full">
+      <div className="flex flex-row space-x-4">
+        <Breadcrumbs
+          options={[
+            { label: "หน้าหลัก", link: "/admin" },
+            { label: "จัดการบทบาทผู้ดูแล" },
+          ]}
+        />
+      </div>
+
+      <h1 className="text-center">จัดการบทบาทผู้ดูแล</h1>
+
+      {/* Toolbar centered */}
+      <div className="w-full flex justify-center mt-4 mb-4">
+        <div className="w-full max-w-8xl grid grid-cols-1 md:grid-cols-[auto_1fr_auto] items-center gap-3 px-2">
+          {/* ซ้าย: Dropdown */}
+          <div>
+            <FilterDropdown
+              selectedOption={selectedOption}
+              setSelectedOption={setSelectedOption}
+              options={optionsForPersonnel}
+              className="select"
             />
           </div>
-        </div>
 
-        <table className="table">
-          {/* head */}
+          {/* กลาง: Search */}
+          <div className="md:justify-self-center">
+            <SearchPersonnel
+              placeholder="ค้นหาผู้ดูแล..."
+              searchKeyword={searchKeyword}
+              setSearchKeyword={setSearchKeyword}
+              className="w-72 md:w-[28rem]"
+            />
+          </div>
+
+          {/* ขวา: ช่องว่างเพื่อจัดวางเหมือน Personnel */}
+          <div className="md:justify-self-end" />
+        </div>
+      </div>
+
+      {/* ตารางแสดงข้อมูล */}
+      <div className="overflow-x-auto flex justify-center">
+        <table className="table table-zebra w-full max-w-7xl">
           <thead>
             <tr>
               <th>เลขที่ประจำตัว</th>
@@ -150,9 +191,8 @@ const ManageAdminRoles = () => {
             </tr>
           </thead>
           <tbody>
-            {/* row 1 */}
-            {currentItems.map((person, index) => (
-              <tr key={index}>
+            {currentItems.map((person) => (
+              <tr key={person.user_id}>
                 <td>{person.user_id}</td>
                 <td>{person.prefix}</td>
                 <td>{person.first_name}</td>
@@ -161,9 +201,7 @@ const ManageAdminRoles = () => {
                 <td>
                   <input
                     type="checkbox"
-                    // ใช้ได้สองแบบเลย
-                    // checked={user.role === "admin"}
-                    checked={person.role.includes("Admin")}
+                    checked={hasAdminRole(person.role)}
                     onChange={(e) =>
                       e.target.checked
                         ? handleAddRole(person.email, "Admin")
@@ -175,21 +213,9 @@ const ManageAdminRoles = () => {
               </tr>
             ))}
           </tbody>
-          {/* foot */}
-          {currentItems.length === itemsPerPage && (
-            <tfoot>
-              <tr>
-                <th>เลขที่ประจำตัว</th>
-                <th>คำนำหน้า</th>
-                <th>ชื่อ</th>
-                <th>นามสกุล</th>
-                <th>ตำแหน่ง</th>
-                <th>บทบาทผู้ดูแล</th>
-              </tr>
-            </tfoot>
-          )}
         </table>
       </div>
+
       {/* Pagination */}
       <Pagination
         totalItems={filteredPersonnel.length}

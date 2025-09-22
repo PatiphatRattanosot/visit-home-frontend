@@ -1,15 +1,19 @@
 import * as yup from "yup";
 
-const onlyNumber = /^\d+$/;
-
 export const ClassroomSchema = yup.object().shape({
   room: yup
-    .string()
-    .matches(onlyNumber, "กรุณากรอกหมายเลขห้องเรียนเป็นตัวเลข")
+    .number()
+    .typeError("กรุณากรอกเลขชั้นเรียนเป็นตัวเลข")
+    .integer("ไม่อนุญาตให้กรอกทศนิยม")
+    .min(1, "กรุณากรอกเลขชั้นเรียนตั้งแต่ 1")
+    .max(6, "กรุณากรอกเลขชั้นเรียนไม่เกิน 6")
     .required("กรุณากรอกเลขชั้นเรียน"),
   number: yup
-    .string()
-    .matches(onlyNumber, "กรุณากรอกชั้นเรียนเป็นตัวเลข")
+    .number()
+    .typeError("กรุณากรอกห้องเรียนเป็นตัวเลข")
+    .integer("ไม่อนุญาตให้กรอกทศนิยม")
+    .min(1, "กรุณากรอกห้องเรียนตั้งแต่ 1")
+    .max(7, "กรุณากรอกห้องเรียนไม่เกิน 7")
     .required("กรุณากรอกห้องเรียน"),
   teacherId: yup.string().required("กรุณาเลือกครูที่ปรึกษา"),
 });

@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
-
 import { PersonnelSchema } from "../../schemas/personnelUpdate";
-
 import { usePersonnelStore } from "../../stores/admin.store";
 import TextInputInModal from "./TexInputInModal";
 import SelectInputInModal from "./SelectInputInModal";
@@ -23,9 +21,9 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
     { value: "นางสาว", label: "นางสาว" },
   ];
   const statusOptions = [
-    { value: "รับราชการ", label: "รับราชการ" },
-    { value: "เกษียณ", label: "เกษียณอายุ" },
-    { value: "ลาออก", label: "ลาออก" },
+    { value: "Active", label: "ใช้งานอยู่" },
+    { value: "Inactive", label: "ไม่ได้ใช้งานแล้ว" },
+    
   ];
 
   const formik = useFormik({
@@ -111,6 +109,7 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
 
               <TextInputInModal
                 name="phone"
+                maxLength={10}
                 placeholder="เบอร์โทรศัพท์"
                 disabled={false}
                 value={formik.values.phone}

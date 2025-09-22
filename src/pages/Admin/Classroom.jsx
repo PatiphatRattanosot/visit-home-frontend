@@ -1,23 +1,24 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router";
 import DateInput from "../../components/DateInput";
 import FilterDropdown from "../../components/FilterDropdown";
 import SearchClass from "../../components/SearchClassroom";
 import { BiSolidEdit } from "react-icons/bi";
 import { AiOutlineDelete } from "react-icons/ai";
-import { useParams } from "react-router";
-import Swal from "sweetalert2";
-import classService from "../../services/class/class.service";
 import Pagiantion from "../../components/Pagination";
 import ModalAddClassroom from "../../components/modals/AddClassroom";
 import ModalEditClassroom from "../../components/modals/EditClassroom";
-import Breadcrumbs from "../../components/Breadcrumbs";
-import ArrowBack from "../../components/ArrowBack";
-import { useClassroomStore } from "../../stores/admin.store";
-const Classroom = () => {
-  const {data: classrooms, fetchData, deleteClassroom} = useClassroomStore();
-  const { yearId, year } = useParams();
-  const [selectedOption, setSelectedOption] = useState("SortToMost");
+import BreadcrumbsLoop from "../../components/Breadcrumbs";
+import { useClassroomStore } from "../../stores/classroom.store";
+import useYearSelectStore from "../../stores/year_select.store";
+import YearSelector from "../../components/YearSelector";
 
+const Classroom = () => {
+  const { yearId } = useParams();
+  const { classrooms, fetchClassrooms, deleteClassroom } = useClassroomStore();
+  const { years, selectedYear, setSelectedYear } = useYearSelectStore();
+  const navigate = useNavigate();
+  const [selectedOption, setSelectedOption] = useState("SortToMost");
   // สร้าง state สำหรับเก็บข้อมูลชั้นเรียนที่กรองแล้ว
   // เพื่อใช้ในการแสดงผลในตาราง
   const optionsForClassroom = [
@@ -37,11 +38,22 @@ const Classroom = () => {
     : [];
 
   useEffect(() => {
-   fetchData(yearId); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลชั้นเรียนตามปีการศึกษา
-    setFilteredClassroom(classrooms); // ตั้งค่าเริ่มต้นให้ classrooms ทั้งหมด
+    setFilteredClassroom(Array.isArray(classrooms) ? classrooms : []);
+  }, [classrooms]);
+
+  // หากมี yearId ใน URL ให้ตั้งค่าเป็นปีที่ถูกเลือก
+  useEffect(() => {
+    if (yearId && selectedYear !== yearId) {
+      setSelectedYear(String(yearId));
+    }
   }, [yearId]);
 
-
+  // ดึงชั้นเรียนเมื่อปีที่เลือกเปลี่ยนแปลง
+  useEffect(() => {
+    if (selectedYear) {
+      fetchClassrooms(String(selectedYear));
+    }
+  }, [selectedYear]);
 
   useEffect(() => {
     // กรองข้อมูลชั้นเรียนตามตัวเลือกที่เลือก
@@ -65,19 +77,27 @@ const Classroom = () => {
   return (
     <div className="section-container">
       <div className="flex items-center space-x-2">
-        <ArrowBack to={`/year/${yearId}/${year}`} />
-        <Breadcrumbs />
+        <BreadcrumbsLoop options={[{ label: "จัดการชั้นเรียน" }]} />
       </div>
       <div>
         <h1 className="text-lg md:text-xl text-center">
-          เพิ่มชั้นเรียนของปีการศึกษา {year}
+          เพิ่มชั้นเรียนของปีการศึกษา{" "}
+          {years.find((y) => y._id === selectedYear)?.year ?? ""}
         </h1>
+        <div className="flex flex-row justify-end items-center m-2">
+          <YearSelector />
+        </div>
+
         {/* กล่องสำหรับกำหนดช่วงเวลานัดเยี่ยมบ้าน */}
         <div className="flex justify-center items-center">
           <div className="card w-xl md:w-2xl p-4 shadow-sm flex flex-col items-center justify-center">
             <h2 className="text-lg">กำหนดช่วงเวลานัดเยี่ยมบ้าน</h2>
             <div className="flex gap-2">
-              <DateInput />
+              <DateInput
+                yearNumber={
+                  years.find((y) => y._id === selectedYear)?.year ?? ""
+                }
+              />
             </div>
           </div>
         </div>
@@ -106,8 +126,12 @@ const Classroom = () => {
             >
               เพิ่มชั้นเรียน
             </button>
-           <ModalAddClassroom addClassroomSuccess={() => fetchData(yearId)} />
-
+            <ModalAddClassroom
+              yearId={selectedYear ?? ""}
+              addClassroomSuccess={() => {
+                if (selectedYear) fetchClassrooms(selectedYear);
+              }}
+            />
           </div>
         </div>
 
@@ -131,16 +155,22 @@ const Classroom = () => {
             {/* row 1 */}
 
             {currentItems.map((classroom, index) => (
-              <tr key={classroom._id}>
+              <tr key={classroom._id || index} className="hover:bg-gray-100">
                 <th>
                   <label>
                     <input type="checkbox" className="checkbox" />
                   </label>
                 </th>
-                <td>
+
+                <td
+                  onClick={() =>
+                    navigate(`/admin/year/classroom/${classroom._id}`)
+                  }
+                  className="cursor-pointer hover:underline"
+                >
                   ม.{classroom.room}/{classroom.number}
                 </td>
-                <td>{classroom?.quantity}</td>
+                <td>{classroom.students?.length}</td>
 
                 <td className="flex gap-2 items-center justify-center">
                   <button
@@ -162,7 +192,9 @@ const Classroom = () => {
                   </button>
                   <ModalEditClassroom
                     id={classroom._id}
-                    onUpdateSuccess={() => fetchData(yearId)}
+                    onUpdateSuccess={() => {
+                      if (selectedYear) fetchClassrooms(selectedYear);
+                    }}
                   />
                 </td>
               </tr>
@@ -185,7 +217,9 @@ const Classroom = () => {
       </div>
       {/* Pagination */}
       <Pagiantion
-        totalItems={filteredClassroom.length}
+        totalItems={
+          Array.isArray(filteredClassroom) ? filteredClassroom.length : 0
+        }
         itemsPerPage={itemsPerPage}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}

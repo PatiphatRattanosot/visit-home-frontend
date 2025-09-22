@@ -6,8 +6,6 @@ export const getNavLinks = (roles = [], activeRole = null) => {
   // ถ้าไม่มี ให้ใช้บทบาทแรกในอาร์เรย์ roles แทน (เช่น roles[0])
   // ถ้า roles ไม่ใช่อาร์เรย์ จะ fallback เป็น string ว่าง ""  เพื่
 
-  console.log(role);
-
   if (role === "Admin") {
     return (
       <ul className="menu menu-vertical md:menu-horizontal px-1 ">
@@ -15,13 +13,16 @@ export const getNavLinks = (roles = [], activeRole = null) => {
           <a href="/admin">หน้าแรก</a>
         </li>
         <li>
-          <a href="/admin/personnel">จัดการบุคลากร</a>
+          <a href="/admin/dashboard">วิเคราะห์ข้อมูล</a>
         </li>
         <li>
           <a href="/admin/manage-admin">จัดการสถานะบุคลากร</a>
         </li>
         <li>
           <a href="/admin/year">จัดการปีการศึกษา</a>
+        </li>
+        <li>
+          <a href="/admin/year/classroom">จัดการชั้นเรียน</a>
         </li>
       </ul>
     );
@@ -34,11 +35,11 @@ export const getNavLinks = (roles = [], activeRole = null) => {
           <a href="/teacher">หน้าแรก</a>
         </li>
         <li>
-          <a href="/teacher/students">รายชื่อนักเรียน</a>
+          <a href="/teacher/visualization">วิเคราะห์ข้อมูล</a>
         </li>
-        <li>
+        {/* <li>
           <a href="/teacher/sdq">ผลประเมิน SDQ</a>
-        </li>
+        </li> */}
       </ul>
     );
   }
@@ -50,17 +51,17 @@ export const getNavLinks = (roles = [], activeRole = null) => {
           <a href={`/student`}>หน้าแรก</a>
         </li>
         <li>
-          <a href={`/student/visit-info`}>ข้อมูลการเยี่ยมบ้าน</a>
+          <a href={`/student/visiting-info`}>ข้อมูลการเยี่ยมบ้าน</a>
         </li>
         <li>
           <details>
             <summary>ประเมิน SDQ</summary>
             <ul className="p-2">
               <li>
-                <a href="/student">นักเรียน</a>
+                <a href="/student/sdq-student">นักเรียน</a>
               </li>
               <li>
-                <a href="/student">ผู้ปกครอง</a>
+                <a href="/student/sdq-parent">ผู้ปกครอง</a>
               </li>
             </ul>
           </details>

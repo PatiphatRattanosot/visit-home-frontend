@@ -1,10 +1,9 @@
-import { toast } from "react-hot-toast";
 import { useFormik } from "formik";
 import TextInputInModal from "./TexInputInModal";
 import SelectInputInModal from "./SelectInputInModal";
 import { PersonnelSchema } from "../../schemas/personnel";
 import { usePersonnelStore } from "../../stores/admin.store";
-const AddPersonnel = ({ onSuccesAddPerson }) => {
+const AddPersonnel = () => {
   const { data: personnel, addPersonnel } = usePersonnelStore();
   const prefixOptions = [
     { value: "นาย", label: "นาย" },
@@ -21,12 +20,12 @@ const AddPersonnel = ({ onSuccesAddPerson }) => {
       phone: "",
     },
     validationSchema: PersonnelSchema,
+    
     onSubmit: async (values, actions) => {
       console.log("Submitting", values);
       console.log("Submitting", actions);
-
       await addPersonnel(values);
-      await onSuccesAddPerson();
+  
       actions.resetForm();
     },
   });
@@ -96,6 +95,7 @@ const AddPersonnel = ({ onSuccesAddPerson }) => {
               <TextInputInModal
                 name="phone"
                 maxLength={10}
+                type="tel"
                 placeholder="เบอร์โทรศัพท์"
                 disabled={false}
                 value={formik.values.phone}
