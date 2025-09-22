@@ -4,14 +4,25 @@ import StudentService from "../../services/student/student.service";
 import SDQServices from "../../services/sdq/sdq.service";
 import { useEffect, useState } from "react";
 import { useAuthStore } from "../../stores/auth.store";
+import { useScheduleStore } from "../../stores/schedule.store";
+import { formatThaiDate } from "../../utils/formatDate";
 
 const Status = () => {
   const { selectedYear } = useYearSelectStore();
+  const { fetchSchedule, schedule } = useScheduleStore();
   const { userInfo } = useAuthStore();
   const [homeVisitData, setHomeVisitData] = useState(null);
   const [sdqStudentData, setSdqStudentData] = useState(null);
   const [sdqTeacherData, setSdqTeacherData] = useState(null);
   const [sdqParentData, setSdqParentData] = useState(null);
+
+  console.log("student info", userInfo);
+  console.log("selected year", selectedYear);
+  console.log("schedule data", schedule);
+
+  useEffect(() => {
+    fetchSchedule(selectedYear, userInfo?._id);
+  }, [selectedYear]);
 
   useEffect(() => {
     setHomeVisitData(null);
@@ -102,7 +113,37 @@ const Status = () => {
           <YearSelector />
         </div>
 
-        <div className="flex justify-center md:justify-end mb-10"></div>
+        <div className="flex flex-col space-y-1 mb-10 md:ml-4">
+          <p className="text-lg font-bold">
+            <span className="text-gray-700">วันที่นัดหมายเยี่ยมบ้าน</span>:{" "}
+            {schedule
+              ? formatThaiDate(schedule?.appointment_date)
+              : "ยังไม่มีการนัดหมาย"}
+          </p>
+          {schedule?.teacher && (
+            <div className="flex flex-col md:flex-row space-y-1 md:space-y-0 md:space-x-6">
+              <p className="text-lg font-bold">
+                <span className="text-gray-700">ครูที่ปรึกษา</span>:{" "}
+                {schedule
+                  ? schedule?.teacher?.prefix +
+                    schedule?.teacher?.first_name +
+                    " " +
+                    schedule?.teacher?.last_name
+                  : "-"}
+              </p>
+              <p className="text-lg font-bold">
+                <span className="text-gray-700">เบอร์โทรศัพท์</span>:{" "}
+                {schedule?.teacher?.phone || "-"}
+              </p>
+            </div>
+          )}
+          {schedule?.comment && (
+            <p className="text-lg font-bold">
+              <span className="text-gray-700">หมายเหตุ</span>:{" "}
+              {schedule?.comment}
+            </p>
+          )}
+        </div>
         {/* Status Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* การ์ดสถานะ */}

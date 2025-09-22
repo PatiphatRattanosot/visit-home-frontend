@@ -16,13 +16,13 @@ const Appointment = ({ student, studentId }) => {
   const [scheduleId, setScheduleId] = useState(null);
 
   useEffect(() => {
-    fetchSchedule(userInfo._id, selectedYear, studentId);
-    formik.setValues({ student_id: studentId, teacher_id: userInfo._id, year_id: selectedYear });
+    fetchSchedule(selectedYear, studentId);
+    formik.setValues({
+      student_id: studentId,
+      teacher_id: userInfo._id,
+      year_id: selectedYear,
+    });
   }, [userInfo._id, selectedYear, studentId]);
-
-
-
- 
 
   const formik = useFormik({
     initialValues: {
