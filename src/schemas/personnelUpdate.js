@@ -26,7 +26,7 @@ export const PersonnelSchema = yup.object().shape({
 
    status: yup
     .string().transform((value) => value.trim())
-    .oneOf(["ลาออก", "เกษียณ", "ทำงาน"], "กรุณาเลือกสถานะที่ถูกต้อง")
+    .oneOf([ "Inactive", "Active"], "กรุณาเลือกสถานะที่ถูกต้อง")
     .required("กรุณาเลือกสถานะ"),
 
 

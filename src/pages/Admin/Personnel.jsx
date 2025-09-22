@@ -118,16 +118,16 @@ const Personnel = () => {
 
   const showStatus = (status) => {
     switch (status) {
-      case "ทำงาน":
+      case "Active":
         return (
           <div className="inline-block px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">
-            ทำงาน
+            ใช้งานอยู่
           </div>
         );
-      case "เกษียณ":
+      case "Inactive":
         return (
           <div className="inline-block px-2 py-1 text-xs font-semibold text-yellow-800 bg-yellow-100 rounded-full">
-            เกษียณ
+            ไม่ได้ใช้งานแล้ว
           </div>
         );
       default:

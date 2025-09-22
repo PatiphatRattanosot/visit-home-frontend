@@ -40,7 +40,7 @@ const EditYear = ({ year, onUpdateSuccess }) => {
       }
     };
     fetchYear();
-  }, [year._id, update]); 
+  }, [year._id, update]);
 
   return (
     <div>
@@ -63,6 +63,7 @@ const EditYear = ({ year, onUpdateSuccess }) => {
               error={formik.errors.year}
               touched={formik.touched.year}
               onBlur={formik.handleBlur}
+              minLength={0}
             />
             <div className="modal-action flex justify-center gap-4">
               <button type="submit" className="btn bg-green-500 text-white">

@@ -1,7 +1,7 @@
 import api from "../api";
 
 const addVisitInfo = async (data) => {
-  return await api.post("visit-info/create", data, {
+  return await api.post("/visit-info/create", data, {
     headers: { "Content-Type": "multipart/form-data" },
   });
 };

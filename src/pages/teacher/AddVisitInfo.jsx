@@ -25,10 +25,14 @@ const AddVisitInfo = () => {
     family_img: null,
   });
 
-  const handleChangePicture = (e) => {
+    const handleChangePicture = (e) => {
     const file = e.target.files[0];
     const field = e.target.id; // ใช้ id เพื่อรู้ว่าเป็น home_img หรือ family_img
     if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert("ไฟล์เกิน 5MB");
+        return;
+      }
       setPictureFile((prev) => ({
         ...prev,
         [field]: file,
@@ -41,10 +45,6 @@ const AddVisitInfo = () => {
         [field]: null,
       }));
       formik.setFieldValue(field, null);
-    }
-    if (file && file.size > 5 * 1024 * 1024) {
-      alert("ไฟล์เกิน 5MB");
-      return;
     }
   };
 

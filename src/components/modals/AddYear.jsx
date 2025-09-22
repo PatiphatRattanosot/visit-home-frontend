@@ -42,25 +42,29 @@ const AddYear = ({ addDataSuccess }) => {
             method="dialog"
             className="flex flex-col gap-4 mt-4"
           >
-           <TextInputInModal
-                type="number"
-                name="year"
-                placeholder="ปีการศึกษา เช่น 2566"
-                disabled={false}
-                value={formik.values.year}
-                onChange={formik.handleChange}
-                label="ปีการศึกษา"
-                error={formik.errors.year}
-                touched={formik.touched.year}
-                onBlur={formik.handleBlur}
-              />
-         
+            <TextInputInModal
+              type="number"
+              name="year"
+              placeholder="ปีการศึกษา เช่น 2566"
+              disabled={false}
+              value={formik.values.year}
+              onChange={formik.handleChange}
+              label="ปีการศึกษา"
+              error={formik.errors.year}
+              touched={formik.touched.year}
+              onBlur={formik.handleBlur}
+              minLength={0}
+            />
+
             <div className="modal-action flex gap-4 justify-center">
               <button
                 className="btn bg-red-400 text-white"
                 type="button"
                 //
-                onClick={() => {formik.resetForm(); document.getElementById("add_year").close()}}
+                onClick={() => {
+                  formik.resetForm();
+                  document.getElementById("add_year").close();
+                }}
               >
                 ยกเลิก
               </button>
