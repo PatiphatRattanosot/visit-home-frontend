@@ -16,9 +16,9 @@ const Status = () => {
   const [sdqTeacherData, setSdqTeacherData] = useState(null);
   const [sdqParentData, setSdqParentData] = useState(null);
 
-  console.log("student info", userInfo);
-  console.log("selected year", selectedYear);
-  console.log("schedule data", schedule);
+  // console.log("student info", userInfo);
+  // console.log("selected year", selectedYear);
+  // console.log("schedule data", schedule);
 
   useEffect(() => {
     fetchSchedule(selectedYear, userInfo?._id);
@@ -38,7 +38,7 @@ const Status = () => {
           );
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     fetchData();
@@ -57,7 +57,7 @@ const Status = () => {
           setSdqParentData(sdqParentResponse.data?.sdq?.status);
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     fetchData();
@@ -77,7 +77,7 @@ const Status = () => {
           setSdqStudentData(sdqStudentResponse.data?.sdq?.status);
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     fetchData();
@@ -96,7 +96,7 @@ const Status = () => {
           setSdqTeacherData(sdqTeacherResponse.data?.sdq?.status);
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     };
     fetchData();
