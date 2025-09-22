@@ -2,14 +2,14 @@ import { MdUpload } from "react-icons/md";
 
 const AddPicture = ({ pictureFile, id, onChange }) => {
   const ACCEPTED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/png",
-  "image/jpg",
-  "image/gif",
-  "image/bmp",
-  "image/webp",
-];
- const handleChange = (e) => {
+    "image/jpeg",
+    "image/png",
+    "image/jpg",
+    "image/gif",
+    "image/bmp",
+    "image/webp",
+  ];
+  const handleChange = (e) => {
     const file = e.target.files[0];
     if (file && !ACCEPTED_IMAGE_TYPES.includes(file.type)) {
       alert("กรุณาเลือกไฟล์รูปภาพเท่านั้น (JPG, PNG, GIF, BMP, WEBP)");
@@ -39,7 +39,7 @@ const AddPicture = ({ pictureFile, id, onChange }) => {
           <>
             <MdUpload className="text-4xl text-gray-400 mb-2" />
             <p className="text-sm text-gray-500">เพิ่มรูปภาพที่นี่</p>
-           <p className="text-xs text-gray-400">
+            <p className="text-xs text-gray-400">
               JPG, PNG, GIF, BMP, WEBP (Max 5MB)
             </p>
           </>

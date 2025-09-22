@@ -20,9 +20,24 @@ const Index = () => {
   const [page, setPage] = React.useState(1);
   const [image, setImage] = React.useState(null);
 
+  const ACCEPTED_IMAGE_TYPES = [
+    "image/jpeg",
+    "image/png",
+    "image/jpg",
+    "image/gif",
+    "image/bmp",
+    "image/webp",
+  ];
+
   const handleSetImage = (e) => {
     const file = e.target.files[0];
     if (file) {
+      if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+        alert("กรุณาเลือกไฟล์รูปภาพเท่านั้น (JPG, PNG, GIF, BMP, WEBP)");
+        e.target.value = ""; // reset input
+        setImage(null);
+        return;
+      }
       setImage(file);
     } else {
       setImage(null);

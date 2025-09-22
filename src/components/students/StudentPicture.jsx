@@ -33,6 +33,7 @@ const StudentPicture = ({ studentPic, handleChange }) => {
         ref={inputRef}
         onChange={handleChange}
         name="studentPic"
+        accept="image/jpeg, image/png, image/jpg, image/gif, image/bmp, image/webp"
       />
     </div>
   );
