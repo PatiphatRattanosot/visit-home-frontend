@@ -25,10 +25,14 @@ const AddVisitInfo = () => {
     family_img: null,
   });
 
-  const handleChangePicture = (e) => {
+    const handleChangePicture = (e) => {
     const file = e.target.files[0];
     const field = e.target.id; // ใช้ id เพื่อรู้ว่าเป็น home_img หรือ family_img
     if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert("ไฟล์เกิน 5MB");
+        return;
+      }
       setPictureFile((prev) => ({
         ...prev,
         [field]: file,
@@ -41,10 +45,6 @@ const AddVisitInfo = () => {
         [field]: null,
       }));
       formik.setFieldValue(field, null);
-    }
-    if (file && file.size > 5 * 1024 * 1024) {
-      alert("ไฟล์เกิน 5MB");
-      return;
     }
   };
 
@@ -62,8 +62,6 @@ const AddVisitInfo = () => {
     validationSchema: VisitInfoSchema,
     enableReinitialize: true,
     onSubmit: async (values, actions) => {
-      console.log("values:", values);
-      
       const formData = new FormData();
       if (pictureFile.home_img) {
         formData.append("home_img", pictureFile.home_img); // ไฟล์
@@ -81,12 +79,10 @@ const AddVisitInfo = () => {
       if (visitInfo) {
         formData.append("visit_info_id", visitInfo._id);
         await updateVisitInfo(formData);
-   } else {
-    console.log(formData);
-    
+      } else {
         await addVisitInfo(formData).then(() => {
           setTimeout(() => {
-            // window.location.reload();
+            window.location.reload();
           }, 2600);
         });
       }
