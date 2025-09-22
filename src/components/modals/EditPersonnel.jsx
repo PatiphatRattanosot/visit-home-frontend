@@ -21,9 +21,9 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
     { value: "นางสาว", label: "นางสาว" },
   ];
   const statusOptions = [
-    { value: "ทำงาน", label: "ทำงาน" },
-    { value: "เกษียณ", label: "เกษียณอายุ" },
-    { value: "ลาออก", label: "ลาออก" },
+    { value: "Active", label: "ใช้งานอยู่" },
+    { value: "Inactive", label: "ไม่ได้ใช้งานแล้ว" },
+    
   ];
 
   const formik = useFormik({
