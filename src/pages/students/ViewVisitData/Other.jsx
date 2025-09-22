@@ -4,7 +4,7 @@ import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import YearSelector from "../../../components/YearSelector";
 import useYearSelectStore from "../../../stores/year_select.store";
 
-const Other = ({ page, setPage, otherInfo }) => {
+const Other = ({ page, setPage, otherInfo, isCompleted }) => {
   const breadcrumbsOptions = [
     { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
     { label: "จากผู้ปกครอง" },
@@ -47,7 +47,7 @@ const Other = ({ page, setPage, otherInfo }) => {
 
           {/* Add / Edit button */}
           <div className="mt-2 flex justify-center md:justify-end">
-            {otherInfo ? (
+            {isCompleted === "Completed" || isCompleted === "Edit" ? (
               <a
                 href={`/student/visiting-info/update/${selectedYear}`}
                 className="text-white btn btn-warning"

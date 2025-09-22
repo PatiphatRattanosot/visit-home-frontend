@@ -133,12 +133,18 @@ const Index = () => {
 
   React.useEffect(() => {
     if (yearId) {
-      getYearlyData(yearId).then((res) => {
-        const yearlyData = res?.students?.[0]?.yearly_data?.[0];
-        if (yearlyData) {
-          navigate(`/student/visiting-info/update/${yearId}`);
+      getYearlyData({ student_id: userInfo?._id, year_id: yearId }).then(
+        (res) => {
+          const yearlyData = res?.students?.[0]?.yearly_data?.[0];
+
+          if (
+            yearlyData?.isCompleted === "Completed" ||
+            yearlyData?.isCompleted === "Edit"
+          ) {
+            navigate(`/student/visiting-info/update/${yearId}`);
+          }
         }
-      });
+      );
     }
   }, [yearId]);
 
@@ -153,8 +159,6 @@ const Index = () => {
       localStorage.getItem(`student_data_${yearId}`)
     );
     if (savedData) {
-      console.log("Loaded saved data:", savedData);
-
       formik.setValues(savedData);
     }
   }, [yearId]);

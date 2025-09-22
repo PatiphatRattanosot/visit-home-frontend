@@ -19,6 +19,7 @@ const Index = () => {
   const [behaviorInfo, setBehaviorInfo] = React.useState(null);
   const [riskInfo, setRiskInfo] = React.useState(null);
   const [otherInfo, setOtherInfo] = React.useState(null);
+  const [isCompleted, setIsCompleted] = React.useState(null);
 
   const { userInfo } = useAuthStore();
   const { selectedYear } = useYearSelectStore();
@@ -33,6 +34,7 @@ const Index = () => {
     setOtherInfo(null);
     setImage(null);
     setPhone(null);
+    setIsCompleted(null);
     // Fetch existing data for the selected year
     if (selectedYear && userInfo?._id) {
       getYearlyData({ student_id: userInfo?._id, year_id: selectedYear }).then(
@@ -47,6 +49,7 @@ const Index = () => {
             setOtherInfo(yearlyData.additional_info || null);
             setImage(res?.students?.[0]?.image_url || null);
             setPhone(res?.students?.[0]?.phone || null);
+            setIsCompleted(yearlyData?.isCompleted || null);
           } else {
             setPersonalInfo(null);
             setRelationshipInfo(null);
@@ -56,6 +59,7 @@ const Index = () => {
             setOtherInfo(null);
             setImage(null);
             setPhone(null);
+            setIsCompleted(null);
           }
         }
       );
@@ -71,6 +75,7 @@ const Index = () => {
             personalInfo={personalInfo}
             image={image}
             phone={phone}
+            isCompleted={isCompleted}
           />
         )}
         {page === 2 && (
@@ -78,19 +83,40 @@ const Index = () => {
             page={page}
             setPage={setPage}
             relationshipInfo={relationshipInfo}
+            isCompleted={isCompleted}
           />
         )}
         {page === 3 && (
-          <Family page={page} setPage={setPage} familyInfo={familyInfo} />
+          <Family
+            page={page}
+            setPage={setPage}
+            familyInfo={familyInfo}
+            isCompleted={isCompleted}
+          />
         )}
         {page === 4 && (
-          <Behavior page={page} setPage={setPage} behaviorInfo={behaviorInfo} />
+          <Behavior
+            page={page}
+            setPage={setPage}
+            behaviorInfo={behaviorInfo}
+            isCompleted={isCompleted}
+          />
         )}
         {page === 5 && (
-          <Risk page={page} setPage={setPage} riskInfo={riskInfo} />
+          <Risk
+            page={page}
+            setPage={setPage}
+            riskInfo={riskInfo}
+            isCompleted={isCompleted}
+          />
         )}
         {page === 6 && (
-          <Other page={page} setPage={setPage} otherInfo={otherInfo} />
+          <Other
+            page={page}
+            setPage={setPage}
+            otherInfo={otherInfo}
+            isCompleted={isCompleted}
+          />
         )}
       </div>
     </div>

@@ -4,7 +4,7 @@ import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import YearSelector from "../../../components/YearSelector";
 import useYearSelectStore from "../../../stores/year_select.store";
 
-const Relation = ({ page, setPage, relationshipInfo }) => {
+const Relation = ({ page, setPage, relationshipInfo, isCompleted }) => {
   const breadcrumbsOptions = [
     { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
     { label: "ความสัมพันธ์" },
@@ -66,7 +66,7 @@ const Relation = ({ page, setPage, relationshipInfo }) => {
           </div>
 
           <div className="mt-2 flex justify-center md:justify-end">
-            {relationshipInfo ? (
+            {isCompleted === "Completed" || isCompleted === "Edit" ? (
               <a
                 href={`/student/visiting-info/update/${selectedYear}`}
                 className="text-white btn btn-warning"
