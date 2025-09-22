@@ -9,6 +9,8 @@ export const useVisitInfoStore = create((set, get) => ({
   setVisitInfos: (visitInfos) => set({ visitInfos }),
 
   addVisitInfo: async (data) => {
+    console.log("Adding visit info with data:", data);
+    
     try {
       const response = await VisitInfoService.addVisitInfo(data);
       if (response.status === 201) {
