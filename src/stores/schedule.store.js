@@ -6,16 +6,13 @@ import ScheduleServices from "../services/schedule/schedule.service";
 export const useScheduleStore = create((set, get) => ({
   schedule: null,
   setSchedule: (newData) => set({ schedule: newData }),
-  fetchSchedule: async (teacherId, yearId, studentId) => {
+  fetchSchedule: async (yearId, studentId) => {
+    set({ schedule: null });
     try {
-      const response = await ScheduleServices.getSchedule(
-        teacherId,
-        yearId,
-        studentId
-      );
+      const response = await ScheduleServices.getSchedule(yearId, studentId);
       if (response.status === 200) {
-        set({ schedule: response.data.schedules[0] });
-        return response.data.schedules[0];
+        set({ schedule: response.data.schedules || null });
+        return response.data.schedules || null;
       }
     } catch (error) {
       console.error(error);
