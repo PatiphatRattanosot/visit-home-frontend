@@ -165,6 +165,7 @@ const Personnel = () => {
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
               options={optionsForPersonnel}
+              className="w-40 border border-gray-300 rounded-md px-2 py-1"
             />
           </div>
 
@@ -174,7 +175,7 @@ const Personnel = () => {
               setSearchKeyword={setSearchKeyword}
               setCurrentPage={setCurrentPage}
               placeholder="ค้นหาบุคลากร..."
-              className="w-72 md:w-[28rem]" // ปรับความกว้างที่นี่
+              className="w-72 md:w-[20rem]" // ปรับความกว้างที่นี่
             />
           </div>
 
