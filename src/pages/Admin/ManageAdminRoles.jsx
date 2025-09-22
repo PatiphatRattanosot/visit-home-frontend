@@ -24,7 +24,7 @@ const ManageAdminRoles = () => {
   ];
   // สร้าง satate สำหรับ Paginations
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
+  const itemsPerPage = 10;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
@@ -56,7 +56,7 @@ const ManageAdminRoles = () => {
     const safeArray = Array.isArray(personnel) ? personnel : [];
 
     // สถานะทำงานเท่านั้น
-    const active = safeArray.filter((p) => (p?.status || "") === "ทำงาน");
+    const active = safeArray.filter((p) => (p?.status || "") === "Active");
 
     // ค้นหา
     const keyword = searchKeyword.trim().toLowerCase();
@@ -150,10 +150,11 @@ const ManageAdminRoles = () => {
       <h1 className="text-center">จัดการบทบาทผู้ดูแล</h1>
 
       {/* Toolbar centered */}
+      {/* Toolbar */}
       <div className="w-full flex justify-center mt-4 mb-4">
-        <div className="w-full max-w-8xl grid grid-cols-1 md:grid-cols-[auto_1fr_auto] items-center gap-3 px-2">
+        <div className="w-full max-w-7xl flex justify-between flex-col md:flex-row items-center gap-3 px-2">
           {/* ซ้าย: Dropdown */}
-          <div>
+          <div className="order-1 md:order-none">
             <FilterDropdown
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
@@ -162,18 +163,15 @@ const ManageAdminRoles = () => {
             />
           </div>
 
-          {/* กลาง: Search */}
-          <div className="md:justify-self-center">
+          {/* ขวา: Search */}
+          <div className="flex justify-end">
             <SearchPersonnel
               placeholder="ค้นหาผู้ดูแล..."
               searchKeyword={searchKeyword}
               setSearchKeyword={setSearchKeyword}
-              className="w-72 md:w-[28rem]"
+              className="w-72 md:w-[16rem]"
             />
           </div>
-
-          {/* ขวา: ช่องว่างเพื่อจัดวางเหมือน Personnel */}
-          <div className="md:justify-self-end" />
         </div>
       </div>
 
@@ -207,12 +205,48 @@ const ManageAdminRoles = () => {
                         ? handleAddRole(person.email, "Admin")
                         : handleRemoveRole(person.email, "Admin")
                     }
-                    className="toggle toggle-secondary"
+                    // ถ้ามีบทบาท Admin ให้แสดง toggle เป็นสีเขียว ถ้าไม่มีเป็นสีแดง
+                    //ถ้ามีบทบาท Admin ให้แสดง toggle เป็นสีเขียว ถ้าไม่มีเป็นสีแดง เปลี่ยนไปตามคลาสของ DaisyUI
+                    className={`toggle ${
+                      hasAdminRole(person.role)
+                        ? "toggle-success"
+                        : "toggle-error"
+                    }`}
                   />
+                  <span
+                    className={`text-sm font-semibold ${
+                      hasAdminRole(person.role)
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }`}
+                  >
+                    {hasAdminRole(person.role) ? "เจ้าหน้าที่" : "คุณครู"}
+                  </span>
                 </td>
               </tr>
             ))}
           </tbody>
+          {currentItems.length === 0 && (
+            <tfoot>
+              <tr>
+                <td colSpan={6} className="text-center py-4">
+                  ไม่พบข้อมูล
+                </td>
+              </tr>
+            </tfoot>
+          )}
+          {currentItems.length == 10 && (
+            <tfoot>
+              <tr>
+                <th>เลขที่ประจำตัว</th>
+                <th>คำนำหน้า</th>
+                <th>ชื่อ</th>
+                <th>นามสกุล</th>
+                <th>ตำแหน่ง</th>
+                <th>บทบาทผู้ดูแล</th>
+              </tr>
+            </tfoot>
+          )}
         </table>
       </div>
 
