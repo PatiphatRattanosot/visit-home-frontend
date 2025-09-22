@@ -1,5 +1,5 @@
 import api from "../api";
-const baseUrl = "/visualiz";
+
 const getVisualiz_total_role = async () => {
   return await api.get(`/show-all-user`);
 };

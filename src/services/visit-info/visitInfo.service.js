@@ -1,8 +1,6 @@
 import api from "../api";
 
 const addVisitInfo = async (data) => {
-  console.log("Data being sent to addVisitInfo:", data);
-  
   return await api.post("/visit-info/create", data, {
     headers: { "Content-Type": "multipart/form-data" },
   });

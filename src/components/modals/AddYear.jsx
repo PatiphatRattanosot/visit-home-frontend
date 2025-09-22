@@ -54,7 +54,6 @@ const AddYear = ({ addDataSuccess }) => {
               touched={formik.touched.year}
               onBlur={formik.handleBlur}
               minLength={0}
-              maxLength={3000}
             />
 
             <div className="modal-action flex gap-4 justify-center">
