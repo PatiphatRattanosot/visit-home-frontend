@@ -12,9 +12,12 @@ import BreadcrumbsLoop from "../../components/Breadcrumbs";
 import { useClassroomStore } from "../../stores/classroom.store";
 import useYearSelectStore from "../../stores/year_select.store";
 import YearSelector from "../../components/YearSelector";
+import { usePersonnelStore } from "../../stores/admin.store";
 
 const Classroom = () => {
   const { yearId } = useParams();
+  const { fetchData: fetchPersonnelData } = usePersonnelStore();
+
   const { classrooms, fetchClassrooms, deleteClassroom } = useClassroomStore();
   const { years, selectedYear, setSelectedYear } = useYearSelectStore();
   const navigate = useNavigate();
@@ -70,8 +73,10 @@ const Classroom = () => {
   }, [selectedOption, classrooms]);
 
   const handleDeleteClassroom = async (id) => {
-    deleteClassroom(id);
-    setFilteredClassroom(classrooms);
+    await deleteClassroom(id).then(async () => {
+      fetchClassrooms(selectedYear);
+      await fetchPersonnelData();
+    });
   };
 
   return (
