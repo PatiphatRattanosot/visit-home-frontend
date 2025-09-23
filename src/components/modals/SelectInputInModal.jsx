@@ -13,7 +13,10 @@ const SelectInputInModal = ({
 }) => {
   return (
     <div className={`flex flex-col ${className}`}>
-      <label htmlFor={name} className="mb-1 text-sm font-medium text-gray-700 text-start">
+      <label
+        htmlFor={name}
+        className="mb-1 text-sm font-medium text-gray-700 text-start"
+      >
         {label} : <span className="text-red-600">*</span>
       </label>
       <select
@@ -33,7 +36,9 @@ const SelectInputInModal = ({
         ))}
       </select>
       {error && touched && (
-        <div className="text-red-600 text-xs mt-1">{error}</div>
+        <div className="text-red-600 text-xs mt-1" id={`${name}-error`}>
+          {error}
+        </div>
       )}
     </div>
   );

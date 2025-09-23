@@ -169,8 +169,8 @@ const Risk = ({ page, setPage, formik }) => {
               error={formik.errors.distance_to_school}
               touched={formik.touched.distance_to_school}
               type="number"
-              minLength={0}
-              maxLength={200}
+              min={0}
+              max={200}
               required
             />
             {/* เวลาที่ใช้ */}
@@ -183,8 +183,8 @@ const Risk = ({ page, setPage, formik }) => {
               error={formik.errors.time_used}
               touched={formik.touched.time_used}
               type="number"
-              minLength={0}
-              maxLength={60}
+              min={0}
+              max={60}
               step={5}
               required
             />

@@ -127,8 +127,8 @@ const Family = ({ page, setPage, formik }) => {
                 error={formik.errors.total_household_income}
                 touched={formik.touched.total_household_income}
                 type="number"
-                minLength={0}
-                maxLength={1000000}
+                min={0}
+                max={1000000}
                 step={1000}
                 className="md:w-1/2 md:pr-3"
                 required
@@ -151,8 +151,8 @@ const Family = ({ page, setPage, formik }) => {
               name="daily_total_to_school"
               value={formik.values.daily_total_to_school}
               onChange={formik.handleChange}
-              minLength={0}
-              maxLength={1000}
+              min={0}
+              max={1000}
               type="number"
               error={formik.errors.daily_total_to_school}
               touched={formik.touched.daily_total_to_school}
@@ -192,8 +192,8 @@ const Family = ({ page, setPage, formik }) => {
                 error={formik.errors.student_income}
                 touched={formik.touched.student_income}
                 type="number"
-                minLength={0}
-                maxLength={50000}
+                min={0}
+                max={50000}
                 step={100}
                 disabled={!studentWork}
               />
@@ -299,8 +299,8 @@ const Family = ({ page, setPage, formik }) => {
                   error={formik.errors.owned_land}
                   touched={formik.touched.owned_land}
                   type="number"
-                  minLength={0}
-                  maxLength={5000}
+                  min={0}
+                  max={5000}
                 />
               </div>
             )}
@@ -324,8 +324,8 @@ const Family = ({ page, setPage, formik }) => {
                   error={formik.errors.rented_land}
                   touched={formik.touched.rented_land}
                   type="number"
-                  minLength={0}
-                  maxLength={5000}
+                  min={0}
+                  max={5000}
                 />
               </div>
             )}
