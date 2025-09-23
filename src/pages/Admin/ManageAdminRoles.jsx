@@ -4,8 +4,11 @@ import SearchPersonnel from "../../components/SearchPersonnel";
 import Pagination from "../../components/Pagination";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import { usePersonnelStore } from "../../stores/admin.store"; // ใช้ store ที่สร้างขึ้นมา
+import { useAuthStore } from "../../stores/auth.store";
+
 const ManageAdminRoles = () => {
   // ใช้ Zustand store เพื่อจัดการข้อมูลบุคลากร
+  const { userInfo } = useAuthStore();
   const {
     data: personnel,
     fetchData,
@@ -56,7 +59,9 @@ const ManageAdminRoles = () => {
     const safeArray = Array.isArray(personnel) ? personnel : [];
 
     // สถานะทำงานเท่านั้น
-    const active = safeArray.filter((p) => (p?.status || "") === "Active");
+    const active = safeArray.filter(
+      (p) => (p?.status || "") === "Active" && p.email !== userInfo?.email
+    );
 
     // ค้นหา
     const keyword = searchKeyword.trim().toLowerCase();
