@@ -232,15 +232,17 @@ const StudentList = () => {
                 </tr>
               )}
             </tbody>
-            <tfoot>
-              <tr>
-                <th className="text-center">เลขที่ประจำตัวนักเรียน</th>
-                <th>คำนำหน้า</th>
-                <th>ชื่อ - นามสกุล</th>
-                <th>สถานะการเยี่ยมบ้าน</th>
-                <th>นัดวันเยี่ยมบ้าน</th>
-              </tr>
-            </tfoot>
+            {currentItems.length == 10 && (
+              <tfoot>
+                <tr>
+                  <th className="text-center">เลขที่ประจำตัวนักเรียน</th>
+                  <th>คำนำหน้า</th>
+                  <th>ชื่อ - นามสกุล</th>
+                  <th>สถานะการเยี่ยมบ้าน</th>
+                  <th>นัดวันเยี่ยมบ้าน</th>
+                </tr>
+              </tfoot>
+            )}
           </table>
         </div>
       </div>
