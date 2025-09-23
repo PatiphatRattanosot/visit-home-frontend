@@ -125,8 +125,8 @@ const Relation = ({ page, setPage, formik }) => {
               error={formik.errors.family_member}
               touched={formik.touched.family_member}
               type="number"
-              maxLength={20}
-              minLength={1}
+              max={20}
+              min={1}
               required
             />
             {/* เวลาร่วมกัน */}
@@ -140,8 +140,8 @@ const Relation = ({ page, setPage, formik }) => {
               error={formik.errors.family_time}
               touched={formik.touched.family_time}
               type="number"
-              maxLength={24}
-              minLength={0}
+              max={24}
+              min={0}
               required
             />
             {/* ความสัมพันธ์ */}
