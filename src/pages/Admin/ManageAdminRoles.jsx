@@ -60,7 +60,7 @@ const ManageAdminRoles = () => {
 
     // สถานะทำงานเท่านั้น
     const active = safeArray.filter(
-      (p) => (p?.status || "") === "Active" && p.email !== userInfo?.email
+      (p) => (p?.status || "") === "ใช้งานอยู่" && p.email !== userInfo?.email
     );
 
     // ค้นหา
