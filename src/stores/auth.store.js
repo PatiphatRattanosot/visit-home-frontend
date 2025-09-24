@@ -109,8 +109,8 @@ export const useAuthStore = create(
               text: "คุณกำลังจะออกจากระบบ!",
               icon: "warning",
               showCancelButton: true,
-              confirmButtonColor: "#c1121f",
-              cancelButtonColor: "#e5e5e5",
+              confirmButtonColor: "#3085d6",
+              cancelButtonColor: "#d33",
               confirmButtonText: "ใช่",
               cancelButtonText: "ไม่",
             }).then(async (result) => {

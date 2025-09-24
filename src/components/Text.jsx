@@ -12,8 +12,10 @@ const Text = ({
   type = "text",
   className = "",
   disabled = false,
-  maxLength = 10,
-  minLength = 0,
+  maxLength,
+  minLength,
+  min = 0,
+  max = 100,
   required = false,
   step = 1,
 }) => {
@@ -33,8 +35,10 @@ const Text = ({
         onBlur={onBlur}
         className="input w-full"
         disabled={disabled}
-        min={minLength}
-        max={maxLength}
+        minLength={minLength}
+        maxLength={maxLength}
+        max={max}
+        min={min}
         step={step}
       />
       {error && touched && (

@@ -10,6 +10,8 @@ const TextInputInModal = ({
   type = "text",
   disabled,
   className = "",
+  min,
+  max,
   maxLength,
   minLength,
   id,
@@ -23,8 +25,10 @@ const TextInputInModal = ({
         {label} : <span className="text-red-600">*</span>
       </label>
       <input
-        max={maxLength}
-        min={minLength}
+        max={max}
+        min={min}
+        minLength={minLength}
+        maxLength={maxLength}
         type={type}
         id={id || name}
         name={name}

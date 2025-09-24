@@ -8,11 +8,13 @@ import ModalAddPersonnel from "../../components/modals/AddPersonnel";
 import ModalEditPersonnel from "../../components/modals/EditPersonnel";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import { usePersonnelStore } from "../../stores/admin.store"; // ใช้ store ที่สร้างขึ้นมา
+import { useAuthStore } from "../../stores/auth.store";
 
 const Personnel = () => {
   // ใช้ Zustand store เพื่อจัดการข้อมูลบุคลากร
   const { data: personnel, fetchData, deletePersonnel } = usePersonnelStore();
   const [selectedOption, setSelectedOption] = useState("SortToMost");
+  const { userInfo } = useAuthStore();
 
   // สร้าง state สำหรับเก็บข้อมูลบุคลากรที่กรองแล้ว
   // เพื่อใช้ในการแสดงผลในตาราง
@@ -46,19 +48,19 @@ const Personnel = () => {
 
   // //สาเหตุที่แยก useefect ออกมาเพราะ อยากให้ fetchPersonnel ใส่เข้าไปใน prop ได้
   useEffect(() => {
-    // fetchPersonnel(); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลบุคลากร
-    fetchData(); // เรียกใช้ฟังก์ชันเพื่อดึงข้อมูลบุคลากร
-    setFilteredPersonnel(personnel); // ตั้งค่าเริ่มต้นให้ personnel ทั้งหมด
+    fetchData();
+    setFilteredPersonnel(
+      personnel?.filter((p) => p?.email !== userInfo?.email)
+    );
   }, []);
 
   useEffect(() => {
-    let filtered = personnel;
+    // กรองบุคลากรที่ไม่ใช่ userInfo.email ก่อนเสมอ
+    let filtered = personnel.filter((p) => p?.email !== userInfo?.email);
 
     if (searchKeyword) {
-      // toLoqwer() ใช้เพื่อเปลี่ยนตัวอักษรเป็นตัวพิมพ์เล็ก
-      // trim() ใช้เพื่อลบช่องว่างที่ไม่จำเป็น และ toLowerCase() เพื่อเปรียบเทียบแบบไม่สนใจตัวพิมพ์ใหญ่-เล็ก
       const keyword = searchKeyword.trim().toLowerCase();
-      filtered = personnel.filter((person) => {
+      filtered = filtered.filter((person) => {
         const firstName = person.first_name.toLowerCase();
         const lastName = person.last_name.toLowerCase();
         const fullName =
@@ -93,8 +95,6 @@ const Personnel = () => {
         sorted.sort((a, b) => {
           const nameA = `${a.first_name}${a.last_name}`;
           const nameB = `${b.first_name}${b.last_name}`;
-          // { sensitivity: "base" } คือการเปรียบเทียบแบบไม่สนใจตัวพิมพ์ใหญ่-เล็ก
-          // localeCompare() ใช้สำหรับเปรียบเทียบสตริงตามภาษาที่กำหนด
           return nameB.localeCompare(nameA, "th", { sensitivity: "base" });
         });
         break;
@@ -114,7 +114,7 @@ const Personnel = () => {
 
     setFilteredPersonnel(sorted);
     setCurrentPage(1);
-  }, [searchKeyword, selectedOption, personnel]);
+  }, [searchKeyword, selectedOption, personnel, userInfo?.email]);
 
   const showStatus = (status) => {
     switch (status) {
@@ -165,6 +165,7 @@ const Personnel = () => {
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
               options={optionsForPersonnel}
+              className="w-40 border border-gray-300 rounded-md px-2 py-1"
             />
           </div>
 
@@ -174,7 +175,7 @@ const Personnel = () => {
               setSearchKeyword={setSearchKeyword}
               setCurrentPage={setCurrentPage}
               placeholder="ค้นหาบุคลากร..."
-              className="w-72 md:w-[28rem]" // ปรับความกว้างที่นี่
+              className="w-72 md:w-[20rem]" // ปรับความกว้างที่นี่
             />
           </div>
 
@@ -191,7 +192,7 @@ const Personnel = () => {
           </div>
 
           {/* Modal */}
-          <ModalAddPersonnel 
+          <ModalAddPersonnel
             id="add_personnel"
             onSuccessAddPerson={fetchData}
           />

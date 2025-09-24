@@ -99,6 +99,7 @@ const ImportStudentBtn = ({ classId }) => {
         accept=".xlsx,.xls,.csv"
         style={{ display: "none" }}
         onChange={handleFileChange}
+        disabled={loading}
       />
       <button
         disabled={loading}
