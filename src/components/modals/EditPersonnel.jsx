@@ -21,8 +21,8 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
     { value: "นางสาว", label: "นางสาว" },
   ];
   const statusOptions = [
-    { value: "Active", label: "ใช้งานอยู่" },
-    { value: "Inactive", label: "ไม่ได้ใช้งานแล้ว" },
+    { value: "ใช้งานอยู่", label: "ใช้งานอยู่" },
+    { value: "ไม่ได้ใช้งานแล้ว", label: "ไม่ได้ใช้งานแล้ว" },
     
   ];
 
