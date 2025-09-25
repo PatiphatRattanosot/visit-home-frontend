@@ -29,6 +29,7 @@ const AddClassroom = ({ yearId, addClassroomSuccess }) => {
       console.log("Submitting", actions);
       await addClassroom(values, yearId);
       await addClassroomSuccess();
+      await fetchData();
       actions.resetForm();
     },
   });

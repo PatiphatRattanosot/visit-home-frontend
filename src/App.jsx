@@ -34,7 +34,7 @@ function App() {
   if (isLoading)
     return (
       <div className="h-screen w-full flex justify-center items-center">
-        Loading...
+        กำลังโหลด...
       </div>
     );
 
