@@ -15,6 +15,7 @@ import { Radar } from "react-chartjs-2";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import SDQScoreCard from "../../../components/SDQScoreCard";
 import { caseMapping } from "../../../utils/sdq2ndPageMapping";
+import SDQTable from "../../../components/teacher/SDQTable";
 
 ChartJS.register(
   ArcElement,
@@ -183,6 +184,36 @@ const SDQResult = () => {
     (sdqTeacher?.hyperactivity?.total_score || 0) +
     (sdqTeacher?.friendship?.total_score || 0) +
     (sdqTeacher?.social?.total_score || 0);
+
+  const tableData = [
+    {
+      assessor: "ครูที่ปรึกษา",
+      emotional: sdqTeacher?.emotional?.total_score || 0,
+      behavioral: sdqTeacher?.behavioral?.total_score || 0,
+      hyperactivity: sdqTeacher?.hyperactivity?.total_score || 0,
+      friendship: sdqTeacher?.friendship?.total_score || 0,
+      social: sdqTeacher?.social?.total_score || 0,
+      total: overallScoreTeacher,
+    },
+    {
+      assessor: "ผู้ปกครอง",
+      emotional: sdqParent?.emotional?.total_score || 0,
+      behavioral: sdqParent?.behavioral?.total_score || 0,
+      hyperactivity: sdqParent?.hyperactivity?.total_score || 0,
+      friendship: sdqParent?.friendship?.total_score || 0,
+      social: sdqParent?.social?.total_score || 0,
+      total: overallScoreParent,
+    },
+    {
+      assessor: "นักเรียน",
+      emotional: sdqStudent?.emotional?.total_score || 0,
+      behavioral: sdqStudent?.behavioral?.total_score || 0,
+      hyperactivity: sdqStudent?.hyperactivity?.total_score || 0,
+      friendship: sdqStudent?.friendship?.total_score || 0,
+      social: sdqStudent?.social?.total_score || 0,
+      total: overallScoreStudent,
+    },
+  ];
 
   return (
     <div className="w-full max-w-screen h-full min-h-screen flex justify-center flex-col bg-gray-50 px-4 py-6">
@@ -614,6 +645,9 @@ const SDQResult = () => {
               </p>
             </div>
           )}
+          <div className="mt-10">
+            <SDQTable data={tableData} />
+          </div>
         </div>
       </div>
     </div>
