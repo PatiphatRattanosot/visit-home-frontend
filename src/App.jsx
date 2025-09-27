@@ -26,6 +26,7 @@ import AddVisitInfo from "./pages/teacher/AddVisitInfo";
 import SDQFormTeacher from "./pages/teacher/sdq/Index";
 import SDQResult from "./pages/teacher/sdq/SDQResult";
 import PrivacyPage from "./pages/PrivacyPage";
+import Visualization from "./pages/teacher/Visualization";
 
 function App() {
   const { user, userInfo, isLoading, signInSystem, signOutSystem } =
@@ -151,6 +152,7 @@ function App() {
                       <Route path="" element={<SDQResult />} />
                       <Route path="estimate" element={<SDQFormTeacher />} />
                     </Route>
+                    <Route path="visualization" element={<Visualization />} />
                   </Route>
                 </Routes>
               </div>
