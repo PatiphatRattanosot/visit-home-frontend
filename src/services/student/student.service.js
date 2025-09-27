@@ -27,7 +27,7 @@ const getYearlyData = async (data) => {
 };
 
 const updateProfile = async (data) => {
-  return await api.put(`${baseUrl}/profile-image`, data, {
+  return await api.patch(`${baseUrl}/profile-image`, data, {
     headers: { "Content-Type": "multipart/form-data" },
   });
 };
