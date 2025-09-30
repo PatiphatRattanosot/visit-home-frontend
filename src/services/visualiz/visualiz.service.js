@@ -15,8 +15,8 @@ const getVisualiz_visit_status = async () => {
 const getVisualiz_sdq_status = async () => {
   return await api.get(`/show-sdq-status`);
 };
-const getVisualiz_teacher_student_analytics = async () => {
-  return await api.get(`/teacher-student-analytics`);
+const getVisualiz_teacher_students_analytics = async () => {
+  return await api.get(`/teacher-students-analytics`);
 };
 
 const VisualizServices = {
@@ -25,6 +25,6 @@ const VisualizServices = {
   getVisualiz_total_visitor,
   getVisualiz_visit_status,
   getVisualiz_sdq_status,
-  getVisualiz_teacher_student_analytics,
+  getVisualiz_teacher_students_analytics,
 };
 export default VisualizServices;
