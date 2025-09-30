@@ -3,7 +3,7 @@ import React from "react";
 const SDQTable = ({ data = [] }) => {
   return (
     <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-      <table className="table">
+      <table className="table table-zebra w-full text-xs sm:text-sm">
         {/* head */}
         <thead>
           <tr>
@@ -24,17 +24,36 @@ const SDQTable = ({ data = [] }) => {
               </td>
             </tr>
           ) : (
-            data.map((item, index) => (
-              <tr key={index}>
-                <td>{item.assessor}</td>
-                <td>{item.emotional}</td>
-                <td>{item.behavioral}</td>
-                <td>{item.hyperactivity}</td>
-                <td>{item.friendship}</td>
-                <td>{item.social}</td>
-                <td>{item.total}</td>
-              </tr>
-            ))
+            data.map((item, index) => {
+              // Check if all data fields are "ยังไม่มีการประเมิน"
+              const isNoData =
+                item.emotional === "ยังไม่มีการประเมิน" ||
+                item.behavioral === "ยังไม่มีการประเมิน" ||
+                item.hyperactivity === "ยังไม่มีการประเมิน" ||
+                item.friendship === "ยังไม่มีการประเมิน" ||
+                item.social === "ยังไม่มีการประเมิน" ||
+                item.total === "ยังไม่มีการประเมิน";
+
+              return (
+                <tr key={index}>
+                  <td>{item.assessor}</td>
+                  {isNoData ? (
+                    <td colSpan="6" className="text-center text-red-600">
+                      ยังไม่มีการประเมิน
+                    </td>
+                  ) : (
+                    <>
+                      <td className="text-center">{item.emotional}</td>
+                      <td className="text-center">{item.behavioral}</td>
+                      <td className="text-center">{item.hyperactivity}</td>
+                      <td className="text-center">{item.friendship}</td>
+                      <td className="text-center">{item.social}</td>
+                      <td className="text-center">{item.total}</td>
+                    </>
+                  )}
+                </tr>
+              );
+            })
           )}
         </tbody>
       </table>
