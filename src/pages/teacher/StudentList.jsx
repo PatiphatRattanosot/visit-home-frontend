@@ -90,32 +90,36 @@ const StudentList = () => {
     indexOfLastItem
   );
 
-  useEffect(() => {
-    const loadSchedules = async () => {
-      if (!currentClass?.students) return;
+  const loadSchedules = async () => {
+    if (!currentClass?.students) return;
 
-      let results = {};
-      for (const student of currentClass.students) {
-        try {
-          const response = await fetchSchedule(selectedYear, student._id);
-          // Based on your API response structure: response.schedules contains the schedule object
-          if (response && response.appointment_date) {
-            results[student._id] = {
-              appointment_date: response.appointment_date,
-              student_id: student._id,
-            };
-          }
-        } catch (error) {
-          console.log(
-            `Error fetching schedule for student ${student._id}:`,
-            error
-          );
-          // Continue with other students even if one fails
+    let results = {};
+    for (const student of currentClass.students) {
+      try {
+        const response = await fetchSchedule(selectedYear, student._id);
+        // Based on your API response structure: response.schedules contains the schedule object
+        if (response && response.appointment_date) {
+          results[student._id] = {
+            appointment_date: response.appointment_date,
+            student_id: student._id,
+          };
         }
+      } catch (error) {
+        console.log(
+          `Error fetching schedule for student ${student._id}:`,
+          error
+        );
+        // Continue with other students even if one fails
       }
-      setStudentSchedules(results);
-    };
+    }
+    setStudentSchedules(results);
+  };
 
+  const refreshSchedules = async () => {
+    await loadSchedules();
+  };
+
+  useEffect(() => {
     loadSchedules();
   }, [currentClass, selectedYear]);
 
@@ -261,6 +265,7 @@ const StudentList = () => {
                     studentId={student._id}
                     student={student}
                     id={`add_appointment_schedule_${student._id}`}
+                    onScheduleUpdate={refreshSchedules}
                   />
                 </tr>
               ))}
