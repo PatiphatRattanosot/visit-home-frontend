@@ -16,7 +16,7 @@ const StudentList = () => {
   const { classroom, getClassroomByTeacherId } = useClassroomStore(); // classroom = array ของห้อง
   const { selectedYear, setSelectedYear } = useYearSelectStore();
   const { fetchSchedule } = useScheduleStore();
-  const [studentSchedules, setStudentSchedules] = useState({});
+  const [studentSchedules, setStudentSchedules] = useState([]);
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredStudents, setFilteredStudents] = useState([]);
@@ -96,10 +96,21 @@ const StudentList = () => {
 
       let results = {};
       for (const student of currentClass.students) {
-        const schedule = await fetchSchedule(selectedYear, student._id);
-        if (schedule && schedule.length > 0) {
-          // สมมติ API ส่ง array ของ schedules
-          results[student._id] = schedule[0].appointment_date; //  เอาวันแรกมาเก็บ
+        try {
+          const response = await fetchSchedule(selectedYear, student._id);
+          // Based on your API response structure: response.schedules contains the schedule object
+          if (response && response.appointment_date) {
+            results[student._id] = {
+              appointment_date: response.appointment_date,
+              student_id: student._id,
+            };
+          }
+        } catch (error) {
+          console.log(
+            `Error fetching schedule for student ${student._id}:`,
+            error
+          );
+          // Continue with other students even if one fails
         }
       }
       setStudentSchedules(results);
@@ -112,14 +123,14 @@ const StudentList = () => {
     if (value === "Completed") {
       return (
         <span className="badge text-white badge-success badge-md">
-          เยี่ยมบ้านแล้ว
+          กรอกข้อมูลแล้ว
         </span>
       );
     }
 
     return (
       <span className="badge text-white badge-error badge-md">
-        ยังไม่เยี่ยมบ้าน
+        ยังไม่กรอกข้อมูล
       </span>
     );
   };
@@ -180,7 +191,7 @@ const StudentList = () => {
                 <th className="text-center">เลขที่ประจำตัวนักเรียน</th>
                 <th>คำนำหน้า</th>
                 <th>ชื่อ - นามสกุล</th>
-                <th>สถานะการเยี่ยมบ้าน</th>
+                <th>สถานะการกรอกข้อมูล</th>
                 <th>วันที่นัดเยี่ยมบ้าน</th>
                 <th>นัดวันเยี่ยมบ้าน</th>
               </tr>
@@ -218,8 +229,12 @@ const StudentList = () => {
                   <td>
                     {studentSchedules[student._id]
                       ? new Date(
-                          studentSchedules[student._id]
-                        ).toLocaleDateString("th-TH")
+                          studentSchedules[student._id].appointment_date
+                        ).toLocaleDateString("th-TH", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })
                       : "ยังไม่ได้นัด"}
                   </td>
                   <td>
@@ -267,7 +282,7 @@ const StudentList = () => {
                   <th className="text-center">เลขที่ประจำตัวนักเรียน</th>
                   <th>คำนำหน้า</th>
                   <th>ชื่อ - นามสกุล</th>
-                  <th>สถานะการเยี่ยมบ้าน</th>
+                  <th>สถานะการกรอกข้อมูล</th>
                   <th>วันที่นัดเยี่ยมบ้าน</th>
                   <th>นัดวันเยี่ยมบ้าน</th>
                 </tr>
