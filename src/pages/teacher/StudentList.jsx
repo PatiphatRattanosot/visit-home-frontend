@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useClassroomStore } from "../../stores/classroom.store";
 import { useAuthStore } from "../../stores/auth.store";
+import { useScheduleStore } from "../../stores/schedule.store";
 import ManageStudent from "../../components/modals/ManageStudent";
 import BreadcrumbsLoop from "../../components/Breadcrumbs";
 import SearchPersonnel from "../../components/SearchPersonnel";
@@ -14,7 +15,8 @@ const StudentList = () => {
   const { userInfo } = useAuthStore();
   const { classroom, getClassroomByTeacherId } = useClassroomStore(); // classroom = array ของห้อง
   const { selectedYear, setSelectedYear } = useYearSelectStore();
-
+  const { fetchSchedule } = useScheduleStore();
+  const [studentSchedules, setStudentSchedules] = useState({});
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredStudents, setFilteredStudents] = useState([]);
@@ -87,6 +89,25 @@ const StudentList = () => {
     indexOfFirstItem,
     indexOfLastItem
   );
+
+  useEffect(() => {
+    const loadSchedules = async () => {
+      if (!currentClass?.students) return;
+
+      let results = {};
+      for (const student of currentClass.students) {
+        const schedule = await fetchSchedule(selectedYear, student._id);
+        if (schedule && schedule.length > 0) {
+          // สมมติ API ส่ง array ของ schedules
+          results[student._id] = schedule[0].appointment_date; //  เอาวันแรกมาเก็บ
+        }
+      }
+      setStudentSchedules(results);
+    };
+
+    loadSchedules();
+  }, [currentClass, selectedYear]);
+
   const VisitStatusBadge = ({ value }) => {
     if (value === "Completed") {
       return (
@@ -160,6 +181,7 @@ const StudentList = () => {
                 <th>คำนำหน้า</th>
                 <th>ชื่อ - นามสกุล</th>
                 <th>สถานะการเยี่ยมบ้าน</th>
+                <th>วันที่นัดเยี่ยมบ้าน</th>
                 <th>นัดวันเยี่ยมบ้าน</th>
               </tr>
             </thead>
@@ -192,6 +214,13 @@ const StudentList = () => {
                   </td>
                   <td>
                     <VisitStatusBadge value={student?.isCompleted} />
+                  </td>
+                  <td>
+                    {studentSchedules[student._id]
+                      ? new Date(
+                          studentSchedules[student._id]
+                        ).toLocaleDateString("th-TH")
+                      : "ยังไม่ได้นัด"}
                   </td>
                   <td>
                     <button
@@ -239,6 +268,7 @@ const StudentList = () => {
                   <th>คำนำหน้า</th>
                   <th>ชื่อ - นามสกุล</th>
                   <th>สถานะการเยี่ยมบ้าน</th>
+                  <th>วันที่นัดเยี่ยมบ้าน</th>
                   <th>นัดวันเยี่ยมบ้าน</th>
                 </tr>
               </tfoot>
