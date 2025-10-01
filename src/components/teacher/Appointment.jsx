@@ -7,7 +7,7 @@ import useYearSelectStore from "../../stores/year_select.store";
 import DateField from "../DateField";
 import Textarea from "../Textarea";
 
-const Appointment = ({ student, studentId }) => {
+const Appointment = ({ student, studentId, onScheduleUpdate }) => {
   const [hasSchedule, setHasSchedule] = useState(false);
   const { userInfo } = useAuthStore();
   const {
@@ -85,6 +85,10 @@ const Appointment = ({ student, studentId }) => {
       }
       // Refetch after submit
       await fetchAndSet();
+      // Refresh parent component data
+      if (onScheduleUpdate) {
+        await onScheduleUpdate();
+      }
       document
         .getElementById(`add_appointment_schedule_${student._id}`)
         ?.close();
@@ -158,6 +162,10 @@ const Appointment = ({ student, studentId }) => {
                   setHasSchedule(false);
                   setScheduleId(null);
                   await fetchSchedule(selectedYear, studentId);
+                  // Refresh parent component data
+                  if (onScheduleUpdate) {
+                    await onScheduleUpdate();
+                  }
                   document
                     .getElementById(`add_appointment_schedule_${student._id}`)
                     ?.close();
