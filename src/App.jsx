@@ -21,7 +21,6 @@ import StudentViewSDQ from "./pages/students/SDQ/view/StudentViewSDQ";
 import ParentViewSDQ from "./pages/students/SDQ/view/ParentViewSDQ";
 import ClassroomDetail from "./pages/Admin/ClassroomDetail";
 import StudentList from "./pages/teacher/StudentList";
-import VisitInfo from "./pages/teacher/VisitInfo";
 import AddVisitInfo from "./pages/teacher/AddVisitInfo";
 import SDQFormTeacher from "./pages/teacher/sdq/Index";
 import SDQResult from "./pages/teacher/sdq/SDQResult";
@@ -140,7 +139,7 @@ function App() {
                     }
                   >
                     <Route path="" element={<StudentList />} />
-                    <Route path="visit-info" element={<VisitInfo />} />
+
                     <Route
                       path="visit-info/add/:studentId"
                       element={<AddVisitInfo />}
