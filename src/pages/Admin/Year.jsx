@@ -11,7 +11,7 @@ import { useClassroomStore } from "../../stores/classroom.store";
 import useYearSelectStore from "../../stores/year_select.store";
 const YearManagement = () => {
   // ใช้ Zustand store เพื่อจัดการข้อมูลปีการศึกษา
-  const { years, fetchYears, deleteYear, setSelectedYear } =
+  const { years, fetchYears, deleteYear, setSelectedYear, autoCreateYear } =
     useYearSelectStore();
   const { setClassrooms } = useClassroomStore();
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const YearManagement = () => {
   useEffect(() => {
     fetchYears();
     setClassrooms([]); // เคลียร์ข้อมูลชั้นเรียนเมื่อเปลี่ยนปีการศึกษา
-  }, [years, fetchYears, setClassrooms]);
+  }, []);
 
   // เลือกปีแล้วมันจะเกิดแอ็คชั่น
   const handleSelectYear = async (year) => {
@@ -110,7 +110,11 @@ const YearManagement = () => {
               ))}
 
               <button
-                onClick={() => document.getElementById("add_year").showModal()}
+                onClick={() => {
+                  years.length > 0
+                    ? autoCreateYear()
+                    : document.getElementById("add_year").showModal();
+                }}
                 className="btn btn-outline w-40 h-40 rounded-xl text-4xl text-gray-800"
               >
                 <FaPlus />

@@ -146,11 +146,6 @@ const Classroom = () => {
           {/* head */}
           <thead>
             <tr>
-              <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th>
               <th>ชั้นเรียน</th>
               <th>จำนวนสมาชิก</th>
               <th>แก้ไข/ลบ</th>
@@ -160,13 +155,7 @@ const Classroom = () => {
             {/* row 1 */}
 
             {currentItems.map((classroom, index) => (
-              <tr key={classroom._id || index} className="hover:bg-gray-100">
-                <th>
-                  <label>
-                    <input type="checkbox" className="checkbox" />
-                  </label>
-                </th>
-
+              <tr key={index} className="hover:bg-gray-100">
                 <td
                   onClick={() =>
                     navigate(`/admin/year/classroom/${classroom._id}`)
@@ -185,6 +174,8 @@ const Classroom = () => {
                         .showModal()
                     }
                     className="btn btn-warning"
+                    id={`edit-classroom-button_${index}`}
+                    data-testid={`edit-classroom-button_${index}`}
                   >
                     <BiSolidEdit size={20} />
                   </button>
@@ -192,6 +183,8 @@ const Classroom = () => {
                   <button
                     onClick={() => handleDeleteClassroom(classroom._id)}
                     className="btn btn-error"
+                    id={`delete-classroom-button_${index}`}
+                    data-testid={`delete-classroom-button_${index}`}
                   >
                     <AiOutlineDelete size={20} />
                   </button>
@@ -208,11 +201,6 @@ const Classroom = () => {
           {/* foot */}
           <tfoot>
             <tr>
-              <th>
-                <label>
-                  <input type="checkbox" className="checkbox" />
-                </label>
-              </th>
               <th>ชั้นเรียน</th>
               <th>จำนวนสมาชิก</th>
               <th>แก้ไข/ลบ</th>

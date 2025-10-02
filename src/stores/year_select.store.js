@@ -23,31 +23,41 @@ const useYearSelectStore = create(
         // console.log("error fetching years:", error);
       }
     },
-    createOrAutoCreateYear: async () => {
-  try {
-    const res = await YearServices.getYears(); // ดึงข้อมูลปีการศึกษาทั้งหมด
-    if (res.status === 200 && res.data.length > 0) {
-      // ถ้ามีปีการศึกษาอยู่แล้วในระบบ
-      const response = await YearServices.createYearAuto(); // ใช้ auto_create_year
-      if (response.status === 201) {
-        toast.success(response.data.message || "เพิ่มปีการศึกษาอัตโนมัติเรียบร้อยแล้ว");
-        get().fetchYears(); // อัปเดตข้อมูลปีการศึกษา
+    autoCreateYear: async () => {
+      try {
+        // ใช้ createYearAuto ที่จัดการ logic การสร้างปีใหม่ให้ใน backend
+        const response = await YearServices.createYearAuto();
+        if (response.status === 201) {
+          toast.success(
+            response.data.message || "เพิ่มปีการศึกษาอัตโนมัติเรียบร้อยแล้ว"
+          );
+          get().fetchYears(); // อัปเดตข้อมูลปีการศึกษา
+        }
+      } catch (error) {
+        console.log("Error in createOrAutoCreateYear:", error);
+        toast.error(
+          error.response?.data?.message || "เกิดข้อผิดพลาดในการเพิ่มปีการศึกษา"
+        );
       }
-    } else {
-      // ถ้ายังไม่มีปีการศึกษาในระบบ
-      const response = await YearServices.createYear({ year: new Date().getFullYear() }); // ใช้ create_year
-      if (response.status === 201) {
-        toast.success(response.data.message || "เพิ่มปีการศึกษาเรียบร้อยแล้ว");
-        get().fetchYears(); 
+    },
+    createYear: async (year) => {
+      try {
+        const response = await YearServices.createYear({ year: Number(year) });
+        if (response.status === 201) {
+          toast.success(
+            response.data.message || "เพิ่มปีการศึกษาเรียบร้อยแล้ว"
+          );
+          get().fetchYears(); // เรียกใช้ fetchYears เพื่ออัปเดตข้อมูล
+          document.getElementById("add_year").close();
+        }
+      } catch (err) {
+        // console.log(err);
+        toast.error(
+          err.response?.data?.message || "เกิดข้อผิดพลาดในการเพิ่มปีการศึกษา"
+        );
+        document.getElementById("add_year").close();
       }
-    }
-  } catch (error) {
-    console.log("Error in createOrAutoCreateYear:", error);
-    toast.error(
-      error.response?.data?.message || "เกิดข้อผิดพลาดในการเพิ่มปีการศึกษา"
-    );
-  }
-},
+    },
     getYearsByYear: async (year) => {
       try {
         const response = await YearServices.getYearsByYear(year);
