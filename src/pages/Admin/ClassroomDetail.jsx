@@ -174,13 +174,6 @@ const ClassroomDetail = () => {
           <table className="table table-zebra w-full text-xs sm:text-sm">
             <thead>
               <tr>
-                {/* ซ่อน checkbox บนจอเล็ก */}
-                <th className="hidden sm:table-cell w-10">
-                  <label>
-                    <input type="checkbox" className="checkbox checkbox-sm" />
-                  </label>
-                </th>
-
                 <th className="text-center">
                   {/* สลับข้อความตามขนาดจอ */}
                   <span className="hidden sm:inline">
@@ -200,15 +193,8 @@ const ClassroomDetail = () => {
             </thead>
 
             <tbody>
-              {currentItems.map((student) => (
-                <tr key={student?._id}>
-                  {/* ซ่อน checkbox บนจอเล็ก */}
-                  <td className="hidden sm:table-cell">
-                    <label>
-                      <input type="checkbox" className="checkbox checkbox-sm" />
-                    </label>
-                  </td>
-
+              {currentItems.map((student, index) => (
+                <tr key={index}>
                   <td className="text-center">{student?.user_id}</td>
                   <td>{student?.prefix}</td>
 
@@ -225,6 +211,8 @@ const ClassroomDetail = () => {
                             .showModal();
                         }}
                         className="btn btn-warning btn-xs sm:btn-sm"
+                        id={`edit-student-button_${index}`}
+                        data-testid={`edit-student-button_${index}`}
                       >
                         {/* ใช้ขนาดไอคอนตาม font-size */}
                         <BiSolidEdit className="text-base sm:text-lg" />
@@ -237,6 +225,8 @@ const ClassroomDetail = () => {
                       <button
                         onClick={() => handleDeleteStudent(student?.email)}
                         className="btn btn-error btn-xs sm:btn-sm"
+                        id={`delete-student-button_${index}`}
+                        data-testid={`delete-student-button_${index}`}
                       >
                         <AiOutlineDelete className="text-base sm:text-lg" />
                       </button>
@@ -248,9 +238,6 @@ const ClassroomDetail = () => {
 
             <tfoot>
               <tr>
-                {/* ซ่อน checkbox บนจอเล็ก */}
-                <th className="hidden sm:table-cell"></th>
-
                 <th className="text-center">
                   <span className="hidden sm:inline">
                     เลขที่ประจำตัวนักเรียน
