@@ -201,7 +201,7 @@ const StudentList = () => {
               </tr>
             </thead>
             <tbody>
-              {currentItems.map((student) => (
+              {currentItems.map((student, index) => (
                 <tr
                   className="cursor-pointer hover:bg-gray-100"
                   key={student?._id}
@@ -224,6 +224,9 @@ const StudentList = () => {
                         .getElementById(`manage_student_${student._id}`)
                         .showModal()
                     }
+                    className="cursor-pointer"
+                    id={`manage-student-name_${index}`}
+                    data-testid={`manage-student-name_${index}`}
                   >
                     {student?.first_name} {student?.last_name}
                   </td>
@@ -251,6 +254,8 @@ const StudentList = () => {
                           .showModal()
                       }
                       className="btn-blue btn-sm hover:btn-blue/80"
+                      id={`add-appointment-button_${index}`}
+                      data-testid={`add-appointment-button_${index}`}
                     >
                       นัดวันเยี่ยมบ้าน
                     </button>

@@ -4,8 +4,9 @@ const createYear = async (data) => {
   return await api.post("/year/", data);
 };
 
-const createYearAuto = async (data) => {
-  return await api.post("/year/auto", data);
+const createYearAuto = async () => {
+  // เส้นนี้ไม่ต้องมี data เพราะ backend จัดการให้เอง
+  return await api.post("/year/auto");
 };
 
 const getYears = async () => {

@@ -1,21 +1,19 @@
 import { useFormik } from "formik";
 import { YearSchema } from "../../schemas/year";
-
 import toast from "react-hot-toast";
 import TextInput from "../../components/Text";
 import useYearSelectStore from "../../stores/year_select.store";
+
 const AddYear = ({ addDataSuccess }) => {
-  const { createOrAutoCreateYear } = useYearSelectStore();
+  const { createYear } = useYearSelectStore();
   const formik = useFormik({
     initialValues: {
       year: "",
     },
     validationSchema: YearSchema,
     onSubmit: async (values, actions) => {
-      console.log("Submitting", values);
-   
       try {
-        await createOrAutoCreateYear();
+        await createYear(values?.year);
         addDataSuccess();
         document.getElementById("add_year").close();
       } catch (err) {

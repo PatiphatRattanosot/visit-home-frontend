@@ -194,8 +194,8 @@ const ManageAdminRoles = () => {
             </tr>
           </thead>
           <tbody>
-            {currentItems.map((person) => (
-              <tr key={person.user_id}>
+            {currentItems.map((person, index) => (
+              <tr key={index}>
                 <td>{person.user_id}</td>
                 <td>{person.prefix}</td>
                 <td>{person.first_name}</td>
@@ -203,8 +203,8 @@ const ManageAdminRoles = () => {
                 <td>{getRoleDisplay(person.role)}</td>
                 <td>
                   <input
-                    id={`admin-role-toggle_${person.user_id}`}
-                    data-testid={`admin-role-toggle_${person.user_id}`}
+                    id={`admin-role-toggle_${index}`}
+                    data-testid={`admin-role-toggle_${index}`}
                     type="checkbox"
                     checked={hasAdminRole(person.role)}
                     onChange={(e) =>

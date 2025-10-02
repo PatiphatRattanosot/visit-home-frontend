@@ -255,8 +255,8 @@ const Personnel = () => {
                   />
 
                   <button
-                    id={`delete-personnel-button_${person._id}`}
-                    data-testid={`delete-personnel-button_${person._id}`}
+                    id={`delete-personnel-button_${index}`}
+                    data-testid={`delete-personnel-button_${index}`}
                     onClick={() => handleDeleteUser(person.email)}
                     className="btn btn-error"
                   >
