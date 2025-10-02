@@ -7,6 +7,7 @@ import {
   LinearScale,
   BarElement,
 } from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import { Doughnut } from "react-chartjs-2";
 import { Bar } from "react-chartjs-2";
 import { useEffect, useState } from "react";
@@ -18,7 +19,8 @@ ChartJS.register(
   Legend,
   CategoryScale,
   LinearScale,
-  BarElement
+  BarElement,
+  ChartDataLabels
 );
 
 const Home = () => {
@@ -145,61 +147,201 @@ const Home = () => {
     }
   }, [selectedYear, allVisitorData]);
 
-  return (
-    <>
-      <div className="section-container flex flex-col items-center justify-center space-y-10">
-        <h1 className="text-center">รายงานสถานะบุคลากรและการเยี่ยมบ้าน</h1>
-        {/*  grid บน md: จอใหญ่  โชว์ 2 คอลัมน์, บนมือถือ 1 คอลัมน์ */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full justify-items-center">
-          {/* Doughnut 1 */}
-          <div className="w-[300px] md:w-[400px] h-[300px] md:h-[400px] text-center">
-            <h1>จำนวนผู้ใช้แต่ละบทบาท</h1>
-            {chartDataRole && <Doughnut data={chartDataRole} />}
-          </div>
+  // Calculate totals for statistics cards
+  const totalUsers = chartDataRole
+    ? chartDataRole.datasets[0].data.reduce((sum, value) => sum + value, 0)
+    : 0;
 
-          {/* Doughnut 2 */}
-          <div className="w-[300px] md:w-[400px] h-[300px] md:h-[400px] text-center">
-            <h1>สถานะอาจารย์</h1>
-            {chartDataStatus && <Doughnut data={chartDataStatus} />}
+  const activeTeachers = chartDataStatus
+    ? chartDataStatus.datasets[0].data[0] || 0
+    : 0;
+
+  const totalVisits =
+    chartDataVisitor && allVisitorData.length > 0
+      ? selectedYear
+        ? allVisitorData.find((item) => item.year === selectedYear)
+            ?.status_total || 0
+        : allVisitorData.reduce((sum, item) => sum + item.status_total, 0)
+      : 0;
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "bottom",
+        labels: {
+          padding: 20,
+          usePointStyle: true,
+        },
+      },
+      datalabels: {
+        display: true,
+        color: "#ffffff",
+        font: {
+          weight: "bold",
+          size: 14,
+        },
+        formatter: (value, context) => {
+          return value > 0 ? value : "";
+        },
+      },
+    },
+  };
+
+  const barChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      datalabels: {
+        display: true,
+        color: "#ffffff",
+        font: {
+          weight: "bold",
+          size: 12,
+        },
+        formatter: (value, context) => {
+          return value > 0 ? value : "";
+        },
+        anchor: "center",
+        align: "center",
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1,
+          precision: 0,
+        },
+      },
+    },
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+            ภาพรวมระบบและสถิติการใช้งาน
+          </h1>
+          <p className="text-gray-600">
+            รายงานสถานะบุคลากรและการเยี่ยมบ้านนักเรียน
+          </p>
+        </div>
+
+        {/* Statistics Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="text-sm font-medium text-gray-500">
+              จำนวนผู้ใช้ทั้งหมด
+            </h3>
+            <p className="text-3xl font-bold text-blue-600">{totalUsers}</p>
+            <p className="text-xs text-gray-400 mt-1">คน</p>
+          </div>
+          <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="text-sm font-medium text-gray-500">
+              อาจารย์ที่ใช้งานอยู่
+            </h3>
+            <p className="text-3xl font-bold text-green-600">
+              {activeTeachers}
+            </p>
+            <p className="text-xs text-gray-400 mt-1">คน</p>
+          </div>
+          <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="text-sm font-medium text-gray-500">
+              การเยี่ยมบ้านสำเร็จ
+            </h3>
+            <p className="text-3xl font-bold text-purple-600">{totalVisits}</p>
+            <p className="text-xs text-gray-400 mt-1">ครั้ง</p>
+          </div>
+          <div className="bg-white rounded-lg shadow p-6">
+            <h3 className="text-sm font-medium text-gray-500">
+              ปีการศึกษาล่าสุด
+            </h3>
+            <p className="text-3xl font-bold text-orange-600">
+              {allVisitorData.length > 0
+                ? Math.max(...allVisitorData.map((item) => item.year))
+                : "-"}
+            </p>
+            <p className="text-xs text-gray-400 mt-1">ปี พ.ศ.</p>
           </div>
         </div>
 
-        {/* Bar chart อยู่ตรงกลางเสมอ */}
-        <div className="w-[300px] md:w-[600px] h-[300px] md:h-[400px] text-center">
-          <h1>จำนวนสถานะเยี่ยมบ้าน</h1>
-
-          <div className="flex justify-end items-center">
-            <Select
-              name="year"
-              label="เลือกปีการศึกษา"
-              value={selectedYear ?? ""}
-              onChange={(e) =>
-                setSelectedYear(
-                  e.target.value === "" ? null : Number(e.target.value)
-                )
-              }
-              options={yearsOptions}
-              className="mb-4 w-32"
-            />
+        {/* Charts Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* User Roles Chart */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              จำนวนผู้ใช้แต่ละบทบาท
+            </h2>
+            <div className="h-80">
+              {chartDataRole ? (
+                <Doughnut data={chartDataRole} options={chartOptions} />
+              ) : (
+                <div className="flex items-center justify-center h-full text-gray-500">
+                  กำลังโหลดข้อมูล...
+                </div>
+              )}
+            </div>
           </div>
-          {chartDataVisitor && (
-            <Bar
-              data={chartDataVisitor}
-              options={{
-                scales: {
-                  y: {
-                    ticks: {
-                      stepSize: 1,
-                      precision: 0, // ให้เป็นจำนวนเต็ม
-                    },
-                  },
-                },
-              }}
-            />
-          )}
+
+          {/* Teacher Status Chart */}
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+              สถานะการใช้งานของอาจารย์
+            </h2>
+            <div className="h-80">
+              {chartDataStatus ? (
+                <Doughnut data={chartDataStatus} options={chartOptions} />
+              ) : (
+                <div className="flex items-center justify-center h-full text-gray-500">
+                  กำลังโหลดข้อมูล...
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Visitor Statistics Bar Chart */}
+          <div className="bg-white rounded-lg shadow p-6 lg:col-span-2">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold text-gray-800">
+                สถิติการเยี่ยมบ้านแยกตามปี
+              </h2>
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700">
+                  เลือกปี:
+                </label>
+                <Select
+                  name="year"
+                  value={selectedYear ?? ""}
+                  onChange={(e) =>
+                    setSelectedYear(
+                      e.target.value === "" ? null : Number(e.target.value)
+                    )
+                  }
+                  options={yearsOptions}
+                  className="w-32"
+                />
+              </div>
+            </div>
+            <div className="h-80">
+              {chartDataVisitor ? (
+                <Bar data={chartDataVisitor} options={barChartOptions} />
+              ) : (
+                <div className="flex items-center justify-center h-full text-gray-500">
+                  กำลังโหลดข้อมูล...
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
