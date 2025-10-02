@@ -23,23 +23,31 @@ const useYearSelectStore = create(
         // console.log("error fetching years:", error);
       }
     },
-    addYear: async (values) => {
-      try {
-        const res = await YearServices.createYear({
-          year: Number(values.year),
-        });
-        if (res.status === 201) {
-          toast.success(res.data.message);
-          get().fetchYears(); // เรียกใช้ fetchData เพื่ออัปเดตข้อมูล
-          document.getElementById("add_year").close(); // ปิด modal
-        }
-      } catch (err) {
-        // console.log(err);
-        toast.error(
-          err.response?.data?.message || "เกิดข้อผิดพลาดในการเพิ่มปีการศึกษา"
-        );
+    createOrAutoCreateYear: async () => {
+  try {
+    const res = await YearServices.getYears(); // ดึงข้อมูลปีการศึกษาทั้งหมด
+    if (res.status === 200 && res.data.length > 0) {
+      // ถ้ามีปีการศึกษาอยู่แล้วในระบบ
+      const response = await YearServices.createYearAuto(); // ใช้ auto_create_year
+      if (response.status === 201) {
+        toast.success(response.data.message || "เพิ่มปีการศึกษาอัตโนมัติเรียบร้อยแล้ว");
+        get().fetchYears(); // อัปเดตข้อมูลปีการศึกษา
       }
-    },
+    } else {
+      // ถ้ายังไม่มีปีการศึกษาในระบบ
+      const response = await YearServices.createYear({ year: new Date().getFullYear() }); // ใช้ create_year
+      if (response.status === 201) {
+        toast.success(response.data.message || "เพิ่มปีการศึกษาเรียบร้อยแล้ว");
+        get().fetchYears(); 
+      }
+    }
+  } catch (error) {
+    console.log("Error in createOrAutoCreateYear:", error);
+    toast.error(
+      error.response?.data?.message || "เกิดข้อผิดพลาดในการเพิ่มปีการศึกษา"
+    );
+  }
+},
     getYearsByYear: async (year) => {
       try {
         const response = await YearServices.getYearsByYear(year);

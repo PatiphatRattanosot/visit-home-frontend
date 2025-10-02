@@ -237,6 +237,8 @@ const Personnel = () => {
                 <td>{showStatus(person.status)}</td>
                 <td className="flex gap-2">
                   <button
+                    id={`edit-personnel-button_${person._id}`}
+                    data-testid={`edit-personnel-button_${person._id}`}
                     onClick={() =>
                       document
                         .getElementById(`edit_personnel_${person._id}`)
@@ -253,6 +255,8 @@ const Personnel = () => {
                   />
 
                   <button
+                    id={`delete-personnel-button_${person._id}`}
+                    data-testid={`delete-personnel-button_${person._id}`}
                     onClick={() => handleDeleteUser(person.email)}
                     className="btn btn-error"
                   >
