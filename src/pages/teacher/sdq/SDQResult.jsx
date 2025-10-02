@@ -13,8 +13,8 @@ import {
 } from "chart.js";
 import { Radar } from "react-chartjs-2";
 import Breadcrumbs from "../../../components/Breadcrumbs";
-import SDQScoreCard from "../../../components/SDQScoreCard";
 import { caseMapping } from "../../../utils/sdq2ndPageMapping";
+import SDQTable from "../../../components/teacher/SDQTable";
 
 ChartJS.register(
   ArcElement,
@@ -130,7 +130,7 @@ const SDQResult = () => {
     ],
     backgroundColor: "rgba(54, 162, 235, 0.2)",
     borderColor: "rgba(54, 162, 235, 1)",
-    borderWidth: 1,
+    borderWidth: 1.5,
   };
 
   const parentDataSet = {
@@ -145,7 +145,7 @@ const SDQResult = () => {
     ],
     backgroundColor: "rgba(255, 206, 86, 0.2)",
     borderColor: "rgba(255, 206, 86, 1)",
-    borderWidth: 1,
+    borderWidth: 1.5,
   };
 
   const teacherDataSet = {
@@ -160,34 +160,97 @@ const SDQResult = () => {
     ],
     backgroundColor: "rgba(255, 99, 132, 0.2)",
     borderColor: "rgba(255, 99, 132, 1)",
-    borderWidth: 1,
+    borderWidth: 1.5,
   };
 
-  const overallScoreStudent =
-    (sdqStudent?.emotional?.total_score || 0) +
-    (sdqStudent?.behavioral?.total_score || 0) +
-    (sdqStudent?.hyperactivity?.total_score || 0) +
-    (sdqStudent?.friendship?.total_score || 0) +
-    (sdqStudent?.social?.total_score || 0);
+  // Calculate averages only from available data
+  const availableAssessors = [sdqTeacher, sdqParent, sdqStudent].filter(
+    Boolean
+  );
+  const assessorCount = availableAssessors.length;
 
-  const overallScoreParent =
-    (sdqParent?.emotional?.total_score || 0) +
-    (sdqParent?.behavioral?.total_score || 0) +
-    (sdqParent?.hyperactivity?.total_score || 0) +
-    (sdqParent?.friendship?.total_score || 0) +
-    (sdqParent?.social?.total_score || 0);
+  const calculateAverage = (field) => {
+    if (assessorCount === 0) return "ยังไม่มีการประเมิน";
 
-  const overallScoreTeacher =
-    (sdqTeacher?.emotional?.total_score || 0) +
-    (sdqTeacher?.behavioral?.total_score || 0) +
-    (sdqTeacher?.hyperactivity?.total_score || 0) +
-    (sdqTeacher?.friendship?.total_score || 0) +
-    (sdqTeacher?.social?.total_score || 0);
+    let sum = 0;
+    if (sdqTeacher?.[field]?.total_score) sum += sdqTeacher[field].total_score;
+    if (sdqParent?.[field]?.total_score) sum += sdqParent[field].total_score;
+    if (sdqStudent?.[field]?.total_score) sum += sdqStudent[field].total_score;
+
+    return assessorCount > 0
+      ? Math.round((sum / assessorCount) * 100) / 100
+      : 0;
+  };
+
+  const tableData = [
+    {
+      assessor: "ครูที่ปรึกษา",
+      emotional: sdqTeacher
+        ? sdqTeacher?.emotional?.total_score || 0
+        : "ยังไม่มีการประเมิน",
+      behavioral: sdqTeacher
+        ? sdqTeacher?.behavioral?.total_score || 0
+        : "ยังไม่มีการประเมิน",
+      hyperactivity: sdqTeacher
+        ? sdqTeacher?.hyperactivity?.total_score || 0
+        : "ยังไม่มีการประเมิน",
+      friendship: sdqTeacher
+        ? sdqTeacher?.friendship?.total_score || 0
+        : "ยังไม่มีการประเมิน",
+      social: sdqTeacher
+        ? sdqTeacher?.social?.total_score || 0
+        : "ยังไม่มีการประเมิน",
+    },
+    {
+      assessor: "ผู้ปกครอง",
+      emotional: sdqParent
+        ? sdqParent?.emotional?.total_score || 0
+        : "ยังไม่มีการประเมิน",
+      behavioral: sdqParent
+        ? sdqParent?.behavioral?.total_score || 0
+        : "ยังไม่มีการประเมิน",
+      hyperactivity: sdqParent
+        ? sdqParent?.hyperactivity?.total_score || 0
+        : "ยังไม่มีการประเมิน",
+      friendship: sdqParent
+        ? sdqParent?.friendship?.total_score || 0
+        : "ยังไม่มีการประเมิน",
+      social: sdqParent
+        ? sdqParent?.social?.total_score || 0
+        : "ยังไม่มีการประเมิน",
+    },
+    {
+      assessor: "นักเรียน",
+      emotional: sdqStudent
+        ? sdqStudent?.emotional?.total_score || 0
+        : "ยังไม่มีการประเมิน",
+      behavioral: sdqStudent
+        ? sdqStudent?.behavioral?.total_score || 0
+        : "ยังไม่มีการประเมิน",
+      hyperactivity: sdqStudent
+        ? sdqStudent?.hyperactivity?.total_score || 0
+        : "ยังไม่มีการประเมิน",
+      friendship: sdqStudent
+        ? sdqStudent?.friendship?.total_score || 0
+        : "ยังไม่มีการประเมิน",
+      social: sdqStudent
+        ? sdqStudent?.social?.total_score || 0
+        : "ยังไม่มีการประเมิน",
+    },
+    {
+      assessor: "คะแนนเฉลี่ย",
+      emotional: calculateAverage("emotional"),
+      behavioral: calculateAverage("behavioral"),
+      hyperactivity: calculateAverage("hyperactivity"),
+      friendship: calculateAverage("friendship"),
+      social: calculateAverage("social"),
+    },
+  ];
 
   return (
     <div className="w-full max-w-screen h-full min-h-screen flex justify-center flex-col bg-gray-50 px-4 py-6">
       <div className="flex items-center justify-center">
-        <div className="w-full max-w-5xl p-4 md:p-6 bg-white rounded-lg shadow-md">
+        <div className="w-full max-w-6xl p-4 md:p-6 bg-white rounded-lg shadow-md">
           <Breadcrumbs
             options={[
               { label: "รายชื่อนักเรียน", link: `/teacher` },
@@ -214,7 +277,7 @@ const SDQResult = () => {
                     "ด้านความสัมพันธ์กับเพื่อน",
                     "ด้านสัมพันธภาพทางสังคม",
                   ],
-                  datasets: [studentDataSet, parentDataSet, teacherDataSet],
+                  datasets: [teacherDataSet, parentDataSet, studentDataSet],
                 }}
                 options={{
                   responsive: true,
@@ -225,11 +288,10 @@ const SDQResult = () => {
                       max: 10,
                       ticks: {
                         stepSize: 1,
-                        backdropColor: "transparent",
                       },
                       pointLabels: {
                         font: {
-                          size: 12,
+                          size: 14,
                         },
                       },
                     },
@@ -239,7 +301,7 @@ const SDQResult = () => {
                       position: "top",
                       labels: {
                         font: {
-                          size: 14,
+                          size: 16,
                         },
                       },
                     },
@@ -248,64 +310,45 @@ const SDQResult = () => {
               />
             </div>
           </div>
-          {/* Score Cards & Assessor Selector */}
-          <div className="mt-6 w-full flex justify-center md:justify-start space-x-2 items-center">
-            <button
-              className={`btn ${
-                selectedSDQ === "Teacher" ? "btn-neutral" : ""
-              }`}
-              onClick={() => setSelectedSDQ("Teacher")}
-            >
-              ครูที่ปรึกษา
-            </button>
-            <button
-              className={`btn ${selectedSDQ === "Parent" ? "btn-neutral" : ""}`}
-              onClick={() => setSelectedSDQ("Parent")}
-            >
-              ผู้ปกครอง
-            </button>
-            <button
-              className={`btn ${
-                selectedSDQ === "Student" ? "btn-neutral" : ""
-              }`}
-              onClick={() => setSelectedSDQ("Student")}
-            >
-              นักเรียน
-            </button>
+          <div className="mt-8">
+            <SDQTable data={tableData} />
+          </div>
+          {/* Assessor Selector */}
+          <div className="mt-8 w-full flex justify-center md:justify-start space-x-2 items-center">
+            {sdqTeacher && (
+              <button
+                className={`btn ${
+                  selectedSDQ === "Teacher" ? "btn-neutral" : ""
+                }`}
+                onClick={() => setSelectedSDQ("Teacher")}
+              >
+                ครูที่ปรึกษา
+              </button>
+            )}
+            {sdqParent && (
+              <button
+                className={`btn ${
+                  selectedSDQ === "Parent" ? "btn-neutral" : ""
+                }`}
+                onClick={() => setSelectedSDQ("Parent")}
+              >
+                ผู้ปกครอง
+              </button>
+            )}
+            {sdqStudent && (
+              <button
+                className={`btn ${
+                  selectedSDQ === "Student" ? "btn-neutral" : ""
+                }`}
+                onClick={() => setSelectedSDQ("Student")}
+              >
+                นักเรียน
+              </button>
+            )}
           </div>
 
           {sdqTeacher && selectedSDQ === "Teacher" ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-              <SDQScoreCard
-                title="ด้านอารมณ์"
-                score={sdqTeacher?.emotional?.total_score}
-                operator={sdqTeacher?.emotional?.total_score > 5}
-              />
-              <SDQScoreCard
-                title="ด้านความประพฤติ/เกเร"
-                score={sdqTeacher?.behavioral?.total_score}
-                operator={sdqTeacher?.behavioral?.total_score > 4}
-              />
-              <SDQScoreCard
-                title="ด้านพฤติกรรมอยู่ไม่นิ่ง/สมาธิสั้น"
-                score={sdqTeacher?.hyperactivity?.total_score}
-                operator={sdqTeacher?.hyperactivity?.total_score > 5}
-              />
-              <SDQScoreCard
-                title="ด้านความสัมพันธ์กับเพื่อน"
-                score={sdqTeacher?.friendship?.total_score}
-                operator={sdqTeacher?.friendship?.total_score > 3}
-              />
-              <SDQScoreCard
-                title="ด้านสัมพันธภาพทางสังคม"
-                score={sdqTeacher?.social?.total_score}
-                operator={sdqTeacher?.social?.total_score < 4}
-              />
-              <SDQScoreCard
-                title="ผลรวม"
-                score={overallScoreTeacher}
-                operator={overallScoreTeacher > 16}
-              />
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   เด็กมีปัญหาในด้านใดด้านหนึ่งต่อไปนี้หรือไม่ : ด้านอารมณ์
@@ -379,36 +422,6 @@ const SDQResult = () => {
             </div>
           ) : sdqParent && selectedSDQ === "Parent" ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-              <SDQScoreCard
-                title="ด้านอารมณ์"
-                score={sdqParent?.emotional?.total_score}
-                operator={sdqParent?.emotional?.total_score > 5}
-              />
-              <SDQScoreCard
-                title="ด้านความประพฤติ/เกเร"
-                score={sdqParent?.behavioral?.total_score}
-                operator={sdqParent?.behavioral?.total_score > 4}
-              />
-              <SDQScoreCard
-                title="ด้านพฤติกรรมอยู่ไม่นิ่ง/สมาธิสั้น"
-                score={sdqParent?.hyperactivity?.total_score}
-                operator={sdqParent?.hyperactivity?.total_score > 5}
-              />
-              <SDQScoreCard
-                title="ด้านความสัมพันธ์กับเพื่อน"
-                score={sdqParent?.friendship?.total_score}
-                operator={sdqParent?.friendship?.total_score > 3}
-              />
-              <SDQScoreCard
-                title="ด้านสัมพันธภาพทางสังคม"
-                score={sdqParent?.social?.total_score}
-                operator={sdqParent?.social?.total_score < 4}
-              />
-              <SDQScoreCard
-                title="ผลรวม"
-                score={overallScoreParent}
-                operator={overallScoreParent > 16}
-              />
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   ความเห็นหรือความกังวลอื่น
@@ -494,36 +507,6 @@ const SDQResult = () => {
             </div>
           ) : sdqStudent && selectedSDQ === "Student" ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-              <SDQScoreCard
-                title="ด้านอารมณ์"
-                score={sdqStudent?.emotional?.total_score}
-                operator={sdqStudent?.emotional?.total_score > 5}
-              />
-              <SDQScoreCard
-                title="ด้านความประพฤติ/เกเร"
-                score={sdqStudent?.behavioral?.total_score}
-                operator={sdqStudent?.behavioral?.total_score > 4}
-              />
-              <SDQScoreCard
-                title="ด้านพฤติกรรมอยู่ไม่นิ่ง/สมาธิสั้น"
-                score={sdqStudent?.hyperactivity?.total_score}
-                operator={sdqStudent?.hyperactivity?.total_score > 5}
-              />
-              <SDQScoreCard
-                title="ด้านความสัมพันธ์กับเพื่อน"
-                score={sdqStudent?.friendship?.total_score}
-                operator={sdqStudent?.friendship?.total_score > 3}
-              />
-              <SDQScoreCard
-                title="ด้านสัมพันธภาพทางสังคม"
-                score={sdqStudent?.social?.total_score}
-                operator={sdqStudent?.social?.total_score < 4}
-              />
-              <SDQScoreCard
-                title="ผลรวม"
-                score={overallScoreStudent}
-                operator={overallScoreStudent > 16}
-              />
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   สิ่งอื่นที่จะบอก
@@ -607,13 +590,7 @@ const SDQResult = () => {
                 </div>
               )}
             </div>
-          ) : (
-            <div className="mt-6 h-[65vh] flex items-center justify-center">
-              <p className="text-center text-red-600">
-                ยังไม่มีการประเมินในปีนี้
-              </p>
-            </div>
-          )}
+          ) : null}
         </div>
       </div>
     </div>
