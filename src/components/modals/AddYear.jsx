@@ -1,9 +1,11 @@
 import { useFormik } from "formik";
 import { YearSchema } from "../../schemas/year";
-import YearServices from "../../services/years/years.service";
+
 import toast from "react-hot-toast";
-import TextInputInModal from "./TexInputInModal";
+import TextInput from "../../components/Text";
+import useYearSelectStore from "../../stores/year_select.store";
 const AddYear = ({ addDataSuccess }) => {
+  const { createOrAutoCreateYear } = useYearSelectStore();
   const formik = useFormik({
     initialValues: {
       year: "",
@@ -11,17 +13,11 @@ const AddYear = ({ addDataSuccess }) => {
     validationSchema: YearSchema,
     onSubmit: async (values, actions) => {
       console.log("Submitting", values);
-      console.log("Submitting", actions);
+   
       try {
-        const res = await YearServices.createYear({
-          year: Number(formik.values.year),
-        });
-        if (res.status === 201) {
-          toast.success(res.data.message);
-          addDataSuccess(); // แจ้งให้ component แม่ refresh รายการ ไม่งั้นก็ไม่เคย refresh ให้ผมเลยแมร่งเอ้ย
-
-          document.getElementById("add_year").close(); // ปิด modal
-        }
+        await createOrAutoCreateYear();
+        addDataSuccess();
+        document.getElementById("add_year").close();
       } catch (err) {
         console.log(err);
         toast.error(
@@ -42,7 +38,7 @@ const AddYear = ({ addDataSuccess }) => {
             method="dialog"
             className="flex flex-col gap-4 mt-4"
           >
-            <TextInputInModal
+            <TextInput
               type="number"
               name="year"
               placeholder="ปีการศึกษา เช่น 2566"
@@ -54,6 +50,7 @@ const AddYear = ({ addDataSuccess }) => {
               touched={formik.touched.year}
               onBlur={formik.handleBlur}
               minLength={0}
+              className="w-72"
             />
 
             <div className="modal-action flex gap-4 justify-center">
