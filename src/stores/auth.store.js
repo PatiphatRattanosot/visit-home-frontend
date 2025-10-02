@@ -7,6 +7,7 @@ import {
   listenToAuthChanges,
 } from "../configs/firebase.config";
 import AuthServices from "../services/auth.service";
+import { authEncode } from "../utils/authEncode";
 
 export const useAuthStore = create(
   persist(
@@ -24,7 +25,9 @@ export const useAuthStore = create(
         if (user) {
           set({ user, isLoading: false });
           try {
-            const res = await AuthServices.sign({ email: user.email });
+            const res = await AuthServices.sign({
+              email: authEncode(user.email),
+            });
             if (res.status === 200) {
               set({ userInfo: res.data?.user });
             } else {
@@ -62,7 +65,9 @@ export const useAuthStore = create(
           try {
             const result = await googleSignIn();
             if (result.user && result.user.email) {
-              const res = await AuthServices.sign({ email: result.user.email });
+              const res = await AuthServices.sign({
+                email: authEncode(result.user.email),
+              });
               if (res.status === 200) {
                 swalOptions = {
                   title: "สำเร็จ!",
