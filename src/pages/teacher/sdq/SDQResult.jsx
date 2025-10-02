@@ -163,27 +163,6 @@ const SDQResult = () => {
     borderWidth: 1.5,
   };
 
-  const overallScoreStudent =
-    (sdqStudent?.emotional?.total_score || 0) +
-    (sdqStudent?.behavioral?.total_score || 0) +
-    (sdqStudent?.hyperactivity?.total_score || 0) +
-    (sdqStudent?.friendship?.total_score || 0) +
-    (sdqStudent?.social?.total_score || 0);
-
-  const overallScoreParent =
-    (sdqParent?.emotional?.total_score || 0) +
-    (sdqParent?.behavioral?.total_score || 0) +
-    (sdqParent?.hyperactivity?.total_score || 0) +
-    (sdqParent?.friendship?.total_score || 0) +
-    (sdqParent?.social?.total_score || 0);
-
-  const overallScoreTeacher =
-    (sdqTeacher?.emotional?.total_score || 0) +
-    (sdqTeacher?.behavioral?.total_score || 0) +
-    (sdqTeacher?.hyperactivity?.total_score || 0) +
-    (sdqTeacher?.friendship?.total_score || 0) +
-    (sdqTeacher?.social?.total_score || 0);
-
   // Calculate averages only from available data
   const availableAssessors = [sdqTeacher, sdqParent, sdqStudent].filter(
     Boolean
@@ -203,15 +182,6 @@ const SDQResult = () => {
       : 0;
   };
 
-  const averageTotal =
-    assessorCount > 0
-      ? Math.round(
-          ((overallScoreTeacher + overallScoreParent + overallScoreStudent) /
-            assessorCount) *
-            100
-        ) / 100
-      : "ยังไม่มีการประเมิน";
-
   const tableData = [
     {
       assessor: "ครูที่ปรึกษา",
@@ -230,7 +200,6 @@ const SDQResult = () => {
       social: sdqTeacher
         ? sdqTeacher?.social?.total_score || 0
         : "ยังไม่มีการประเมิน",
-      total: sdqTeacher ? overallScoreTeacher : "ยังไม่มีการประเมิน",
     },
     {
       assessor: "ผู้ปกครอง",
@@ -249,7 +218,6 @@ const SDQResult = () => {
       social: sdqParent
         ? sdqParent?.social?.total_score || 0
         : "ยังไม่มีการประเมิน",
-      total: sdqParent ? overallScoreParent : "ยังไม่มีการประเมิน",
     },
     {
       assessor: "นักเรียน",
@@ -268,7 +236,6 @@ const SDQResult = () => {
       social: sdqStudent
         ? sdqStudent?.social?.total_score || 0
         : "ยังไม่มีการประเมิน",
-      total: sdqStudent ? overallScoreStudent : "ยังไม่มีการประเมิน",
     },
     {
       assessor: "คะแนนเฉลี่ย",
@@ -277,7 +244,6 @@ const SDQResult = () => {
       hyperactivity: calculateAverage("hyperactivity"),
       friendship: calculateAverage("friendship"),
       social: calculateAverage("social"),
-      total: averageTotal,
     },
   ];
 

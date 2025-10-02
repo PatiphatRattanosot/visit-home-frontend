@@ -13,7 +13,6 @@ const SDQTable = ({ data = [] }) => {
             <th>ด้านพฤติกรรมอยู่ไม่นิ่ง/สมาธิสั้น</th>
             <th>ด้านความสัมพันธ์กับเพื่อน</th>
             <th>ด้านสัมพันธภาพทางสังคม</th>
-            <th>คะแนนรวม</th>
           </tr>
         </thead>
         <tbody>
@@ -31,9 +30,7 @@ const SDQTable = ({ data = [] }) => {
                 item.behavioral === "ยังไม่มีการประเมิน" ||
                 item.hyperactivity === "ยังไม่มีการประเมิน" ||
                 item.friendship === "ยังไม่มีการประเมิน" ||
-                item.social === "ยังไม่มีการประเมิน" ||
-                item.total === "ยังไม่มีการประเมิน";
-
+                item.social === "ยังไม่มีการประเมิน";
               return (
                 <tr key={index}>
                   <td>{item.assessor}</td>
@@ -43,12 +40,47 @@ const SDQTable = ({ data = [] }) => {
                     </td>
                   ) : (
                     <>
-                      <td className="text-center">{item.emotional}</td>
-                      <td className="text-center">{item.behavioral}</td>
-                      <td className="text-center">{item.hyperactivity}</td>
-                      <td className="text-center">{item.friendship}</td>
-                      <td className="text-center">{item.social}</td>
-                      <td className="text-center">{item.total}</td>
+                      <td
+                        className={`text-center ${
+                          item.emotional > 5 ? "text-red-600" : "text-green-600"
+                        }`}
+                      >
+                        {item.emotional}
+                      </td>
+                      <td
+                        className={`text-center ${
+                          item.behavioral > 4
+                            ? "text-red-600"
+                            : "text-green-600"
+                        }`}
+                      >
+                        {item.behavioral}
+                      </td>
+                      <td
+                        className={`text-center ${
+                          item.hyperactivity > 5
+                            ? "text-red-600"
+                            : "text-green-600"
+                        }`}
+                      >
+                        {item.hyperactivity}
+                      </td>
+                      <td
+                        className={`text-center ${
+                          item.friendship > 3
+                            ? "text-red-600"
+                            : "text-green-600"
+                        }`}
+                      >
+                        {item.friendship}
+                      </td>
+                      <td
+                        className={`text-center ${
+                          item.social < 4 ? "text-red-600" : "text-green-600"
+                        }`}
+                      >
+                        {item.social}
+                      </td>
                     </>
                   )}
                 </tr>
