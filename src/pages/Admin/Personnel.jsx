@@ -98,7 +98,7 @@ const Personnel = () => {
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
               options={sortPersonnelOptions}
-              className="w-40 border border-gray-300 rounded-md px-2 py-1"
+              className="select"
             />
           </div>
 
