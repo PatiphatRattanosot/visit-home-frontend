@@ -10,18 +10,23 @@ import Pagination from "../../components/Pagination";
 import useYearSelectStore from "../../stores/year_select.store";
 import YearSelector from "../../components/YearSelector";
 import Appointment from "../../components/teacher/Appointment";
+import { useVisitInfoStore } from "../../stores/visit.store";
 
 const StudentList = () => {
   const { userInfo } = useAuthStore();
   const { classroom, getClassroomByTeacherId } = useClassroomStore(); // classroom = array ของห้อง
   const { selectedYear, setSelectedYear } = useYearSelectStore();
   const { fetchSchedule } = useScheduleStore();
+  const { getVisitInfoByStudentId } = useVisitInfoStore();
   const [studentSchedules, setStudentSchedules] = useState([]);
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredStudents, setFilteredStudents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [studentVisitData, setStudentVisitData] = useState([]);
   const itemsPerPage = 10;
+
+  console.log(studentVisitData);
 
   useEffect(() => {
     getClassroomByTeacherId(String(userInfo._id), String(selectedYear));
@@ -115,12 +120,42 @@ const StudentList = () => {
     setStudentSchedules(results);
   };
 
+  const loadVisitData = async () => {
+    if (!currentClass?.students) return;
+
+    let results = {};
+    for (const student of currentClass.students) {
+      try {
+        const response = await getVisitInfoByStudentId(
+          student._id,
+          selectedYear
+        );
+        // Based on your API response structure: response contains the visit info data
+        if (response) {
+          results[student._id] = {
+            data: response,
+            student_id: student._id,
+          };
+        }
+      } catch (error) {
+        console.log(
+          `Error fetching visit data for student ${student._id}:`,
+          error
+        );
+        // Continue with other students even if one fails
+      }
+    }
+    setStudentVisitData(results);
+  };
+
   const refreshSchedules = async () => {
     await loadSchedules();
+    await loadVisitData();
   };
 
   useEffect(() => {
     loadSchedules();
+    loadVisitData();
   }, [currentClass, selectedYear]);
 
   const VisitStatusBadge = ({ value }) => {
@@ -234,15 +269,19 @@ const StudentList = () => {
                     <VisitStatusBadge value={student?.isCompleted} />
                   </td>
                   <td>
-                    {studentSchedules[student._id]
-                      ? new Date(
-                          studentSchedules[student._id].appointment_date
-                        ).toLocaleDateString("th-TH", {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        })
-                      : "ยังไม่ได้นัด"}
+                    <span className="badge badge-info text-white w-32">
+                      {studentVisitData[student._id]
+                        ? "เยี่ยมบ้านแล้ว"
+                        : studentSchedules[student._id]
+                        ? new Date(
+                            studentSchedules[student._id].appointment_date
+                          ).toLocaleDateString("th-TH", {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          })
+                        : "ยังไม่ได้นัด"}
+                    </span>
                   </td>
                   <td>
                     <button

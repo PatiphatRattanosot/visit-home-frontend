@@ -2,7 +2,6 @@ import { create } from "zustand";
 import VisitInfoService from "../services/visit-info/visitInfo.service";
 import toast from "react-hot-toast";
 
-
 export const useVisitInfoStore = create((set, get) => ({
   visitInfos: [],
   visitInfo: null,
@@ -10,7 +9,7 @@ export const useVisitInfoStore = create((set, get) => ({
 
   addVisitInfo: async (data) => {
     console.log("Adding visit info with data:", data);
-    
+
     try {
       const response = await VisitInfoService.addVisitInfo(data);
       if (response.status === 201) {
