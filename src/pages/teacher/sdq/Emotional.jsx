@@ -2,8 +2,10 @@ import React from "react";
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import SDQRadio from "../../../components/SDQRadio";
 import { validateCurrentPage } from "../../../utils/formNavigation";
+import { useNavigate } from "react-router";
 
 const Emotional = ({ page, setPage, formik }) => {
+  const navigate = useNavigate();
   const breadcrumbsOptions = [
     { label: "แบบประเมิน SDQ", link: "/student/sdq-student" },
     { label: "แบบประเมินตนเอง", link: "/student/sdq-student" },
@@ -91,7 +93,12 @@ const Emotional = ({ page, setPage, formik }) => {
             <button
               className="btn btn-error w-1/2 text-white"
               type="button"
-              onClick={() => setPage(1)}
+              onClick={() => {
+                setPage(1);
+                formik.setValues(formik.initialValues);
+                navigate("/teacher");
+              }}
+              id="cancel-button"
             >
               ยกเลิก
             </button>
@@ -105,6 +112,7 @@ const Emotional = ({ page, setPage, formik }) => {
                   onSuccess: () => setPage(page + 1),
                 })
               }
+              id="next-button-page1"
             >
               ถัดไป {` (${page + 1})`}
             </button>

@@ -91,6 +91,7 @@ const Hyperactivity = ({ page, setPage, formik }) => {
               className="btn btn-soft w-1/2"
               type="button"
               onClick={() => setPage(page - 1)}
+              id="back-button-page3"
             >
               ย้อนกลับ{` (${page - 1})`}
             </button>
@@ -104,6 +105,7 @@ const Hyperactivity = ({ page, setPage, formik }) => {
                   onSuccess: () => setPage(page + 1),
                 })
               }
+              id="next-button-page3"
             >
               ถัดไป {` (${page + 1})`}
             </button>

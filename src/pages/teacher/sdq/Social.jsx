@@ -91,6 +91,7 @@ const Social = ({ page, setPage, formik }) => {
               className="btn btn-soft w-1/2"
               type="button"
               onClick={() => setPage(page - 1)}
+              id="back-button-page5"
             >
               ย้อนกลับ{` (${page - 1})`}
             </button>
@@ -104,6 +105,7 @@ const Social = ({ page, setPage, formik }) => {
                   onSuccess: () => setPage(page + 1),
                 })
               }
+              id="next-button-page5"
             >
               ถัดไป {` (${page + 1})`}
             </button>

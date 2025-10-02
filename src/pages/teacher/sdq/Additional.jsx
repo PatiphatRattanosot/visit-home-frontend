@@ -125,10 +125,15 @@ const Additional = ({ page, setPage, formik }) => {
               className="btn btn-soft w-1/2"
               type="button"
               onClick={() => setPage(page - 1)}
+              id="back-button-page6"
             >
               ย้อนกลับ{` (${page - 1})`}
             </button>
-            <button type="submit" className="btn btn-success w-1/2 text-white">
+            <button
+              type="submit"
+              className="btn btn-success w-1/2 text-white"
+              id="submit-button"
+            >
               บันทึกข้อมูล
             </button>
           </div>
