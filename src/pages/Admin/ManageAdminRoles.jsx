@@ -203,6 +203,8 @@ const ManageAdminRoles = () => {
                 <td>{getRoleDisplay(person.role)}</td>
                 <td>
                   <input
+                    id={`admin-role-toggle_${person.user_id}`}
+                    data-testid={`admin-role-toggle_${person.user_id}`}
                     type="checkbox"
                     checked={hasAdminRole(person.role)}
                     onChange={(e) =>

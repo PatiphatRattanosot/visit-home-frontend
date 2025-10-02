@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
-import TextInputInModal from "./TexInputInModal";
-import SelectInputInModal from "./SelectInputInModal";
+import TextInput from "../../components/Text";
+import SelectInput from "../../components/Select";
 import { PersonnelSchema } from "../../schemas/personnel";
 import { usePersonnelStore } from "../../stores/admin.store";
 const AddPersonnel = () => {
@@ -38,7 +38,7 @@ const AddPersonnel = () => {
 
           <form onSubmit={formik.handleSubmit}>
             <div className="flex flex-col items-center justify-center space-y-2">
-              <SelectInputInModal
+              <SelectInput
                 name="prefix"
                 value={formik.values.prefix}
                 onChange={formik.handleChange}
@@ -53,7 +53,7 @@ const AddPersonnel = () => {
                 id="add-personnel-prefix-select"
               />
 
-              <TextInputInModal
+              <TextInput
                 name="first_name"
                 placeholder="ชื่อ"
                 disabled={false}
@@ -64,9 +64,10 @@ const AddPersonnel = () => {
                 touched={formik.touched.first_name}
                 onBlur={formik.handleBlur}
                 id="add-personnel-firstname-input"
+                className="w-64 md:w-72"
               />
 
-              <TextInputInModal
+              <TextInput
                 name="last_name"
                 placeholder="นามสกุล"
                 disabled={false}
@@ -77,9 +78,10 @@ const AddPersonnel = () => {
                 touched={formik.touched.last_name}
                 onBlur={formik.handleBlur}
                 id="add-personnel-lastname-input"
+                className="w-64 md:w-72"
               />
 
-              <TextInputInModal
+              <TextInput
                 name="user_id"
                 placeholder="เลขที่ประจำตัวบุคลากร"
                 disabled={false}
@@ -90,9 +92,10 @@ const AddPersonnel = () => {
                 touched={formik.touched.user_id}
                 onBlur={formik.handleBlur}
                 id="add-personnel-userid-input"
+                className="w-64 md:w-72"
               />
 
-              <TextInputInModal
+              <TextInput
                 name="phone"
                 maxLength={10}
                 type="tel"
@@ -105,6 +108,7 @@ const AddPersonnel = () => {
                 touched={formik.touched.phone}
                 onBlur={formik.handleBlur}
                 id="add-personnel-phone-input"
+                className="w-64 md:w-72"
               />
 
               <div className="flex gap-6 justify-center mt-4">
