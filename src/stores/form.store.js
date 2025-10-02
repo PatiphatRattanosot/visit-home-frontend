@@ -32,61 +32,89 @@ export const useStudentFormStore = create(
           year_id: yearId,
         };
 
+        console.log("Submitting data:", reqData);
+        console.log("Image file:", image);
+
+        // Submit yearly data first
         const res = await StudentService.yearlyData(reqData);
+        console.log("Yearly data response:", res);
+
+        if (res.status !== 200) {
+          throw new Error("Failed to update yearly data");
+        }
+
+        // Update user info including phone
+        const updateUserData = {
+          first_name: userInfo?.first_name,
+          last_name: userInfo?.last_name,
+          prefix: userInfo?.prefix,
+          user_id: userInfo?.user_id,
+          class_id: userInfo?.class_id,
+          phone: data?.phone || "", // Ensure phone is included
+        };
+
+        console.log("Updating user with:", updateUserData);
         const resUpdateUser = await StudentService.updateStudent(
           userInfo?._id,
-          {
-            first_name: userInfo?.first_name,
-            last_name: userInfo?.last_name,
-            prefix: userInfo?.prefix,
-            user_id: userInfo?.user_id,
-            class_id: userInfo?.class_id,
-            phone: reqData?.phone,
-          }
+          updateUserData
         );
+        console.log("Update user response:", resUpdateUser);
 
+        if (resUpdateUser.status !== 200) {
+          throw new Error("Failed to update user information");
+        }
+
+        // Handle image upload if provided
         let imageSuccess = true;
-        if (image && typeof image !== "string") {
+        if (image && image instanceof File) {
           const updateImageData = new FormData();
           updateImageData.append("file_image", image);
           updateImageData.append("student_id", userInfo?._id);
+
+          console.log("Uploading image:", image.name);
           try {
             const resUpdateImage = await StudentService.updateProfile(
               updateImageData
             );
+            console.log("Image upload response:", resUpdateImage);
             imageSuccess = resUpdateImage.status === 200;
           } catch (error) {
+            console.error("Image upload error:", error);
             imageSuccess = false;
-            console.log(error);
+            // Don't fail the entire process if image upload fails
+            await Swal.fire({
+              icon: "warning",
+              title: "คำเตือน",
+              text: "อัพโหลดรูปภาพไม่สำเร็จ แต่ข้อมูลอื่นๆ ถูกบันทึกเรียบร้อยแล้ว",
+              confirmButtonText: "ตกลง",
+            });
           }
         }
 
-        if (
-          res.status === 200 &&
-          resUpdateUser.status === 200 &&
-          imageSuccess
-        ) {
-          // Ensure SweetAlert is called after all async operations
-          await Swal.fire({
-            icon: "success",
-            title: "สำเร็จ",
-            text:
-              operation === "add"
-                ? "เพิ่มข้อมูลรายปีสำเร็จ!"
-                : "แก้ไขข้อมูลรายปีสำเร็จ!",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          get().clearFormData(yearId);
-        } else {
-          await Swal.fire({
-            icon: "error",
-            title: "ข้อผิดพลาด",
-            text: "ไม่สามารถเพิ่มข้อมูลประจำปีได้.",
-          });
-        }
+        // Success message
+        await Swal.fire({
+          icon: "success",
+          title: "สำเร็จ",
+          text:
+            operation === "add"
+              ? "เพิ่มข้อมูลรายปีสำเร็จ!"
+              : "แก้ไขข้อมูลรายปีสำเร็จ!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        get().clearFormData(yearId);
+        return true;
       } catch (error) {
-        console.log("Error submitting form:", error);
+        console.error("Error submitting form:", error);
+        await Swal.fire({
+          icon: "error",
+          title: "ข้อผิดพลาด",
+          text:
+            error.message || "ไม่สามารถบันทึกข้อมูลได้ กรุณาลองใหม่อีกครั้ง",
+          confirmButtonText: "ตกลง",
+        });
+        return false;
       }
     },
   }))

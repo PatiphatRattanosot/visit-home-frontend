@@ -1,5 +1,6 @@
 import React from "react";
 import { useFormik } from "formik";
+import Swal from "sweetalert2";
 import Personal from "./Personal";
 import Relation from "./Relation";
 import Family from "./Family";
@@ -29,11 +30,16 @@ const Index = () => {
     "image/webp",
   ];
 
-  const handleSetImage = (e) => {
+  const handleSetImage = async (e) => {
     const file = e.target.files[0];
     if (file) {
       if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
-        alert("กรุณาเลือกไฟล์รูปภาพเท่านั้น (JPG, PNG, GIF, BMP, WEBP)");
+        await Swal.fire({
+          icon: "error",
+          title: "ไฟล์ไม่ถูกต้อง",
+          text: "กรุณาเลือกไฟล์รูปภาพเท่านั้น (JPG, PNG, GIF, BMP, WEBP)",
+          confirmButtonText: "ตกลง",
+        });
         e.target.value = ""; // reset input
         setImage(null);
         return;
