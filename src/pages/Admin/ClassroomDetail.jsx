@@ -11,6 +11,7 @@ import FilterDropdown from "../../components/FilterDropdown";
 import Pagination from "../../components/Pagination";
 import SearchPersonnel from "../../components/SearchPersonnel";
 import ImportStudentBtn from "../../components/ImportStudentBtn";
+import { sortStudentOptions, switchSortStudent } from "../../utils/sortDataStudentTable";
 
 const ClassroomDetail = () => {
   const { classroomId } = useParams();
@@ -55,32 +56,7 @@ const ClassroomDetail = () => {
     }
 
     let sorted = [...filtered];
-    switch (selectedOption) {
-      case "SortToMost":
-        sorted.sort((a, b) => Number(a.user_id) - Number(b.user_id));
-        break;
-      case "MostToSort":
-        sorted.sort((a, b) => Number(b.user_id) - Number(a.user_id));
-        break;
-      case "AlphaSortToMost":
-        sorted.sort((a, b) =>
-          (a.first_name + a.last_name).localeCompare(
-            b.first_name + b.last_name,
-            "th"
-          )
-        );
-        break;
-      case "AlphaMostToSort":
-        sorted.sort((a, b) =>
-          (b.first_name + b.last_name).localeCompare(
-            a.first_name + a.last_name,
-            "th"
-          )
-        );
-        break;
-      default:
-        break;
-    }
+    switchSortStudent(selectedOption, sorted);
     setFilteredStudents(sorted);
     setCurrentPage(1); // รีเซ็ตไปที่หน้าแรกเมื่อมีการเปลี่ยนแปลงการค้นหาหรือการกรอง
   }, [searchKeyword, classroom, selectedOption]);
@@ -157,12 +133,7 @@ const ClassroomDetail = () => {
         {/* ตัวเลือกการเรียง */}
         <FilterDropdown
           setCurrentPage={setCurrentPage}
-          options={[
-            { value: "SortToMost", label: "เรียงเลข น้อย → มาก" },
-            { value: "MostToSort", label: "เรียงเลข มาก → น้อย" },
-            { value: "AlphaSortToMost", label: "ชื่อ ก → ฮ" },
-            { value: "AlphaMostToSort", label: "ชื่อ ฮ → ก" },
-          ]}
+          options={sortStudentOptions}
           selectedOption={selectedOption}
           setSelectedOption={setSelectedOption}
         />

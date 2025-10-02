@@ -11,6 +11,7 @@ import useYearSelectStore from "../../stores/year_select.store";
 import YearSelector from "../../components/YearSelector";
 import Appointment from "../../components/teacher/Appointment";
 import { useVisitInfoStore } from "../../stores/visit.store";
+import { switchSortStudent, sortStudentOptions } from "../../utils/sortDataStudentTable";
 
 const StudentList = () => {
   const { userInfo } = useAuthStore();
@@ -56,32 +57,7 @@ const StudentList = () => {
     }
 
     let sorted = [...list];
-    switch (selectedOption) {
-      case "SortToMost":
-        sorted.sort((a, b) => Number(a.user_id) - Number(b.user_id));
-        break;
-      case "MostToSort":
-        sorted.sort((a, b) => Number(b.user_id) - Number(a.user_id));
-        break;
-      case "AlphaSortToMost":
-        sorted.sort((a, b) =>
-          (a.first_name + a.last_name).localeCompare(
-            b.first_name + b.last_name,
-            "th"
-          )
-        );
-        break;
-      case "AlphaMostToSort":
-        sorted.sort((a, b) =>
-          (b.first_name + b.last_name).localeCompare(
-            a.first_name + a.last_name,
-            "th"
-          )
-        );
-        break;
-      default:
-        break;
-    }
+   switchSortStudent(selectedOption, sorted);
 
     setFilteredStudents(sorted);
     setCurrentPage(1);
@@ -206,12 +182,7 @@ const StudentList = () => {
           setCurrentPage={setCurrentPage}
         />
         <FilterDropdown
-          options={[
-            { value: "SortToMost", label: "เรียงเลข น้อย → มาก" },
-            { value: "MostToSort", label: "เรียงเลข มาก → น้อย" },
-            { value: "AlphaSortToMost", label: "ชื่อ ก → ฮ" },
-            { value: "AlphaMostToSort", label: "ชื่อ ฮ → ก" },
-          ]}
+          options={sortStudentOptions}
           selectedOption={selectedOption}
           setSelectedOption={setSelectedOption}
           className="select select-bordered w-42"
@@ -269,7 +240,13 @@ const StudentList = () => {
                     <VisitStatusBadge value={student?.isCompleted} />
                   </td>
                   <td>
-                    <span className="badge badge-info text-white w-32">
+                    <span className={`badge ${
+                        studentVisitData[student._id]
+                          ? "badge-success"
+                          : studentSchedules[student._id]
+                          ? "badge-warning"
+                          : "badge-error"
+                      } text-white w-32`}>
                       {studentVisitData[student._id]
                         ? "เยี่ยมบ้านแล้ว"
                         : studentSchedules[student._id]
