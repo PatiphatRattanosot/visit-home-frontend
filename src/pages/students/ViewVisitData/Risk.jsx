@@ -4,7 +4,7 @@ import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import YearSelector from "../../../components/YearSelector";
 import useYearSelectStore from "../../../stores/year_select.store";
 
-const Risk = ({ page, setPage, riskInfo, personalInfo, isCompleted }) => {
+const Risk = ({ page, setPage, riskInfo, personalInfo }) => {
   const breadcrumbsOptions = [
     { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
     { label: "ความเสี่ยง" },

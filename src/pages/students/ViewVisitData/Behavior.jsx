@@ -4,30 +4,9 @@ import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import YearSelector from "../../../components/YearSelector";
 import useYearSelectStore from "../../../stores/year_select.store";
 
-const Behavior = ({
-  page,
-  setPage,
-  behaviorInfo,
-  personalInfo,
-  isCompleted,
-}) => {
-  const breadcrumbsOptions = [
-    { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
-    { label: "พฤติกรรม" },
-  ];
-
-  const { selectedYear } = useYearSelectStore();
-
-  // ฟังก์ชันสำหรับ mapping
-  const mapValuesToLabels = (values, options) => {
-    if (!values?.length) return ["-"];
-    return values.map((val) => {
-      const found = options.find((opt) => opt.value === val);
-      return found ? found.label : val; // ถ้าไม่เจอ ให้คืนค่าเดิม
-    });
-  };
-
-  const hobbies = [
+// Constants for behavior options
+const BEHAVIOR_OPTIONS = {
+  HOBBIES: [
     { value: "0", label: "อ่านหนังสือ" },
     { value: "1", label: "เล่นดนตรี" },
     { value: "2", label: "ดูทีวี/ ฟังเพลง" },
@@ -36,25 +15,22 @@ const Behavior = ({
     { value: "5", label: "ไปเที่ยวห้าง/ ดูหนัง" },
     { value: "6", label: "ไปหาเพื่อน/ แฟน" },
     { value: "7", label: "แว้น/ สก๊อย" },
-  ];
-
-  const drugs_behavior = [
+  ],
+  DRUGS: [
     { value: "0", label: "คบเพื่อนในกลุ่มที่ใช้สารเสพติด" },
     { value: "1", label: "อยู่ในสภาพแวดล้อมที่ใช้สารเสพติด" },
     { value: "2", label: "สมาชิกในครอบครัวข้องเกี่ยวกับยาเสพติด" },
     { value: "3", label: "ปัจจุบันเกี่ยวข้องกับสารเสพติด" },
     { value: "4", label: "เป็นผู้ติดบุหรี่ สุรา หรือการใช้สารเสพติดอื่นๆ" },
-  ];
-
-  const violence_behavior = [
+  ],
+  VIOLENCE: [
     { value: "0", label: "มีการทะเลาะวิวาท" },
     { value: "1", label: "ทะเลาะวิวาทเป็นประจำ" },
     { value: "2", label: "ก้าวร้าว เกเร" },
     { value: "3", label: "ทำร้ายร่างกายตนเอง" },
     { value: "4", label: "ทำร้ายร่างกายผู้อื่น" },
-  ];
-
-  const sexual_behavior = [
+  ],
+  SEXUAL: [
     {
       value: "0",
       label:
@@ -68,33 +44,23 @@ const Behavior = ({
     { value: "3", label: "อยู่ในกลุ่มขายบริการ" },
     { value: "4", label: "ขายบริการทางเพศ" },
     { value: "5", label: "ตั้งครรภ์ก่อนวัยอันควร" },
-  ];
-
-  const internet_access_options = [
-    {
-      value: "0",
-      label: "สามารถเข้าถึง Internet ได้จากที่บ้าน",
-    },
-    {
-      value: "1",
-      label: "ไม่สามารถเข้าถึง Internet ได้จากที่บ้าน",
-    },
-  ];
-
-  const tech_use_behav_options = [
+  ],
+  INTERNET_ACCESS: [
+    { value: "0", label: "สามารถเข้าถึง Internet ได้จากที่บ้าน" },
+    { value: "1", label: "ไม่สามารถเข้าถึง Internet ได้จากที่บ้าน" },
+  ],
+  TECH_USE: [
     { value: "0", label: "ใช้ Social media/game (ไม่เกินวันละ 3 ชั่วโมง)" },
     { value: "1", label: "ใช้ Social media/game (วันละ 3 ชั่วโมงขึ้นไป)" },
-  ];
-
-  const student_resp = [
+  ],
+  STUDENT_RESPONSIBILITY: [
     { value: "0", label: "ช่วยงานบ้าน" },
     { value: "1", label: "ช่วยคนดูแลคนเจ็บป่วย/พิการ" },
     { value: "2", label: "ช่วยงานในนาไร่" },
     { value: "3", label: "ช่วยค้าขายเล็กๆน้อยๆ" },
     { value: "4", label: "ทำงานพิเศษแถวบ้าน" },
-  ];
-
-  const gaming_behav = [
+  ],
+  GAMING: [
     { value: "0", label: "เล่นเกมเกินวันละ 1 ชั่วโมง" },
     { value: "1", label: "เล่นเกมเกินวันละ 2 ชั่วโมง" },
     { value: "2", label: "อยู่ในกลุ่มเพื่อนเล่นเกม" },
@@ -104,7 +70,25 @@ const Behavior = ({
     { value: "6", label: "ใช้จ่ายเงินผิดปกติ" },
     { value: "7", label: "ใช้เงินสิ้นเปลือง โกหก ลักขโมยเงินเพื่อเล่นเกม" },
     { value: "8", label: "ขาดจินตนาการและความคิดสร้างสรรค์" },
+  ],
+};
+
+// Utility function for mapping values to labels
+const mapValuesToLabels = (values, options) => {
+  if (!values?.length) return ["-"];
+  return values.map((val) => {
+    const found = options.find((opt) => opt.value === val);
+    return found ? found.label : val;
+  });
+};
+
+const Behavior = ({ page, setPage, behaviorInfo, personalInfo }) => {
+  const breadcrumbsOptions = [
+    { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
+    { label: "พฤติกรรม" },
   ];
+
+  const { selectedYear } = useYearSelectStore();
 
   return (
     <div className="flex items-center justify-center py-9">
@@ -164,19 +148,19 @@ const Behavior = ({
                 <p className="w-full p-2 rounded-md text-gray-900">
                   {mapValuesToLabels(
                     behaviorInfo?.student_resp,
-                    student_resp
+                    BEHAVIOR_OPTIONS.STUDENT_RESPONSIBILITY
                   ).join(", ")}
                 </p>
               </div>
 
-              {/* อื่น ๆ */}
-              {behaviorInfo.other_student_resp && (
+              {/* ความรับผิดชอบอื่น ๆ */}
+              {behaviorInfo?.other_student_resp && (
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     ความรับผิดชอบอื่น ๆ
                   </label>
                   <p className="w-full p-2 rounded-md text-gray-900">
-                    {behaviorInfo?.other_student_resp}
+                    {behaviorInfo.other_student_resp}
                   </p>
                 </div>
               )}
@@ -187,17 +171,21 @@ const Behavior = ({
                   งานอดิเรก
                 </label>
                 <p className="w-full p-2 rounded-md text-gray-900">
-                  {mapValuesToLabels(behaviorInfo?.hobbies, hobbies).join(", ")}
+                  {mapValuesToLabels(
+                    behaviorInfo?.hobbies,
+                    BEHAVIOR_OPTIONS.HOBBIES
+                  ).join(", ")}
                 </p>
               </div>
 
+              {/* งานอดิเรกอื่น ๆ */}
               {behaviorInfo?.other_hobbies && (
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     งานอดิเรกอื่น ๆ
                   </label>
                   <p className="w-full p-2 rounded-md text-gray-900">
-                    {behaviorInfo?.other_hobbies}
+                    {behaviorInfo.other_hobbies}
                   </p>
                 </div>
               )}
@@ -210,7 +198,7 @@ const Behavior = ({
                 <p className="w-full p-2 rounded-md text-gray-900">
                   {mapValuesToLabels(
                     behaviorInfo?.drugs_behav,
-                    drugs_behavior
+                    BEHAVIOR_OPTIONS.DRUGS
                   ).join(", ")}
                 </p>
               </div>
@@ -223,18 +211,19 @@ const Behavior = ({
                 <p className="w-full p-2 rounded-md text-gray-900">
                   {mapValuesToLabels(
                     behaviorInfo?.violent_behav,
-                    violence_behavior
+                    BEHAVIOR_OPTIONS.VIOLENCE
                   ).join(", ")}
                 </p>
               </div>
 
-              {behaviorInfo.other_violent_behav && (
+              {/* พฤติกรรมก้าวร้าวอื่น ๆ */}
+              {behaviorInfo?.other_violent_behav && (
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     พฤติกรรมก้าวร้าวอื่น ๆ
                   </label>
                   <p className="w-full p-2 rounded-md text-gray-900">
-                    {behaviorInfo?.other_violent_behav}
+                    {behaviorInfo.other_violent_behav}
                   </p>
                 </div>
               )}
@@ -247,7 +236,7 @@ const Behavior = ({
                 <p className="w-full p-2 rounded-md text-gray-900">
                   {mapValuesToLabels(
                     behaviorInfo?.sexual_behav,
-                    sexual_behavior
+                    BEHAVIOR_OPTIONS.SEXUAL
                   ).join(", ")}
                 </p>
               </div>
@@ -260,7 +249,7 @@ const Behavior = ({
                 <p className="w-full p-2 rounded-md text-gray-900">
                   {mapValuesToLabels(
                     [behaviorInfo?.computer_internet_access],
-                    internet_access_options
+                    BEHAVIOR_OPTIONS.INTERNET_ACCESS
                   ).join(", ")}
                 </p>
               </div>
@@ -273,7 +262,7 @@ const Behavior = ({
                 <p className="w-full p-2 rounded-md text-gray-900">
                   {mapValuesToLabels(
                     [behaviorInfo?.tech_use_behav],
-                    tech_use_behav_options
+                    BEHAVIOR_OPTIONS.TECH_USE
                   ).join(", ")}
                 </p>
               </div>
@@ -286,18 +275,19 @@ const Behavior = ({
                 <p className="w-full p-2 rounded-md text-gray-900">
                   {mapValuesToLabels(
                     behaviorInfo?.gaming_behav,
-                    gaming_behav
+                    BEHAVIOR_OPTIONS.GAMING
                   ).join(", ")}
                 </p>
               </div>
 
-              {behaviorInfo.other_gaming_behav && (
+              {/* พฤติกรรมการเล่นเกมอื่น ๆ */}
+              {behaviorInfo?.other_gaming_behav && (
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     พฤติกรรมการเล่นเกมอื่น ๆ
                   </label>
                   <p className="w-full p-2 rounded-md text-gray-900">
-                    {behaviorInfo?.other_gaming_behav}
+                    {behaviorInfo.other_gaming_behav}
                   </p>
                 </div>
               )}

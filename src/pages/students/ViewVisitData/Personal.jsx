@@ -7,14 +7,7 @@ import useYearSelectStore from "../../../stores/year_select.store";
 import { useAuthStore } from "../../../stores/auth.store";
 import ViewMap from "../../../components/students/ViewMap";
 
-const Personal = ({
-  page,
-  setPage,
-  personalInfo,
-  image,
-  phone,
-  isCompleted,
-}) => {
+const Personal = ({ page, setPage, personalInfo, image, phone }) => {
   const breadcrumbsOptions = [
     { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
     { label: "ข้อมูลส่วนตัว" },
