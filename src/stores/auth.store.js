@@ -25,9 +25,7 @@ export const useAuthStore = create(
         if (user) {
           set({ user, isLoading: false });
           try {
-            const res = await AuthServices.sign({
-              email: authEncode(user.email),
-            });
+            const res = await AuthServices.sign(authEncode(user.email));
             if (res.status === 200) {
               set({ userInfo: res.data?.user });
             } else {
@@ -65,9 +63,13 @@ export const useAuthStore = create(
           try {
             const result = await googleSignIn();
             if (result.user && result.user.email) {
-              const res = await AuthServices.sign({
-                email: authEncode(result.user.email),
-              });
+              console.log("Encoded Email:", authEncode(result.user.email));
+
+              const res = await AuthServices.sign(
+                authEncode(result.user.email)
+              );
+              console.log("Sign-in Response:", res);
+
               if (res.status === 200) {
                 swalOptions = {
                   title: "สำเร็จ!",

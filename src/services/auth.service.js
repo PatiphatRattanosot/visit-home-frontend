@@ -1,7 +1,7 @@
 import api from "./api";
 
-const sign = async (email) => {
-  return await api.post(`/auth/sign`, email);
+const sign = async (token) => {
+  return await api.post(`/auth/sign`, { access_token: token });
 };
 
 const signOut = async () => {
