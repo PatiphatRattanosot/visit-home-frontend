@@ -37,13 +37,62 @@ const ManageStudent = ({ student }) => {
         title: "ไม่สามารถเปิดแผนที่ได้",
         text: "นักเรียนไม่มีข้อมูลพิกัดที่อยู่",
       });
+      return;
     }
-    window.open(
-      `https://www.google.com/maps?q=${encodeURIComponent(
-        student.lat
-      )},${encodeURIComponent(student.lng)}`,
-      "_blank"
-    );
+
+    // Get user's current location and navigate to student's location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLat = position.coords.latitude;
+          const userLng = position.coords.longitude;
+
+          // Open Google Maps with directions from current location to student's location
+          const mapsUrl = `https://www.google.com/maps/dir/${encodeURIComponent(
+            userLat
+          )},${encodeURIComponent(userLng)}/${encodeURIComponent(
+            student.lat
+          )},${encodeURIComponent(student.lng)}`;
+          window.open(mapsUrl, "_blank");
+        },
+        (error) => {
+          console.error("Error getting current location:", error);
+          document.getElementById(`manage_student_${student._id}`).close();
+
+          // Fallback: Open map with just student's location if geolocation fails
+          Swal.fire({
+            icon: "warning",
+            title: "ไม่สามารถระบุตำแหน่งปัจจุบันได้",
+            text: "จะเปิดแผนที่ไปยังตำแหน่งนักเรียนเท่านั้น",
+            confirmButtonText: "ตกลง",
+          }).then(() => {
+            const fallbackUrl = `https://www.google.com/maps?q=${encodeURIComponent(
+              student.lat
+            )},${encodeURIComponent(student.lng)}`;
+            window.open(fallbackUrl, "_blank");
+          });
+        },
+        {
+          enableHighAccuracy: false,
+          timeout: 10000,
+          maximumAge: 300000, // 5 minutes cache
+        }
+      );
+    } else {
+      document.getElementById(`manage_student_${student._id}`).close();
+      // Fallback for browsers that don't support geolocation
+      Swal.fire({
+        icon: "info",
+        title: "เบราว์เซอร์ไม่รองรับการระบุตำแหน่ง",
+        text: "จะเปิดแผนที่ไปยังตำแหน่งนักเรียน",
+        confirmButtonText: "ตกลง",
+      }).then(() => {
+        const fallbackUrl = `https://www.google.com/maps?q=${encodeURIComponent(
+          student.lat
+        )},${encodeURIComponent(student.lng)}`;
+        window.open(fallbackUrl, "_blank");
+      });
+    }
   };
 
   return (
