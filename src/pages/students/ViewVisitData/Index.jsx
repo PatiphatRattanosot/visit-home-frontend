@@ -83,6 +83,7 @@ const Index = () => {
             page={page}
             setPage={setPage}
             relationshipInfo={relationshipInfo}
+            personalInfo={personalInfo}
             isCompleted={isCompleted}
           />
         )}
@@ -91,6 +92,7 @@ const Index = () => {
             page={page}
             setPage={setPage}
             familyInfo={familyInfo}
+            personalInfo={personalInfo}
             isCompleted={isCompleted}
           />
         )}
@@ -99,6 +101,7 @@ const Index = () => {
             page={page}
             setPage={setPage}
             behaviorInfo={behaviorInfo}
+            personalInfo={personalInfo}
             isCompleted={isCompleted}
           />
         )}
@@ -107,6 +110,7 @@ const Index = () => {
             page={page}
             setPage={setPage}
             riskInfo={riskInfo}
+            personalInfo={personalInfo}
             isCompleted={isCompleted}
           />
         )}
@@ -115,6 +119,7 @@ const Index = () => {
             page={page}
             setPage={setPage}
             otherInfo={otherInfo}
+            personalInfo={personalInfo}
             isCompleted={isCompleted}
           />
         )}

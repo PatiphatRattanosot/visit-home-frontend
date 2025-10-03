@@ -43,7 +43,7 @@ const Personal = ({
           </div>
 
           <div className="mt-2 flex justify-center md:justify-end">
-            {isCompleted === "Completed" || isCompleted === "Edit" ? (
+            {personalInfo ? (
               <a
                 href={`/student/visiting-info/update/${selectedYear}`}
                 className="text-white btn btn-warning"

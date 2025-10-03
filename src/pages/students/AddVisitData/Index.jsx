@@ -160,7 +160,8 @@ const Index = () => {
 
           if (
             yearlyData?.isCompleted === "Completed" ||
-            yearlyData?.isCompleted === "Edit"
+            yearlyData?.isCompleted === "Edit" ||
+            yearlyData?.personal_info
           ) {
             navigate(`/student/visiting-info/update/${yearId}`);
           }
