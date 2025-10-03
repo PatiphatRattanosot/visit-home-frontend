@@ -16,13 +16,18 @@ import {
   sortStudentOptions,
 } from "../../utils/sortDataStudentTable";
 
+
+
 const StudentList = () => {
   const { userInfo } = useAuthStore();
   const { classroom, getClassroomByTeacherId } = useClassroomStore(); // classroom = array ของห้อง
-  const { selectedYear, setSelectedYear } = useYearSelectStore();
+  const { selectedYear, setSelectedYear, years } = useYearSelectStore();
   const { fetchSchedule } = useScheduleStore();
   const { getVisitInfoByStudentId } = useVisitInfoStore();
   const [studentSchedules, setStudentSchedules] = useState([]);
+  const [currentYearData, setCurrentYearData] = useState(null);
+
+  const [scheduleLength, setScheduleLength] = useState(null);
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredStudents, setFilteredStudents] = useState([]);
@@ -30,7 +35,23 @@ const StudentList = () => {
   const [studentVisitData, setStudentVisitData] = useState([]);
   const itemsPerPage = 10;
 
-  console.log(studentVisitData);
+  // useEffect สำหรับเรียกข้อมูล sheduleLength มาโชว์์ที่หน้ารายชื่อนักเรียน 
+  useEffect(() => {
+    const fetchScheduleLengthShow = async () => {
+
+     
+    };
+    fetchScheduleLengthShow();
+  }, []);
+
+  // Find current year data when selectedYear or years change
+  useEffect(() => {
+    if (selectedYear && years.length > 0) {
+      const yearData = years.find(year => year._id === selectedYear);
+      setCurrentYearData(yearData || null);
+    }
+  }, [selectedYear, years]);
+
 
   useEffect(() => {
     getClassroomByTeacherId(String(userInfo._id), String(selectedYear));
@@ -194,6 +215,26 @@ const StudentList = () => {
           selectedYear={selectedYear}
           setSelectedYear={setSelectedYear}
         />
+        {/* โชว์ข้อมูลช่วงเวลาวันนัดเยี่ยมบ้าน */}
+           <div>
+  <span className={`badge text-lg text-white badge-lg ${
+    currentYearData?.start_schedule_date && currentYearData?.end_schedule_date
+      ? "badge-info"  // สีฟ้าเมื่อมีช่วงเวลา
+      : "badge-error" // สีแดงเมื่อไม่มีช่วงเวลา
+  }`}>
+    {currentYearData?.start_schedule_date && currentYearData?.end_schedule_date
+      ? `ช่วงเวลานัดเยี่ยมบ้าน: ${new Date(currentYearData.start_schedule_date).toLocaleDateString("th-TH", {
+          day: "numeric",
+          month: "long", 
+          year: "numeric",
+        })} - ${new Date(currentYearData.end_schedule_date).toLocaleDateString("th-TH", {
+          day: "numeric",
+          month: "long",
+          year: "numeric", 
+        })}`
+      : "ยังไม่กำหนดช่วงเวลานัดเยี่ยมบ้าน"}
+  </span>
+</div>
       </div>
 
       <div className="rounded-xl border border-base-300 overflow-hidden">
@@ -266,20 +307,24 @@ const StudentList = () => {
                     </span>
                   </td>
                   <td>
-                    <button
-                      onClick={() =>
-                        document
-                          .getElementById(
-                            `add_appointment_schedule_${student._id}`
-                          )
-                          .showModal()
-                      }
-                      className="btn-blue btn-sm hover:btn-blue/80"
-                      id={`add-appointment-button_${index}`}
-                      data-testid={`add-appointment-button_${index}`}
-                    >
-                      นัดวันเยี่ยมบ้าน
-                    </button>
+                    {currentYearData?.start_schedule_date && currentYearData?.end_schedule_date ? (
+                      <button
+                        onClick={() =>
+                          document
+                            .getElementById(
+                              `add_appointment_schedule_${student._id}`
+                            )
+                            .showModal()
+                        }
+                        className="btn-blue btn-sm hover:btn-blue/80"
+                        id={`add-appointment-button_${index}`}
+                        data-testid={`add-appointment-button_${index}`}
+                      >
+                        นัดวันเยี่ยมบ้าน
+                      </button>
+                    ) : (
+                      <span className="text-gray-400 text-sm">ยังไม่กำหนดช่วงเวลา</span>
+                    )}
                   </td>
                   <td>
                     <ManageStudent
@@ -292,6 +337,7 @@ const StudentList = () => {
                     student={student}
                     id={`add_appointment_schedule_${student._id}`}
                     onScheduleUpdate={refreshSchedules}
+                    currentYearData={currentYearData}
                   />
                 </tr>
               ))}
@@ -299,7 +345,7 @@ const StudentList = () => {
               {currentItems.length === 0 && (
                 <tr>
                   <td
-                    colSpan={4}
+                    colSpan={6}
                     className="text-center text-base text-gray-500 py-6"
                   >
                     ไม่พบข้อมูลนักเรียน
