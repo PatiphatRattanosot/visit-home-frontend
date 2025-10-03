@@ -129,11 +129,10 @@ const Visualization = () => {
     labels: visitDataStatus?.map((item) => `ปี ${item.year}`) || [],
     datasets: [
       {
-        label: "นักเรียนที่กรอกข้อมูลแล้ว",
+        label: "จำนวนการเยี่ยมบ้าน",
         data: visitDataStatus?.map((item) => item.status_total) || [],
-        backgroundColor: "rgba(34, 197, 94, 0.8)",
-        borderColor: "rgba(34, 197, 94, 1)",
-        borderWidth: 2,
+        backgroundColor: "#36a2eb",
+        borderWidth: 0,
       },
     ],
   };
@@ -147,9 +146,8 @@ const Visualization = () => {
       {
         label: "ประเมิน SDQ แล้ว",
         data: sdqDataStatus?.map((item) => item.status_total) || [],
-        backgroundColor: "rgba(59, 130, 246, 0.8)",
-        borderColor: "rgba(59, 130, 246, 1)",
-        borderWidth: 2,
+        backgroundColor: "#4bc0c0",
+        borderWidth: 0,
       },
     ],
   };
@@ -159,13 +157,12 @@ const Visualization = () => {
     visitDataStatus?.reduce((sum, item) => sum + item.status_total, 0) || 0;
 
   const visitPieChartData = {
-    labels: ["นักเรียนที่กรอกข้อมูลแล้ว"],
+    labels: ["จำนวนการเยี่ยมบ้าน"],
     datasets: [
       {
         data: [totalCompleted],
-        backgroundColor: ["rgba(34, 197, 94, 0.8)"],
-        borderColor: ["rgba(34, 197, 94, 1)"],
-        borderWidth: 2,
+        backgroundColor: ["#36a2eb"],
+        borderWidth: 0,
       },
     ],
   };
@@ -179,9 +176,8 @@ const Visualization = () => {
     datasets: [
       {
         data: [totalAssessed],
-        backgroundColor: ["rgba(59, 130, 246, 0.8)"],
-        borderColor: ["rgba(59, 130, 246, 1)"],
-        borderWidth: 2,
+        backgroundColor: ["#4bc0c0"],
+        borderWidth: 0,
       },
     ],
   };
@@ -193,9 +189,9 @@ const Visualization = () => {
       {
         label: "จำนวนนักเรียนทั้งหมด",
         data: visitData?.map((item) => item.total_students) || [],
-        borderColor: "rgba(168, 85, 247, 1)",
-        backgroundColor: "rgba(168, 85, 247, 0.1)",
-        borderWidth: 3,
+        borderColor: "#ffce56",
+        backgroundColor: "rgba(255, 206, 134, 0.1)",
+        borderWidth: 0,
         fill: true,
         tension: 0.4,
       },
@@ -212,9 +208,8 @@ const Visualization = () => {
           visitData?.map(
             (item) => item.family_relation_status?.together || 0
           ) || [],
-        backgroundColor: "rgba(34, 197, 94, 0.8)",
-        borderColor: "rgba(34, 197, 94, 1)",
-        borderWidth: 2,
+        backgroundColor: "#36a2eb",
+        borderWidth: 0,
       },
       {
         label: "หย่าร้าง",
@@ -222,9 +217,8 @@ const Visualization = () => {
           visitData?.map(
             (item) => item.family_relation_status?.divorced || 0
           ) || [],
-        backgroundColor: "rgba(239, 68, 68, 0.8)",
-        borderColor: "rgba(239, 68, 68, 1)",
-        borderWidth: 2,
+        backgroundColor: "#4bc0c0",
+        borderWidth: 0,
       },
       {
         label: "แยกกันอยู่",
@@ -232,18 +226,16 @@ const Visualization = () => {
           visitData?.map(
             (item) => item.family_relation_status?.separated || 0
           ) || [],
-        backgroundColor: "rgba(249, 115, 22, 0.8)",
-        borderColor: "rgba(249, 115, 22, 1)",
-        borderWidth: 2,
+        backgroundColor: "#ffce56",
+        borderWidth: 0,
       },
       {
         label: "อื่นๆ",
         data:
           visitData?.map((item) => item.family_relation_status?.other || 0) ||
           [],
-        backgroundColor: "rgba(156, 163, 175, 0.8)",
-        borderColor: "rgba(156, 163, 175, 1)",
-        borderWidth: 2,
+        backgroundColor: "#4bc0c0",
+        borderWidth: 0,
       },
     ],
   };
@@ -257,9 +249,8 @@ const Visualization = () => {
         data:
           visitData?.map((item) => item.household_income?.below_3000 || 0) ||
           [],
-        backgroundColor: "rgba(239, 68, 68, 0.8)",
-        borderColor: "rgba(239, 68, 68, 1)",
-        borderWidth: 2,
+        backgroundColor: "#ff6384",
+        borderWidth: 0,
       },
       {
         label: "3,000-5,000 บาท",
@@ -267,9 +258,8 @@ const Visualization = () => {
           visitData?.map(
             (item) => item.household_income?.income_3000_5000 || 0
           ) || [],
-        backgroundColor: "rgba(249, 115, 22, 0.8)",
-        borderColor: "rgba(249, 115, 22, 1)",
-        borderWidth: 2,
+        backgroundColor: "#36a2eb",
+        borderWidth: 0,
       },
       {
         label: "5,000-7,000 บาท",
@@ -277,9 +267,8 @@ const Visualization = () => {
           visitData?.map(
             (item) => item.household_income?.income_5000_7000 || 0
           ) || [],
-        backgroundColor: "rgba(234, 179, 8, 0.8)",
-        borderColor: "rgba(234, 179, 8, 1)",
-        borderWidth: 2,
+        backgroundColor: "#ffce56",
+        borderWidth: 0,
       },
       {
         label: "7,000-9,000 บาท",
@@ -287,18 +276,16 @@ const Visualization = () => {
           visitData?.map(
             (item) => item.household_income?.income_7000_9000 || 0
           ) || [],
-        backgroundColor: "rgba(34, 197, 94, 0.8)",
-        borderColor: "rgba(34, 197, 94, 1)",
-        borderWidth: 2,
+        backgroundColor: "#4bc0c0",
+        borderWidth: 0,
       },
       {
         label: "มากกว่า 9,000 บาท",
         data:
           visitData?.map((item) => item.household_income?.above_9000 || 0) ||
           [],
-        backgroundColor: "rgba(59, 130, 246, 0.8)",
-        borderColor: "rgba(59, 130, 246, 1)",
-        borderWidth: 2,
+        backgroundColor: "#ff9f40",
+        borderWidth: 0,
       },
     ],
   };
@@ -311,9 +298,8 @@ const Visualization = () => {
         label: "ต่ำกว่า 40 บาท",
         data:
           visitData?.map((item) => item.daily_allowance?.below_40 || 0) || [],
-        backgroundColor: "rgba(239, 68, 68, 0.8)",
-        borderColor: "rgba(239, 68, 68, 1)",
-        borderWidth: 2,
+        backgroundColor: "#ff6384",
+        borderWidth: 0,
       },
       {
         label: "40-60 บาท",
@@ -321,9 +307,8 @@ const Visualization = () => {
           visitData?.map(
             (item) => item.daily_allowance?.allowance_40_60 || 0
           ) || [],
-        backgroundColor: "rgba(249, 115, 22, 0.8)",
-        borderColor: "rgba(249, 115, 22, 1)",
-        borderWidth: 2,
+        backgroundColor: "#36a2eb",
+        borderWidth: 0,
       },
       {
         label: "60-80 บาท",
@@ -331,9 +316,8 @@ const Visualization = () => {
           visitData?.map(
             (item) => item.daily_allowance?.allowance_60_80 || 0
           ) || [],
-        backgroundColor: "rgba(234, 179, 8, 0.8)",
-        borderColor: "rgba(234, 179, 8, 1)",
-        borderWidth: 2,
+        backgroundColor: "#ffce56",
+        borderWidth: 0,
       },
       {
         label: "80-100 บาท",
@@ -341,17 +325,15 @@ const Visualization = () => {
           visitData?.map(
             (item) => item.daily_allowance?.allowance_80_100 || 0
           ) || [],
-        backgroundColor: "rgba(34, 197, 94, 0.8)",
-        borderColor: "rgba(34, 197, 94, 1)",
-        borderWidth: 2,
+        backgroundColor: "#4bc0c0",
+        borderWidth: 0,
       },
       {
         label: "มากกว่า 100 บาท",
         data:
           visitData?.map((item) => item.daily_allowance?.above_100 || 0) || [],
-        backgroundColor: "rgba(59, 130, 246, 0.8)",
-        borderColor: "rgba(59, 130, 246, 1)",
-        borderWidth: 2,
+        backgroundColor: "#ff9f40",
+        borderWidth: 0,
       },
     ],
   };
@@ -381,19 +363,8 @@ const Visualization = () => {
           familyRelationTotals.separated,
           familyRelationTotals.other,
         ],
-        backgroundColor: [
-          "rgba(34, 197, 94, 0.8)",
-          "rgba(239, 68, 68, 0.8)",
-          "rgba(249, 115, 22, 0.8)",
-          "rgba(156, 163, 175, 0.8)",
-        ],
-        borderColor: [
-          "rgba(34, 197, 94, 1)",
-          "rgba(239, 68, 68, 1)",
-          "rgba(249, 115, 22, 1)",
-          "rgba(156, 163, 175, 1)",
-        ],
-        borderWidth: 2,
+        backgroundColor: ["#36a2eb", "#4bc0c0", "#ffce56", "#ff6384"],
+        borderWidth: 0,
       },
     ],
   };
@@ -437,20 +408,13 @@ const Visualization = () => {
           incomeTotals.above_9000,
         ],
         backgroundColor: [
-          "rgba(239, 68, 68, 0.8)",
-          "rgba(249, 115, 22, 0.8)",
-          "rgba(234, 179, 8, 0.8)",
-          "rgba(34, 197, 94, 0.8)",
-          "rgba(59, 130, 246, 0.8)",
+          "#ff6384",
+          "#36a2eb",
+          "#ffce56",
+          "#4bc0c0",
+          "#ff9f40",
         ],
-        borderColor: [
-          "rgba(239, 68, 68, 1)",
-          "rgba(249, 115, 22, 1)",
-          "rgba(234, 179, 8, 1)",
-          "rgba(34, 197, 94, 1)",
-          "rgba(59, 130, 246, 1)",
-        ],
-        borderWidth: 2,
+        borderWidth: 0,
       },
     ],
   };
@@ -574,12 +538,12 @@ const Visualization = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-sm font-medium text-gray-500">
-              นักเรียนที่กรอกข้อมูลแล้ว
+              จำนวนการเยี่ยมบ้าน
             </h3>
             <p className="text-3xl font-bold text-green-600">
               {totalCompleted}
             </p>
-            <p className="text-xs text-gray-400 mt-1">คน</p>
+            <p className="text-xs text-gray-400 mt-1">ครั้ง</p>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
             <h3 className="text-sm font-medium text-gray-500">
@@ -613,7 +577,7 @@ const Visualization = () => {
           {/* Visit Status Bar Chart */}
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              จำนวนนักเรียนที่กรอกข้อมูลแยกตามปี
+              จำนวนการเยี่ยมบ้านแยกตามปี
             </h2>
             <div className="h-80">
               {visitDataStatus && visitDataStatus.length > 0 ? (
@@ -672,7 +636,7 @@ const Visualization = () => {
           {/* Visit Status Pie Chart */}
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              สัดส่วนนักเรียนที่กรอกข้อมูล
+              สัดส่วนการเยี่ยมบ้าน
             </h2>
             <div className="h-80">
               {totalCompleted > 0 ? (
@@ -758,9 +722,8 @@ const Visualization = () => {
                         label: "จำนวนนักเรียน",
                         data:
                           visitData?.map((item) => item.total_students) || [],
-                        backgroundColor: "rgba(168, 85, 247, 0.8)",
-                        borderColor: "rgba(168, 85, 247, 1)",
-                        borderWidth: 2,
+                        backgroundColor: "#36a2eb",
+                        borderWidth: 0,
                       },
                     ],
                   }}
@@ -875,18 +838,16 @@ const Visualization = () => {
                         label: "จำนวนนักเรียนทั้งหมด",
                         data:
                           visitData?.map((item) => item.total_students) || [],
-                        backgroundColor: "rgba(168, 85, 247, 0.8)",
-                        borderColor: "rgba(168, 85, 247, 1)",
-                        borderWidth: 2,
+                        backgroundColor: "#36a2eb",
+                        borderWidth: 0,
                       },
                       {
-                        label: "กรอกข้อมูลแล้ว",
+                        label: "จำนวนการเยี่ยมบ้าน",
                         data:
                           visitDataStatus?.map((item) => item.status_total) ||
                           [],
-                        backgroundColor: "rgba(34, 197, 94, 0.8)",
-                        borderColor: "rgba(34, 197, 94, 1)",
-                        borderWidth: 2,
+                        backgroundColor: "#4bc0c0",
+                        borderWidth: 0,
                       },
                       {
                         label: "ประเมิน SDQ แล้ว",
@@ -907,9 +868,8 @@ const Visualization = () => {
                               return acc;
                             }, [])
                             .map((item) => item.total) || [],
-                        backgroundColor: "rgba(59, 130, 246, 0.8)",
-                        borderColor: "rgba(59, 130, 246, 1)",
-                        borderWidth: 2,
+                        backgroundColor: "#ffce56",
+                        borderWidth: 0,
                       },
                     ],
                   }}
