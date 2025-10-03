@@ -11,7 +11,10 @@ import useYearSelectStore from "../../stores/year_select.store";
 import YearSelector from "../../components/YearSelector";
 import Appointment from "../../components/teacher/Appointment";
 import { useVisitInfoStore } from "../../stores/visit.store";
-import { switchSortStudent, sortStudentOptions } from "../../utils/sortDataStudentTable";
+import {
+  switchSortStudent,
+  sortStudentOptions,
+} from "../../utils/sortDataStudentTable";
 
 const StudentList = () => {
   const { userInfo } = useAuthStore();
@@ -57,7 +60,7 @@ const StudentList = () => {
     }
 
     let sorted = [...list];
-   switchSortStudent(selectedOption, sorted);
+    switchSortStudent(selectedOption, sorted);
 
     setFilteredStudents(sorted);
     setCurrentPage(1);
@@ -162,7 +165,7 @@ const StudentList = () => {
         ห้อง{" "}
         {currentClass
           ? `${currentClass?.room}/${currentClass?.number}`
-          : "Loading..."}
+          : "คุณยังไม่มีชั้นเรียนในปีการศึกษานี้"}
       </h1>
 
       <div>
@@ -170,7 +173,7 @@ const StudentList = () => {
           คุณครูที่ปรึกษา:{" "}
           {userInfo
             ? `${userInfo.first_name} ${userInfo.last_name}`
-            : "Loading..."}
+            : "กำลังโหลด..."}
         </h2>
       </div>
 
@@ -240,13 +243,15 @@ const StudentList = () => {
                     <VisitStatusBadge value={student?.isCompleted} />
                   </td>
                   <td>
-                    <span className={`badge ${
+                    <span
+                      className={`badge ${
                         studentVisitData[student._id]
                           ? "badge-success"
                           : studentSchedules[student._id]
                           ? "badge-warning"
                           : "badge-error"
-                      } text-white w-32`}>
+                      } text-white w-32`}
+                    >
                       {studentVisitData[student._id]
                         ? "เยี่ยมบ้านแล้ว"
                         : studentSchedules[student._id]
