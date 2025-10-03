@@ -212,21 +212,25 @@ const StudentList = () => {
           setSelectedYear={setSelectedYear}
         />
         {/* โชว์ข้อมูลช่วงเวลาวันนัดเยี่ยมบ้าน */}
-            <div>
-              <span className="badge badge-info text-white badge-md">
-                {currentYearData?.start_schedule_date && currentYearData?.end_schedule_date
-                  ? `ช่วงเวลานัดเยี่ยมบ้าน: ${new Date(currentYearData.start_schedule_date).toLocaleDateString("th-TH", {
-                      day: "numeric",
-                      month: "long", 
-                      year: "numeric",
-                    })} - ${new Date(currentYearData.end_schedule_date).toLocaleDateString("th-TH", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric", 
-                    })}`
-                  : "ยังไม่กำหนดช่วงเวลานัดเยี่ยมบ้าน"}
-              </span>
-            </div>
+           <div>
+  <span className={`badge text-lg text-white badge-lg ${
+    currentYearData?.start_schedule_date && currentYearData?.end_schedule_date
+      ? "badge-info"  // สีฟ้าเมื่อมีช่วงเวลา
+      : "badge-error" // สีแดงเมื่อไม่มีช่วงเวลา
+  }`}>
+    {currentYearData?.start_schedule_date && currentYearData?.end_schedule_date
+      ? `ช่วงเวลานัดเยี่ยมบ้าน: ${new Date(currentYearData.start_schedule_date).toLocaleDateString("th-TH", {
+          day: "numeric",
+          month: "long", 
+          year: "numeric",
+        })} - ${new Date(currentYearData.end_schedule_date).toLocaleDateString("th-TH", {
+          day: "numeric",
+          month: "long",
+          year: "numeric", 
+        })}`
+      : "ยังไม่กำหนดช่วงเวลานัดเยี่ยมบ้าน"}
+  </span>
+</div>
       </div>
 
       <div className="rounded-xl border border-base-300 overflow-hidden">
@@ -335,7 +339,7 @@ const StudentList = () => {
               {currentItems.length === 0 && (
                 <tr>
                   <td
-                    colSpan={4}
+                    colSpan={6}
                     className="text-center text-base text-gray-500 py-6"
                   >
                     ไม่พบข้อมูลนักเรียน
