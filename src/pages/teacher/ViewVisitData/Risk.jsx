@@ -1,14 +1,10 @@
 import Stepper from "../../../components/Stepper";
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
-import { useParams } from "react-router";
 import YearSelector from "../../../components/YearSelector";
 
 const Risk = ({ page, setPage, riskInfo, studentInfo }) => {
-  const { studentId } = useParams();
-
   const breadcrumbsOptions = [
     {
-      link: `/teacher/student-data/${studentId}`,
       label: "ข้อมูลการเยี่ยมบ้าน",
     },
     { label: "ความเสี่ยง" },
