@@ -200,7 +200,7 @@ const AddVisitInfo = () => {
         <div className="flex justify-center md:justify-end ml-6 md:mx-50">
           <button
             type="button"
-            onClick={() => navigate("/teacher/students")}
+            onClick={() => navigate("/teacher")}
             className={visitInfo ? "hidden" : "btn-red mr-4"}
           >
             ยกเลิก
