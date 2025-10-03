@@ -6,8 +6,10 @@ import { useAuthStore } from "../../stores/auth.store";
 import useYearSelectStore from "../../stores/year_select.store";
 import DateField from "../DateField";
 import Textarea from "../Textarea";
+import toast from "react-hot-toast";
 
-const Appointment = ({ student, studentId, onScheduleUpdate }) => {
+
+const Appointment = ({ student, studentId, onScheduleUpdate, currentYearData }) => {
   const [hasSchedule, setHasSchedule] = useState(false);
   const { userInfo } = useAuthStore();
   const {
@@ -67,6 +69,31 @@ const Appointment = ({ student, studentId, onScheduleUpdate }) => {
     // enableReinitialize: true,
     validationSchema: AppointmentSchema,
     onSubmit: async (values) => {
+      // ตรวจสอบว่าวันที่ที่เลือกอยู่ในช่วงที่กำหนดหรือไม่
+      if (currentYearData?.start_schedule_date && currentYearData?.end_schedule_date) {
+        const selectedDate = new Date(values.appointment_date);
+        const startDate = new Date(currentYearData.start_schedule_date);
+        const endDate = new Date(currentYearData.end_schedule_date);
+        
+        // เซ็ตเวลาเป็น 00:00:00 เพื่อเปรียบเทียบแค่วันที่
+        selectedDate.setHours(0, 0, 0, 0);
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setHours(0, 0, 0, 0);
+        
+        if (selectedDate < startDate || selectedDate > endDate) {
+          toast.error(`กรุณาเลือกวันที่ในช่วง ${startDate.toLocaleDateString("th-TH", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })} - ${endDate.toLocaleDateString("th-TH", {
+            day: "numeric", 
+            month: "long",
+            year: "numeric",
+          })}`);
+          return;
+        }
+      }
+
       if (hasSchedule) {
         await updateSchedule({
           schedule_id: values.schedule_id || scheduleId,
