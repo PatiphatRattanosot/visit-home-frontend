@@ -26,6 +26,7 @@ import SDQFormTeacher from "./pages/teacher/sdq/Index";
 import SDQResult from "./pages/teacher/sdq/SDQResult";
 import PrivacyPage from "./pages/PrivacyPage";
 import Visualization from "./pages/teacher/Visualization";
+import PDFCanvas from "./components/PDF/PDFCanvas";
 
 function App() {
   const { user, userInfo, isLoading, signInSystem, signOutSystem } =
@@ -46,6 +47,15 @@ function App() {
           element={
             <>
               <PrivacyPage />
+              <Toaster />
+            </>
+          }
+        />
+        <Route
+          path="/pdf-viewer"
+          element={
+            <>
+              <PDFCanvas />
               <Toaster />
             </>
           }

@@ -1,0 +1,468 @@
+/* PDFCanvas CSS Styles */
+.pdf-canvas {
+  font-family: 'TH SarabunPSK', 'Arial', sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #000;
+  background-color: white;
+  max-width: 210mm; /* A4 width */
+  margin: 0 auto;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.form-page {
+  min-height: 297mm; /* A4 height */
+  page-break-after: always;
+  padding: 20mm;
+  border: 1px solid #000;
+  margin-bottom: 20px;
+}
+
+/* Header Styles */
+.form-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #000;
+  padding-bottom: 20px;
+}
+
+.logo-section {
+  flex: 0 0 80px;
+}
+
+.government-logo {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.title-section {
+  flex: 1;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.main-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 0 15px 0;
+  color: #000;
+}
+
+.subtitle-box {
+  border: 2px solid #000;
+  padding: 10px;
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+.subtitle-box p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.photo-section {
+  flex: 0 0 150px;
+  text-align: center;
+}
+
+.photo-placeholder {
+  width: 120px;
+  height: 140px;
+  border: 2px solid #000;
+  margin: 0 auto 10px auto;
+  background-color: #f9f9f9;
+}
+
+.number-boxes {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  margin: 5px 0;
+}
+
+.number-boxes.small {
+  gap: 1px;
+}
+
+.number-box {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #000;
+  display: inline-block;
+}
+
+.number-boxes.small .number-box {
+  width: 15px;
+  height: 15px;
+}
+
+/* Form Content Styles */
+.form-content {
+  line-height: 1.8;
+}
+
+.form-section {
+  margin-bottom: 20px;
+  padding: 10px 0;
+}
+
+.field-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.field-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.underline-input {
+  border: none;
+  border-bottom: 1px solid #000;
+  padding: 2px 5px;
+  font-size: 14px;
+  background: transparent;
+  min-width: 80px;
+}
+
+.underline-input.short {
+  min-width: 40px;
+  width: 60px;
+}
+
+.underline-input.long {
+  min-width: 200px;
+  width: 300px;
+}
+
+.underline-input:focus {
+  outline: none;
+  border-bottom: 2px solid #000;
+}
+
+/* Checkbox Groups */
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-left: 10px;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+}
+
+/* Table Styles for Family Composition */
+.family-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+}
+
+.family-table th,
+.family-table td {
+  border: 1px solid #000;
+  padding: 8px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.family-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+/* Income Section */
+.income-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .pdf-canvas {
+    max-width: 100%;
+    padding: 10px;
+  }
+  
+  .form-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .photo-section {
+    margin-top: 20px;
+  }
+  
+  .checkbox-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .field-group {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .underline-input.long {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .pdf-canvas {
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .form-page {
+    margin-bottom: 0;
+    page-break-after: always;
+  }
+  
+  .form-page:last-child {
+    page-break-after: avoid;
+  }
+}
+
+/* Additional Form Elements */
+.signature-section {
+  margin-top: 50px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.signature-box {
+  text-align: center;
+  width: 200px;
+}
+
+.signature-line {
+  border-bottom: 1px solid #000;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+/* Status Checkboxes */
+.status-group {
+  display: flex;
+  gap: 30px;
+  margin: 15px 0;
+}
+
+.status-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+/* Page 2+ Header */
+.form-header-simple {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #000;
+  padding-bottom: 10px;
+}
+
+.government-logo.small {
+  width: 40px;
+  height: 40px;
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Table Inputs */
+.table-input {
+  border: none;
+  width: 100%;
+  padding: 4px;
+  text-align: center;
+  font-size: 12px;
+  background: transparent;
+}
+
+.table-input:focus {
+  outline: 1px solid #007acc;
+  background-color: #f0f8ff;
+}
+
+/* Vertical Checkbox Groups */
+.checkbox-group.vertical {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* Income Section Grid */
+.income-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin: 20px 0;
+}
+
+.income-details {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+/* Section Headers */
+.form-section h3 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #000;
+  border-bottom: 1px solid #000;
+  padding-bottom: 5px;
+}
+
+/* Responsive adjustments for smaller screens */
+@media screen and (max-width: 768px) {
+  .income-section {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .form-header-simple {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .family-table {
+    font-size: 10px;
+  }
+  
+  .family-table th,
+  .family-table td {
+    padding: 4px;
+  }
+}
+
+/* Problem Categories */
+.problem-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.problem-category {
+  margin-bottom: 25px;
+}
+
+.problem-category h4 {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #000;
+}
+
+.checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-left: 15px;
+}
+
+.checkbox-list label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.checkbox-list input[type="checkbox"] {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* Drawing Boxes */
+.drawing-boxes {
+  display: flex;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.drawing-box {
+  flex: 1;
+  text-align: center;
+}
+
+.drawing-box.large {
+  width: 100%;
+}
+
+.drawing-area {
+  width: 100%;
+  height: 150px;
+  border: 2px solid #000;
+  margin-bottom: 10px;
+  background-color: #f9f9f9;
+}
+
+.drawing-area.large {
+  height: 200px;
+}
+
+.drawing-box p {
+  font-size: 12px;
+  margin: 0;
+  text-align: center;
+}
+
+/* Underline Spaces for Signatures */
+.underline-space {
+  border-bottom: 1px solid #000;
+  padding: 2px 5px;
+  display: inline-block;
+  min-width: 150px;
+}
+
+/* Responsive Design for Drawing Boxes */
+@media screen and (max-width: 768px) {
+  .drawing-boxes {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .checkbox-list label {
+    font-size: 12px;
+  }
+  
+  .problem-category h4 {
+    font-size: 13px;
+  }
+}
