@@ -25,7 +25,7 @@ const AddVisitInfo = () => {
     family_img: null,
   });
 
-    const handleChangePicture = (e) => {
+  const handleChangePicture = (e) => {
     const file = e.target.files[0];
     const field = e.target.id; // ใช้ id เพื่อรู้ว่าเป็น home_img หรือ family_img
     if (file) {
@@ -117,8 +117,8 @@ const AddVisitInfo = () => {
       <div>
         <BreadcrumbsLoop
           options={[
-            { label: "หน้าหลัก", link: "/" },
-            { label: "ข้อมูลการเยี่ยมบ้าน", link: "/admin/year/classroom" },
+            { label: "หน้าหลัก", link: "/teacher" },
+            { label: "ข้อมูลผลการเยี่ยมบ้าน" },
           ]}
         />
       </div>
