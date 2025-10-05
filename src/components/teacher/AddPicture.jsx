@@ -1,6 +1,6 @@
 import { MdUpload } from "react-icons/md";
 
-const AddPicture = ({ pictureFile, id, onChange }) => {
+const AddPicture = ({ pictureFile, id, onChange, showUploadButton }) => {
   const ACCEPTED_IMAGE_TYPES = [
     "image/jpeg",
     "image/png",
@@ -9,6 +9,7 @@ const AddPicture = ({ pictureFile, id, onChange }) => {
     "image/bmp",
     "image/webp",
   ];
+
   const handleChange = (e) => {
     const file = e.target.files[0];
     if (file && !ACCEPTED_IMAGE_TYPES.includes(file.type)) {
@@ -18,11 +19,16 @@ const AddPicture = ({ pictureFile, id, onChange }) => {
     }
     onChange(e);
   };
+
+  const openFileInput = () => {
+    document.getElementById(id)?.click();
+  };
+
   return (
     <>
       <div
         className="flex flex-col items-center justify-center w-78 h-60 border-2 border-gray-300 rounded-md bg-white hover:bg-gray-50 hover:border-gray-400 cursor-pointer transition border-dashed"
-        onClick={() => document.getElementById(id)?.click()}
+        onClick={openFileInput}
       >
         {pictureFile ? (
           <img
@@ -45,6 +51,12 @@ const AddPicture = ({ pictureFile, id, onChange }) => {
           </>
         )}
       </div>
+
+      {showUploadButton && (
+        <button type="button" className="btn-blue mt-2" onClick={openFileInput}>
+          อัปโหลดรูปใหม่
+        </button>
+      )}
 
       <input
         className="hidden"
