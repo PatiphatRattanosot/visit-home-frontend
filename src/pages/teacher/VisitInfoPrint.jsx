@@ -197,6 +197,8 @@ const TEXTAREA_CLASS = "min-h-[120px] rounded-xl border border-dashed border-ind
 const SIGNATURE_BLOCK_CLASS = "grid gap-10 md:grid-cols-2";
 const SIGNATURE_LABEL_CLASS = "text-sm font-semibold text-slate-900";
 const SIGNATURE_LINE_CLASS = "h-7 border-b border-dotted border-slate-600";
+const HEADER_PHOTO_CLASS =
+  "flex h-28 w-28 items-center justify-center overflow-hidden rounded-xl border border-slate-300 bg-slate-100 text-[11px] text-slate-500 print:h-32 print:w-32 print:bg-transparent";
 const PHOTO_FRAME_CLASS = "flex h-40 items-center justify-center overflow-hidden rounded-2xl border border-dashed border-slate-300 bg-slate-100 text-xs text-slate-500 print:bg-transparent md:h-48";
 const PAGE_BASE_CLASS =
   "relative flex w-full max-w-[210mm] flex-col gap-6 rounded-2xl border border-slate-200 bg-white px-[22mm] py-[24mm] text-slate-900 shadow-[0_20px_45px_-20px_rgba(15,23,42,0.35)] print:w-full print:max-w-none print:rounded-none print:border-none print:px-[18mm] print:py-[20mm] print:shadow-none print:break-after-page last:print:break-after-auto";
@@ -378,14 +380,28 @@ const VisitInfoPrint = () => {
 
       <div className="mx-auto flex w-full flex-col items-center gap-10 print:mx-0 print:items-stretch print:gap-0">
         <section className={PAGE_BASE_CLASS}>
-          <div className="flex flex-col items-center gap-2 text-center">
-            <img src={CREST_SRC} alt="ตรากระทรวง" className="h-16 w-16 object-contain" />
-            <div className="text-xl font-bold text-slate-900">บันทึกการเยี่ยมบ้าน</div>
-            <div className="text-sm text-slate-600">
-              โรงเรียนบางแพปฐมพิทยา สังกัดสำนักงานเขตพื้นที่การศึกษามัธยมศึกษาราชบุรี
+          <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:justify-between print:flex-row print:items-start print:justify-between">
+            <div className="flex flex-1 flex-col items-center gap-2 text-center">
+              <img src={CREST_SRC} alt="ตรากระทรวง" className="h-16 w-16 object-contain" />
+              <div className="text-xl font-bold text-slate-900">บันทึกการเยี่ยมบ้าน</div>
+              <div className="text-sm text-slate-600">
+                โรงเรียนบางแพปฐมพิทยา สังกัดสำนักงานเขตพื้นที่การศึกษามัธยมศึกษาราชบุรี
+              </div>
+              <div className="text-sm text-slate-600">
+                ภาคเรียนที่ 1 ปีการศึกษา {years.find((y) => y?._id === selectedYear)?.year ?? "-"}
+              </div>
             </div>
-            <div className="text-sm text-slate-600">
-              ภาคเรียนที่ 1 ปีการศึกษา {years.find((y) => y?._id === selectedYear)?.year ?? "-"}
+            <div className="flex flex-col items-center gap-2 sm:items-end print:items-end">
+              <div className={HEADER_PHOTO_CLASS}>
+                {student?.image_url ? (
+                  <img src={student.image_url} alt={studentFullName || "รูปนักเรียน"} className="h-full w-full object-cover" />
+                ) : (
+                  <span>รูปนักเรียน</span>
+                )}
+              </div>
+              <div className="text-xs font-medium text-slate-600">
+                {studentFullName || "ชื่อ-สกุลนักเรียน"}
+              </div>
             </div>
           </div>
 
