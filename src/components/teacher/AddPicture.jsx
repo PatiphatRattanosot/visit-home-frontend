@@ -1,6 +1,6 @@
 import { MdUpload } from "react-icons/md";
 
-const AddPicture = ({ pictureFile, id, onChange }) => {
+const AddPicture = ({ pictureFile, id, onChange, showUploadButton }) => {
   const ACCEPTED_IMAGE_TYPES = [
     "image/jpeg",
     "image/png",
@@ -9,6 +9,7 @@ const AddPicture = ({ pictureFile, id, onChange }) => {
     "image/bmp",
     "image/webp",
   ];
+
   const handleChange = (e) => {
     const file = e.target.files[0];
     if (file && !ACCEPTED_IMAGE_TYPES.includes(file.type)) {
@@ -24,7 +25,11 @@ const AddPicture = ({ pictureFile, id, onChange }) => {
   return (
     <div className="flex flex-col items-center gap-3">
       <div
-        className={`flex flex-col items-center justify-center w-78 h-60 border-2 border-gray-300 rounded-md bg-white transition border-dashed ${hasImage ? "" : "hover:bg-gray-50 hover:border-gray-400 cursor-pointer"}`}
+        className={`flex flex-col items-center justify-center w-78 h-60 border-2 border-gray-300 rounded-md bg-white transition border-dashed ${
+          hasImage
+            ? ""
+            : "hover:bg-gray-50 hover:border-gray-400 cursor-pointer"
+        }`}
         onClick={hasImage ? undefined : triggerFileDialog}
       >
         {hasImage ? (
@@ -53,6 +58,8 @@ const AddPicture = ({ pictureFile, id, onChange }) => {
           type="button"
           className="btn-blue"
           onClick={triggerFileDialog}
+          id="upload-image-button"
+          data-testid="upload-image-button"
         >
           เลือกรูปภาพใหม่
         </button>
