@@ -859,7 +859,7 @@ const VisitInfoPrint = () => {
             </div>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 print:grid-cols-2">
             <div className={PHOTO_FRAME_CLASS}>
               {visitInfo?.home_img ? (
                 <img
