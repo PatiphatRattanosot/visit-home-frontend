@@ -7,6 +7,7 @@ import StudentPicture from "../../../components/students/StudentPicture";
 import BreadcrumbsLoop from "../../../components/Breadcrumbs";
 import { useNavigate } from "react-router";
 import { validateCurrentPage } from "../../../utils/formNavigation";
+import Swal from "sweetalert2";
 
 const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
   const navigate = useNavigate();
@@ -67,6 +68,27 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
       formik.setFieldValue("parent_phone", "");
     }
   }, [checkParent, selectParent, formik.values]);
+
+  const handleNextPage = () => {
+    // Check if image is null or undefined
+    if (!image) {
+      Swal.fire({
+        icon: "warning",
+        title: "ไม่พบรูปภาพ",
+        text: "กรุณาเลือกรูปภาพนักเรียนก่อนดำเนินการต่อ",
+        confirmButtonText: "ตกลง",
+        confirmButtonColor: "#3085d6",
+      });
+      return;
+    }
+
+    // If image exists, proceed with form validation
+    validateCurrentPage({
+      formik,
+      fieldsToValidate: personalFields,
+      onSuccess: () => setPage(page + 1),
+    });
+  };
 
   return (
     <div className="flex items-center justify-center py-9">
@@ -390,13 +412,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
             <button
               type="button"
               className="btn btn-soft w-1/2"
-              onClick={() =>
-                validateCurrentPage({
-                  formik,
-                  fieldsToValidate: personalFields,
-                  onSuccess: () => setPage(page + 1),
-                })
-              }
+              onClick={handleNextPage}
             >
               ถัดไป {` (${page + 1})`}
             </button>
