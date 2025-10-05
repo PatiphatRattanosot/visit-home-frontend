@@ -98,7 +98,7 @@ const ManageStudent = ({ student }) => {
   return (
     <div>
       <dialog id={`manage_student_${student._id}`} className="modal">
-        <div className="modal-box max-w-4xl w-full max-h-screen overflow-y-auto">
+        <div className="modal-box max-w-5xl w-full max-h-screen overflow-y-auto">
           <form method="dialog">
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
               ✕
