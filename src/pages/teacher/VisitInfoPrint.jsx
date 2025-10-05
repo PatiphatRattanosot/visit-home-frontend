@@ -40,36 +40,36 @@ const toThaiNumber = (value) => {
 
 const getDailyGiverLabel = (code) => {
   const mapping = {
-    "0": "บิดา",
-    "1": "มารดา",
-    "2": "พี่ชาย",
-    "3": "พี่สาว",
-    "4": "ลุง",
-    "5": "ป้า",
-    "6": "น้า",
-    "7": "อา",
-    "8": "ปู่",
-    "9": "ย่า",
-    "10": "ตา",
-    "11": "ยาย",
+    0: "บิดา",
+    1: "มารดา",
+    2: "พี่ชาย",
+    3: "พี่สาว",
+    4: "ลุง",
+    5: "ป้า",
+    6: "น้า",
+    7: "อา",
+    8: "ปู่",
+    9: "ย่า",
+    10: "ตา",
+    11: "ยาย",
   };
   return mapping?.[code] ?? "-";
 };
 
 const getHouseTypeLabel = (code) => {
   const mapping = {
-    "0": "บ้านของตนเอง",
-    "1": "บ้านเช่า",
-    "2": "อาศัยอยู่กับผู้อื่น",
+    0: "บ้านของตนเอง",
+    1: "บ้านเช่า",
+    2: "อาศัยอยู่กับผู้อื่น",
   };
   return mapping?.[code] ?? "-";
 };
 
 const getHousingConditionLabel = (code) => {
   const mapping = {
-    "0": "สภาพบ้านปกติ",
-    "1": "ไม่มีห้องส้วมในที่อยู่อาศัยและบริเวณ",
-    "2": "สภาพบ้านชำรุดทรุดโทรมหรือทำจากวัสดุพื้นบ้าน",
+    0: "สภาพบ้านปกติ",
+    1: "ไม่มีห้องส้วมในที่อยู่อาศัยและบริเวณ",
+    2: "สภาพบ้านชำรุดทรุดโทรมหรือทำจากวัสดุพื้นบ้าน",
   };
   return mapping?.[code] ?? "-";
 };
@@ -219,31 +219,13 @@ const CheckBoxRangeGroup = ({ title, options, value }) => (
 
 const VisitInfoPrint = () => {
   const { studentId } = useParams();
-  const { selectedYear, years, fetchYears } = useYearSelectStore((state) => ({
-    selectedYear: state.selectedYear,
-    years: state.years,
-    fetchYears: state.fetchYears,
-  }));
+  const { selectedYear, years, fetchYears } = useYearSelectStore();
 
-  const { student, getStudentById, getYearlyData } = useStudentStore(
-    (state) => ({
-      student: state.student,
-      getStudentById: state.getStudentById,
-      getYearlyData: state.getYearlyData,
-    })
-  );
+  const { student, getStudentById, getYearlyData } = useStudentStore();
 
-  const { visitInfo, getVisitInfoByStudentId } = useVisitInfoStore(
-    (state) => ({
-      visitInfo: state.visitInfo,
-      getVisitInfoByStudentId: state.getVisitInfoByStudentId,
-    })
-  );
+  const { visitInfo, getVisitInfoByStudentId } = useVisitInfoStore();
 
-  const { schedule, fetchSchedule } = useScheduleStore((state) => ({
-    schedule: state.schedule,
-    fetchSchedule: state.fetchSchedule,
-  }));
+  const { schedule, fetchSchedule } = useScheduleStore();
 
   const [yearlyData, setYearlyData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -251,12 +233,12 @@ const VisitInfoPrint = () => {
 
   useEffect(() => {
     fetchYears();
-  }, [fetchYears]);
+  }, []);
 
   useEffect(() => {
     if (!studentId) return;
     getStudentById(studentId);
-  }, [studentId, getStudentById]);
+  }, [studentId]);
 
   useEffect(() => {
     if (!studentId || !selectedYear) return;
@@ -288,7 +270,7 @@ const VisitInfoPrint = () => {
     };
 
     load();
-  }, [studentId, selectedYear, getVisitInfoByStudentId, fetchSchedule, getYearlyData]);
+  }, [studentId, selectedYear]);
 
   useEffect(() => {
     if (!isLoading && !hasPrinted) {
@@ -353,10 +335,17 @@ const VisitInfoPrint = () => {
           ]}
         />
         <div className="print-toolbar-actions">
-          <button type="button" className="btn btn-outline" onClick={() => window.print()}>
+          <button
+            type="button"
+            className="btn btn-outline"
+            onClick={() => window.print()}
+          >
             พิมพ์อีกครั้ง
           </button>
-          <Link className="btn btn-soft" to={`/teacher/visit-info/overview/${studentId}`}>
+          <Link
+            className="btn btn-soft"
+            to={`/teacher/visit-info/overview/${studentId}`}
+          >
             กลับไปหน้าก่อนหน้า
           </Link>
         </div>
@@ -368,17 +357,26 @@ const VisitInfoPrint = () => {
             <img src={CREST_SRC} alt="ตรากระทรวง" className="print-logo" />
             <div className="print-title">บันทึกการเยี่ยมบ้าน</div>
             <div className="print-subtitle">
-              โรงเรียนบางแพปฐมพิทยา สังกัดสำนักงานเขตพื้นที่การศึกษามัธยมศึกษาราชบุรี
+              โรงเรียนบางแพปฐมพิทยา
+              สังกัดสำนักงานเขตพื้นที่การศึกษามัธยมศึกษาราชบุรี
             </div>
-            <div className="print-subtitle">ภาคเรียนที่ 1 ปีการศึกษา {years.find((y) => y?._id === selectedYear)?.year ?? "-"}</div>
+            <div className="print-subtitle">
+              ภาคเรียนที่ 1 ปีการศึกษา{" "}
+              {years.find((y) => y?._id === selectedYear)?.year ?? "-"}
+            </div>
           </div>
 
           <div className="print-instruction">
             <p>
-              คำชี้แจง : แบบบันทึกนี้สำหรับบันทึกการเยี่ยมบ้านของนักเรียนรายบุคคล เพื่อเป็นข้อมูลประกอบการพัฒนานักเรียนให้เต็มศักยภาพ
+              คำชี้แจง :
+              แบบบันทึกนี้สำหรับบันทึกการเยี่ยมบ้านของนักเรียนรายบุคคล
+              เพื่อเป็นข้อมูลประกอบการพัฒนานักเรียนให้เต็มศักยภาพ
             </p>
             <ul>
-              <li>การตอบแต่ละข้อหมายความ : ตอบด้วยการทำเครื่องหมาย ✓ ลงในช่องที่ตรงกับความเป็นจริง</li>
+              <li>
+                การตอบแต่ละข้อหมายความ : ตอบด้วยการทำเครื่องหมาย ✓
+                ลงในช่องที่ตรงกับความเป็นจริง
+              </li>
               <li>ให้ระบุข้อมูลตามความเป็นจริงเพื่อประโยชน์ของนักเรียน</li>
             </ul>
           </div>
@@ -386,19 +384,28 @@ const VisitInfoPrint = () => {
           <div className="print-info-grid">
             <div className="print-info-cell large">
               <span className="label">ชื่อ-สกุล นักเรียน</span>
-              <span className="value underline">{studentFullName || "........................"}</span>
+              <span className="value underline">
+                {studentFullName || "........................"}
+              </span>
             </div>
             <div className="print-info-cell small">
               <span className="label">เลขที่</span>
-              <span className="value underline">{student?.user_id ?? "........"}</span>
+              <span className="value underline">
+                {student?.user_id ?? "........"}
+              </span>
             </div>
             <div className="print-info-cell small">
               <span className="label">เบอร์ติดต่อ</span>
-              <span className="value underline">{student?.phone ?? "........"}</span>
+              <span className="value underline">
+                {student?.phone ?? "........"}
+              </span>
             </div>
             <div className="print-info-cell large">
               <span className="label">ที่อยู่</span>
-              <span className="value underline">{student?.address ?? "................................................"}</span>
+              <span className="value underline">
+                {student?.address ??
+                  "................................................"}
+              </span>
             </div>
             <div className="print-info-cell medium">
               <span className="label">สถานะข้อมูล</span>
@@ -425,10 +432,14 @@ const VisitInfoPrint = () => {
           />
 
           <div className="print-section">
-            <div className="print-section-title">ผู้สนับสนุนค่าใช้จ่ายรายวัน</div>
+            <div className="print-section-title">
+              ผู้สนับสนุนค่าใช้จ่ายรายวัน
+            </div>
             <div className="print-inline">
               <span>ได้รับจาก</span>
-              <span className="underline">{getDailyGiverLabel(familyInfo?.received_daily_from)}</span>
+              <span className="underline">
+                {getDailyGiverLabel(familyInfo?.received_daily_from)}
+              </span>
             </div>
           </div>
 
@@ -456,11 +467,15 @@ const VisitInfoPrint = () => {
           <div className="print-two-column">
             <div>
               <div className="print-section-title">ที่ดินเป็นของตนเอง</div>
-              <div className="underline">{toThaiNumber(familyInfo?.owned_land)} ไร่</div>
+              <div className="underline">
+                {toThaiNumber(familyInfo?.owned_land)} ไร่
+              </div>
             </div>
             <div>
               <div className="print-section-title">ที่ดินที่เช่า</div>
-              <div className="underline">{toThaiNumber(familyInfo?.rented_land)} ไร่</div>
+              <div className="underline">
+                {toThaiNumber(familyInfo?.rented_land)} ไร่
+              </div>
             </div>
           </div>
         </section>
@@ -488,11 +503,15 @@ const VisitInfoPrint = () => {
               </div>
               <div className="print-table-row">
                 <div className="print-table-cell header">เบอร์โทรศัพท์</div>
-                <div className="print-table-cell">{personalInfo?.parent_phone ?? "-"}</div>
+                <div className="print-table-cell">
+                  {personalInfo?.parent_phone ?? "-"}
+                </div>
               </div>
               <div className="print-table-row">
                 <div className="print-table-cell header">อาชีพ</div>
-                <div className="print-table-cell">{personalInfo?.parent_job ?? "-"}</div>
+                <div className="print-table-cell">
+                  {personalInfo?.parent_job ?? "-"}
+                </div>
               </div>
             </div>
           </div>
@@ -501,16 +520,22 @@ const VisitInfoPrint = () => {
             <div className="print-section-title">สถานะครัวเรือน</div>
             <div className="print-inline">
               <span>สถานะความสัมพันธ์ในครอบครัว:</span>
-              <span className="underline">{relationshipInfo?.family_relation_status ?? "-"}</span>
+              <span className="underline">
+                {relationshipInfo?.family_relation_status ?? "-"}
+              </span>
             </div>
             <div className="print-inline">
               <span>จำนวนสมาชิกครอบครัวรวมทั้งหมด:</span>
-              <span className="underline">{toThaiNumber(relationshipInfo?.family_member)}</span>
+              <span className="underline">
+                {toThaiNumber(relationshipInfo?.family_member)}
+              </span>
               <span>คน</span>
             </div>
             <div className="print-inline">
               <span>เวลาที่ใช้ร่วมกับครอบครัว:</span>
-              <span className="underline">{toThaiNumber(relationshipInfo?.family_time)}</span>
+              <span className="underline">
+                {toThaiNumber(relationshipInfo?.family_time)}
+              </span>
               <span>ชั่วโมง/วัน</span>
             </div>
           </div>
@@ -525,11 +550,15 @@ const VisitInfoPrint = () => {
             <div className="print-section-title">สถานะที่อยู่อาศัย</div>
             <div className="print-inline">
               <span>ประเภทบ้าน:</span>
-              <span className="underline">{getHouseTypeLabel(familyInfo?.housing_type)}</span>
+              <span className="underline">
+                {getHouseTypeLabel(familyInfo?.housing_type)}
+              </span>
             </div>
             <div className="print-inline">
               <span>สภาพบ้าน:</span>
-              <span className="underline">{getHousingConditionLabel(familyInfo?.housing_condition)}</span>
+              <span className="underline">
+                {getHousingConditionLabel(familyInfo?.housing_condition)}
+              </span>
             </div>
           </div>
 
@@ -553,7 +582,9 @@ const VisitInfoPrint = () => {
           </div>
 
           <div className="print-section">
-            <div className="print-section-title">พฤติกรรมและหน้าที่ในครอบครัว</div>
+            <div className="print-section-title">
+              พฤติกรรมและหน้าที่ในครอบครัว
+            </div>
             <div className="print-multiline">
               <span>งานที่รับผิดชอบ:</span>
               <span className="underline">
@@ -561,11 +592,11 @@ const VisitInfoPrint = () => {
                   ? behaviorInfo.student_resp
                       .map((value) => {
                         const mapping = {
-                          "0": "ช่วยงานบ้าน",
-                          "1": "ช่วยดูแลคนเจ็บป่วย/พิการ",
-                          "2": "ช่วยงานในนาไร่",
-                          "3": "ช่วยค้าขายเล็กๆน้อยๆ",
-                          "4": "ทำงานพิเศษแถวบ้าน",
+                          0: "ช่วยงานบ้าน",
+                          1: "ช่วยดูแลคนเจ็บป่วย/พิการ",
+                          2: "ช่วยงานในนาไร่",
+                          3: "ช่วยค้าขายเล็กๆน้อยๆ",
+                          4: "ทำงานพิเศษแถวบ้าน",
                         };
                         return mapping[value] ?? "";
                       })
@@ -585,14 +616,14 @@ const VisitInfoPrint = () => {
                   ? behaviorInfo.hobbies
                       .map((value) => {
                         const mapping = {
-                          "0": "อ่านหนังสือ",
-                          "1": "เล่นดนตรี",
-                          "2": "ดูทีวี/ฟังเพลง",
-                          "3": "เล่นเกม",
-                          "4": "ไปสวนสาธารณะ",
-                          "5": "ไปเที่ยวห้าง/ดูหนัง",
-                          "6": "ไปหาเพื่อน/แฟน",
-                          "7": "กิจกรรมแอดเวนเจอร์",
+                          0: "อ่านหนังสือ",
+                          1: "เล่นดนตรี",
+                          2: "ดูทีวี/ฟังเพลง",
+                          3: "เล่นเกม",
+                          4: "ไปสวนสาธารณะ",
+                          5: "ไปเที่ยวห้าง/ดูหนัง",
+                          6: "ไปหาเพื่อน/แฟน",
+                          7: "กิจกรรมแอดเวนเจอร์",
                         };
                         return mapping[value] ?? "";
                       })
@@ -632,13 +663,17 @@ const VisitInfoPrint = () => {
             <CheckBoxGroup
               title="วิธีการเดินทาง"
               options={TRANSPORT_OPTIONS}
-              selected={riskInfo?.school_transport ? [riskInfo.school_transport] : []}
+              selected={
+                riskInfo?.school_transport ? [riskInfo.school_transport] : []
+              }
             />
 
             <div className="print-inline">
               <span>เมื่ออยู่บ้านตามลำพัง:</span>
               <span className="underline">
-                {RISK_ALONE_OPTIONS.find((item) => item.value === riskInfo?.when_student_alone)?.label ?? "-"}
+                {RISK_ALONE_OPTIONS.find(
+                  (item) => item.value === riskInfo?.when_student_alone
+                )?.label ?? "-"}
               </span>
             </div>
           </div>
@@ -664,7 +699,9 @@ const VisitInfoPrint = () => {
             />
             <div className="print-inline">
               <span>ความห่วงใยของผู้ปกครอง:</span>
-              <span className="underline">{additionalInfo?.parent_concern ?? "-"}</span>
+              <span className="underline">
+                {additionalInfo?.parent_concern ?? "-"}
+              </span>
             </div>
           </div>
 
@@ -672,7 +709,9 @@ const VisitInfoPrint = () => {
             <div className="print-section-title">ข้อมูลการเยี่ยมบ้าน</div>
             <div className="print-inline">
               <span>กำหนดการเยี่ยมบ้าน:</span>
-              <span className="underline">{formatThaiDate(schedule?.appointment_date)}</span>
+              <span className="underline">
+                {formatThaiDate(schedule?.appointment_date)}
+              </span>
             </div>
             <div className="print-inline">
               <span>ครูเยี่ยมบ้าน:</span>
@@ -690,13 +729,18 @@ const VisitInfoPrint = () => {
             </div>
             <div className="print-inline">
               <span>หมายเหตุ:</span>
-              <span className="underline">{schedule?.comment ?? "................................................"}</span>
+              <span className="underline">
+                {schedule?.comment ??
+                  "................................................"}
+              </span>
             </div>
           </div>
 
           <div className="print-section">
             <div className="print-section-title">สรุปผลจากครูผู้เยี่ยมบ้าน</div>
-            <div className="print-textarea">{visitInfo?.comment ?? "ยังไม่มีบันทึกจากการเยี่ยมบ้าน"}</div>
+            <div className="print-textarea">
+              {visitInfo?.comment ?? "ยังไม่มีบันทึกจากการเยี่ยมบ้าน"}
+            </div>
           </div>
 
           <div className="print-signature-block">
@@ -730,7 +774,9 @@ const VisitInfoPrint = () => {
       </div>
 
       {isLoading && (
-        <div className="print-loading">กำลังประมวลผลข้อมูลสำหรับการพิมพ์...</div>
+        <div className="print-loading">
+          กำลังประมวลผลข้อมูลสำหรับการพิมพ์...
+        </div>
       )}
     </div>
   );
