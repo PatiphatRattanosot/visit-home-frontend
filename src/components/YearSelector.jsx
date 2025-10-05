@@ -7,13 +7,7 @@ const YearSelector = () => {
 
   useEffect(() => {
     fetchYears();
-  }, []);
-
-  useEffect(() => {
-    if (years.length > 0 && !selectedYear) {
-      setSelectedYear(years[0]._id);
-    }
-  }, [years, selectedYear, setSelectedYear]);
+  }, [fetchYears]);
 
   return (
     <select

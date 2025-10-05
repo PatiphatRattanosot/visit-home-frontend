@@ -17,7 +17,19 @@ const useYearSelectStore = create(
 
         if (res.status === 200) {
           const sorted = res.data.sort((a, b) => b.year - a.year);
-          set({ years: sorted });
+          const currentSelectedYear = get().selectedYear;
+          const hasCurrentYear = sorted.some(
+            (item) => item?._id === currentSelectedYear
+          );
+
+          const nextSelectedYear = hasCurrentYear
+            ? currentSelectedYear
+            : sorted[0]?._id ?? null;
+
+          set({
+            years: sorted,
+            selectedYear: nextSelectedYear,
+          });
         }
       } catch (error) {
         // console.log("error fetching years:", error);

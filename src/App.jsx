@@ -26,6 +26,8 @@ import SDQFormTeacher from "./pages/teacher/sdq/Index";
 import SDQResult from "./pages/teacher/sdq/SDQResult";
 import PrivacyPage from "./pages/PrivacyPage";
 import Visualization from "./pages/teacher/Visualization";
+import VisitInfoOverview from "./pages/teacher/VisitInfoOverview";
+import VisitInfoPrint from "./pages/teacher/VisitInfoPrint";
 
 function App() {
   const { user, userInfo, isLoading, signInSystem, signOutSystem } =
@@ -143,6 +145,14 @@ function App() {
                     <Route
                       path="visit-info/add/:studentId"
                       element={<AddVisitInfo />}
+                    />
+                    <Route
+                      path="visit-info/overview/:studentId"
+                      element={<VisitInfoOverview />}
+                    />
+                    <Route
+                      path="visit-info/print/:studentId"
+                      element={<VisitInfoPrint />}
                     />
                     <Route path="student-data/:studentId">
                       <Route path="" element={<ViewVisitDataForTeacher />} />
