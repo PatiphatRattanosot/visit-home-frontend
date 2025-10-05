@@ -7,7 +7,7 @@ import { useScheduleStore } from "../../stores/schedule.store";
 import BreadcrumbsLoop from "../../components/Breadcrumbs";
 import "./VisitInfoPrint.css";
 
-const CREST_SRC = "/logo.png";
+const CREST_SRC = "/pdfLogo.png";
 
 const Checkbox = ({ label, checked }) => (
   <div className="print-checkbox">

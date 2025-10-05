@@ -52,6 +52,18 @@ function App() {
             </>
           }
         />
+        {/* PDF */}
+        <Route
+          path="/teacher/visit-info/print/:studentId"
+          element={
+            !userInfo?.role.includes("Teacher") ? (
+              <Navigate to={"/"} />
+            ) : (
+              <VisitInfoPrint />
+            )
+          }
+        />
+        {/* Main App */}
 
         <Route
           path="*"
@@ -150,10 +162,7 @@ function App() {
                       path="visit-info/overview/:studentId"
                       element={<VisitInfoOverview />}
                     />
-                    <Route
-                      path="visit-info/print/:studentId"
-                      element={<VisitInfoPrint />}
-                    />
+
                     <Route path="student-data/:studentId">
                       <Route path="" element={<ViewVisitDataForTeacher />} />
                     </Route>
