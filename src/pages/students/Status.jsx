@@ -54,7 +54,7 @@ const Status = () => {
           student_id: userInfo?._id,
         });
         if (sdqParentResponse.status === 200) {
-          setSdqParentData(sdqParentResponse.data?.sdq?.status);
+          setSdqParentData(sdqParentResponse.data?.sdq?.isEstimate);
         }
       } catch (error) {
         // console.log(error);
@@ -74,7 +74,7 @@ const Status = () => {
         });
 
         if (sdqStudentResponse.status === 200) {
-          setSdqStudentData(sdqStudentResponse.data?.sdq?.status);
+          setSdqStudentData(sdqStudentResponse.data?.sdq?.isEstimate);
         }
       } catch (error) {
         // console.log(error);
@@ -93,7 +93,7 @@ const Status = () => {
           student_id: userInfo?._id,
         });
         if (sdqTeacherResponse.status === 200) {
-          setSdqTeacherData(sdqTeacherResponse.data?.sdq?.status);
+          setSdqTeacherData(sdqTeacherResponse.data?.sdq?.isEstimate);
         }
       } catch (error) {
         // console.log(error);
