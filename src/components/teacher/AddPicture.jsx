@@ -19,6 +19,7 @@ const AddPicture = ({ pictureFile, id, onChange, showUploadButton }) => {
     }
     onChange(e);
   };
+  
   const hasImage = Boolean(pictureFile);
   const triggerFileDialog = () => document.getElementById(id)?.click();
 
