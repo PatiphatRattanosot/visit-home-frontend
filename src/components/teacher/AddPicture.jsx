@@ -19,21 +19,23 @@ const AddPicture = ({ pictureFile, id, onChange, showUploadButton }) => {
     }
     onChange(e);
   };
-
-  const openFileInput = () => {
-    document.getElementById(id)?.click();
-  };
+  
+  const hasImage = Boolean(pictureFile);
+  const triggerFileDialog = () => document.getElementById(id)?.click();
 
   return (
-    <>
+    <div className="flex flex-col items-center gap-3">
       <div
-        className="flex flex-col items-center justify-center w-78 h-60 border-2 border-gray-300 rounded-md bg-white hover:bg-gray-50 hover:border-gray-400 cursor-pointer transition border-dashed"
-        onClick={openFileInput}
+        className={`flex flex-col items-center justify-center w-78 h-60 border-2 border-gray-300 rounded-md bg-white transition border-dashed ${
+          hasImage
+            ? ""
+            : "hover:bg-gray-50 hover:border-gray-400 cursor-pointer"
+        }`}
+        onClick={hasImage ? undefined : triggerFileDialog}
       >
-        {pictureFile ? (
+        {hasImage ? (
           <img
             src={
-              //เช็คถ้าเป็น string หรือเปล่า ถ้าใช่ให้ใช้เลย ถ้าไม่ใช่ให้สร้างอัพโหลด object URL
               typeof pictureFile === "string"
                 ? pictureFile
                 : URL.createObjectURL(pictureFile)
@@ -52,9 +54,15 @@ const AddPicture = ({ pictureFile, id, onChange, showUploadButton }) => {
         )}
       </div>
 
-      {showUploadButton && (
-        <button type="button" className="btn-blue mt-2" onClick={openFileInput}>
-          อัปโหลดรูปใหม่
+      {hasImage && (
+        <button
+          type="button"
+          className="btn-blue"
+          onClick={triggerFileDialog}
+          id="upload-image-button"
+          data-testid="upload-image-button"
+        >
+          เลือกรูปภาพใหม่
         </button>
       )}
 
@@ -66,7 +74,7 @@ const AddPicture = ({ pictureFile, id, onChange, showUploadButton }) => {
         onChange={handleChange}
         name={id}
       />
-    </>
+    </div>
   );
 };
 

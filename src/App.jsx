@@ -26,6 +26,8 @@ import SDQFormTeacher from "./pages/teacher/sdq/Index";
 import SDQResult from "./pages/teacher/sdq/SDQResult";
 import PrivacyPage from "./pages/PrivacyPage";
 import Visualization from "./pages/teacher/Visualization";
+import VisitInfoOverview from "./pages/teacher/VisitInfoOverview";
+import VisitInfoPrint from "./pages/teacher/VisitInfoPrint";
 
 function App() {
   const { user, userInfo, isLoading, signInSystem, signOutSystem } =
@@ -50,6 +52,18 @@ function App() {
             </>
           }
         />
+        {/* PDF */}
+        <Route
+          path="/teacher/visit-info/print/:studentId"
+          element={
+            !userInfo?.role.includes("Teacher") ? (
+              <Navigate to={"/"} />
+            ) : (
+              <VisitInfoPrint />
+            )
+          }
+        />
+        {/* Main App */}
 
         <Route
           path="*"
@@ -144,6 +158,11 @@ function App() {
                       path="visit-info/add/:studentId"
                       element={<AddVisitInfo />}
                     />
+                    <Route
+                      path="visit-info/overview/:studentId"
+                      element={<VisitInfoOverview />}
+                    />
+
                     <Route path="student-data/:studentId">
                       <Route path="" element={<ViewVisitDataForTeacher />} />
                     </Route>

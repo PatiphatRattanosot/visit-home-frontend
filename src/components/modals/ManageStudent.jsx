@@ -98,7 +98,7 @@ const ManageStudent = ({ student }) => {
   return (
     <div>
       <dialog id={`manage_student_${student._id}`} className="modal">
-        <div className="modal-box max-w-4xl w-full max-h-screen overflow-y-auto">
+        <div className="modal-box max-w-5xl w-full max-h-screen overflow-y-auto">
           <form method="dialog">
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
               ✕
@@ -128,11 +128,24 @@ const ManageStudent = ({ student }) => {
             <a href={`/teacher/student-data/${student._id}`} className="btn">
               ข้อมูลนักเรียน
             </a>
+            <a
+              href={`/teacher/visit-info/overview/${student._id}`}
+              className="btn"
+            >
+              ภาพรวมเยี่ยมบ้าน
+            </a>
             <a href={`/teacher/visit-info/add/${student._id}`} className="btn">
               ผลการเยี่ยมบ้าน
             </a>
 
-            <button className="btn">พิมพ์เอกสาร</button>
+            <a
+              href={`/teacher/visit-info/print/${student._id}`}
+              className="btn"
+              target="_blank"
+              rel="noreferrer"
+            >
+              พิมพ์เอกสาร
+            </a>
           </div>
         </div>
       </dialog>
