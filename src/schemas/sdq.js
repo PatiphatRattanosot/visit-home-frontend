@@ -147,8 +147,24 @@ export const SDQValidations = yup.object().shape({
     .required("กรุณาเลือกคำตอบ"),
   additional: yup.string().matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย"),
   overall_problem: yup.string().required("กรุณาเลือกคำตอบ"),
-  problem_time: yup.string(),
-  is_uneasy_student: yup.string(),
-  is_annoy_student: yup.string(),
-  is_difficult_student: yup.string(),
+  problem_time: yup.string().when("overall_problem", {
+    is: (val) => val && val !== "0",
+    then: (schema) => schema.required("กรุณาเลือกคำตอบ"),
+    otherwise: (schema) => schema,
+  }),
+  is_uneasy_student: yup.string().when("overall_problem", {
+    is: (val) => val && val !== "0",
+    then: (schema) => schema.required("กรุณาเลือกคำตอบ"),
+    otherwise: (schema) => schema,
+  }),
+  is_annoy_student: yup.string().when("overall_problem", {
+    is: (val) => val && val !== "0",
+    then: (schema) => schema.required("กรุณาเลือกคำตอบ"),
+    otherwise: (schema) => schema,
+  }),
+  is_difficult_student: yup.string().when("overall_problem", {
+    is: (val) => val && val !== "0",
+    then: (schema) => schema.required("กรุณาเลือกคำตอบ"),
+    otherwise: (schema) => schema,
+  }),
 });
