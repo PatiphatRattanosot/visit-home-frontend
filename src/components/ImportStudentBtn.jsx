@@ -16,6 +16,19 @@ const ImportStudentBtn = ({ classId }) => {
     "class_id",
   ];
 
+  const COLUMN_HEADER_MAP = {
+    prefix: "prefix",
+    คำนำหน้า: "prefix",
+    first_name: "first_name",
+    ชื่อ: "first_name",
+    last_name: "last_name",
+    นามสกุล: "last_name",
+    user_id: "user_id",
+    เลขที่ประจำตัว: "user_id",
+    class_id: "class_id",
+    รหัสชั้นเรียน: "class_id",
+  };
+
   const importStudents = async (students) => {
     try {
       const response = await StudentService.uploadStudentsByExcel(students);
@@ -64,14 +77,32 @@ const ImportStudentBtn = ({ classId }) => {
           const worksheet = workbook.Sheets[sheetName];
           const jsonStudents = XLSX.utils.sheet_to_json(worksheet);
 
-          const students = jsonStudents.map((student) => ({
-            ...student,
-            class_id: classId,
-            user_id: student.user_id.toString(),
-          }));
+          const students = jsonStudents.map((student) => {
+            const normalized = Object.entries(student).reduce(
+              (acc, [key, value]) => {
+                const trimmedKey = key.trim();
+                const mappedKey = COLUMN_HEADER_MAP[trimmedKey];
+                if (mappedKey) {
+                  acc[mappedKey] = value;
+                }
+                return acc;
+              },
+              {}
+            );
+
+            return {
+              ...normalized,
+              class_id: classId,
+              user_id: normalized.user_id?.toString?.() ?? "",
+            };
+          });
+
+          const firstStudent = students[0] ?? {};
 
           const hasAllRequiredCols = REQUIRED_COLS.every((col) =>
-            Object.keys(students[0]).includes(col)
+            Object.prototype.hasOwnProperty.call(firstStudent, col) &&
+            firstStudent[col] !== undefined &&
+            firstStudent[col] !== ""
           );
           if (!hasAllRequiredCols) {
             toast.error("ไฟล์ Excel ต้องมีข้อมูลในคอลัมน์ที่จำเป็นทั้งหมด");
