@@ -148,8 +148,12 @@ export const formValidation = object().shape({
     .transform((value) => value?.trim())
     .matches(onlyThaiLang, "กรุณากรอกข้อมูลเป็นภาษาไทย")
     .required("กรุณาตอบคำถาม"),
-  lat: number().required("กรุณาตอบคำถาม"),
-  lng: number().required("กรุณาตอบคำถาม"),
+  lat: number()
+    .typeError("กรุณากรอกเป็นตัวเลข")
+    .required("กรุณาเลือกตำแหน่งบนแผนที่"),
+  lng: number()
+    .typeError("กรุณากรอกเป็นตัวเลข")
+    .required("กรุณาเลือกตำแหน่งบนแผนที่"),
   // Page 2 Relationship Information
   family_relation_status: string()
     .transform((value) => value?.trim())

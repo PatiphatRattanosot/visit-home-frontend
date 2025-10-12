@@ -5,8 +5,8 @@ import { validateCurrentPage } from "../../../../utils/formNavigation";
 
 const Hyperactivity = ({ page, setPage, formik }) => {
   const breadcrumbsOptions = [
-    { label: "แบบประเมิน SDQ", link: "/student/sdq-student" },
-    { label: "แบบประเมินตนเอง", link: "/student/sdq-student" },
+    { label: "แบบประเมิน SDQ", link: "/student/sdq-parent" },
+    { label: "แบบประเมินของผู้ปกครอง", link: "/student/sdq-parent" },
     { label: "หน้า 3" },
   ];
 
