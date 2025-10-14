@@ -19,7 +19,7 @@ const AddPicture = ({ pictureFile, id, onChange, showUploadButton }) => {
     }
     onChange(e);
   };
-  
+
   const hasImage = Boolean(pictureFile);
   const triggerFileDialog = () => document.getElementById(id)?.click();
 
@@ -59,8 +59,8 @@ const AddPicture = ({ pictureFile, id, onChange, showUploadButton }) => {
           type="button"
           className="btn-blue"
           onClick={triggerFileDialog}
-          id="upload-image-button"
-          data-testid="upload-image-button"
+          id={`upload-image-button-${id}`}
+          data-testid={`upload-image-button-${id}`}
         >
           เลือกรูปภาพใหม่
         </button>
