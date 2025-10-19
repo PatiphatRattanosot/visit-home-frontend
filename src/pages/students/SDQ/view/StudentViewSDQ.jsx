@@ -64,7 +64,7 @@ const StudentViewSDQ = () => {
               <div className="mt-2 flex justify-center md:justify-end">
                 {!sdq && (
                   <a
-                    href={`/student/sdq-parent/${selectedYear}`}
+                    href={`/student/sdq-student/${selectedYear}`}
                     className="text-white btn btn-success"
                   >
                     ประเมิน SDQ

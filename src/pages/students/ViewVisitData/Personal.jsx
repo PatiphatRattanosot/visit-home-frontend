@@ -7,14 +7,7 @@ import useYearSelectStore from "../../../stores/year_select.store";
 import { useAuthStore } from "../../../stores/auth.store";
 import ViewMap from "../../../components/students/ViewMap";
 
-const Personal = ({
-  page,
-  setPage,
-  personalInfo,
-  image,
-  phone,
-  isCompleted,
-}) => {
+const Personal = ({ page, setPage, personalInfo, image, phone }) => {
   const breadcrumbsOptions = [
     { link: "/student/visiting-info", label: "ข้อมูลการเยี่ยมบ้าน" },
     { label: "ข้อมูลส่วนตัว" },
@@ -43,7 +36,7 @@ const Personal = ({
           </div>
 
           <div className="mt-2 flex justify-center md:justify-end">
-            {isCompleted === "Completed" || isCompleted === "Edit" ? (
+            {personalInfo ? (
               <a
                 href={`/student/visiting-info/update/${selectedYear}`}
                 className="text-white btn btn-warning"

@@ -11,7 +11,7 @@ import { useClassroomStore } from "../../stores/classroom.store";
 import useYearSelectStore from "../../stores/year_select.store";
 const YearManagement = () => {
   // ใช้ Zustand store เพื่อจัดการข้อมูลปีการศึกษา
-  const { years, fetchYears, deleteYear, setSelectedYear } =
+  const { years, fetchYears, deleteYear, setSelectedYear, autoCreateYear } =
     useYearSelectStore();
   const { setClassrooms } = useClassroomStore();
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const YearManagement = () => {
   useEffect(() => {
     fetchYears();
     setClassrooms([]); // เคลียร์ข้อมูลชั้นเรียนเมื่อเปลี่ยนปีการศึกษา
-  }, [years, fetchYears, setClassrooms]);
+  }, []);
 
   // เลือกปีแล้วมันจะเกิดแอ็คชั่น
   const handleSelectYear = async (year) => {
@@ -69,6 +69,8 @@ const YearManagement = () => {
                   <button
                     className="btn btn-outline w-40 h-40 rounded-xl text-4xl text-gray-800"
                     onClick={() => handleSelectYear(year)}
+                    id={`select_year_${year._id}`}
+                    data-testid={`select_year_${year._id}`}
                   >
                     {year.year}
                   </button>
@@ -76,7 +78,12 @@ const YearManagement = () => {
                   {/* จุดสามจุดที่มุมขวาบน */}
                   <div className="absolute top-2 right-2">
                     <div className="dropdown dropdown-end">
-                      <label tabIndex={0} className="btn btn-sm  z-10">
+                      <label
+                        tabIndex={0}
+                        className="btn btn-sm  z-10"
+                        id={`dropdown_${year._id}`}
+                        data-testid={`dropdown_${year._id}`}
+                      >
                         <p className="text-lg">⋯</p>
                       </label>
                       <ul
@@ -90,13 +97,19 @@ const YearManagement = () => {
                                 .getElementById(`Edit_year_${year._id}`)
                                 .showModal()
                             }
+                            id={`edit_year_${year._id}`}
+                            data-testid={`edit_year_${year._id}`}
                           >
                             <FaPencilAlt className="text-yellow" /> แก้ไข
                           </button>
                         </li>
 
                         <li>
-                          <button onClick={() => handleDeleteYear(year._id)}>
+                          <button
+                            onClick={() => handleDeleteYear(year._id)}
+                            id={`delete_year_${year._id}`}
+                            data-testid={`delete_year_${year._id}`}
+                          >
                             <MdDeleteForever className="text-red" />
                             ลบ
                           </button>
@@ -110,8 +123,14 @@ const YearManagement = () => {
               ))}
 
               <button
-                onClick={() => document.getElementById("add_year").showModal()}
+                onClick={() => {
+                  years.length > 0
+                    ? autoCreateYear()
+                    : document.getElementById("add_year").showModal();
+                }}
                 className="btn btn-outline w-40 h-40 rounded-xl text-4xl text-gray-800"
+                id="add_year_button"
+                data-testid="add_year_button"
               >
                 <FaPlus />
               </button>

@@ -9,6 +9,11 @@ import ModalEditPersonnel from "../../components/modals/EditPersonnel";
 import Breadcrumbs from "../../components/Breadcrumbs";
 import { usePersonnelStore } from "../../stores/admin.store"; // ใช้ store ที่สร้างขึ้นมา
 import { useAuthStore } from "../../stores/auth.store";
+import {
+  sortPersonnelOptions,
+  switchSortPersonnel,
+} from "../../utils/sortDataTable";
+import { getRoleDisplay, showStatus } from "../../utils/userTable";
 
 const Personnel = () => {
   // ใช้ Zustand store เพื่อจัดการข้อมูลบุคลากร
@@ -18,14 +23,7 @@ const Personnel = () => {
 
   // สร้าง state สำหรับเก็บข้อมูลบุคลากรที่กรองแล้ว
   // เพื่อใช้ในการแสดงผลในตาราง
-  const optionsForPersonnel = [
-    { value: "SortToMost", label: "เรียงจากน้อยไปมาก" },
-    { value: "SortToLess", label: "เรียงจากมากไปน้อย" },
-    { value: "AlphaSortToMost", label: "เรียงตามลำดับตัวอักษร ก-ฮ" },
-    { value: "AlphaSortToLess", label: "เรียงตามลำดับตัวอักษร ฮ-ก" },
-    { value: "PrefixMr", label: "คำนำหน้า นาย-นาง" },
-    { value: "PrefixMrs", label: "คำนำหน้า นาง-นาย" },
-  ];
+
   const [searchKeyword, setSearchKeyword] = useState("");
   // สร้าง state สำหรับเก็บข้อมูลบุคลากรที่กรองแล้ว
   const [filteredPersonnel, setFilteredPersonnel] = useState([]);
@@ -77,76 +75,11 @@ const Personnel = () => {
     }
 
     let sorted = [...filtered];
-    switch (selectedOption) {
-      case "SortToMost":
-        sorted.sort((a, b) => a.user_id - b.user_id);
-        break;
-      case "SortToLess":
-        sorted.sort((a, b) => b.user_id - a.user_id);
-        break;
-      case "AlphaSortToMost":
-        sorted.sort((a, b) => {
-          const nameA = `${a.first_name}${a.last_name}`;
-          const nameB = `${b.first_name}${b.last_name}`;
-          return nameA.localeCompare(nameB, "th", { sensitivity: "base" });
-        });
-        break;
-      case "AlphaSortToLess":
-        sorted.sort((a, b) => {
-          const nameA = `${a.first_name}${a.last_name}`;
-          const nameB = `${b.first_name}${b.last_name}`;
-          return nameB.localeCompare(nameA, "th", { sensitivity: "base" });
-        });
-        break;
-      case "PrefixMr":
-        sorted.sort((a, b) => {
-          const prefixOrder = { นาย: 1, นางสาว: 2, นาง: 3 };
-          return (prefixOrder[a.prefix] || 99) - (prefixOrder[b.prefix] || 99);
-        });
-        break;
-      case "PrefixMrs":
-        sorted.sort((a, b) => {
-          const prefixOrder = { นาย: 1, นางสาว: 2, นาง: 3 };
-          return (prefixOrder[b.prefix] || 99) - (prefixOrder[a.prefix] || 99);
-        });
-        break;
-    }
+    switchSortPersonnel(selectedOption, sorted);
 
     setFilteredPersonnel(sorted);
     setCurrentPage(1);
   }, [searchKeyword, selectedOption, personnel, userInfo?.email]);
-
-  const showStatus = (status) => {
-    switch (status) {
-      case "ใช้งานอยู่":
-        return (
-          <div className="inline-block px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">
-            ใช้งานอยู่
-          </div>
-        );
-      case "ไม่ได้ใช้งานแล้ว":
-        return (
-          <div className="inline-block px-2 py-1 text-xs font-semibold text-yellow-800 bg-yellow-100 rounded-full">
-            ไม่ได้ใช้งานแล้ว
-          </div>
-        );
-      default:
-        return (
-          <div className="inline-block px-2 py-1 text-xs font-semibold text-red-800 bg-red-100 rounded-full">
-            ลาออก
-          </div>
-        );
-    }
-  };
-  const getRoleDisplay = (role) => {
-    const roles = Array.isArray(role) ? role : [role]; // แปลงให้เป็น array เสมอ
-    //ใช้ includes() เรียงลำดับความสำคัญของบทบาท และ คืนค่าชื่อบทบาทที่เหมาะสม
-    if (roles.includes("Admin")) return "เจ้าหน้าที่ฝ่ายทะเบียน";
-    if (roles.includes("Teacher")) return "คุณครู";
-    if (roles.includes("Student")) return "นักเรียน";
-
-    return "ไม่ทราบบทบาท";
-  };
 
   return (
     <div className="section-container w-full">
@@ -164,8 +97,8 @@ const Personnel = () => {
             <FilterDropdown
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
-              options={optionsForPersonnel}
-              className="w-40 border border-gray-300 rounded-md px-2 py-1"
+              options={sortPersonnelOptions}
+              className="select"
             />
           </div>
 
@@ -237,6 +170,8 @@ const Personnel = () => {
                 <td>{showStatus(person.status)}</td>
                 <td className="flex gap-2">
                   <button
+                    id={`edit-personnel-button_${person._id}`}
+                    data-testid={`edit-personnel-button_${person._id}`}
                     onClick={() =>
                       document
                         .getElementById(`edit_personnel_${person._id}`)
@@ -253,6 +188,8 @@ const Personnel = () => {
                   />
 
                   <button
+                    id={`delete-personnel-button_${index}`}
+                    data-testid={`delete-personnel-button_${index}`}
                     onClick={() => handleDeleteUser(person.email)}
                     className="btn btn-error"
                   >

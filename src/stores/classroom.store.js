@@ -9,6 +9,7 @@ export const useClassroomStore = create((set, get) => ({
   setClassrooms: (classrooms) => set({ classrooms }), // ตั้งค่าเริ่มต้นให้ชั้นเรียน
   //ทำ fetchClassroom
   fetchClassrooms: async (yearId) => {
+    set({ classrooms: [] }); // เริ่มต้นด้วยการลิสต์ว่าง
     try {
       const response = await ClassroomService.getClassroomsByYear(yearId);
       if (response.status === 200) {
@@ -69,6 +70,7 @@ export const useClassroomStore = create((set, get) => ({
     }
   },
   getClassroomByTeacherId: async (teacherId, yearId) => {
+    set({ classroom: null }); // เริ่มต้นด้วยการตั้งค่าเป็น null
     try {
       const response = await ClassroomService.getClassesByTeacherId(
         teacherId,

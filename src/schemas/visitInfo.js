@@ -1,8 +1,6 @@
 import * as yup from "yup";
 
 export const VisitInfoSchema = yup.object().shape({
-  home_img: yup.mixed().nullable().required(),
-  family_img: yup.mixed().nullable().required(),
   home_description: yup
     .string()
     .max(255, "คำอธิบายภาพบ้านต้องไม่เกิน 255 ตัวอักษร")

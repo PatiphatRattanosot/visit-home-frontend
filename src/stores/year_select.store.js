@@ -17,27 +17,57 @@ const useYearSelectStore = create(
 
         if (res.status === 200) {
           const sorted = res.data.sort((a, b) => b.year - a.year);
-          set({ years: sorted });
+          const currentSelectedYear = get().selectedYear;
+          const hasCurrentYear = sorted.some(
+            (item) => item?._id === currentSelectedYear
+          );
+
+          const nextSelectedYear = hasCurrentYear
+            ? currentSelectedYear
+            : sorted[0]?._id ?? null;
+
+          set({
+            years: sorted,
+            selectedYear: nextSelectedYear,
+          });
         }
       } catch (error) {
         // console.log("error fetching years:", error);
       }
     },
-    addYear: async (values) => {
+    autoCreateYear: async () => {
       try {
-        const res = await YearServices.createYear({
-          year: Number(values.year),
-        });
-        if (res.status === 201) {
-          toast.success(res.data.message);
-          get().fetchYears(); // เรียกใช้ fetchData เพื่ออัปเดตข้อมูล
-          document.getElementById("add_year").close(); // ปิด modal
+        // ใช้ createYearAuto ที่จัดการ logic การสร้างปีใหม่ให้ใน backend
+        const response = await YearServices.createYearAuto();
+        if (response.status === 201) {
+          toast.success(
+            response.data.message || "เพิ่มปีการศึกษาอัตโนมัติเรียบร้อยแล้ว"
+          );
+          get().fetchYears(); // อัปเดตข้อมูลปีการศึกษา
+        }
+      } catch (error) {
+        console.log("Error in createOrAutoCreateYear:", error);
+        toast.error(
+          error.response?.data?.message || "เกิดข้อผิดพลาดในการเพิ่มปีการศึกษา"
+        );
+      }
+    },
+    createYear: async (year) => {
+      try {
+        const response = await YearServices.createYear({ year: Number(year) });
+        if (response.status === 201) {
+          toast.success(
+            response.data.message || "เพิ่มปีการศึกษาเรียบร้อยแล้ว"
+          );
+          get().fetchYears(); // เรียกใช้ fetchYears เพื่ออัปเดตข้อมูล
+          document.getElementById("add_year").close();
         }
       } catch (err) {
         // console.log(err);
         toast.error(
           err.response?.data?.message || "เกิดข้อผิดพลาดในการเพิ่มปีการศึกษา"
         );
+        document.getElementById("add_year").close();
       }
     },
     getYearsByYear: async (year) => {

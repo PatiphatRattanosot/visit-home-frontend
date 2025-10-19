@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import { PersonnelSchema } from "../../schemas/personnelUpdate";
 import { usePersonnelStore } from "../../stores/admin.store";
-import TextInputInModal from "./TexInputInModal";
-import SelectInputInModal from "./SelectInputInModal";
+import TextInput from "../../components/Text";
+import SelectInput from "../../components/Select";
 
 const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
   // ใช้ Zustand store เพื่อจัดการข้อมูลบุคลากร
@@ -69,7 +69,7 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
 
           <form onSubmit={formik.handleSubmit} className="mt-2">
             <div className="flex flex-col items-center justify-center space-y-2">
-              <SelectInputInModal
+              <SelectInput
                 name="prefix"
                 value={formik.values.prefix}
                 onChange={formik.handleChange}
@@ -83,7 +83,7 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
                 className="w-64 md:w-72"
               />
 
-              <TextInputInModal
+              <TextInput
                 name="first_name"
                 placeholder="ชื่อ"
                 disabled={false}
@@ -93,9 +93,10 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
                 error={formik.errors.first_name}
                 touched={formik.touched.first_name}
                 onBlur={formik.handleBlur}
+                className="w-64 md:w-72"
               />
 
-              <TextInputInModal
+              <TextInput
                 name="last_name"
                 placeholder="นามสกุล"
                 disabled={false}
@@ -105,9 +106,10 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
                 error={formik.errors.last_name}
                 touched={formik.touched.last_name}
                 onBlur={formik.handleBlur}
+                className="w-64 md:w-72"
               />
 
-              <TextInputInModal
+              <TextInput
                 name="phone"
                 maxLength={10}
                 placeholder="เบอร์โทรศัพท์"
@@ -118,9 +120,10 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
                 error={formik.errors.phone}
                 touched={formik.touched.phone}
                 onBlur={formik.handleBlur}
+                className="w-64 md:w-72"
               />
 
-              <SelectInputInModal
+              <SelectInput
                 name="status"
                 value={formik.values.status}
                 onChange={formik.handleChange}

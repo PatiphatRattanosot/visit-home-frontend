@@ -11,60 +11,57 @@ import { useStudentStore } from "../../../stores/student.store";
 
 const Index = () => {
   const [page, setPage] = React.useState(1);
-  const [image, setImage] = React.useState("");
-  const [phone, setPhone] = React.useState("");
-  const [personalInfo, setPersonalInfo] = React.useState(null);
-  const [relationshipInfo, setRelationshipInfo] = React.useState(null);
-  const [familyInfo, setFamilyInfo] = React.useState(null);
-  const [behaviorInfo, setBehaviorInfo] = React.useState(null);
-  const [riskInfo, setRiskInfo] = React.useState(null);
-  const [otherInfo, setOtherInfo] = React.useState(null);
-  const [isCompleted, setIsCompleted] = React.useState(null);
+  const [studentData, setStudentData] = React.useState({
+    image: null,
+    phone: null,
+    personalInfo: null,
+    relationshipInfo: null,
+    familyInfo: null,
+    behaviorInfo: null,
+    riskInfo: null,
+    otherInfo: null,
+  });
 
   const { userInfo } = useAuthStore();
   const { selectedYear } = useYearSelectStore();
   const { getYearlyData } = useStudentStore();
 
+  const resetStudentData = () => {
+    setStudentData({
+      image: null,
+      phone: null,
+      personalInfo: null,
+      relationshipInfo: null,
+      familyInfo: null,
+      behaviorInfo: null,
+      riskInfo: null,
+      otherInfo: null,
+    });
+  };
+
   React.useEffect(() => {
-    setPersonalInfo(null);
-    setRelationshipInfo(null);
-    setFamilyInfo(null);
-    setBehaviorInfo(null);
-    setRiskInfo(null);
-    setOtherInfo(null);
-    setImage(null);
-    setPhone(null);
-    setIsCompleted(null);
-    // Fetch existing data for the selected year
+    resetStudentData();
+
     if (selectedYear && userInfo?._id) {
       getYearlyData({ student_id: userInfo?._id, year_id: selectedYear }).then(
         (res) => {
           const yearlyData = res?.students?.[0]?.yearly_data?.[0];
-          if (yearlyData) {
-            setPersonalInfo(yearlyData.personal_info || null);
-            setRelationshipInfo(yearlyData.relationship_info || null);
-            setFamilyInfo(yearlyData.family_info || null);
-            setBehaviorInfo(yearlyData.behavior_info || null);
-            setRiskInfo(yearlyData.risk_info || null);
-            setOtherInfo(yearlyData.additional_info || null);
-            setImage(res?.students?.[0]?.image_url || null);
-            setPhone(res?.students?.[0]?.phone || null);
-            setIsCompleted(yearlyData?.isCompleted || null);
-          } else {
-            setPersonalInfo(null);
-            setRelationshipInfo(null);
-            setFamilyInfo(null);
-            setBehaviorInfo(null);
-            setRiskInfo(null);
-            setOtherInfo(null);
-            setImage(null);
-            setPhone(null);
-            setIsCompleted(null);
-          }
+          const student = res?.students?.[0];
+
+          setStudentData({
+            image: student?.image_url || null,
+            phone: student?.phone || null,
+            personalInfo: yearlyData?.personal_info || null,
+            relationshipInfo: yearlyData?.relationship_info || null,
+            familyInfo: yearlyData?.family_info || null,
+            behaviorInfo: yearlyData?.behavior_info || null,
+            riskInfo: yearlyData?.risk_info || null,
+            otherInfo: yearlyData?.additional_info || null,
+          });
         }
       );
     }
-  }, [selectedYear, userInfo?._id]);
+  }, [selectedYear, userInfo?._id, getYearlyData]);
   return (
     <div className="w-full max-w-screen h-full min-h-screen flex justify-center flex-col bg-gray-50">
       <div className="space-y-8">
@@ -72,50 +69,49 @@ const Index = () => {
           <Personal
             page={page}
             setPage={setPage}
-            personalInfo={personalInfo}
-            image={image}
-            phone={phone}
-            isCompleted={isCompleted}
+            personalInfo={studentData.personalInfo}
+            image={studentData.image}
+            phone={studentData.phone}
           />
         )}
         {page === 2 && (
           <Relation
             page={page}
             setPage={setPage}
-            relationshipInfo={relationshipInfo}
-            isCompleted={isCompleted}
+            relationshipInfo={studentData.relationshipInfo}
+            personalInfo={studentData.personalInfo}
           />
         )}
         {page === 3 && (
           <Family
             page={page}
             setPage={setPage}
-            familyInfo={familyInfo}
-            isCompleted={isCompleted}
+            familyInfo={studentData.familyInfo}
+            personalInfo={studentData.personalInfo}
           />
         )}
         {page === 4 && (
           <Behavior
             page={page}
             setPage={setPage}
-            behaviorInfo={behaviorInfo}
-            isCompleted={isCompleted}
+            behaviorInfo={studentData.behaviorInfo}
+            personalInfo={studentData.personalInfo}
           />
         )}
         {page === 5 && (
           <Risk
             page={page}
             setPage={setPage}
-            riskInfo={riskInfo}
-            isCompleted={isCompleted}
+            riskInfo={studentData.riskInfo}
+            personalInfo={studentData.personalInfo}
           />
         )}
         {page === 6 && (
           <Other
             page={page}
             setPage={setPage}
-            otherInfo={otherInfo}
-            isCompleted={isCompleted}
+            otherInfo={studentData.otherInfo}
+            personalInfo={studentData.personalInfo}
           />
         )}
       </div>

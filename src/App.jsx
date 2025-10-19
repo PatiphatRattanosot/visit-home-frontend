@@ -21,11 +21,13 @@ import StudentViewSDQ from "./pages/students/SDQ/view/StudentViewSDQ";
 import ParentViewSDQ from "./pages/students/SDQ/view/ParentViewSDQ";
 import ClassroomDetail from "./pages/Admin/ClassroomDetail";
 import StudentList from "./pages/teacher/StudentList";
-import VisitInfo from "./pages/teacher/VisitInfo";
 import AddVisitInfo from "./pages/teacher/AddVisitInfo";
 import SDQFormTeacher from "./pages/teacher/sdq/Index";
 import SDQResult from "./pages/teacher/sdq/SDQResult";
 import PrivacyPage from "./pages/PrivacyPage";
+import Visualization from "./pages/teacher/Visualization";
+import VisitInfoOverview from "./pages/teacher/VisitInfoOverview";
+import VisitInfoPrint from "./pages/teacher/VisitInfoPrint";
 
 function App() {
   const { user, userInfo, isLoading, signInSystem, signOutSystem } =
@@ -50,6 +52,18 @@ function App() {
             </>
           }
         />
+        {/* PDF */}
+        <Route
+          path="/teacher/visit-info/print/:studentId"
+          element={
+            !userInfo?.role.includes("Teacher") ? (
+              <Navigate to={"/"} />
+            ) : (
+              <VisitInfoPrint />
+            )
+          }
+        />
+        {/* Main App */}
 
         <Route
           path="*"
@@ -139,11 +153,16 @@ function App() {
                     }
                   >
                     <Route path="" element={<StudentList />} />
-                    <Route path="visit-info" element={<VisitInfo />} />
+
                     <Route
                       path="visit-info/add/:studentId"
                       element={<AddVisitInfo />}
                     />
+                    <Route
+                      path="visit-info/overview/:studentId"
+                      element={<VisitInfoOverview />}
+                    />
+
                     <Route path="student-data/:studentId">
                       <Route path="" element={<ViewVisitDataForTeacher />} />
                     </Route>
@@ -151,6 +170,7 @@ function App() {
                       <Route path="" element={<SDQResult />} />
                       <Route path="estimate" element={<SDQFormTeacher />} />
                     </Route>
+                    <Route path="visualization" element={<Visualization />} />
                   </Route>
                 </Routes>
               </div>

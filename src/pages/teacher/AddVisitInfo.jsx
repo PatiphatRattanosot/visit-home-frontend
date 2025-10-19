@@ -10,6 +10,7 @@ import { useVisitInfoStore } from "../../stores/visit.store";
 import { useStudentStore } from "../../stores/student.store";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const AddVisitInfo = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const AddVisitInfo = () => {
     family_img: null,
   });
 
-    const handleChangePicture = (e) => {
+  const handleChangePicture = (e) => {
     const file = e.target.files[0];
     const field = e.target.id; // ใช้ id เพื่อรู้ว่าเป็น home_img หรือ family_img
     if (file) {
@@ -48,10 +49,40 @@ const AddVisitInfo = () => {
     }
   };
 
+  const handleSubmitWithValidation = async (values, actions) => {
+    if (!pictureFile.home_img || !pictureFile.family_img) {
+      toast.error("กรุณาอัปโหลดรูปภาพทั้งสองรูปก่อนบันทึกข้อมูล");
+      return;
+    }
+
+    const formData = new FormData();
+    if (pictureFile.home_img) {
+      formData.append("home_img", pictureFile.home_img);
+    }
+    if (pictureFile.family_img) {
+      formData.append("family_img", pictureFile.family_img);
+    }
+    formData.append("home_description", values.home_description);
+    formData.append("family_description", values.family_description);
+    formData.append("comment", values.comment);
+    formData.append("student_id", values.student_id);
+    formData.append("teacher_id", values.teacher_id);
+    formData.append("year_id", values.year_id);
+
+    if (visitInfo) {
+      formData.append("visit_info_id", visitInfo._id);
+      await updateVisitInfo(formData);
+    } else {
+      await addVisitInfo(formData).then(() => {
+        setTimeout(() => {
+          window.location.reload();
+        }, 2600);
+      });
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
-      home_img: null,
-      family_img: null,
       home_description: visitInfo?.home_description || "",
       family_description: visitInfo?.family_description || "",
       comment: visitInfo?.comment || "",
@@ -61,32 +92,7 @@ const AddVisitInfo = () => {
     },
     validationSchema: VisitInfoSchema,
     enableReinitialize: true,
-    onSubmit: async (values, actions) => {
-      const formData = new FormData();
-      if (pictureFile.home_img) {
-        formData.append("home_img", pictureFile.home_img); // ไฟล์
-      }
-      if (pictureFile.family_img) {
-        formData.append("family_img", pictureFile.family_img); // ไฟล์
-      }
-      formData.append("home_description", values.home_description);
-      formData.append("family_description", values.family_description);
-      formData.append("comment", values.comment);
-      formData.append("student_id", values.student_id);
-      formData.append("teacher_id", values.teacher_id);
-      formData.append("year_id", values.year_id);
-
-      if (visitInfo) {
-        formData.append("visit_info_id", visitInfo._id);
-        await updateVisitInfo(formData);
-      } else {
-        await addVisitInfo(formData).then(() => {
-          setTimeout(() => {
-            window.location.reload();
-          }, 2600);
-        });
-      }
-    },
+    onSubmit: handleSubmitWithValidation,
   });
 
   useEffect(() => {
@@ -96,14 +102,16 @@ const AddVisitInfo = () => {
       const res = await getVisitInfoByStudentId(studentId, selectedYear);
       if (res) {
         formik.setValues({
-          home_img: res.home_img || null,
-          family_img: res.family_img || null,
           home_description: res.home_description || "",
           family_description: res.family_description || "",
           comment: res.comment || "",
           student_id: studentId,
           teacher_id: userInfo._id,
           year_id: selectedYear,
+        });
+        setPictureFile({
+          home_img: res.home_img || null,
+          family_img: res.family_img || null,
         });
       }
       getStudentById(studentId);
@@ -117,8 +125,8 @@ const AddVisitInfo = () => {
       <div>
         <BreadcrumbsLoop
           options={[
-            { label: "หน้าหลัก", link: "/" },
-            { label: "ข้อมูลการเยี่ยมบ้าน", link: "/admin/year/classroom" },
+            { label: "หน้าหลัก", link: "/teacher" },
+            { label: "ข้อมูลผลการเยี่ยมบ้าน" },
           ]}
         />
       </div>
@@ -137,9 +145,10 @@ const AddVisitInfo = () => {
             <AddPicture
               id="home_img"
               onChange={handleChangePicture}
-              pictureFile={pictureFile.home_img || visitInfo?.home_img}
+              pictureFile={pictureFile.home_img}
               file={pictureFile.home_img}
               setPictureFile={setPictureFile}
+              showUploadButton={pictureFile.home_img}
             />
 
             <TextArea
@@ -161,9 +170,10 @@ const AddVisitInfo = () => {
             <AddPicture
               id="family_img"
               onChange={handleChangePicture}
-              pictureFile={pictureFile.family_img || visitInfo?.family_img}
+              pictureFile={pictureFile.family_img}
               setPictureFile={setPictureFile}
               file={pictureFile.family_img}
+              showUploadButton={pictureFile.family_img}
             />
             <TextArea
               name="family_description"
@@ -200,7 +210,7 @@ const AddVisitInfo = () => {
         <div className="flex justify-center md:justify-end ml-6 md:mx-50">
           <button
             type="button"
-            onClick={() => navigate("/teacher/students")}
+            onClick={() => navigate("/teacher")}
             className={visitInfo ? "hidden" : "btn-red mr-4"}
           >
             ยกเลิก

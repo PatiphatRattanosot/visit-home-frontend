@@ -3,7 +3,7 @@ import * as yup from "yup";
 const onlyNumber = /^[0-9]+$/;
 const currentYear = new Date().getFullYear() + 543; // ปีปัจจุบันแบบ พ.ศ.
 const minYear = currentYear - 10; // ย้อนหลังได้ 10 ปี
-const maxYear = currentYear + 1;  // เผื่ออนาคตได้ 1 ปี
+const maxYear = currentYear + 5; // เผื่ออนาคตได้ 5 ปี
 
 export const YearSchema = yup.object().shape({
   year: yup

@@ -63,7 +63,7 @@ export const useAuthStore = create(
           try {
             const result = await googleSignIn();
             if (result.user && result.user.email) {
-              console.log("Encoded Email:", authEncode(result.user.email));
+              // console.log("Encoded Email:", authEncode(result.user.email));
 
               const res = await AuthServices.sign(
                 authEncode(result.user.email)
@@ -125,6 +125,7 @@ export const useAuthStore = create(
                 set({ isLoading: true });
                 await logout();
                 await AuthServices.signOut();
+                localStorage.removeItem("activeNavbarRole");
                 set({ isLoading: false });
                 // userInfo will be set to null by listenToAuthChanges
                 Swal.fire({

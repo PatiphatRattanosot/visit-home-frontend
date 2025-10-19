@@ -9,6 +9,7 @@ const Select = ({
   touched,
   label,
   name,
+  defaultOpt,
   className = "",
   disabled = false,
   required = false,
@@ -28,6 +29,7 @@ const Select = ({
         className="select w-full"
         disabled={disabled}
       >
+        {defaultOpt && <option value="">{defaultOpt}</option>}
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
