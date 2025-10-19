@@ -206,12 +206,12 @@ const Behavior = ({ page, setPage, formik }) => {
               <div className="md:col-span-2">
                 <Checkbox
                   label="การใช้สารเสพติด"
-                  name="drugs_behavior"
-                  value={formik.values.drugs_behavior}
+                  name="drugs_behav"
+                  value={formik.values.drugs_behav}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={formik.errors.drugs_behavior}
-                  touched={formik.touched.drugs_behavior}
+                  error={formik.errors.drugs_behav}
+                  touched={formik.touched.drugs_behav}
                   options={drugs_behavior}
                   setFieldValue={formik.setFieldValue}
                 />
@@ -284,12 +284,12 @@ const Behavior = ({ page, setPage, formik }) => {
               <div className="md:col-span-2">
                 <Checkbox
                   label="พฤติกรรมทางเพศ"
-                  name="sexual_behavior"
-                  value={formik.values.sexual_behavior}
+                  name="sexual_behav"
+                  value={formik.values.sexual_behav}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={formik.errors.sexual_behavior}
-                  touched={formik.touched.sexual_behavior}
+                  error={formik.errors.sexual_behav}
+                  touched={formik.touched.sexual_behav}
                   options={sexual_behavior}
                   setFieldValue={formik.setFieldValue}
                 />
