@@ -56,13 +56,13 @@ const SDQResult = () => {
         if (res.status === 200) {
           const sdqData = res.data?.sdq;
           setSdqTeacher(sdqData);
-          console.log(sdqData);
+          
         } else {
           setSdqTeacher(null);
         }
       } catch (err) {
         setSdqTeacher(null);
-        console.error("Failed to fetch SDQ data:", err);
+        // console.error("Failed to fetch SDQ data:", err);
       }
     };
     fetchData();
@@ -81,13 +81,13 @@ const SDQResult = () => {
         if (res.status === 200) {
           const sdqData = res.data?.sdq;
           setSdqParent(sdqData);
-          console.log(sdqData);
+    
         } else {
           setSdqParent(null);
         }
       } catch (err) {
         setSdqParent(null);
-        console.error("Failed to fetch SDQ data:", err);
+        // console.error("Failed to fetch SDQ data:", err);
       }
     };
     fetchData();
@@ -106,13 +106,13 @@ const SDQResult = () => {
         if (res.status === 200) {
           const sdqData = res.data?.sdq;
           setSdqStudent(sdqData);
-          console.log(sdqData);
+      
         } else {
           setSdqStudent(null);
         }
       } catch (err) {
         setSdqStudent(null);
-        console.error("Failed to fetch SDQ data:", err);
+        // console.error("Failed to fetch SDQ data:", err);
       }
     };
     fetchData();

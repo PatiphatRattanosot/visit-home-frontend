@@ -40,7 +40,7 @@ const AddClassroom = ({ yearId, addClassroomSuccess }) => {
     fetchData();
   }, []);
 
-  console.log("personnel", personnel);
+
 
   return (
     <div>

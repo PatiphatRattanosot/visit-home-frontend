@@ -9,8 +9,6 @@ export const usePersonnelStore = create((set, get) => ({
   fetchData: async () => {
     try {
       const response = await UserService.getAllTeacher();
-      //ถ้า Log User จะต้องเป็น response.data.users
-      console.log("hello teacher", response.data);
       if (response.status === 200) {
         set({ data: response.data.teachers }); // ตั้งค่าเริ่มต้นให้ personnel ทั้งหมด
         return response.data.teachers; // ส่งคืนข้อมูลบุคลากรที่ได้
@@ -23,7 +21,7 @@ export const usePersonnelStore = create((set, get) => ({
   getPersonnelById: async (id) => {
     try {
       const response = await UserService.getTeacherById(id);
-      console.log("getPersonnelById = ", response);
+
       if (response.status === 200) {
         return response.data.teacher; // ส่งคืนข้อมูลบุคลากรที่ได้
       }
@@ -36,7 +34,6 @@ export const usePersonnelStore = create((set, get) => ({
   addPersonnel: async (values) => {
     try {
       const res = await UserService.addTeacher(values);
-      console.log(res);
 
       if (res.status === 201) {
         document.getElementById("add_personnel").close();
@@ -54,7 +51,7 @@ export const usePersonnelStore = create((set, get) => ({
   updatePersonnel: async (id, values) => {
     try {
       const res = await UserService.updateTeacher({ ...values, _id: id });
-      console.log("res", res);
+
       if (res.status === 200) {
         document.getElementById(`edit_personnel_${id}`).close();
         toast.success(res.data.message);
