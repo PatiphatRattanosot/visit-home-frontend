@@ -253,6 +253,7 @@ const VisitInfoPrint = () => {
   const { selectedYear, years, fetchYears } = useYearSelectStore();
 
   const { student, getStudentById, getYearlyData } = useStudentStore();
+  
 
   const { visitInfo, getVisitInfoByStudentId } = useVisitInfoStore();
 

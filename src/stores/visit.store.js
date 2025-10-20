@@ -38,7 +38,7 @@ export const useVisitInfoStore = create((set, get) => ({
         return response.data.data;
       }
     } catch (error) {
-      console.error("Error fetching visit info by ID:", error);
+      // console.error("Error fetching visit info by ID:", error);
     }
   },
   getVisitInfoByStudentId: async (studentId, yearId) => {
@@ -53,7 +53,7 @@ export const useVisitInfoStore = create((set, get) => ({
         return response.data.data;
       }
     } catch (error) {
-      console.error("Error fetching visit info by student ID:", error);
+      // console.error("Error fetching visit info by student ID:", error);
     }
   },
 
