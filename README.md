@@ -138,13 +138,13 @@ docker network ls
 ```bash
 # Windows (PowerShell)
 docker run --restart=always ^
--d --pull always --name test -p 5173:80 ^
+-d --pull always --name visit-home-frontend -p 5173:80 ^
 --network visit-home-network ^
 ghcr.io/patiphatrattanosot/visit-home-frontend:latest
 
 # MacOS / Linux (bash)
 docker run --restart=always \
--d --pull always --name test -p 5173:80 \
+-d --pull always --name visit-home-frontend -p 5173:80 \
 --network visit-home-network \
 ghcr.io/patiphatrattanosot/visit-home-frontend:latest
 
