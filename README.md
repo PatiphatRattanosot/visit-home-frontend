@@ -58,13 +58,13 @@ Visit Home Frontend is a home visiting record management web app built with mode
 
 ## 🛠️ Technology Stack
 
-| Category             | Technology                                   |
-| -------------------- | -------------------------------------------- |
-| **Framework**        | [React](https://react.dev/)                  |
-| **Build Tool**       | [Vite](https://vitejs.dev/)                  |
-| **Runtime**          | [Bun](https://bun.sh/)                       |
-| **Auth/Storage**     | [Firebase](https://firebase.google.com/)     |
-| **Containerization** | [Docker](https://www.docker.com/)            |
+| Category             | Technology                               |
+| -------------------- | ---------------------------------------- |
+| **Framework**        | [React](https://react.dev/)              |
+| **Build Tool**       | [Vite](https://vitejs.dev/)              |
+| **Runtime**          | [Bun](https://bun.sh/)                   |
+| **Auth/Storage**     | [Firebase](https://firebase.google.com/) |
+| **Containerization** | [Docker](https://www.docker.com/)        |
 
 ## 📁 Project Structure
 
@@ -113,6 +113,45 @@ src/
 	```
 
 The app will start on `http://localhost:5173`
+
+
+### Pull Docker image 
+
+If you want to run the provided frontend production image instead of building locally, pull it from GitHub Container Registry:
+
+```bash
+# Pull frontend image
+docker pull ghcr.io/patiphatrattanosot/visit-home-frontend:latest
+```
+
+#### Run the pulled image
+
+Create a network (optional but used by examples):
+
+```bash
+docker network create visit-home-network
+# verify
+docker network ls 
+```
+
+
+```bash
+# Windows (PowerShell)
+docker run --restart=always ^
+-d --pull always --name test -p 5173:80 ^
+--network visit-home-network ^
+ghcr.io/patiphatrattanosot/visit-home-frontend:latest
+
+# MacOS / Linux (bash)
+docker run --restart=always \
+-d --pull always --name test -p 5173:80 \
+--network visit-home-network \
+ghcr.io/patiphatrattanosot/visit-home-frontend:latest
+
+``` 
+
+The app will start on `http://localhost:5173`
+
 
 ## ⚙️ Configuration
 
