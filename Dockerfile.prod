@@ -22,6 +22,7 @@ RUN --mount=type=secret,id=VITE_BASEURL \
     --mount=type=secret,id=VITE_APPID \
     --mount=type=secret,id=VITE_GOOGLE_MAPS_API_KEY \
     --mount=type=secret,id=VITE_SECRET_KEY \
+    --mount=type=secret,id=VITE_EMAIL_DOMAIN \
     VITE_BASEURL=$(cat /run/secrets/VITE_BASEURL) \
     VITE_APIKEY=$(cat /run/secrets/VITE_APIKEY) \
     VITE_AUTHDOMAIN=$(cat /run/secrets/VITE_AUTHDOMAIN) \
@@ -31,6 +32,7 @@ RUN --mount=type=secret,id=VITE_BASEURL \
     VITE_APPID=$(cat /run/secrets/VITE_APPID) \
     VITE_GOOGLE_MAPS_API_KEY=$(cat /run/secrets/VITE_GOOGLE_MAPS_API_KEY) \
     VITE_SECRET_KEY=$(cat /run/secrets/VITE_SECRET_KEY) \
+    VITE_EMAIL_DOMAIN=$(cat /run/secrets/VITE_EMAIL_DOMAIN) \
     bun run build
 
 #Stage 2

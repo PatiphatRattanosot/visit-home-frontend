@@ -28,6 +28,7 @@ jobs:
           VITE_APPID: ${{ secrets.VITE_APPID }}
           VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
           VITE_SECRET_KEY: ${{ secrets.VITE_SECRET_KEY }}
+          VITE_EMAIL_DOMAIN: ${{ secrets.VITE_EMAIL_DOMAIN }}
         run: |
           docker build \
             --secret id=VITE_BASEURL,env=VITE_BASEURL \
@@ -39,6 +40,7 @@ jobs:
             --secret id=VITE_APPID,env=VITE_APPID \
             --secret id=VITE_GOOGLE_MAPS_API_KEY,env=VITE_GOOGLE_MAPS_API_KEY \
             --secret id=VITE_SECRET_KEY,env=VITE_SECRET_KEY \
+            --secret id=VITE_EMAIL_DOMAIN,env=VITE_EMAIL_DOMAIN \
             -t ghcr.io/patiphatrattanosot/visit-home-frontend:${{ env.TAG_NAME }} \
             -f ./Dockerfile.prod .
 
