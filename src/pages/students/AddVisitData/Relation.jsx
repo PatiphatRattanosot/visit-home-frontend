@@ -128,6 +128,7 @@ const Relation = ({ page, setPage, formik }) => {
               max={20}
               min={1}
               required
+              id="family_member"
             />
             {/* เวลาร่วมกัน */}
             <Text
@@ -143,6 +144,7 @@ const Relation = ({ page, setPage, formik }) => {
               max={24}
               min={0}
               required
+              id="family_time"
             />
             {/* ความสัมพันธ์ */}
             <Select
@@ -155,6 +157,7 @@ const Relation = ({ page, setPage, formik }) => {
               error={formik.errors.father_relation}
               touched={formik.touched.father_relation}
               required
+              id="father_relation"
             />
             <Select
               name="mother_relation"
@@ -166,6 +169,7 @@ const Relation = ({ page, setPage, formik }) => {
               error={formik.errors.mother_relation}
               touched={formik.touched.mother_relation}
               required
+              id="mother_relation"
             />
             <div className="flex flex-col">
               <LabelCheck
@@ -225,6 +229,7 @@ const Relation = ({ page, setPage, formik }) => {
                 onBlur={formik.handleBlur}
                 error={formik.errors.big_brother_relation}
                 touched={formik.touched.big_brother_relation}
+                id="big_brother_relation"
               />
             )}
             {lilBrotherCheck && (
@@ -237,6 +242,7 @@ const Relation = ({ page, setPage, formik }) => {
                 onBlur={formik.handleBlur}
                 error={formik.errors.lil_brother_relation}
                 touched={formik.touched.lil_brother_relation}
+                id="lil_brother_relation"
               />
             )}
             {bigSisterCheck && (
@@ -249,6 +255,7 @@ const Relation = ({ page, setPage, formik }) => {
                 onBlur={formik.handleBlur}
                 error={formik.errors.big_sister_relation}
                 touched={formik.touched.big_sister_relation}
+                id="big_sister_relation"
               />
             )}
             {lilSisterCheck && (
@@ -261,6 +268,7 @@ const Relation = ({ page, setPage, formik }) => {
                 onBlur={formik.handleBlur}
                 error={formik.errors.lil_sister_relation}
                 touched={formik.touched.lil_sister_relation}
+                id="lil_sister_relation"
               />
             )}
             {grandparentCheck && (
@@ -273,6 +281,7 @@ const Relation = ({ page, setPage, formik }) => {
                 onBlur={formik.handleBlur}
                 error={formik.errors.grandparent_relation}
                 touched={formik.touched.grandparent_relation}
+                id="grandparent_relation"
               />
             )}
             {relativeCheck && (
@@ -285,6 +294,7 @@ const Relation = ({ page, setPage, formik }) => {
                 onBlur={formik.handleBlur}
                 error={formik.errors.relative_relation}
                 touched={formik.touched.relative_relation}
+                id="relative_relation"
               />
             )}
           </div>

@@ -173,6 +173,7 @@ const Risk = ({ page, setPage, formik }) => {
               min={0}
               max={200}
               required
+              id="distance_to_school"
             />
             {/* เวลาที่ใช้ */}
             <Text
@@ -188,6 +189,7 @@ const Risk = ({ page, setPage, formik }) => {
               max={60}
               step={5}
               required
+              id="time_used"
             />
             {/* วิธีการเดินทางของนักเรียนไปโรงเรียน */}
             <div className="md:col-span-2">

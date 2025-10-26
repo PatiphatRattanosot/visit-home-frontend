@@ -50,7 +50,7 @@ const AddPersonnel = () => {
                 touched={formik.touched.prefix}
                 onBlur={formik.handleBlur}
                 className="w-64 md:w-72"
-                id="add-personnel-prefix-select"
+                id="prefix_add"
               />
 
               <TextInput
@@ -63,7 +63,7 @@ const AddPersonnel = () => {
                 error={formik.errors.first_name}
                 touched={formik.touched.first_name}
                 onBlur={formik.handleBlur}
-                id="add-personnel-firstname-input"
+                id="first_name_add"
                 className="w-64 md:w-72"
               />
 
@@ -77,7 +77,7 @@ const AddPersonnel = () => {
                 error={formik.errors.last_name}
                 touched={formik.touched.last_name}
                 onBlur={formik.handleBlur}
-                id="add-personnel-lastname-input"
+                id="last_name_add"
                 className="w-64 md:w-72"
               />
 
@@ -91,7 +91,7 @@ const AddPersonnel = () => {
                 error={formik.errors.user_id}
                 touched={formik.touched.user_id}
                 onBlur={formik.handleBlur}
-                id="add-personnel-userid-input"
+                id="user_id_add"
                 className="w-64 md:w-72"
               />
 
@@ -107,7 +107,7 @@ const AddPersonnel = () => {
                 error={formik.errors.phone}
                 touched={formik.touched.phone}
                 onBlur={formik.handleBlur}
-                id="add-personnel-phone-input"
+                id="phone_add"
                 className="w-64 md:w-72"
               />
 

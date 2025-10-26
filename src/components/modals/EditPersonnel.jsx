@@ -81,6 +81,7 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
                 touched={formik.touched.prefix}
                 onBlur={formik.handleBlur}
                 className="w-64 md:w-72"
+                id="prefix_edit"
               />
 
               <TextInput
@@ -94,6 +95,7 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
                 touched={formik.touched.first_name}
                 onBlur={formik.handleBlur}
                 className="w-64 md:w-72"
+                id="first_name_edit"
               />
 
               <TextInput
@@ -107,6 +109,7 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
                 touched={formik.touched.last_name}
                 onBlur={formik.handleBlur}
                 className="w-64 md:w-72"
+                id="last_name_edit"
               />
 
               <TextInput
@@ -121,6 +124,7 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
                 touched={formik.touched.phone}
                 onBlur={formik.handleBlur}
                 className="w-64 md:w-72"
+                id="phone_edit"
               />
 
               <SelectInput
@@ -134,6 +138,7 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
                 touched={formik.touched.status}
                 onBlur={formik.handleBlur}
                 className="w-64 md:w-72"
+                id="status_edit"
               />
             </div>
 

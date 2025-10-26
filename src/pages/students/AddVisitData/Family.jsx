@@ -158,6 +158,7 @@ const Family = ({ page, setPage, formik }) => {
                 step={1000}
                 className="md:w-1/2 md:pr-3"
                 required
+                id="total_household_income"
               />
             </div>
             {/* นักเรียนได้เงินมาโรงเรียน */}
@@ -184,6 +185,7 @@ const Family = ({ page, setPage, formik }) => {
               touched={formik.touched.daily_total_to_school}
               step={5}
               required
+              id="daily_total_to_school"
             />
             {/* งานพิเศษ */}
             <div className="md:col-span-2 flex flex-col">
@@ -206,6 +208,7 @@ const Family = ({ page, setPage, formik }) => {
                 error={formik.errors.student_part_time}
                 touched={formik.touched.student_part_time}
                 disabled={!studentWork}
+                id="student_part_time"
               />
             )}
             {studentWork && (
@@ -222,6 +225,7 @@ const Family = ({ page, setPage, formik }) => {
                 max={50000}
                 step={100}
                 disabled={!studentWork}
+                id="student_income"
               />
             )}
             {/* ภาระพึ่งพิงของครัวเรือน */}
@@ -327,6 +331,7 @@ const Family = ({ page, setPage, formik }) => {
                   type="number"
                   min={0}
                   max={5000}
+                  id="owned_land"
                 />
               </div>
             )}
@@ -352,6 +357,7 @@ const Family = ({ page, setPage, formik }) => {
                   type="number"
                   min={0}
                   max={5000}
+                  id="rented_land"
                 />
               </div>
             )}

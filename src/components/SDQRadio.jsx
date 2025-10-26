@@ -26,6 +26,7 @@ const SDQRadio = ({
             checked={value === options[0]}
             onChange={onChange}
             onBlur={onBlur}
+            data-testid={`${name}_0`}
           />
           <label htmlFor={`${name}_0`}>ไม่จริง</label>
         </div>
@@ -41,6 +42,7 @@ const SDQRadio = ({
             checked={value === options[1]}
             onChange={onChange}
             onBlur={onBlur}
+            data-testid={`${name}_1`}
           />
           <label htmlFor={`${name}_1`}>ค่อนข้างจริง</label>
         </div>
@@ -56,6 +58,7 @@ const SDQRadio = ({
             checked={value === options[2]}
             onChange={onChange}
             onBlur={onBlur}
+            data-testid={`${name}_2`}
           />
           <label htmlFor={`${name}_2`}>จริง</label>
         </div>

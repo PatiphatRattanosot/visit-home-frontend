@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import TextInputInModal from "./TexInputInModal";
-import SelectInputInModal from "./SelectInputInModal";
+import TextInputInModal from "../Text";
+import SelectInputInModal from "../Select";
 import { useFormik } from "formik";
 import { ClassroomSchema } from "../../schemas/classroom";
 import { usePersonnelStore } from "../../stores/admin.store";
@@ -64,6 +64,7 @@ const AddClassroom = ({ yearId, addClassroomSuccess }) => {
                 onBlur={formik.handleBlur}
                 className="w-64 md:w-72"
                 label="ชั้น"
+                id="room_add"
               />
               <TextInputInModal
                 type="number"
@@ -79,11 +80,13 @@ const AddClassroom = ({ yearId, addClassroomSuccess }) => {
                 touched={formik.touched.number}
                 onBlur={formik.handleBlur}
                 name="number"
+                id="number_add"
               />
               <SelectInputInModal
                 className="w-64 md:w-72"
                 label="ครูที่ปรึกษา"
                 name="teacherId"
+                id="teacherId_add"
                 value={formik.values.teacherId}
                 onChange={formik.handleChange}
                 error={formik.errors.teacherId}

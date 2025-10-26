@@ -49,6 +49,7 @@ const AddYear = ({ addDataSuccess }) => {
               onBlur={formik.handleBlur}
               minLength={0}
               className="w-72"
+              id="year_add"
             />
 
             <div className="modal-action flex gap-4 justify-center">

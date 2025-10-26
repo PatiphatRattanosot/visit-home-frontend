@@ -56,6 +56,7 @@ const DateInput = ({ yearNumber }) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             className="input input-bordered w-full md:w-42"
+            id="start_date"
           />
           {formik.touched.startDate && formik.errors.startDate ? (
             <div className="text-red-500 text-xs mt-1">
@@ -74,6 +75,7 @@ const DateInput = ({ yearNumber }) => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             className="input input-bordered w-full md:w-42"
+            id="end_date"
           />
           {formik.touched.endDate && formik.errors.endDate ? (
             <div className="text-red-500 text-xs mt-1">
@@ -83,7 +85,7 @@ const DateInput = ({ yearNumber }) => {
         </div>
       </div>
       <div className="flex justify-center">
-        <button type="submit" className="btn-green">
+        <button type="submit" className="btn-green" id="save_date_button">
           บันทึก
         </button>
       </div>

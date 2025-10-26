@@ -12,6 +12,7 @@ const StudentPicture = ({ studentPic, handleChange }) => {
     <div
       className="border-1 border-gray-200 bg-white w-[13.875rem] h-[18.5rem] rounded-sm flex justify-center items-center hover:bg-gray-50 hover:cursor-pointer"
       onClick={handleOpenInput}
+      id="manage_student_picture"
     >
       {/* ใช้ typeof เช็คว่าตัวแปรที่รับมาเป็นตัวแปรที่เป็นตัวอักษรรึป่าว */}
       {studentPic ? (

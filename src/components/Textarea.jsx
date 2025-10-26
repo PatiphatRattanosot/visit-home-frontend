@@ -1,4 +1,5 @@
 const Textarea = ({
+  id,
   value,
   onChange,
   onBlur,
@@ -18,7 +19,7 @@ const Textarea = ({
         {required && <span className="text-red-500"> *</span>}
       </label>
       <textarea
-        id={name}
+        id={id}
         name={name}
         placeholder={placeholder}
         value={value}
@@ -26,6 +27,7 @@ const Textarea = ({
         onBlur={onBlur}
         className="textarea w-full"
         disabled={disabled}
+        data-testid={id}
       />
       {error && touched && (
         <div className="text-red-500 text-xs mt-2" id={`${name}-error`}>

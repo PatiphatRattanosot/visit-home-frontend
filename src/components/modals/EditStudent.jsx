@@ -1,6 +1,6 @@
 import { useStudentStore } from "../../stores/student.store";
-import TextInputInModal from "./TexInputInModal";
-import SelectInputInModal from "./SelectInputInModal";
+import TextInputInModal from "../Text";
+import SelectInputInModal from "../Select";
 import { useFormik } from "formik";
 import { studentSchema } from "../../schemas/student";
 import { useEffect, useState } from "react";
@@ -88,7 +88,7 @@ const EditStudent = ({ id, onUpdateStudent, classId }) => {
                 touched={formik.touched.prefix}
                 onBlur={formik.handleBlur}
                 className="w-64 md:w-72"
-                id="edit-student-prefix-select"
+                id="prefix_edit"
               />
 
               <TextInputInModal
@@ -101,7 +101,7 @@ const EditStudent = ({ id, onUpdateStudent, classId }) => {
                 error={formik.errors.user_id}
                 touched={formik.touched.user_id}
                 onBlur={formik.handleBlur}
-                id="edit-student-userid-input"
+                id="user_id_edit"
               />
 
               <TextInputInModal
@@ -114,7 +114,7 @@ const EditStudent = ({ id, onUpdateStudent, classId }) => {
                 error={formik.errors.first_name}
                 touched={formik.touched.first_name}
                 onBlur={formik.handleBlur}
-                id="edit-student-firstname-input"
+                id="first_name_edit"
               />
               <TextInputInModal
                 name="last_name"
@@ -126,7 +126,7 @@ const EditStudent = ({ id, onUpdateStudent, classId }) => {
                 error={formik.errors.last_name}
                 touched={formik.touched.last_name}
                 onBlur={formik.handleBlur}
-                id="edit-student-lastname-input"
+                id="last_name_edit"
               />
             </div>
             <div className="modal-action flex justify-center">
