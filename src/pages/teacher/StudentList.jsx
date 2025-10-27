@@ -16,8 +16,6 @@ import {
   sortStudentOptions,
 } from "../../utils/sortDataStudentTable";
 
-
-
 const StudentList = () => {
   const { userInfo } = useAuthStore();
   const { classroom, getClassroomByTeacherId } = useClassroomStore(); // classroom = array ของห้อง
@@ -35,23 +33,19 @@ const StudentList = () => {
   const [studentVisitData, setStudentVisitData] = useState([]);
   const itemsPerPage = 10;
 
-  // useEffect สำหรับเรียกข้อมูล sheduleLength มาโชว์์ที่หน้ารายชื่อนักเรียน 
+  // useEffect สำหรับเรียกข้อมูล sheduleLength มาโชว์์ที่หน้ารายชื่อนักเรียน
   useEffect(() => {
-    const fetchScheduleLengthShow = async () => {
-
-     
-    };
+    const fetchScheduleLengthShow = async () => {};
     fetchScheduleLengthShow();
   }, []);
 
   // Find current year data when selectedYear or years change
   useEffect(() => {
     if (selectedYear && years.length > 0) {
-      const yearData = years.find(year => year._id === selectedYear);
+      const yearData = years.find((year) => year._id === selectedYear);
       setCurrentYearData(yearData || null);
     }
   }, [selectedYear, years]);
-
 
   useEffect(() => {
     getClassroomByTeacherId(String(userInfo._id), String(selectedYear));
@@ -216,25 +210,33 @@ const StudentList = () => {
           setSelectedYear={setSelectedYear}
         />
         {/* โชว์ข้อมูลช่วงเวลาวันนัดเยี่ยมบ้าน */}
-           <div>
-  <span className={`badge text-lg text-white badge-lg ${
-    currentYearData?.start_schedule_date && currentYearData?.end_schedule_date
-      ? "badge-info"  // สีฟ้าเมื่อมีช่วงเวลา
-      : "badge-error" // สีแดงเมื่อไม่มีช่วงเวลา
-  }`}>
-    {currentYearData?.start_schedule_date && currentYearData?.end_schedule_date
-      ? `ช่วงเวลานัดเยี่ยมบ้าน: ${new Date(currentYearData.start_schedule_date).toLocaleDateString("th-TH", {
-          day: "numeric",
-          month: "long", 
-          year: "numeric",
-        })} - ${new Date(currentYearData.end_schedule_date).toLocaleDateString("th-TH", {
-          day: "numeric",
-          month: "long",
-          year: "numeric", 
-        })}`
-      : "ยังไม่กำหนดช่วงเวลานัดเยี่ยมบ้าน"}
-  </span>
-</div>
+        <div>
+          <span
+            className={`badge text-lg text-white badge-lg ${
+              currentYearData?.start_schedule_date &&
+              currentYearData?.end_schedule_date
+                ? "badge-info" // สีฟ้าเมื่อมีช่วงเวลา
+                : "badge-error" // สีแดงเมื่อไม่มีช่วงเวลา
+            }`}
+          >
+            {currentYearData?.start_schedule_date &&
+            currentYearData?.end_schedule_date
+              ? `ช่วงเวลานัดเยี่ยมบ้าน: ${new Date(
+                  currentYearData.start_schedule_date
+                ).toLocaleDateString("th-TH", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })} - ${new Date(
+                  currentYearData.end_schedule_date
+                ).toLocaleDateString("th-TH", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}`
+              : "ยังไม่กำหนดช่วงเวลานัดเยี่ยมบ้าน"}
+          </span>
+        </div>
       </div>
 
       <div className="rounded-xl border border-base-300 overflow-hidden">
@@ -257,6 +259,8 @@ const StudentList = () => {
                   key={student?._id}
                 >
                   <td
+                    id={`manage_student_${student._id}`}
+                    data-testid={`manage-student-uid_${index}`}
                     className="text-center cursor-pointer hover:underline"
                     onClick={() =>
                       document
@@ -307,7 +311,8 @@ const StudentList = () => {
                     </span>
                   </td>
                   <td>
-                    {currentYearData?.start_schedule_date && currentYearData?.end_schedule_date ? (
+                    {currentYearData?.start_schedule_date &&
+                    currentYearData?.end_schedule_date ? (
                       <button
                         onClick={() =>
                           document
@@ -323,7 +328,9 @@ const StudentList = () => {
                         นัดวันเยี่ยมบ้าน
                       </button>
                     ) : (
-                      <span className="text-gray-400 text-sm">ยังไม่กำหนดช่วงเวลา</span>
+                      <span className="text-gray-400 text-sm">
+                        ยังไม่กำหนดช่วงเวลา
+                      </span>
                     )}
                   </td>
                   <td>

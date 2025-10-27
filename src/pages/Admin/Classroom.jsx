@@ -157,6 +157,8 @@ const Classroom = () => {
             {currentItems.map((classroom, index) => (
               <tr key={index} className="hover:bg-gray-100">
                 <td
+                  id={`classroom-name-${index}`}
+                  data-testid={`classroom-name-${index}`}
                   onClick={() =>
                     navigate(`/admin/year/classroom/${classroom._id}`)
                   }
