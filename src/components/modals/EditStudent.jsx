@@ -102,6 +102,7 @@ const EditStudent = ({ id, onUpdateStudent, classId }) => {
                 touched={formik.touched.user_id}
                 onBlur={formik.handleBlur}
                 id="user_id_edit"
+                className="w-64 md:w-72"
               />
 
               <TextInputInModal
@@ -115,6 +116,7 @@ const EditStudent = ({ id, onUpdateStudent, classId }) => {
                 touched={formik.touched.first_name}
                 onBlur={formik.handleBlur}
                 id="first_name_edit"
+                className="w-64 md:w-72"
               />
               <TextInputInModal
                 name="last_name"
@@ -127,6 +129,7 @@ const EditStudent = ({ id, onUpdateStudent, classId }) => {
                 touched={formik.touched.last_name}
                 onBlur={formik.handleBlur}
                 id="last_name_edit"
+                className="w-64 md:w-72"
               />
             </div>
             <div className="modal-action flex justify-center">

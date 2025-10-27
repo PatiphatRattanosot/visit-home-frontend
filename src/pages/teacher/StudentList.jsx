@@ -35,7 +35,7 @@ const StudentList = () => {
 
   // useEffect สำหรับเรียกข้อมูล sheduleLength มาโชว์์ที่หน้ารายชื่อนักเรียน
   useEffect(() => {
-    const fetchScheduleLengthShow = async () => {};
+    const fetchScheduleLengthShow = async () => { };
     fetchScheduleLengthShow();
   }, []);
 
@@ -212,28 +212,27 @@ const StudentList = () => {
         {/* โชว์ข้อมูลช่วงเวลาวันนัดเยี่ยมบ้าน */}
         <div>
           <span
-            className={`badge text-lg text-white badge-lg ${
-              currentYearData?.start_schedule_date &&
+            className={`badge text-lg text-white badge-lg ${currentYearData?.start_schedule_date &&
               currentYearData?.end_schedule_date
-                ? "badge-info" // สีฟ้าเมื่อมีช่วงเวลา
-                : "badge-error" // สีแดงเมื่อไม่มีช่วงเวลา
-            }`}
+              ? "badge-info" // สีฟ้าเมื่อมีช่วงเวลา
+              : "badge-error" // สีแดงเมื่อไม่มีช่วงเวลา
+              }`}
           >
             {currentYearData?.start_schedule_date &&
-            currentYearData?.end_schedule_date
+              currentYearData?.end_schedule_date
               ? `ช่วงเวลานัดเยี่ยมบ้าน: ${new Date(
-                  currentYearData.start_schedule_date
-                ).toLocaleDateString("th-TH", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })} - ${new Date(
-                  currentYearData.end_schedule_date
-                ).toLocaleDateString("th-TH", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })}`
+                currentYearData.start_schedule_date
+              ).toLocaleDateString("th-TH", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })} - ${new Date(
+                currentYearData.end_schedule_date
+              ).toLocaleDateString("th-TH", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}`
               : "ยังไม่กำหนดช่วงเวลานัดเยี่ยมบ้าน"}
           </span>
         </div>
@@ -256,15 +255,15 @@ const StudentList = () => {
               {currentItems.map((student, index) => (
                 <tr
                   className="cursor-pointer hover:bg-gray-100"
-                  key={student?._id}
+                  key={index}
                 >
                   <td
-                    id={`manage_student_${index}`}
-                    data-testid={`manage-student-uid_${index}`}
+                    id={`student_${index}`}
+                    data-testid={`student_${index}`}
                     className="text-center cursor-pointer hover:underline"
                     onClick={() =>
                       document
-                        .getElementById(`manage_student_${student._id}`)
+                        .getElementById(`manage_student_${index}`)
                         .showModal()
                     }
                   >
@@ -275,12 +274,12 @@ const StudentList = () => {
                   <td
                     onClick={() =>
                       document
-                        .getElementById(`manage_student_${student._id}`)
+                        .getElementById(`manage_student_${index}`)
                         .showModal()
                     }
                     className="cursor-pointer"
-                    id={`manage-student-name_${index}`}
-                    data-testid={`manage-student-name_${index}`}
+                    id={`student_name_${index}`}
+                    data-testid={`student_name_${index}`}
                   >
                     {student?.first_name} {student?.last_name}
                   </td>
@@ -289,41 +288,40 @@ const StudentList = () => {
                   </td>
                   <td>
                     <span
-                      className={`badge ${
-                        studentVisitData[student._id]
-                          ? "badge-success"
-                          : studentSchedules[student._id]
+                      className={`badge ${studentVisitData[student._id]
+                        ? "badge-success"
+                        : studentSchedules[student._id]
                           ? "badge-warning"
                           : "badge-error"
-                      } text-white w-32`}
+                        } text-white w-32`}
                     >
                       {studentVisitData[student._id]
                         ? "เยี่ยมบ้านแล้ว"
                         : studentSchedules[student._id]
-                        ? new Date(
+                          ? new Date(
                             studentSchedules[student._id].appointment_date
                           ).toLocaleDateString("th-TH", {
                             day: "numeric",
                             month: "long",
                             year: "numeric",
                           })
-                        : "ยังไม่ได้นัด"}
+                          : "ยังไม่ได้นัด"}
                     </span>
                   </td>
                   <td>
                     {currentYearData?.start_schedule_date &&
-                    currentYearData?.end_schedule_date ? (
+                      currentYearData?.end_schedule_date ? (
                       <button
                         onClick={() =>
                           document
                             .getElementById(
-                              `add_appointment_schedule_${student._id}`
+                              `add_appointment_schedule_${index}`
                             )
                             .showModal()
                         }
                         className="btn-blue btn-sm hover:btn-blue/80"
-                        id={`add-appointment-button_${index}`}
-                        data-testid={`add-appointment-button_${index}`}
+                        id={`appointment_button_${index}`}
+                        data-testid={`appointment_button_${index}`}
                       >
                         นัดวันเยี่ยมบ้าน
                       </button>
@@ -335,14 +333,14 @@ const StudentList = () => {
                   </td>
                   <td>
                     <ManageStudent
-                      id={`manage_student_${student._id}`}
+                      id={index}
                       student={student}
                     />
                   </td>
                   <Appointment
                     studentId={student._id}
                     student={student}
-                    id={`add_appointment_schedule_${student._id}`}
+                    id={index}
                     onScheduleUpdate={refreshSchedules}
                     currentYearData={currentYearData}
                   />

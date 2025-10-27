@@ -3,7 +3,7 @@ import SDQServices from "../../services/sdq/sdq.service";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 
-const ManageStudent = ({ student }) => {
+const ManageStudent = ({ student, id }) => {
   const { selectedYear } = useYearSelectStore();
   if (!student) return null; // Ensure student is defined before rendering
 
@@ -97,7 +97,7 @@ const ManageStudent = ({ student }) => {
 
   return (
     <div>
-      <dialog id={`manage_student_${student._id}`} className="modal">
+      <dialog id={`manage_student_${id}`} className="modal">
         <div className="modal-box max-w-5xl w-full max-h-screen overflow-y-auto">
           <form method="dialog">
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">

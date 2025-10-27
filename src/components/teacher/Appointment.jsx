@@ -9,7 +9,7 @@ import Textarea from "../Textarea";
 import toast from "react-hot-toast";
 
 
-const Appointment = ({ student, studentId, onScheduleUpdate, currentYearData }) => {
+const Appointment = ({ student, studentId, onScheduleUpdate, currentYearData, id }) => {
   const [hasSchedule, setHasSchedule] = useState(false);
   const { userInfo } = useAuthStore();
   const {
@@ -74,19 +74,19 @@ const Appointment = ({ student, studentId, onScheduleUpdate, currentYearData }) 
         const selectedDate = new Date(values.appointment_date);
         const startDate = new Date(currentYearData.start_schedule_date);
         const endDate = new Date(currentYearData.end_schedule_date);
-        
+
         // เซ็ตเวลาเป็น 00:00:00 เพื่อเปรียบเทียบแค่วันที่
         selectedDate.setHours(0, 0, 0, 0);
         startDate.setHours(0, 0, 0, 0);
         endDate.setHours(0, 0, 0, 0);
-        
+
         if (selectedDate < startDate || selectedDate > endDate) {
           toast.error(`กรุณาเลือกวันที่ในช่วง ${startDate.toLocaleDateString("th-TH", {
             day: "numeric",
             month: "long",
             year: "numeric",
           })} - ${endDate.toLocaleDateString("th-TH", {
-            day: "numeric", 
+            day: "numeric",
             month: "long",
             year: "numeric",
           })}`);
@@ -125,7 +125,7 @@ const Appointment = ({ student, studentId, onScheduleUpdate, currentYearData }) 
   // fetchSchedule function is now handled by the store and useEffect above
 
   return (
-    <dialog id={`add_appointment_schedule_${student._id}`} className="modal">
+    <dialog id={`add_appointment_schedule_${id}`} className="modal">
       <div className="modal-box max-w-lg">
         <form method="dialog">
           <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
