@@ -259,7 +259,7 @@ const StudentList = () => {
                   key={student?._id}
                 >
                   <td
-                    id={`manage_student_${student._id}`}
+                    id={`manage_student_${index}`}
                     data-testid={`manage-student-uid_${index}`}
                     className="text-center cursor-pointer hover:underline"
                     onClick={() =>
