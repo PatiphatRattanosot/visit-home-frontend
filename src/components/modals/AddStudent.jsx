@@ -52,20 +52,6 @@ const AddStudent = ({ classId, onAddStudentSuccess }) => {
                 className="w-64 md:w-72"
                 id="prefix_add"
               />
-
-              <TextInputInModal
-                name="user_id"
-                placeholder="เลขที่ประจำตัวนักเรียน"
-                disabled={false}
-                value={formik.values.user_id}
-                onChange={formik.handleChange}
-                label="เลขที่ประจำตัวนักเรียน"
-                error={formik.errors.user_id}
-                touched={formik.touched.user_id}
-                onBlur={formik.handleBlur}
-                id="user_id_add"
-                className="w-64 md:w-72"
-              />
               <TextInputInModal
                 name="first_name"
                 placeholder="ชื่อ"
@@ -90,6 +76,19 @@ const AddStudent = ({ classId, onAddStudentSuccess }) => {
                 touched={formik.touched.last_name}
                 onBlur={formik.handleBlur}
                 id="last_name_add"
+                className="w-64 md:w-72"
+              />
+              <TextInputInModal
+                name="user_id"
+                placeholder="เลขที่ประจำตัวนักเรียน"
+                disabled={false}
+                value={formik.values.user_id}
+                onChange={formik.handleChange}
+                label="เลขที่ประจำตัวนักเรียน"
+                error={formik.errors.user_id}
+                touched={formik.touched.user_id}
+                onBlur={formik.handleBlur}
+                id="user_id_add"
                 className="w-64 md:w-72"
               />
               <div className="flex gap-6 justify-center mt-4">
