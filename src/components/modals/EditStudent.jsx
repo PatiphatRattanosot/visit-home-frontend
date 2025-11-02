@@ -4,7 +4,7 @@ import SelectInputInModal from "../Select";
 import { useFormik } from "formik";
 import { studentSchema } from "../../schemas/student";
 import { useEffect, useState } from "react";
-const EditStudent = ({ id, onUpdateStudent, classId, studentId }) => {
+const EditStudent = ({ id, onUpdateStudent, classId, studentId, index }) => {
   const { getStudentById, updateStudent } = useStudentStore();
   const [student, setStudent] = useState(null);
   const prefixOptions = [
@@ -88,7 +88,7 @@ const EditStudent = ({ id, onUpdateStudent, classId, studentId }) => {
                 touched={formik.touched.prefix}
                 onBlur={formik.handleBlur}
                 className="w-64 md:w-72"
-                id="prefix_edit"
+                id={`prefix_edit_${index}`}
               />
               <TextInputInModal
                 name="first_name"
@@ -100,7 +100,7 @@ const EditStudent = ({ id, onUpdateStudent, classId, studentId }) => {
                 error={formik.errors.first_name}
                 touched={formik.touched.first_name}
                 onBlur={formik.handleBlur}
-                id="first_name_edit"
+                id={`first_name_edit_${index}`}
                 className="w-64 md:w-72"
               />
               <TextInputInModal
@@ -113,7 +113,7 @@ const EditStudent = ({ id, onUpdateStudent, classId, studentId }) => {
                 error={formik.errors.last_name}
                 touched={formik.touched.last_name}
                 onBlur={formik.handleBlur}
-                id="last_name_edit"
+                id={`last_name_edit_${index}`}
                 className="w-64 md:w-72"
               />
               <TextInputInModal
@@ -126,7 +126,7 @@ const EditStudent = ({ id, onUpdateStudent, classId, studentId }) => {
                 error={formik.errors.user_id}
                 touched={formik.touched.user_id}
                 onBlur={formik.handleBlur}
-                id="user_id_edit"
+                id={`user_id_edit_${index}`}
                 className="w-64 md:w-72"
               />
             </div>

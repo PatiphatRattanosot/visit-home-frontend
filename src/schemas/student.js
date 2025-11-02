@@ -18,8 +18,8 @@ export const studentSchema = yup.object().shape({
     .required("กรุณากรอกนามสกุล"),
   user_id: yup
     .string().transform((value) => value.trim())
-    .matches(numberRule, "กรุณากรอกเลขที่ประจำตัวบุคลากรให้ถูกต้อง")
-    .required("กรุณากรอกเลขที่ประจำตัวบุคลากร"),
+    .matches(numberRule, "กรุณากรอกเลขที่ประจำตัวนักเรียนให้ถูกต้อง")
+    .required("กรุณากรอกเลขที่ประจำตัวนักเรียน"),
   class_id: yup.string(),
   phone: yup.string()
 });

@@ -183,7 +183,7 @@ const Personnel = () => {
                   </button>
 
                   <ModalEditPersonnel
-                    id={person._id}
+                    id={index}
                     onSuccesUpdatePerson={fetchData}
                   />
 

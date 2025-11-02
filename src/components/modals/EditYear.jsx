@@ -63,7 +63,7 @@ const EditYear = ({ year, onUpdateSuccess }) => {
               error={formik.errors.year}
               touched={formik.touched.year}
               onBlur={formik.handleBlur}
-              minLength={0}
+              max={10000}
               id={`year_edit_${year._id}`}
             />
             <div className="modal-action flex justify-center gap-4">

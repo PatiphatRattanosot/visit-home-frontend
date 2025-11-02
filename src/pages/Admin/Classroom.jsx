@@ -191,7 +191,7 @@ const Classroom = () => {
                     <AiOutlineDelete size={20} />
                   </button>
                   <ModalEditClassroom
-                    id={classroom._id}
+                    id={index}
                     onUpdateSuccess={() => {
                       if (selectedYear) fetchClassrooms(selectedYear);
                     }}

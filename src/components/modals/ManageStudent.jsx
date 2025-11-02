@@ -112,7 +112,7 @@ const ManageStudent = ({ student, id }) => {
               <a
                 href={`/teacher/sdq/${student._id}/${selectedYear}/estimate`}
                 className="btn"
-                id="sdq_teacher"
+                id={`sdq_teacher_${id}`}
               >
                 ประเมิน SDQ
               </a>
@@ -120,24 +120,24 @@ const ManageStudent = ({ student, id }) => {
             <a
               href={`/teacher/sdq/${student._id}/${selectedYear}`}
               className="btn"
-              id="sdq_result"
+              id={`sdq_result_${id}`}
             >
               ผลประเมิน SDQ
             </a>
-            <button onClick={openMapNavigation} className="btn" id="map_navigation">
+            <button onClick={openMapNavigation} className="btn" id={`map_navigation_${id}`}>
               ดูเส้นทาง
             </button>
-            <a href={`/teacher/student-data/${student._id}`} className="btn" id="student_info">
+            <a href={`/teacher/student-data/${student._id}`} className="btn" id={`student_info_${id}`}>
               ข้อมูลนักเรียน
             </a>
             <a
               href={`/teacher/visit-info/overview/${student._id}`}
               className="btn"
-              id="visit_overview"
+              id={`visit_overview_${id}`}
             >
               ภาพรวมเยี่ยมบ้าน
             </a>
-            <a href={`/teacher/visit-info/add/${student._id}`} className="btn" id="visit_add">
+            <a href={`/teacher/visit-info/add/${student._id}`} className="btn" id={`visit_add_${id}`}>
               ผลการเยี่ยมบ้าน
             </a>
 
@@ -146,7 +146,7 @@ const ManageStudent = ({ student, id }) => {
               className="btn"
               target="_blank"
               rel="noreferrer"
-              id="visit_print"
+              id={`visit_print_${id}`}
             >
               พิมพ์เอกสาร
             </a>
