@@ -190,6 +190,7 @@ const ClassroomDetail = () => {
                       </button>
                       <ModalEditStudent
                         id={index}
+                        index={index}
                         classId={classroomId}
                         studentId={student?._id}
                         onUpdateStudent={() => getClassroomById(classroomId)}
