@@ -25,7 +25,6 @@ const StudentList = () => {
   const [studentSchedules, setStudentSchedules] = useState([]);
   const [currentYearData, setCurrentYearData] = useState(null);
 
-  const [scheduleLength, setScheduleLength] = useState(null);
   const [selectedOption, setSelectedOption] = useState("SortToMost");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filteredStudents, setFilteredStudents] = useState([]);

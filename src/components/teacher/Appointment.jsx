@@ -8,17 +8,17 @@ import DateField from "../DateField";
 import Textarea from "../Textarea";
 import toast from "react-hot-toast";
 
-
-const Appointment = ({ student, studentId, onScheduleUpdate, currentYearData, id }) => {
+const Appointment = ({
+  student,
+  studentId,
+  onScheduleUpdate,
+  currentYearData,
+  id,
+}) => {
   const [hasSchedule, setHasSchedule] = useState(false);
   const { userInfo } = useAuthStore();
-  const {
-    createSchedule,
-    updateSchedule,
-    deleteSchedule,
-    fetchSchedule,
-    schedule,
-  } = useScheduleStore();
+  const { createSchedule, updateSchedule, deleteSchedule, fetchSchedule } =
+    useScheduleStore();
   const { selectedYear } = useYearSelectStore();
   const [scheduleId, setScheduleId] = useState(null);
 
@@ -70,7 +70,10 @@ const Appointment = ({ student, studentId, onScheduleUpdate, currentYearData, id
     validationSchema: AppointmentSchema,
     onSubmit: async (values) => {
       // ตรวจสอบว่าวันที่ที่เลือกอยู่ในช่วงที่กำหนดหรือไม่
-      if (currentYearData?.start_schedule_date && currentYearData?.end_schedule_date) {
+      if (
+        currentYearData?.start_schedule_date &&
+        currentYearData?.end_schedule_date
+      ) {
         const selectedDate = new Date(values.appointment_date);
         const startDate = new Date(currentYearData.start_schedule_date);
         const endDate = new Date(currentYearData.end_schedule_date);
@@ -81,15 +84,17 @@ const Appointment = ({ student, studentId, onScheduleUpdate, currentYearData, id
         endDate.setHours(0, 0, 0, 0);
 
         if (selectedDate < startDate || selectedDate > endDate) {
-          toast.error(`กรุณาเลือกวันที่ในช่วง ${startDate.toLocaleDateString("th-TH", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          })} - ${endDate.toLocaleDateString("th-TH", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          })}`);
+          toast.error(
+            `กรุณาเลือกวันที่ในช่วง ${startDate.toLocaleDateString("th-TH", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })} - ${endDate.toLocaleDateString("th-TH", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}`
+          );
           return;
         }
       }
@@ -148,7 +153,7 @@ const Appointment = ({ student, studentId, onScheduleUpdate, currentYearData, id
               error={formik.errors.appointment_date}
               required={true}
               className="w-full"
-              id="appointment-date-input"
+              id={`appointment-date-input_${id}`}
             />
             <label className="form-control w-full">
               <Textarea
@@ -159,7 +164,7 @@ const Appointment = ({ student, studentId, onScheduleUpdate, currentYearData, id
                 onBlur={formik.handleBlur}
                 touched={formik.touched.comment}
                 error={formik.errors.comment}
-                id="appointment-comment-textarea"
+                id={`appointment-comment-textarea_${id}`}
                 placeholder="หมายเหตุเพิ่มเติม..."
               />
             </label>
@@ -171,7 +176,7 @@ const Appointment = ({ student, studentId, onScheduleUpdate, currentYearData, id
                 className="btn-red"
                 onClick={() => {
                   document
-                    .getElementById(`add_appointment_schedule_${student._id}`)
+                    .getElementById(`add_appointment_schedule_${id}`)
                     ?.close();
                   formik.resetForm();
                 }}
@@ -183,6 +188,7 @@ const Appointment = ({ student, studentId, onScheduleUpdate, currentYearData, id
               <button
                 className="btn-red"
                 type="button"
+                id={`cancel-appointment-button_${id}`}
                 onClick={async () => {
                   await deleteSchedule(formik.values.schedule_id || scheduleId);
                   formik.resetForm();
@@ -194,7 +200,7 @@ const Appointment = ({ student, studentId, onScheduleUpdate, currentYearData, id
                     await onScheduleUpdate();
                   }
                   document
-                    .getElementById(`add_appointment_schedule_${student._id}`)
+                    .getElementById(`add_appointment_schedule_${id}`)
                     ?.close();
                 }}
               >
@@ -204,6 +210,7 @@ const Appointment = ({ student, studentId, onScheduleUpdate, currentYearData, id
             <button
               type="submit"
               className={hasSchedule ? "btn-yellow" : "btn-green"}
+              id={`save-appointment-button_${id}`}
             >
               {hasSchedule ? "แก้ไขนัดหมาย" : "บันทึก"}
             </button>
