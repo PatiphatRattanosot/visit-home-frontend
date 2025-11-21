@@ -113,32 +113,32 @@ const ManageAdminRoles = () => {
       {/* Toolbar centered */}
       {/* Toolbar */}
       <div className="w-full flex justify-center mt-4 mb-4">
-        <div className="w-full max-w-7xl flex justify-between flex-col md:flex-row items-center gap-3 px-2">
+        <div className="w-full max-w-7xl flex flex-col md:flex-row items-stretch md:items-center gap-3 px-2">
           {/* ซ้าย: Dropdown */}
-          <div className="order-1 md:order-none">
+          <div className="w-full md:w-56 order-1 md:order-none">
             <FilterDropdown
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
               options={sortPersonnelOptions}
-              className="select"
+              className="select select-bordered w-full"
             />
           </div>
 
           {/* ขวา: Search */}
-          <div className="flex justify-end">
+          <div className="w-full md:flex-1 flex justify-end">
             <SearchPersonnel
               placeholder="ค้นหาผู้ดูแล..."
               searchKeyword={searchKeyword}
               setSearchKeyword={setSearchKeyword}
-              className="w-72 md:w-[16rem]"
+              className="w-full md:w-80"
             />
           </div>
         </div>
       </div>
 
       {/* ตารางแสดงข้อมูล */}
-      <div className="overflow-x-auto flex justify-center">
-        <table className="table table-zebra w-full max-w-7xl">
+      <div className="hidden md:flex overflow-x-auto justify-center">
+        <table className="table table-zebra w-full max-w-7xl rounded-lg">
           <thead>
             <tr>
               <th>เลขที่ประจำตัว</th>
@@ -158,33 +158,35 @@ const ManageAdminRoles = () => {
                 <td>{person.last_name}</td>
                 <td>{getRoleDisplay(person.role)}</td>
                 <td>
-                  <input
-                    id={`admin-role-toggle_${index}`}
-                    data-testid={`admin-role-toggle_${index}`}
-                    type="checkbox"
-                    checked={hasAdminRole(person.role)}
-                    onChange={(e) =>
-                      e.target.checked
-                        ? handleAddRole(person.email, "Admin")
-                        : handleRemoveRole(person.email, "Admin")
-                    }
-                    // ถ้ามีบทบาท Admin ให้แสดง toggle เป็นสีเขียว ถ้าไม่มีเป็นสีแดง
-                    //ถ้ามีบทบาท Admin ให้แสดง toggle เป็นสีเขียว ถ้าไม่มีเป็นสีแดง เปลี่ยนไปตามคลาสของ DaisyUI
-                    className={`toggle ${
-                      hasAdminRole(person.role)
-                        ? "toggle-success"
-                        : "toggle-error"
-                    }`}
-                  />
-                  <span
-                    className={`text-sm font-semibold ${
-                      hasAdminRole(person.role)
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}
-                  >
-                    {hasAdminRole(person.role) ? "เจ้าหน้าที่" : "คุณครู"}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <input
+                      id={`admin-role-toggle_${index}`}
+                      data-testid={`admin-role-toggle_${index}`}
+                      type="checkbox"
+                      checked={hasAdminRole(person.role)}
+                      onChange={(e) =>
+                        e.target.checked
+                          ? handleAddRole(person.email, "Admin")
+                          : handleRemoveRole(person.email, "Admin")
+                      }
+                      // ถ้ามีบทบาท Admin ให้แสดง toggle เป็นสีเขียว ถ้าไม่มีเป็นสีแดง
+                      //ถ้ามีบทบาท Admin ให้แสดง toggle เป็นสีเขียว ถ้าไม่มีเป็นสีแดง เปลี่ยนไปตามคลาสของ DaisyUI
+                      className={`toggle ${
+                        hasAdminRole(person.role)
+                          ? "toggle-success"
+                          : "toggle-error"
+                      }`}
+                    />
+                    <span
+                      className={`text-sm font-semibold ${
+                        hasAdminRole(person.role)
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
+                      {hasAdminRole(person.role) ? "เจ้าหน้าที่" : "คุณครู"}
+                    </span>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -211,6 +213,60 @@ const ManageAdminRoles = () => {
             </tfoot>
           )}
         </table>
+      </div>
+
+      <div className="grid grid-cols-1 gap-3 md:hidden">
+        {currentItems.map((person, index) => (
+          <div
+            key={person?.email ?? index}
+            className="rounded-xl border border-base-300 bg-white shadow-sm p-4"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-xs uppercase text-gray-500">เลขที่ประจำตัว</p>
+                <p className="text-lg font-semibold text-gray-900">
+                  {person.user_id}
+                </p>
+                <p className="text-sm text-gray-700">
+                  {person.prefix} {person.first_name} {person.last_name}
+                </p>
+                <p className="text-sm text-gray-600">
+                  {getRoleDisplay(person.role)}
+                </p>
+              </div>
+              <span className="badge badge-outline text-xs">
+                {person.prefix || "-"}
+              </span>
+            </div>
+            <div className="mt-3 flex items-center gap-3">
+              <input
+                id={`admin-role-toggle-mobile_${index}`}
+                type="checkbox"
+                checked={hasAdminRole(person.role)}
+                onChange={(e) =>
+                  e.target.checked
+                    ? handleAddRole(person.email, "Admin")
+                    : handleRemoveRole(person.email, "Admin")
+                }
+                className={`toggle ${
+                  hasAdminRole(person.role) ? "toggle-success" : "toggle-error"
+                }`}
+              />
+              <span
+                className={`text-sm font-semibold ${
+                  hasAdminRole(person.role) ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {hasAdminRole(person.role) ? "เจ้าหน้าที่" : "คุณครู"}
+              </span>
+            </div>
+          </div>
+        ))}
+        {currentItems.length === 0 && (
+          <div className="text-center text-sm text-gray-600 py-6 border border-base-300 rounded-xl">
+            ไม่พบข้อมูล
+          </div>
+        )}
       </div>
 
       {/* Pagination */}

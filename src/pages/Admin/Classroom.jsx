@@ -89,15 +89,15 @@ const Classroom = () => {
           เพิ่มชั้นเรียนของปีการศึกษา{" "}
           {years.find((y) => y._id === selectedYear)?.year ?? ""}
         </h1>
-        <div className="flex flex-row justify-end items-center m-2">
+        <div className="flex flex-row justify-center md:justify-end items-center m-2">
           <YearSelector />
         </div>
 
         {/* กล่องสำหรับกำหนดช่วงเวลานัดเยี่ยมบ้าน */}
-        <div className="flex justify-center items-center">
-          <div className="card w-xl md:w-2xl p-4 shadow-sm flex flex-col items-center justify-center">
+        <div className="flex justify-center items-center px-2">
+          <div className="card w-full max-w-2xl p-4 shadow-sm flex flex-col items-center justify-center gap-3">
             <h2 className="text-lg">กำหนดช่วงเวลานัดเยี่ยมบ้าน</h2>
-            <div className="flex gap-2">
+            <div className="w-full flex flex-col md:flex-row md:justify-center gap-2">
               <DateInput
                 yearNumber={
                   years.find((y) => y._id === selectedYear)?.year ?? ""
@@ -108,13 +108,15 @@ const Classroom = () => {
         </div>
 
         {/* ฟีเจอร์เสริม */}
-        <div className="flex flex-col md:flex-row items-center justify-between m-2 mt-4 mb-4 gap-4">
-          <FilterDropdown
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
-            options={optionsForClassroom}
-          />
-          <div className="flex items-center gap-4">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between m-2 mt-4 mb-4 gap-3">
+          <div className="w-full md:w-auto">
+            <FilterDropdown
+              selectedOption={selectedOption}
+              setSelectedOption={setSelectedOption}
+              options={optionsForClassroom}
+            />
+          </div>
+          <div className="w-full md:w-96 flex items-center gap-4">
             <SearchClass
               classroom={classrooms}
               setFilteredClassroom={setFilteredClassroom}
@@ -127,7 +129,7 @@ const Classroom = () => {
               onClick={() =>
                 document.getElementById("add_classroom").showModal()
               }
-              className="btn-green"
+              className="btn-green w-full md:w-auto"
             >
               เพิ่มชั้นเรียน
             </button>
@@ -142,74 +144,125 @@ const Classroom = () => {
 
         {/* ข้อมูลชั้นเรียนรูปแบบตาราง */}
 
-        <table className="table text-center">
-          {/* head */}
-          <thead>
-            <tr>
-              <th>ชั้นเรียน</th>
-              <th>จำนวนสมาชิก</th>
-              <th>แก้ไข/ลบ</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* row 1 */}
-
-            {currentItems.map((classroom, index) => (
-              <tr key={index} className="hover:bg-gray-100">
-                <td
-                  id={`classroom-name-${index}`}
-                  data-testid={`classroom-name-${index}`}
-                  onClick={() =>
-                    navigate(`/admin/year/classroom/${classroom._id}`)
-                  }
-                  className="cursor-pointer hover:underline"
-                >
-                  ม.{classroom.room}/{classroom.number}
-                </td>
-                <td>{classroom.students?.length}</td>
-
-                <td className="flex gap-2 items-center justify-center">
-                  <button
-                    onClick={() =>
-                      document
-                        .getElementById(`edit_classroom_${classroom._id}`)
-                        .showModal()
-                    }
-                    className="btn btn-warning"
-                    id={`edit-classroom-button_${index}`}
-                    data-testid={`edit-classroom-button_${index}`}
-                  >
-                    <BiSolidEdit size={20} />
-                  </button>
-
-                  <button
-                    onClick={() => handleDeleteClassroom(classroom._id)}
-                    className="btn btn-error"
-                    id={`delete-classroom-button_${index}`}
-                    data-testid={`delete-classroom-button_${index}`}
-                  >
-                    <AiOutlineDelete size={20} />
-                  </button>
-                  <ModalEditClassroom
-                    id={classroom._id}
-                    index={index}
-                    onUpdateSuccess={() => {
-                      if (selectedYear) fetchClassrooms(selectedYear);
-                    }}
-                  />
-                </td>
+        <div className="hidden md:block overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+          <table className="table text-center">
+            {/* head */}
+            <thead>
+              <tr>
+                <th>ชั้นเรียน</th>
+                <th>จำนวนสมาชิก</th>
+                <th>แก้ไข/ลบ</th>
               </tr>
-            ))}
-          </tbody>
-          {/* foot */}
-          <tfoot>
-            <tr>
-              <th>ชั้นเรียน</th>
-              <th>จำนวนสมาชิก</th>
-              <th>แก้ไข/ลบ</th>
-            </tr>
-          </tfoot>
-        </table>
+            </thead>
+            <tbody>
+              {/* row 1 */}
+
+              {currentItems.map((classroom, index) => (
+                <tr key={index} className="hover:bg-gray-100">
+                  <td
+                    id={`classroom-name-${index}`}
+                    data-testid={`classroom-name-${index}`}
+                    onClick={() =>
+                      navigate(`/admin/year/classroom/${classroom._id}`)
+                    }
+                    className="cursor-pointer hover:underline"
+                  >
+                    ม.{classroom.room}/{classroom.number}
+                  </td>
+                  <td>{classroom.students?.length}</td>
+
+                  <td className="flex gap-2 items-center justify-center">
+                    <button
+                      onClick={() =>
+                        document
+                          .getElementById(`edit_classroom_${classroom._id}`)
+                          .showModal()
+                      }
+                      className="btn btn-warning"
+                      id={`edit-classroom-button_${index}`}
+                      data-testid={`edit-classroom-button_${index}`}
+                    >
+                      <BiSolidEdit size={20} />
+                    </button>
+
+                    <button
+                      onClick={() => handleDeleteClassroom(classroom._id)}
+                      className="btn btn-error"
+                      id={`delete-classroom-button_${index}`}
+                      data-testid={`delete-classroom-button_${index}`}
+                    >
+                      <AiOutlineDelete size={20} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+            {/* foot */}
+            <tfoot>
+              <tr>
+                <th>ชั้นเรียน</th>
+                <th>จำนวนสมาชิก</th>
+                <th>แก้ไข/ลบ</th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <div className="grid grid-cols-1 gap-3 md:hidden">
+          {currentItems.map((classroom, index) => (
+            <div
+              key={classroom._id ?? index}
+              className="rounded-xl border border-gray-200 bg-white shadow-sm p-4"
+            >
+              <button
+                onClick={() =>
+                  navigate(`/admin/year/classroom/${classroom._id}`)
+                }
+                className="text-left w-full"
+              >
+                <p className="text-xs uppercase text-gray-500">ชั้นเรียน</p>
+                <p className="text-lg font-semibold text-gray-900">
+                  ม.{classroom.room}/{classroom.number}
+                </p>
+                <p className="text-sm text-gray-600">
+                  จำนวนนักเรียน: {classroom.students?.length ?? 0}
+                </p>
+              </button>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <button
+                  onClick={() =>
+                    document
+                      .getElementById(`edit_classroom_${classroom._id}`)
+                      ?.showModal()
+                  }
+                  className="btn btn-warning btn-sm flex-1 min-w-[140px]"
+                  id={`edit-classroom-mobile-button_${index}`}
+                >
+                  <BiSolidEdit size={18} />
+                </button>
+
+                <button
+                  onClick={() => handleDeleteClassroom(classroom._id)}
+                  className="btn btn-error btn-sm flex-1 min-w-[140px]"
+                  id={`delete-classroom-mobile-button_${index}`}
+                >
+                  <AiOutlineDelete size={18} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {currentItems.map((classroom, index) => (
+          <ModalEditClassroom
+            key={classroom._id ?? index}
+            id={classroom._id}
+            index={index}
+            onUpdateSuccess={() => {
+              if (selectedYear) fetchClassrooms(selectedYear);
+            }}
+          />
+        ))}
       </div>
       {/* Pagination */}
       <Pagiantion
