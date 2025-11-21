@@ -90,7 +90,7 @@ const ClassroomDetail = () => {
         {classroom ? `${classroom.room}/${classroom.number}` : "Loading..."}
       </h1>
 
-      <div className="flex justify-between items-center mb-4 md:flex-row flex-col gap-4">
+      <div className="flex justify-between items-start md:items-center mb-4 md:flex-row flex-col gap-4">
         <div>
           {/* ชื่อคุณครูที่ปรึกษา */}
           <h2 className="text-xl font-semibold mb-2">
@@ -105,10 +105,10 @@ const ClassroomDetail = () => {
 
         {/* ปุ่มเพิ่มนักเรียน */}
 
-        <div className="space-x-2">
+        <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto md:justify-end">
           <ImportStudentBtn classId={classroomId} />
           <button
-            className="btn-green"
+            className="btn-green w-full sm:w-auto"
             onClick={() =>
               document.getElementById("add_student_modal").showModal()
             }
@@ -128,6 +128,7 @@ const ClassroomDetail = () => {
           setSearchKeyword={setSearchKeyword}
           placeholder="ค้นหานักเรียน..."
           setCurrentPage={setCurrentPage}
+          className="w-full md:w-80"
         />
 
         {/* ตัวเลือกการเรียง */}
@@ -136,11 +137,12 @@ const ClassroomDetail = () => {
           options={sortStudentOptions}
           selectedOption={selectedOption}
           setSelectedOption={setSelectedOption}
+          className="select select-bordered w-full md:w-56"
         />
       </div>
 
       {/* ตารางชื่อนักเรียน */}
-      <div className="rounded-xl border border-base-300 overflow-hidden">
+      <div className="hidden md:block rounded-xl border border-base-300 overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="table table-zebra w-full text-xs sm:text-sm">
             <thead>
@@ -179,7 +181,7 @@ const ClassroomDetail = () => {
                         onClick={() => {
                           document
                             .getElementById(`edit_student_${index}`)
-                            .showModal();
+                            ?.showModal();
                         }}
                         className="btn btn-warning btn-xs sm:btn-sm"
                         id={`edit-student-button_${index}`}
@@ -188,13 +190,6 @@ const ClassroomDetail = () => {
                         {/* ใช้ขนาดไอคอนตาม font-size */}
                         <BiSolidEdit className="text-base sm:text-lg" />
                       </button>
-                      <ModalEditStudent
-                        id={index}
-                        index={index}
-                        classId={classroomId}
-                        studentId={student?._id}
-                        onUpdateStudent={() => getClassroomById(classroomId)}
-                      />
                       <button
                         onClick={() => handleDeleteStudent(student?.email)}
                         className="btn btn-error btn-xs sm:btn-sm"
@@ -226,6 +221,62 @@ const ClassroomDetail = () => {
           </table>
         </div>
       </div>
+
+      <div className="grid grid-cols-1 gap-3 md:hidden">
+        {currentItems.map((student, index) => (
+          <div
+            key={student?._id ?? index}
+            className="rounded-xl border border-base-300 bg-white shadow-sm p-4"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-xs uppercase text-gray-500">เลขประจำตัว</p>
+                <p className="text-lg font-semibold text-gray-900">
+                  {student?.user_id || "-"}
+                </p>
+                <p className="text-sm text-gray-700">
+                  {student?.prefix} {student?.first_name} {student?.last_name}
+                </p>
+              </div>
+              <span className="badge badge-outline text-xs">
+                {student?.prefix || "-"}
+              </span>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                onClick={() =>
+                  document
+                    .getElementById(`edit_student_${index}`)
+                    ?.showModal()
+                }
+                className="btn btn-warning btn-sm flex-1 min-w-[140px]"
+                id={`edit-student-mobile-button_${index}`}
+              >
+                <BiSolidEdit className="text-base" />
+              </button>
+
+              <button
+                onClick={() => handleDeleteStudent(student?.email)}
+                className="btn btn-error btn-sm flex-1 min-w-[140px]"
+                id={`delete-student-mobile-button_${index}`}
+              >
+                <AiOutlineDelete className="text-base" />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {currentItems.map((student, index) => (
+        <ModalEditStudent
+          key={student?._id ?? index}
+          id={index}
+          index={index}
+          classId={classroomId}
+          studentId={student?._id}
+          onUpdateStudent={() => getClassroomById(classroomId)}
+        />
+      ))}
 
       {/* pagination */}
       <Pagination

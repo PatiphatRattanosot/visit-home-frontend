@@ -91,34 +91,34 @@ const Personnel = () => {
 
       {/* Toolbar centered */}
       <div className="w-full flex justify-center mt-4 mb-4">
-        <div className="w-full max-w-8xl grid grid-cols-1 md:grid-cols-[auto_1fr_auto] items-center gap-3 px-2">
+        <div className="w-full max-w-8xl flex flex-col md:flex-row items-stretch md:items-center gap-3 px-2">
           {/* ซ้าย: Dropdown */}
-          <div>
+          <div className="w-full md:w-56">
             <FilterDropdown
               selectedOption={selectedOption}
               setSelectedOption={setSelectedOption}
               options={sortPersonnelOptions}
-              className="select"
+              className="select select-bordered w-full"
             />
           </div>
 
           {/* กลาง: Search ขยายกินที่ */}
-          <div className="md:justify-self-center">
+          <div className="w-full md:flex-1 md:justify-self-center">
             <SearchPersonnel
               setSearchKeyword={setSearchKeyword}
               setCurrentPage={setCurrentPage}
               placeholder="ค้นหาบุคลากร..."
-              className="w-72 md:w-[20rem]" // ปรับความกว้างที่นี่
+              className="w-full md:w-[20rem]" // ปรับความกว้างที่นี่
             />
           </div>
 
           {/* ขวา: ปุ่มเพิ่ม */}
-          <div className="md:justify-self-end">
+          <div className="w-full md:w-auto md:justify-self-end">
             <button
               onClick={() =>
                 document.getElementById("add_personnel").showModal()
               }
-              className="btn-green"
+              className="btn-green w-full md:w-auto"
             >
               เพิ่มบุคลากร
             </button>
@@ -133,8 +133,8 @@ const Personnel = () => {
       </div>
 
       {/* ตารางแสดงข้อมูลบุคลากร */}
-      <div className="overflow-x-auto flex justify-center">
-        <table className="table table-zebra w-full max-w-7xl">
+      <div className="hidden md:flex overflow-x-auto justify-center">
+        <table className="table table-zebra w-full max-w-7xl rounded-lg">
           <thead>
             <tr>
               <th>
@@ -182,12 +182,6 @@ const Personnel = () => {
                     <BiSolidEdit size={20} />
                   </button>
 
-                  <ModalEditPersonnel
-                    id={person._id}
-                    onSuccesUpdatePerson={fetchData}
-                    index={index}
-                  />
-
                   <button
                     id={`delete-personnel-button_${index}`}
                     data-testid={`delete-personnel-button_${index}`}
@@ -202,6 +196,71 @@ const Personnel = () => {
           </tbody>
         </table>
       </div>
+
+      <div className="grid grid-cols-1 gap-3 md:hidden">
+        {currentItems.map((person, index) => (
+          <div
+            key={person._id ?? index}
+            className="rounded-xl border border-base-300 bg-white shadow-sm p-4"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="space-y-1">
+                <p className="text-xs uppercase text-gray-500">เลขที่ประจำตัว</p>
+                <p className="text-lg font-semibold text-gray-900">
+                  {person.user_id}
+                </p>
+                <p className="text-sm text-gray-700">
+                  {person.prefix} {person.first_name} {person.last_name}
+                </p>
+                <p className="text-sm text-gray-600">
+                  {getRoleDisplay(person.role)}
+                </p>
+                <p className="text-sm text-gray-600">
+                  {person.phone || "-"}
+                </p>
+                <p className="text-sm">{showStatus(person.status)}</p>
+              </div>
+              <span className="badge badge-outline text-xs">
+                {person.prefix || "-"}
+              </span>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                onClick={() =>
+                  document
+                    .getElementById(`edit_personnel_${person._id}`)
+                    ?.showModal()
+                }
+                className="btn btn-warning btn-sm flex-1 min-w-[140px]"
+                id={`edit-personnel-mobile-button_${index}`}
+              >
+                <BiSolidEdit size={18} />
+              </button>
+              <button
+                id={`delete-personnel-mobile-button_${index}`}
+                onClick={() => handleDeleteUser(person.email)}
+                className="btn btn-error btn-sm flex-1 min-w-[140px]"
+              >
+                <AiOutlineDelete size={18} />
+              </button>
+            </div>
+          </div>
+        ))}
+        {currentItems.length === 0 && (
+          <div className="text-center text-sm text-gray-600 py-6 border border-base-300 rounded-xl">
+            ไม่พบข้อมูล
+          </div>
+        )}
+      </div>
+
+      {currentItems.map((person, index) => (
+        <ModalEditPersonnel
+          key={person._id ?? index}
+          id={person._id}
+          onSuccesUpdatePerson={fetchData}
+          index={index}
+        />
+      ))}
 
       {/* Pagination */}
       <Pagination
