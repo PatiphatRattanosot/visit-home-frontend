@@ -15,7 +15,7 @@ export const useScheduleStore = create((set, get) => ({
         return response.data.schedules || null;
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       return null;
     }
   },

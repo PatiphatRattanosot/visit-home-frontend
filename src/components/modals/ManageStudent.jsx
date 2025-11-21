@@ -3,7 +3,7 @@ import SDQServices from "../../services/sdq/sdq.service";
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 
-const ManageStudent = ({ student }) => {
+const ManageStudent = ({ student, id }) => {
   const { selectedYear } = useYearSelectStore();
   if (!student) return null; // Ensure student is defined before rendering
 
@@ -97,7 +97,7 @@ const ManageStudent = ({ student }) => {
 
   return (
     <div>
-      <dialog id={`manage_student_${student._id}`} className="modal">
+      <dialog id={`manage_student_${id}`} className="modal">
         <div className="modal-box max-w-5xl w-full max-h-screen overflow-y-auto">
           <form method="dialog">
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
@@ -112,6 +112,7 @@ const ManageStudent = ({ student }) => {
               <a
                 href={`/teacher/sdq/${student._id}/${selectedYear}/estimate`}
                 className="btn"
+                id={`sdq_teacher_${id}`}
               >
                 ประเมิน SDQ
               </a>
@@ -119,22 +120,24 @@ const ManageStudent = ({ student }) => {
             <a
               href={`/teacher/sdq/${student._id}/${selectedYear}`}
               className="btn"
+              id={`sdq_result_${id}`}
             >
               ผลประเมิน SDQ
             </a>
-            <button onClick={openMapNavigation} className="btn">
+            <button onClick={openMapNavigation} className="btn" id={`map_navigation_${id}`}>
               ดูเส้นทาง
             </button>
-            <a href={`/teacher/student-data/${student._id}`} className="btn">
+            <a href={`/teacher/student-data/${student._id}`} className="btn" id={`student_info_${id}`}>
               ข้อมูลนักเรียน
             </a>
             <a
               href={`/teacher/visit-info/overview/${student._id}`}
               className="btn"
+              id={`visit_overview_${id}`}
             >
               ภาพรวมเยี่ยมบ้าน
             </a>
-            <a href={`/teacher/visit-info/add/${student._id}`} className="btn">
+            <a href={`/teacher/visit-info/add/${student._id}`} className="btn" id={`visit_add_${id}`}>
               ผลการเยี่ยมบ้าน
             </a>
 
@@ -143,6 +146,7 @@ const ManageStudent = ({ student }) => {
               className="btn"
               target="_blank"
               rel="noreferrer"
+              id={`visit_print_${id}`}
             >
               พิมพ์เอกสาร
             </a>

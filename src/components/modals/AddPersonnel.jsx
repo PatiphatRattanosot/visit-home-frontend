@@ -50,7 +50,7 @@ const AddPersonnel = () => {
                 touched={formik.touched.prefix}
                 onBlur={formik.handleBlur}
                 className="w-64 md:w-72"
-                id="add-personnel-prefix-select"
+                id="prefix_add"
               />
 
               <TextInput

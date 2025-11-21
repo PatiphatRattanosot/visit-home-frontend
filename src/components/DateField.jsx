@@ -10,6 +10,7 @@ const DateField = ({
   className = "",
   disabled = false,
   required = false,
+  id
 }) => {
   return (
     <div className={`date flex flex-col ${className}`}>
@@ -19,14 +20,13 @@ const DateField = ({
       </label>
       <input
         type="date"
-        id={name}
+        id={id}
         name={name}
         value={value}
         onChange={onChange}
         onBlur={onBlur}
-        className={`input ${className} ${
-          error && touched ? "input-error" : ""
-        }`}
+        className={`input ${className} ${error && touched ? "input-error" : ""
+          }`}
         placeholder={placeholder}
         disabled={disabled}
         required={required}

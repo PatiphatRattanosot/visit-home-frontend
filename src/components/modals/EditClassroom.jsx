@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useFormik } from "formik";
 import { ClassroomSchema } from "../../schemas/classroom";
-import TextInputInModal from "./TexInputInModal";
-import SelectInputInModal from "./SelectInputInModal";
+import TextInputInModal from "../Text";
+import SelectInputInModal from "../Select";
 import { useClassroomStore } from "../../stores/classroom.store";
 import { usePersonnelStore } from "../../stores/admin.store";
-const EditClassroom = ({ id, onUpdateSuccess }) => {
+const EditClassroom = ({ id, onUpdateSuccess, index }) => {
   const { data: teachers = [], fetchData: fetchTeachers } = usePersonnelStore();
   const { getClassroomById, updateClassroom } = useClassroomStore();
   const selectTeacherOptions = teachers.map((teacher) => ({
@@ -81,6 +81,7 @@ const EditClassroom = ({ id, onUpdateSuccess }) => {
                   onBlur={formik.handleBlur}
                   className="w-64 md:w-72"
                   label="ชั้น"
+                  id={`room_edit_${index}`}
                 />
                 <TextInputInModal
                   type="number"
@@ -96,6 +97,7 @@ const EditClassroom = ({ id, onUpdateSuccess }) => {
                   touched={formik.touched.number}
                   onBlur={formik.handleBlur}
                   name="number"
+                  id={`number_edit_${index}`}
                 />
                 <SelectInputInModal
                   className="w-64 md:w-72"
@@ -108,6 +110,7 @@ const EditClassroom = ({ id, onUpdateSuccess }) => {
                   onBlur={formik.handleBlur}
                   options={selectTeacherOptions}
                   defaultOpt="เลือกครูที่ปรึกษา"
+                  id={`teacherId_edit_${index}`}
                 />
                 <div className="flex gap-6 justify-center mt-4">
                   <button type="submit" className="btn-green">

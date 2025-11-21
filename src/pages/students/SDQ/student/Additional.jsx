@@ -128,6 +128,7 @@ const Additional = ({ page, setPage, formik }) => {
               onBlur={formik.handleBlur}
               error={formik.errors.additional}
               touched={formik.touched.additional}
+              id="additional"
             />
           </div>
           <div className="flex justify-between mt-10 space-x-2">

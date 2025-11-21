@@ -16,6 +16,8 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_APPID,
 };
 
+const emailDomain = import.meta.env.VITE_EMAIL_DOMAIN;
+
 // initialize firebase app and auth
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -24,14 +26,14 @@ const googleProvider = new GoogleAuthProvider();
 // create authentication methods
 const googleSignIn = async () => {
   // googleProvider.setCustomParameters({ hd: "bangpaeschool.ac.th" });
-  googleProvider.setCustomParameters({ hd: "webmail.npru.ac.th" });
+  googleProvider.setCustomParameters({ hd: emailDomain });
 
   const result = await signInWithPopup(auth, googleProvider);
   const email = result.user.email;
   // Check email domain
-  if (!email.endsWith("@webmail.npru.ac.th")) {
+  if (!email.endsWith(`@${emailDomain}`)) {
     auth.signOut();
-    throw new Error("กรุณาใช้บัญชี @bangpaeschool.ac.th ในการเข้าสู่ระบบ");
+    throw new Error(`กรุณาใช้บัญชี @${emailDomain} ในการเข้าสู่ระบบ`);
   }
   return result;
 };

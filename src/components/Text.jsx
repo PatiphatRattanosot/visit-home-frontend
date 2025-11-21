@@ -1,6 +1,7 @@
 import React from "react";
 
 const Text = ({
+  id,
   value,
   onChange,
   onBlur,
@@ -26,7 +27,7 @@ const Text = ({
         {required && <span className="text-red-500"> *</span>}
       </label>
       <input
-        id={name}
+        id={id}
         name={name}
         type={type}
         placeholder={placeholder}
@@ -40,6 +41,7 @@ const Text = ({
         max={max}
         min={min}
         step={step}
+        data-testid={id}
       />
       {error && touched && (
         <div className="text-red-500 text-xs mt-2" id={`${name}-error`}>

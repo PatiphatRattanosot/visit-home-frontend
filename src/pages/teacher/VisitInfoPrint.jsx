@@ -186,20 +186,20 @@ const TRANSPORT_OPTIONS = [
   { value: "5", label: "รถโดยสารสาธารณะ" },
 ];
 
-const SECTION_CLASS = "flex flex-col gap-2";
+const SECTION_CLASS = "flex flex-col gap-2 print:break-inside-avoid";
 const SECTION_TITLE_CLASS = "text-sm font-semibold text-slate-900";
 const CHECKBOX_GROUP_CLASS = "flex flex-wrap gap-x-5 gap-y-2";
 const INLINE_ROW_CLASS = "flex flex-wrap items-center gap-2";
 const UNDERLINE_CLASS =
   "inline-block min-w-[120px] border-b border-dotted border-slate-500 pb-0.5";
-const TABLE_CLASS = "overflow-hidden rounded-xl border border-indigo-100";
+const TABLE_CLASS = "overflow-hidden rounded-xl border border-indigo-100 print:break-inside-avoid";
 const TABLE_ROW_CLASS = "grid grid-cols-[160px_1fr] last:[&>div]:border-b-0";
 const TABLE_CELL_CLASS =
   "border-b border-slate-200 px-3 py-2 text-sm text-slate-700";
 const TABLE_CELL_HEADER_CLASS = "bg-indigo-50 font-semibold text-slate-900";
 const TEXTAREA_CLASS =
-  "min-h-[120px] rounded-xl border border-dashed border-indigo-100 bg-slate-50 p-4 leading-relaxed text-sm text-slate-700";
-const SIGNATURE_BLOCK_CLASS = "grid gap-10 md:grid-cols-2";
+  "min-h-[120px] rounded-xl border border-dashed border-indigo-100 bg-slate-50 p-4 leading-relaxed text-sm text-slate-700 print:break-inside-avoid";
+const SIGNATURE_BLOCK_CLASS = "grid gap-10 md:grid-cols-2 print:break-inside-avoid";
 const SIGNATURE_LABEL_CLASS = "text-sm font-semibold text-slate-900";
 const SIGNATURE_LINE_CLASS = "h-7 border-b border-dotted border-slate-600";
 const HEADER_PHOTO_CLASS =
@@ -207,7 +207,7 @@ const HEADER_PHOTO_CLASS =
 const PHOTO_FRAME_CLASS =
   "flex h-40 items-center justify-center overflow-hidden rounded-2xl border border-dashed border-slate-300 bg-slate-100 text-xs text-slate-500 print:bg-transparent md:h-48";
 const PAGE_BASE_CLASS =
-  "relative flex w-full max-w-[210mm] flex-col gap-6 rounded-2xl border border-slate-200 bg-white px-[22mm] py-[24mm] text-slate-900 shadow-[0_20px_45px_-20px_rgba(15,23,42,0.35)] print:w-full print:max-w-none print:rounded-none print:border-none print:px-[18mm] print:py-[20mm] print:shadow-none print:break-after-page last:print:break-after-auto";
+  "relative flex w-full max-w-[210mm] flex-col gap-6 rounded-2xl border border-slate-200 bg-white px-[22mm] py-[24mm] text-slate-900 shadow-[0_20px_45px_-20px_rgba(15,23,42,0.35)] print:w-full print:max-w-none print:rounded-none print:border-none print:px-[18mm] print:py-[20mm] print:shadow-none";
 const INFO_LABEL_CLASS =
   "text-xs font-semibold uppercase tracking-wider text-slate-600";
 const VALUE_TEXT_CLASS = "text-sm text-slate-800";
@@ -253,6 +253,7 @@ const VisitInfoPrint = () => {
   const { selectedYear, years, fetchYears } = useYearSelectStore();
 
   const { student, getStudentById, getYearlyData } = useStudentStore();
+  
 
   const { visitInfo, getVisitInfoByStudentId } = useVisitInfoStore();
 
@@ -385,7 +386,7 @@ const VisitInfoPrint = () => {
         </div>
       </div>
 
-      <div className="mx-auto flex w-full flex-col items-center gap-10 print:mx-0 print:items-stretch print:gap-0">
+      <div className="mx-auto flex w-full flex-col items-center gap-10 print:mx-0 print:items-stretch print:gap-2">
         <section className={PAGE_BASE_CLASS}>
           <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:justify-between print:flex-row print:items-start print:justify-between">
             <div className="grid grid-cols-4 gap-4">
@@ -545,7 +546,7 @@ const VisitInfoPrint = () => {
           </div>
         </section>
 
-        <section className={PAGE_BASE_CLASS}>
+        <section className={`${PAGE_BASE_CLASS} print:break-before-page`}>
           <div className="flex flex-col items-center gap-2 text-center">
             <img
               src={CREST_SRC}
@@ -667,17 +668,6 @@ const VisitInfoPrint = () => {
         </section>
 
         <section className={PAGE_BASE_CLASS}>
-          <div className="flex flex-col items-center gap-2 text-center">
-            <img
-              src={CREST_SRC}
-              alt="ตรากระทรวง"
-              className="h-16 w-16 object-contain"
-            />
-            <div className="text-xl font-bold text-slate-900">
-              บันทึกการเยี่ยมบ้าน
-            </div>
-          </div>
-
           <div className={SECTION_CLASS}>
             <div className={SECTION_TITLE_CLASS}>
               พฤติกรรมและหน้าที่ในครอบครัว
@@ -776,19 +766,8 @@ const VisitInfoPrint = () => {
           </div>
         </section>
 
-        <section className={PAGE_BASE_CLASS}>
-          <div className="flex flex-col items-center gap-2 text-center">
-            <img
-              src={CREST_SRC}
-              alt="ตรากระทรวง"
-              className="h-16 w-16 object-contain"
-            />
-            <div className="text-xl font-bold text-slate-900">
-              บันทึกการเยี่ยมบ้าน
-            </div>
-          </div>
-
-          <div className={SECTION_CLASS}>
+        <section className={`${PAGE_BASE_CLASS} print:break-before-page print:gap-3`}>
+          <div className="flex flex-col gap-2 rounded-lg  bg-white p-3 shadow-sm print:break-inside-avoid print:shadow-none">
             <div className={SECTION_TITLE_CLASS}>ความช่วยเหลือที่เคยได้รับ</div>
             <CheckBoxGroup
               title="จากหน่วยงาน"
@@ -808,7 +787,7 @@ const VisitInfoPrint = () => {
             </div>
           </div>
 
-          <div className={SECTION_CLASS}>
+          <div className="flex flex-col gap-2 rounded-lg  bg-white p-3 shadow-sm print:break-inside-avoid print:shadow-none">
             <div className={SECTION_TITLE_CLASS}>ข้อมูลการเยี่ยมบ้าน</div>
             <div className={`${INLINE_ROW_CLASS} text-sm text-slate-700`}>
               <span>กำหนดการเยี่ยมบ้าน:</span>
@@ -839,19 +818,19 @@ const VisitInfoPrint = () => {
             </div>
           </div>
 
-          <div className={SECTION_CLASS}>
+          <div className="flex flex-col gap-2 rounded-lg  bg-white p-3 shadow-sm print:break-inside-avoid print:shadow-none">
             <div className={SECTION_TITLE_CLASS}>สรุปผลจากครูผู้เยี่ยมบ้าน</div>
             <div className={TEXTAREA_CLASS}>
               {visitInfo?.comment ?? "ยังไม่มีบันทึกจากการเยี่ยมบ้าน"}
             </div>
           </div>
 
-          <div className={`${SIGNATURE_BLOCK_CLASS} print:grid-cols-2`}>
-            <div className="flex flex-col gap-3">
+          <div className="mt-3 grid gap-3 grid-cols-1 md:grid-cols-2 print:grid-cols-2 print:break-inside-avoid">
+            <div className="flex flex-col gap-2">
               <div className={SIGNATURE_LABEL_CLASS}>ครูผู้เยี่ยมบ้าน</div>
               <div className={SIGNATURE_LINE_CLASS} />
             </div>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2">
               <div className={SIGNATURE_LABEL_CLASS}>
                 ผู้ปกครอง/ผู้ให้ข้อมูล
               </div>
@@ -859,8 +838,8 @@ const VisitInfoPrint = () => {
             </div>
           </div>
 
-          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 print:grid-cols-2">
-            <div className={PHOTO_FRAME_CLASS}>
+          <div className="grid gap-3 grid-cols-1 md:grid-cols-2 print:grid-cols-2 print:break-inside-avoid">
+            <div className="flex items-center justify-center overflow-hidden rounded-lg border border-slate-300 bg-slate-50 print:h-48">
               {visitInfo?.home_img ? (
                 <img
                   src={visitInfo.home_img}
@@ -868,10 +847,10 @@ const VisitInfoPrint = () => {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <span>ภาพถ่ายบ้านนักเรียน</span>
+                <span className="text-sm text-slate-500">ภาพถ่ายบ้านนักเรียน</span>
               )}
             </div>
-            <div className={PHOTO_FRAME_CLASS}>
+            <div className="flex items-center justify-center overflow-hidden rounded-lg border border-slate-300 bg-slate-50 print:h-48">
               {visitInfo?.family_img ? (
                 <img
                   src={visitInfo.family_img}
@@ -879,7 +858,7 @@ const VisitInfoPrint = () => {
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <span>ภาพครอบครัวร่วมกับครู</span>
+                <span className="text-sm text-slate-500">ภาพครอบครัวร่วมกับครู</span>
               )}
             </div>
           </div>

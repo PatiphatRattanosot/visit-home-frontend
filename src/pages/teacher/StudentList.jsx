@@ -16,8 +16,6 @@ import {
   sortStudentOptions,
 } from "../../utils/sortDataStudentTable";
 
-
-
 const StudentList = () => {
   const { userInfo } = useAuthStore();
   const { classroom, getClassroomByTeacherId } = useClassroomStore(); // classroom = array ของห้อง
@@ -35,23 +33,19 @@ const StudentList = () => {
   const [studentVisitData, setStudentVisitData] = useState([]);
   const itemsPerPage = 10;
 
-  // useEffect สำหรับเรียกข้อมูล sheduleLength มาโชว์์ที่หน้ารายชื่อนักเรียน 
+  // useEffect สำหรับเรียกข้อมูล sheduleLength มาโชว์์ที่หน้ารายชื่อนักเรียน
   useEffect(() => {
-    const fetchScheduleLengthShow = async () => {
-
-     
-    };
+    const fetchScheduleLengthShow = async () => { };
     fetchScheduleLengthShow();
   }, []);
 
   // Find current year data when selectedYear or years change
   useEffect(() => {
     if (selectedYear && years.length > 0) {
-      const yearData = years.find(year => year._id === selectedYear);
+      const yearData = years.find((year) => year._id === selectedYear);
       setCurrentYearData(yearData || null);
     }
   }, [selectedYear, years]);
-
 
   useEffect(() => {
     getClassroomByTeacherId(String(userInfo._id), String(selectedYear));
@@ -216,25 +210,32 @@ const StudentList = () => {
           setSelectedYear={setSelectedYear}
         />
         {/* โชว์ข้อมูลช่วงเวลาวันนัดเยี่ยมบ้าน */}
-           <div>
-  <span className={`badge text-lg text-white badge-lg ${
-    currentYearData?.start_schedule_date && currentYearData?.end_schedule_date
-      ? "badge-info"  // สีฟ้าเมื่อมีช่วงเวลา
-      : "badge-error" // สีแดงเมื่อไม่มีช่วงเวลา
-  }`}>
-    {currentYearData?.start_schedule_date && currentYearData?.end_schedule_date
-      ? `ช่วงเวลานัดเยี่ยมบ้าน: ${new Date(currentYearData.start_schedule_date).toLocaleDateString("th-TH", {
-          day: "numeric",
-          month: "long", 
-          year: "numeric",
-        })} - ${new Date(currentYearData.end_schedule_date).toLocaleDateString("th-TH", {
-          day: "numeric",
-          month: "long",
-          year: "numeric", 
-        })}`
-      : "ยังไม่กำหนดช่วงเวลานัดเยี่ยมบ้าน"}
-  </span>
-</div>
+        <div>
+          <span
+            className={`badge text-lg text-white badge-lg ${currentYearData?.start_schedule_date &&
+              currentYearData?.end_schedule_date
+              ? "badge-info" // สีฟ้าเมื่อมีช่วงเวลา
+              : "badge-error" // สีแดงเมื่อไม่มีช่วงเวลา
+              }`}
+          >
+            {currentYearData?.start_schedule_date &&
+              currentYearData?.end_schedule_date
+              ? `ช่วงเวลานัดเยี่ยมบ้าน: ${new Date(
+                currentYearData.start_schedule_date
+              ).toLocaleDateString("th-TH", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })} - ${new Date(
+                currentYearData.end_schedule_date
+              ).toLocaleDateString("th-TH", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}`
+              : "ยังไม่กำหนดช่วงเวลานัดเยี่ยมบ้าน"}
+          </span>
+        </div>
       </div>
 
       <div className="rounded-xl border border-base-300 overflow-hidden">
@@ -254,13 +255,15 @@ const StudentList = () => {
               {currentItems.map((student, index) => (
                 <tr
                   className="cursor-pointer hover:bg-gray-100"
-                  key={student?._id}
+                  key={index}
                 >
                   <td
+                    id={`student_${index}`}
+                    data-testid={`student_${index}`}
                     className="text-center cursor-pointer hover:underline"
                     onClick={() =>
                       document
-                        .getElementById(`manage_student_${student._id}`)
+                        .getElementById(`manage_student_${index}`)
                         .showModal()
                     }
                   >
@@ -271,7 +274,7 @@ const StudentList = () => {
                   <td
                     onClick={() =>
                       document
-                        .getElementById(`manage_student_${student._id}`)
+                        .getElementById(`manage_student_${index}`)
                         .showModal()
                     }
                     className="cursor-pointer"
@@ -303,39 +306,42 @@ const StudentList = () => {
                             month: "long",
                             year: "numeric",
                           })
-                        : "ยังไม่ได้นัด"}
+                          : "ยังไม่ได้นัด"}
                     </span>
                   </td>
                   <td>
-                    {currentYearData?.start_schedule_date && currentYearData?.end_schedule_date ? (
+                    {currentYearData?.start_schedule_date &&
+                      currentYearData?.end_schedule_date ? (
                       <button
                         onClick={() =>
                           document
                             .getElementById(
-                              `add_appointment_schedule_${student._id}`
+                              `add_appointment_schedule_${index}`
                             )
                             .showModal()
                         }
                         className="btn-blue btn-sm hover:btn-blue/80"
-                        id={`add-appointment-button_${index}`}
-                        data-testid={`add-appointment-button_${index}`}
+                        id={`appointment_button_${index}`}
+                        data-testid={`appointment_button_${index}`}
                       >
                         นัดวันเยี่ยมบ้าน
                       </button>
                     ) : (
-                      <span className="text-gray-400 text-sm">ยังไม่กำหนดช่วงเวลา</span>
+                      <span className="text-gray-400 text-sm">
+                        ยังไม่กำหนดช่วงเวลา
+                      </span>
                     )}
                   </td>
                   <td>
                     <ManageStudent
-                      id={`manage_student_${student._id}`}
+                      id={index}
                       student={student}
                     />
                   </td>
                   <Appointment
                     studentId={student._id}
                     student={student}
-                    id={`add_appointment_schedule_${student._id}`}
+                    id={index}
                     onScheduleUpdate={refreshSchedules}
                     currentYearData={currentYearData}
                   />

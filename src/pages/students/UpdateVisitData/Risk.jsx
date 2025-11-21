@@ -52,7 +52,7 @@ const Risk = ({ page, setPage, formik }) => {
     { value: "7", label: "มีความขัดแย้งและมีการใช้ความรุนแรงในครอบครัว" },
     { value: "8", label: "ถูกทารุณ/ทำร้ายจากบุคคลในครอบครัว/เพื่อนบ้าน" },
     { value: "9", label: "ไม่มีผู้ดูแล" },
-    { value: "10", label: "ไม่มีผู้ดูแล" },
+    { value: "10", label: "ถูกล่วงละเมิดทางเพศ" },
   ];
 
   const school_transport = [
@@ -173,6 +173,7 @@ const Risk = ({ page, setPage, formik }) => {
               min={0}
               max={200}
               required
+              id="distance_to_school"
             />
             {/* เวลาที่ใช้ */}
             <Text
@@ -188,6 +189,7 @@ const Risk = ({ page, setPage, formik }) => {
               max={60}
               step={5}
               required
+              id="time_used"
             />
             {/* วิธีการเดินทางของนักเรียนไปโรงเรียน */}
             <div className="md:col-span-2">

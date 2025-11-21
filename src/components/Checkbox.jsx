@@ -45,6 +45,7 @@ const Checkbox = ({
               className="mr-3 checkbox checked:bg-white"
               disabled={disabled}
               checked={value.includes(option.value)}
+              data-testid={`${name}_${index}`}
             />
             {option.label}
           </label>

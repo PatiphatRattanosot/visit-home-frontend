@@ -172,11 +172,13 @@ const Risk = ({ page, setPage, formik }) => {
               min={0}
               max={200}
               required
+              id="distance_to_school"
             />
             {/* เวลาที่ใช้ */}
             <Text
               label="เวลาที่ใช้ในการเดินทางไปโรงเรียนประมาณกี่นาที"
               name="time_used"
+              id="time_used"
               value={formik.values.time_used}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}

@@ -2,7 +2,7 @@ import { YearSchema } from "../../schemas/year";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
 import useYearSelectStore from "../../stores/year_select.store";
-import TextInputInModal from "./TexInputInModal";
+import TextInputInModal from "../Text";
 import toast from "react-hot-toast";
 
 const EditYear = ({ year, onUpdateSuccess }) => {
@@ -63,7 +63,8 @@ const EditYear = ({ year, onUpdateSuccess }) => {
               error={formik.errors.year}
               touched={formik.touched.year}
               onBlur={formik.handleBlur}
-              minLength={0}
+              max={10000}
+              id={`year_edit_${year._id}`}
             />
             <div className="modal-action flex justify-center gap-4">
               <button type="submit" className="btn bg-green-500 text-white">

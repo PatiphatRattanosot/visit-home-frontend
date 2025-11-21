@@ -1,6 +1,7 @@
 import React from "react";
 
 const Select = ({
+  id,
   value,
   onChange,
   options = [],
@@ -21,13 +22,14 @@ const Select = ({
         {required && <span className="text-red-500"> *</span>}
       </label>
       <select
-        id={name}
+        id={id}
         name={name}
         value={value}
         onChange={onChange}
         onBlur={onBlur}
         className="select w-full"
         disabled={disabled}
+        data-testid={id}
       >
         {defaultOpt && <option value="">{defaultOpt}</option>}
         {options.map((option) => (

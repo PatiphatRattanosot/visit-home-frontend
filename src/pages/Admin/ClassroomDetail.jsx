@@ -97,8 +97,8 @@ const ClassroomDetail = () => {
             คุณครูที่ปรึกษา:{" "}
             {classroom && classroom?.teacher_id
               ? `${classroom?.teacher_id?.first_name}` +
-                " " +
-                `${classroom?.teacher_id?.last_name}`
+              " " +
+              `${classroom?.teacher_id?.last_name}`
               : "ยังไม่มีครูที่ปรึกษา"}
           </h2>
         </div>
@@ -178,7 +178,7 @@ const ClassroomDetail = () => {
                       <button
                         onClick={() => {
                           document
-                            .getElementById(`edit_student_${student?._id}`)
+                            .getElementById(`edit_student_${index}`)
                             .showModal();
                         }}
                         className="btn btn-warning btn-xs sm:btn-sm"
@@ -189,8 +189,10 @@ const ClassroomDetail = () => {
                         <BiSolidEdit className="text-base sm:text-lg" />
                       </button>
                       <ModalEditStudent
-                        id={student?._id}
+                        id={index}
+                        index={index}
                         classId={classroomId}
+                        studentId={student?._id}
                         onUpdateStudent={() => getClassroomById(classroomId)}
                       />
                       <button

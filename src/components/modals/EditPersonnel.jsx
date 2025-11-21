@@ -5,7 +5,7 @@ import { usePersonnelStore } from "../../stores/admin.store";
 import TextInput from "../../components/Text";
 import SelectInput from "../../components/Select";
 
-const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
+const EditPersonnel = ({ id, onSuccesUpdatePerson, index }) => {
   // ใช้ Zustand store เพื่อจัดการข้อมูลบุคลากร
   const {
     data: personnel,
@@ -81,6 +81,7 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
                 touched={formik.touched.prefix}
                 onBlur={formik.handleBlur}
                 className="w-64 md:w-72"
+                id={`prefix_edit_${index}`}
               />
 
               <TextInput
@@ -94,6 +95,7 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
                 touched={formik.touched.first_name}
                 onBlur={formik.handleBlur}
                 className="w-64 md:w-72"
+                id={`first_name_edit_${index}`}
               />
 
               <TextInput
@@ -107,6 +109,7 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
                 touched={formik.touched.last_name}
                 onBlur={formik.handleBlur}
                 className="w-64 md:w-72"
+                id={`last_name_edit_${index}`}
               />
 
               <TextInput
@@ -121,6 +124,7 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
                 touched={formik.touched.phone}
                 onBlur={formik.handleBlur}
                 className="w-64 md:w-72"
+                id={`phone_edit_${index}`}
               />
 
               <SelectInput
@@ -134,6 +138,7 @@ const EditPersonnel = ({ id, onSuccesUpdatePerson }) => {
                 touched={formik.touched.status}
                 onBlur={formik.handleBlur}
                 className="w-64 md:w-72"
+                id={`status_edit_${index}`}
               />
             </div>
 

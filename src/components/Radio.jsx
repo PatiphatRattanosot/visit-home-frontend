@@ -33,6 +33,7 @@ const Radio = ({
               className="mr-3 radio"
               disabled={disabled}
               checked={value === option.value}
+              data-testid={`${name}_${index}`}
             />
             {option.label}
           </label>

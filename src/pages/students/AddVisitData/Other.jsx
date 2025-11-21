@@ -101,6 +101,7 @@ const Other = ({ page, setPage, formik }) => {
                   onBlur={formik.handleBlur}
                   error={formik.errors.parent_concern}
                   touched={formik.touched.parent_concern}
+                  id="parent_concern"
                 />
               </div>
             )}

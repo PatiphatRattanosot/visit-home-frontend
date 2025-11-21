@@ -1,10 +1,10 @@
 import { useStudentStore } from "../../stores/student.store";
-import TextInputInModal from "./TexInputInModal";
-import SelectInputInModal from "./SelectInputInModal";
+import TextInputInModal from "../Text";
+import SelectInputInModal from "../Select";
 import { useFormik } from "formik";
 import { studentSchema } from "../../schemas/student";
 import { useEffect, useState } from "react";
-const EditStudent = ({ id, onUpdateStudent, classId }) => {
+const EditStudent = ({ id, onUpdateStudent, classId, studentId, index }) => {
   const { getStudentById, updateStudent } = useStudentStore();
   const [student, setStudent] = useState(null);
   const prefixOptions = [
@@ -38,7 +38,7 @@ const EditStudent = ({ id, onUpdateStudent, classId }) => {
   });
 
   useEffect(() => {
-    getStudentById(id).then((data) => {
+    getStudentById(studentId).then((data) => {
 
       setStudent(data); //data stroe มันเป็น array เลยต้องมา set เพิ่มเพืมเติมทำให้เป้น object ดึงทีละคน
       formik.setValues({
@@ -49,10 +49,10 @@ const EditStudent = ({ id, onUpdateStudent, classId }) => {
         phone: data.phone || "",
       });
     });
-  }, [id]);
+  }, [id, studentId]);
 
   const handleCancel = () => {
-    getStudentById(id).then((data) => {
+    getStudentById(studentId).then((data) => {
       console.log("student data:", data);
 
       setStudent(data); //data stroe มันเป็น array เลยต้องมา set เพิ่มเพืมเติมทำให้เป้น object ดึงทีละคน
@@ -88,22 +88,8 @@ const EditStudent = ({ id, onUpdateStudent, classId }) => {
                 touched={formik.touched.prefix}
                 onBlur={formik.handleBlur}
                 className="w-64 md:w-72"
-                id="edit-student-prefix-select"
+                id={`prefix_edit_${index}`}
               />
-
-              <TextInputInModal
-                name="user_id"
-                placeholder="เลขที่ประจำตัวนักเรียน"
-                disabled={false}
-                value={formik.values.user_id}
-                onChange={formik.handleChange}
-                label="เลขที่ประจำตัวนักเรียน"
-                error={formik.errors.user_id}
-                touched={formik.touched.user_id}
-                onBlur={formik.handleBlur}
-                id="edit-student-userid-input"
-              />
-
               <TextInputInModal
                 name="first_name"
                 placeholder="ชื่อ"
@@ -114,7 +100,8 @@ const EditStudent = ({ id, onUpdateStudent, classId }) => {
                 error={formik.errors.first_name}
                 touched={formik.touched.first_name}
                 onBlur={formik.handleBlur}
-                id="edit-student-firstname-input"
+                id={`first_name_edit_${index}`}
+                className="w-64 md:w-72"
               />
               <TextInputInModal
                 name="last_name"
@@ -126,7 +113,21 @@ const EditStudent = ({ id, onUpdateStudent, classId }) => {
                 error={formik.errors.last_name}
                 touched={formik.touched.last_name}
                 onBlur={formik.handleBlur}
-                id="edit-student-lastname-input"
+                id={`last_name_edit_${index}`}
+                className="w-64 md:w-72"
+              />
+              <TextInputInModal
+                name="user_id"
+                placeholder="เลขที่ประจำตัวนักเรียน"
+                disabled={false}
+                value={formik.values.user_id}
+                onChange={formik.handleChange}
+                label="เลขที่ประจำตัวนักเรียน"
+                error={formik.errors.user_id}
+                touched={formik.touched.user_id}
+                onBlur={formik.handleBlur}
+                id={`user_id_edit_${index}`}
+                className="w-64 md:w-72"
               />
             </div>
             <div className="modal-action flex justify-center">

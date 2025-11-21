@@ -18,7 +18,31 @@ jobs:
         run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
       - name: Build Docker Image
-        run: docker build -t ghcr.io/patiphatrattanosot/visit-home-frontend:${{ env.TAG_NAME }} -f ./Dockerfile.prod .
+        env:
+          VITE_BASEURL: ${{ secrets.VITE_BASEURL }}
+          VITE_APIKEY: ${{ secrets.VITE_APIKEY }}
+          VITE_AUTHDOMAIN: ${{ secrets.VITE_AUTHDOMAIN }}
+          VITE_PROJECTID: ${{ secrets.VITE_PROJECTID }}
+          VITE_STORAGEBUCKET: ${{ secrets.VITE_STORAGEBUCKET }}
+          VITE_MESSAGINGSENDERID: ${{ secrets.VITE_MESSAGINGSENDERID }}
+          VITE_APPID: ${{ secrets.VITE_APPID }}
+          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}
+          VITE_SECRET_KEY: ${{ secrets.VITE_SECRET_KEY }}
+          VITE_EMAIL_DOMAIN: ${{ secrets.VITE_EMAIL_DOMAIN }}
+        run: |
+          docker build \
+            --secret id=VITE_BASEURL,env=VITE_BASEURL \
+            --secret id=VITE_APIKEY,env=VITE_APIKEY \
+            --secret id=VITE_AUTHDOMAIN,env=VITE_AUTHDOMAIN \
+            --secret id=VITE_PROJECTID,env=VITE_PROJECTID \
+            --secret id=VITE_STORAGEBUCKET,env=VITE_STORAGEBUCKET \
+            --secret id=VITE_MESSAGINGSENDERID,env=VITE_MESSAGINGSENDERID \
+            --secret id=VITE_APPID,env=VITE_APPID \
+            --secret id=VITE_GOOGLE_MAPS_API_KEY,env=VITE_GOOGLE_MAPS_API_KEY \
+            --secret id=VITE_SECRET_KEY,env=VITE_SECRET_KEY \
+            --secret id=VITE_EMAIL_DOMAIN,env=VITE_EMAIL_DOMAIN \
+            -t ghcr.io/patiphatrattanosot/visit-home-frontend:${{ env.TAG_NAME }} \
+            -f ./Dockerfile.prod .
 
       - name: Push Docker images to GHCR
         run: |
@@ -44,23 +68,15 @@ jobs:
   #           docker rm -f visit-home-frontend || true
 
   #           # สร้าง network 
-  #           # docker network create visit-home-network || true
+  #           docker network create visit-home-network || true
 
   #           # เอา image ไปที่ server
-  #           docker pull ghcr.io/patiphatrattanosot/visit-home-frontend:latest
+  #           docker pull ghcr.io/patiphatrattanosot/visit-home-frontend:${{ env.TAG_NAME }}
             
-  #           # สั่งให้รัน container ใหม่ และ map environment 
+  #           # สั่งให้รัน container ใหม่ (env ถูก baked in แล้ว)
   #           docker run --restart=always -d --pull always \
-  #           -e VITE_BASEURL=${{secrets.VITE_BASEURL}} \
-  #           -e VITE_APIKEY="${{secrets.VITE_APIKEY}}" \
-  #           -e VITE_AUTHDOMAIN=${{secrets.VITE_AUTHDOMAIN}} \
-  #           -e VITE_PROJECTID=${{secrets.VITE_PROJECTID}} \
-  #           -e VITE_STORAGEBUCKET=${{secrets.VITE_STORAGEBUCKET}} \
-  #           -e VITE_MESSAGINGSENDERID=${{secrets.VITE_MESSAGINGSENDERID}} \
-  #           -e VITE_APPID=${{secrets.VITE_APPID}} \
-  #           -e VITE_GOOGLE_MAPS_API_KEY=${{secrets.VITE_GOOGLE_MAPS_API_KEY}} \
   #           --name visit-home-frontend \
   #           -p 80:80 \
   #           --network visit-home-network \
-  #           ghcr.io/patiphatrattanosot/visit-home-frontend:latest
+  #           ghcr.io/patiphatrattanosot/visit-home-frontend:${{ env.TAG_NAME }}
   #         EOF

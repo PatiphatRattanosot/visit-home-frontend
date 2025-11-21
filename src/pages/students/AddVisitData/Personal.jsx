@@ -125,6 +125,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
                 maxLength={10}
                 minLength={10}
                 required
+                id="student_phone"
               />
             </div>
             {/* ชื่อและคำนำหน้า */}
@@ -141,6 +142,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
                 touched={formik.touched.father_prefix}
                 className="w-1/4"
                 required
+                id="father_prefix"
               />
               {/* ชื่อ บิดา */}
               <Text
@@ -154,6 +156,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
                 touched={formik.touched.father_name}
                 className="w-3/4"
                 required
+                id="father_name"
               />
             </div>
             {/* นามสกุลบิดา */}
@@ -167,6 +170,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               error={formik.errors.father_last_name}
               touched={formik.touched.father_last_name}
               required
+              id="father_last_name"
             />
             {/* อาชีพบิดา */}
             <Text
@@ -179,6 +183,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               error={formik.errors.father_job}
               touched={formik.touched.father_job}
               required
+              id="father_job"
             />
             {/* เบอร์โทรศัพท์ */}
             <Text
@@ -194,6 +199,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               maxLength={10}
               minLength={10}
               required
+              id="father_phone"
             />
             {/* ชื่อและคำนำหน้า */}
             <div className="flex space-x-2">
@@ -209,6 +215,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
                 touched={formik.touched.mother_prefix}
                 className="w-1/4"
                 required
+                id="mother_prefix"
               />
               {/* ชื่อ มารดา */}
               <Text
@@ -222,6 +229,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
                 touched={formik.touched.mother_name}
                 className="w-3/4"
                 required
+                id="mother_name"
               />
             </div>
             {/* นามสกุลมารดา */}
@@ -235,6 +243,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               error={formik.errors.mother_last_name}
               touched={formik.touched.mother_last_name}
               required
+              id="mother_last_name"
             />
             {/* อาชีพมารดา */}
             <Text
@@ -247,6 +256,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               error={formik.errors.mother_job}
               touched={formik.touched.mother_job}
               required
+              id="mother_job"
             />
             {/* เบอร์โทรศัพท์ */}
             <Text
@@ -262,6 +272,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               maxLength={10}
               minLength={10}
               required
+              id="mother_phone"
             />
             {/* ดึงข้อมูลจากบิดาหรือมารดา */}
             <div
@@ -305,6 +316,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
                 className="w-1/4"
                 disabled={checkParent === true}
                 required
+                id="parent_prefix"
               />
               {/* ชื่อ ผู้ปกครอง */}
               <Text
@@ -319,6 +331,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
                 className="w-3/4"
                 disabled={checkParent === true}
                 required
+                id="parent_name"
               />
             </div>
             {/* นามสกุลผู้ปกครอง */}
@@ -333,6 +346,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               touched={formik.touched.parent_last_name}
               disabled={checkParent === true}
               required
+              id="parent_last_name"
             />
             {/* อาชีพผู้ปกครอง */}
             <Text
@@ -346,6 +360,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               touched={formik.touched.parent_job}
               disabled={checkParent === true}
               required
+              id="parent_job"
             />
             {/* เบอร์โทรศัพท์ */}
             <Text
@@ -362,6 +377,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               maxLength={10}
               minLength={10}
               required
+              id="parent_phone"
             />
             {/* lat */}
             <Text
@@ -374,6 +390,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               error={formik.errors.lat}
               touched={formik.touched.lat}
               required
+              id="lat"
             />
             {/* lng */}
             <Text
@@ -386,6 +403,7 @@ const Personal = ({ page, setPage, formik, image, handleSetImage }) => {
               error={formik.errors.lng}
               touched={formik.touched.lng}
               required
+              id="lng"
             />
             {/* Map Component */}
             <div className="md:col-span-2 flex flex-col items-center justify-center">

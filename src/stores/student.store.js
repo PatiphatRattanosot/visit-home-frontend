@@ -11,7 +11,6 @@ export const useStudentStore = create((set, get) => ({
   fetchData: async () => {
     try {
       const response = await StudentService.getAllStudents();
-      console.log(response);
 
       set({ data: response.data });
     } catch (error) {
@@ -33,7 +32,7 @@ export const useStudentStore = create((set, get) => ({
   updateStudent: async (id, studentData) => {
     try {
       const response = await StudentService.updateStudent(id, studentData);
-      console.log("Updated student:", response.data);
+
       toast.success(
         response.data.message || "แก้ไขข้อมูลนักเรียนเรียบร้อยแล้ว",
         {

@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
-import TextInputInModal from "./TexInputInModal";
-import SelectInputInModal from "./SelectInputInModal";
+import TextInputInModal from "../Text";
+import SelectInputInModal from "../Select";
 import { studentSchema } from "../../schemas/student";
 import { useStudentStore } from "../../stores/student.store";
 
@@ -50,22 +50,8 @@ const AddStudent = ({ classId, onAddStudentSuccess }) => {
                 touched={formik.touched.prefix}
                 onBlur={formik.handleBlur}
                 className="w-64 md:w-72"
-                id="add-student-prefix-select"
+                id="prefix_add"
               />
-
-              <TextInputInModal
-                name="user_id"
-                placeholder="เลขที่ประจำตัวนักเรียน"
-                disabled={false}
-                value={formik.values.user_id}
-                onChange={formik.handleChange}
-                label="เลขที่ประจำตัวนักเรียน"
-                error={formik.errors.user_id}
-                touched={formik.touched.user_id}
-                onBlur={formik.handleBlur}
-                id="add-student-userid-input"
-              />
-
               <TextInputInModal
                 name="first_name"
                 placeholder="ชื่อ"
@@ -76,7 +62,8 @@ const AddStudent = ({ classId, onAddStudentSuccess }) => {
                 error={formik.errors.first_name}
                 touched={formik.touched.first_name}
                 onBlur={formik.handleBlur}
-                id="add-student-firstname-input"
+                id="first_name_add"
+                className="w-64 md:w-72"
               />
               <TextInputInModal
                 name="last_name"
@@ -88,11 +75,22 @@ const AddStudent = ({ classId, onAddStudentSuccess }) => {
                 error={formik.errors.last_name}
                 touched={formik.touched.last_name}
                 onBlur={formik.handleBlur}
-                id="add-student-lastname-input"
+                id="last_name_add"
+                className="w-64 md:w-72"
               />
-
-              
-
+              <TextInputInModal
+                name="user_id"
+                placeholder="เลขที่ประจำตัวนักเรียน"
+                disabled={false}
+                value={formik.values.user_id}
+                onChange={formik.handleChange}
+                label="เลขที่ประจำตัวนักเรียน"
+                error={formik.errors.user_id}
+                touched={formik.touched.user_id}
+                onBlur={formik.handleBlur}
+                id="user_id_add"
+                className="w-64 md:w-72"
+              />
               <div className="flex gap-6 justify-center mt-4">
                 <button
                   id="add-student-submit-button"
